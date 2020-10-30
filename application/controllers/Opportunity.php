@@ -18,6 +18,14 @@ class Opportunity extends CI_Controller {
 	 * map to /index.php/welcome/<method_name>
 	 * @see https://codeigniter.com/user_guide/general/urls.html
 	 */
+    function __construct() {
+        parent::__construct();
+        $this->load->model('CustomerModel');
+        $this->load->model('CompanyModel');
+//        $this->load->library('auth');
+//        $this->load->library('session');
+//        $this->auth->check_admin_auth();
+    }
 
 	public function opportunity_list()
 	{	
@@ -41,39 +49,18 @@ class Opportunity extends CI_Controller {
 	}
 
 	public function add_customer()
-	{	
+	{
+	    $companies = new CompanyModel;
+	    $data['company'] = $companies->getCompany();
 		$this->load->view('inc/header');
-		$this->load->view('opportunities/add_customer');
+		$this->load->view('opportunities/add_customer', $data);
 		$this->load->view('inc/footer');
 	}
-	public function getData()
-	{	
-	   $abc =
-	    '{ "data":[
-   	
-   		{
-	      "id": "1",
-	      "customer_id": "1",
-	      "date": "2019/01/1",
-	      "customer": "Tiger Nixon",
-	      "job type": "New Fence",
-	      "Sale Source": "Google Ad",
-	      "status": "New",
-	      "Edit": "",
-	      "Create Quote":"",
 
-	      "jobcity":"Maple",
-	      "ContactPerson":"Aviad Krief",
-	      "JobAddress":"207 Edgeley Blvd",
-	      "JobSite":"School",
-	      "Urgency":"Friend",
-	      "Time":"2pm",
-	      "Details":"New Fence+ Gate"
-	    }
-	   
-	    
-	]}';
-    	echo $abc;
-	 }
+	public function save_customer(){
+        $data = $_POST;
+        $this->db->insert('customers', $data);
+        redirect('Opportunity/add_opportunity');
+    }
 
 }

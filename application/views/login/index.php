@@ -65,7 +65,7 @@
         </div>
     </div>
         <!-- BEGIN: JS Assets-->
-        <script src="<?php echo base_url();?>assets/js/app.js"></script>
+<!--        <script src="--><?php //echo base_url();?><!--assets/js/app.js"></script>-->
         <!-- END: JS Assets-->
     </body>
 </html>
