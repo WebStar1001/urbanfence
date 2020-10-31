@@ -4,3 +4,4 @@ application/config/*
 document/*
 .gitignore
 cgi-bin/*
+.idea

@@ -67,9 +67,10 @@
         <?php include(APPPATH . "views/inc/account_menu.php") ?>
         <!-- END: Account Menu -->
     </div>
-    <div class="grid grid-cols-12 gap-6 box mt-5 md:p-10 sm:p-5 p-5">
+    <form name="opporForm" method="post" action="save_opportunity">
+        <div class="grid grid-cols-12 gap-6 box mt-5 md:p-10 sm:p-5 p-5">
 
-        <!-- update mokeup hide session --
+            <!-- update mokeup hide session --
                     <div class="col-span-12 md:col-span-12">
                         <div class="intro-y flex flex-col sm:flex-row items-left md:pl-3 md:pr-3">
                             <label class="w-full select_label_width sm:text-left sm:mr-5">Choose Quoting Company</label>
@@ -91,131 +92,152 @@
                         </div>
                     </div>
    -->
-        <div class="col-span-12">
-            <div class="preview">
+            <div class="col-span-12">
+                <div class="preview">
 
-                <div class="intro-y flex flex-col sm:flex-row">
-                    <div class="col-span-3 sm:mr-4">
-                        <fieldset class="p-2 mb-3 sm:mb-0 sm:p-3 status_width fieldset_bd_color">
-                            <legend class="legend_spacing">Customer#02</legend>
-                            <p>Customer Name: Gil Naor <br>Address: 88 Ironba </p>
-                        </fieldset>
-                    </div>
+                    <div class="intro-y flex flex-col sm:flex-row">
+                        <div class="col-span-3 sm:mr-4">
+                            <fieldset class="p-2 mb-3 sm:mb-0 sm:p-3 status_width fieldset_bd_color">
+                                <legend class="legend_spacing">Customer</legend>
+                                <p>Customer Name : <?php echo (is_object($customer)) ? $customer->customer : ''; ?>
+                                    <br>Address: <?php echo (is_object($customer)) ? $customer->address : ''; ?></p>
+                            </fieldset>
+                        </div>
 
-                    <div class="col-span-3">
-                        <div class="sm:w-ful col-span-3 sm:m-auto sm:pl-4 sm:pr-4 mt-3 sm:mt-0 mb-3 sm:mb-0">
-                            <label class="w-full text-left sm:pt-3">Search Customer</label>
-                            <select name="company_id" class="select2 w-full">
-                                <option value="1">Lead</option>
-                                <option value="2">Customer</option>
-                            </select>
+                        <div class="col-span-3">
+                            <div class="sm:w-ful col-span-3 sm:m-auto sm:pl-4 sm:pr-4 mt-3 sm:mt-0 mb-3 sm:mb-0">
+                                <label class="w-full text-left sm:pt-3">Search Customer</label>
+                                <select name="customer_id" class="select2 w-full">
+                                    <?php
+                                    foreach ($customer_list as $cus) {
+                                        echo '<option value="' . $cus->id . '">' . $cus->customer . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="col-span-3">
+                            <label class="w-full w-1/3 text-left sm:pt-3 mr-3 sm:mr-0">Create New Customer</label>
+                            <a href="<?php echo base_url('Opportunity/add_customer'); ?>"><i style="font-size: 30px;"
+                                                                                             class="w-full fa fa-user-plus"
+                                                                                             aria-hidden="true"></i></a>
+                        </div>
+                        <div class="col-span-3">
+                            <div class="sm:w-ful col-span-3 sm:m-auto sm:pl-4 sm:pr-4 mt-3 sm:mt-0 mb-3 sm:mb-0">
+                                <label class="w-full text-left sm:pt-3">Choose Quoting Company</label>
+                                <select name="company_id" class="input w-full border flex-1">
+                                    <?php
+                                    foreach ($companies as $com) {
+                                        echo '<option value="' . $com->id . '">' . $com->name . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
                         </div>
 
                     </div>
-                    <div class="col-span-3">
-                        <div class="sm:w-ful col-span-3 sm:m-auto sm:pl-4 sm:pr-4 mt-3 sm:mt-0 mb-3 sm:mb-0">
-                            <label class="w-full text-left sm:pt-3">Choose Quoting Company</label>
-                            <select class="input w-full border flex-1">
-                                <option>Urban Fence</option>
 
-                            </select>
-                        </div>
+                </div>
+            </div>
+
+            <div class="col-span-12 sm:col-span-6 md:col-span-6 md:ml-3" id="add_opppor_left_info">
+                <div class="preview">
+                    <div class="intro-y flex flex-col sm:flex-row">
+                        <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Status</label>
+                        <input type="text" name="status" readonly
+                               class="bg-gray-100 cursor-not-allowed input w-full sm:w-1/2 md:w-1/2 border mt-2 flex-1">
                     </div>
-                    <div class="col-span-3">
-                        <label class="w-full w-1/3 text-left sm:pt-3 mr-3 sm:mr-0">Create New Customer</label>
-                        <a href="<?php echo base_url('Opportunity/add_customer'); ?>"><i style="font-size: 30px;"
-                                                                                         class="w-full fa fa-user-plus"
-                                                                                         aria-hidden="true"></i></a>
+                    <div class="intro-y flex flex-col sm:flex-row mt-3">
+                        <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Date </label>
+                        <input type="Date" name="date" class="input w-full sm:w-1/2 md:w-1/2 border mt-2 flex-1"
+                               value="<?php echo date('Y-m-d'); ?>" readonly>
+                    </div>
+                    <div class="intro-y flex flex-col sm:flex-row mt-3">
+                        <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job Type </label>
+                        <select name="job_type" class="input w-full border mt-2 flex-1">
+                            <option value="1">Fence Repair</option>
+                            <option value="2">Gate Repair</option>
+                            <option value="3">Fence and Gate Repair</option>
+                            <option value="4">New Fence</option>
+                            <option value="5">New Gate</option>
+                            <option value="6">New Fence and Gate c/w Operator</option>
+                            <option value="7">Gate Operator Service</option>
+                        </select>
+                    </div>
+                    <div class="intro-y flex flex-col sm:flex-row mt-3">
+                        <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Urgency</label>
+                        <select name="urgency" class="input w-full border mt-2 flex-1">
+                            <option value="1">Normal</option>
+                            <option value="2">Urgent</option>
+                        </select>
+                    </div>
+                    <div class="intro-y flex flex-col sm:flex-row mt-3">
+                        <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job Site *</label>
+                        <input type="text" name="job_site" class="input w-full border mt-2 flex-1" required>
+                    </div>
+                    <div class="intro-y flex flex-col sm:flex-row mt-3">
+                        <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job Address *</label>
+                        <input type="text" name="job_address" class="input w-full border mt-2 flex-1" required>
                     </div>
 
                 </div>
-
             </div>
-        </div>
+            <div class="col-span-12 sm:col-span-6 md:col-span-6 md:mr-3" id="add_opppor_right_info">
+                <div class="preview">
+                    <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
+                        <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3 ">Sales Rep</label>
+                        <select name="sale_rep" class="select2 w-full sm:w-2/6">
+                            <?php
+                            foreach ($users as $user) {
+                                echo '<option value="' . $user->id . '">' . $user->username . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0 mt-3">
+                        <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3 ">Time</label>
+                        <input type="text" name="time" class="input w-full border mt-2 flex-1" value="<?php echo date('H:i:s'); ?>"
+                               readonly>
+                    </div>
+                    <div class="intro-y flex flex-col sm:flex-row mt-3">
+                        <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Sales Source *</label>
+                        <select class="input w-full border mt-2 flex-1" name="sale_source">
+                            <option value="1">Returned Customer</option>
+                            <option value="2">Yellow Pages</option>
+                            <option value="3">Facebook</option>
+                            <option value="4">Google Ad</option>
+                        </select>
+                    </div>
 
-        <div class="col-span-12 sm:col-span-6 md:col-span-6 md:ml-3" id="add_opppor_left_info">
-            <div class="preview">
-                <div class="intro-y flex flex-col sm:flex-row">
-                    <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Status</label>
-                    <input type="text" disabled
-                           class="bg-gray-100 cursor-not-allowed input w-full sm:w-1/2 md:w-1/2 border mt-2 flex-1">
+                    <div class="intro-y flex flex-col sm:flex-row mt-3">
+                        <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Contact onsite</label>
+                        <input type="text" name="contact_onsite" class="input w-full border mt-2 flex-1">
+                    </div>
+                    <div class="intro-y flex flex-col sm:flex-row mt-3">
+                        <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job City *</label>
+                        <input type="text" name="job_city" class="input w-full border mt-2 flex-1" required>
+                    </div>
                 </div>
-                <div class="intro-y flex flex-col sm:flex-row mt-3">
-                    <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Date *</label>
-                    <input type="Date" class="input w-full sm:w-1/2 md:w-1/2 border mt-2 flex-1">
-                </div>
-                <div class="intro-y flex flex-col sm:flex-row mt-3">
-                    <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job Type *</label>
-                    <select class="input w-full border mt-2 flex-1">
-                        <option>Urban Fence</option>
-                    </select>
-                </div>
-                <div class="intro-y flex flex-col sm:flex-row mt-3">
-                    <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Urgency</label>
-                    <select class="input w-full border mt-2 flex-1">
-                        <option>Normal</option>
-                    </select>
-                </div>
-                <div class="intro-y flex flex-col sm:flex-row mt-3">
-                    <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job Site *</label>
-                    <input type="text" class="input w-full border mt-2 flex-1">
-                </div>
-                <div class="intro-y flex flex-col sm:flex-row mt-3">
-                    <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job Address *</label>
-                    <input type="text" class="input w-full border mt-2 flex-1">
-                </div>
-
             </div>
-        </div>
-        <div class="col-span-12 sm:col-span-6 md:col-span-6 md:mr-3" id="add_opppor_right_info">
-            <div class="preview">
-                <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
-                    <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3 ">Sales Rep</label>
-                    <input type="text" disabled class="bg-gray-100 cursor-not-allowed input w-full border mt-2 flex-1">
-                </div>
-                <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0 mt-3">
-                    <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3 ">Time</label>
-                    <input type="text" class="input w-full border mt-2 flex-1">
-                </div>
-                <div class="intro-y flex flex-col sm:flex-row mt-3">
-                    <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Sales Source *</label>
-                    <select class="input w-full border mt-2 flex-1">
-                        <option>Choose</option>
-                        <option>Yellow Pages</option>
-                        <option>Facebook</option>
-                        <option>Google Ad</option>
-                    </select>
-                </div>
 
-                <div class="intro-y flex flex-col sm:flex-row mt-3">
-                    <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Contact onsite</label>
-                    <input type="text" class="input w-full border mt-2 flex-1">
+            <div class="col-span-12 md:pl-3 md:pr-3" id="address_div_mg">
+                <div class="preview">
+                    <div class="intro-y flex flex-col sm:flex-row">
+                        <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3"> Details</label>
+                        <textarea class="input w-full border mt-2" name="details" placeholder=""></textarea>
+                    </div>
                 </div>
-                <div class="intro-y flex flex-col sm:flex-row mt-3">
-                    <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job City *</label>
-                    <input type="text" class="input w-full border mt-2 flex-1">
+            </div>
+
+            <div class="col-span-12">
+                <div class="preview">
+                    <input type="submit" value="Create Opportunity"
+                           style="float: right;" class="button bg-theme-1 text-white mt-5 sm:p-2"/>
                 </div>
             </div>
         </div>
-
-        <div class="col-span-12 md:pl-3 md:pr-3" id="address_div_mg">
-            <div class="preview">
-                <div class="intro-y flex flex-col sm:flex-row">
-                    <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3"> Details</label>
-                    <textarea class="input w-full border mt-2" name="details" placeholder=""></textarea>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-span-12">
-            <div class="preview">
-                <button onclick="window.location.href='<?php echo base_url(); ?>Opportunity/pending_opportunities'"
-                        style="float: right;" type="button" class="button bg-theme-1 text-white mt-5 sm:p-2">Create
-                    Opportunity
-                </button>
-            </div>
-        </div>
-    </div>
+    </form>
 </div>
 <!-- END: Content -->
  

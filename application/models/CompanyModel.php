@@ -10,7 +10,7 @@ class CompanyModel extends CI_Model {
 
     }
 
-    public function getCompany(){
+    public function getCompanies(){
         $query = $this->db->get('companies');
         return $query->result();
     }

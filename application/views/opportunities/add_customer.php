@@ -79,11 +79,12 @@
 
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-2">
-                        <label class="w-full w-full sm:w-1/3 md:w-1/4 lg:w-1/6 mb-2 sm:mb-0 md:mr-2"> Status</label>
-                        <select name="company_id" class="select2 w-full sm:w-2/6">
-                            <option value="1">Lead</option>
-                            <option value="2">Customer</option>
-                        </select>
+                        <label class="w-full w-full sm:w-1/3 md:w-1/4 lg:w-1/6 mb-2 sm:mb-0 md:mr-2" id="label_status"> Choose Quoting Company</label>
+                        <fieldset class="p-2 sm:p-3 status_width fieldset_bd_color">
+                            <legend class="legend_spacing"> Status</legend>
+                            <p> Lead </p>
+                        </fieldset>
+
                     </div>
                 </div>
             </div>

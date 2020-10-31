@@ -15,5 +15,8 @@ class CustomerModel extends CI_Model {
         $query = $this->db->get('customers');
         return $query->result();
     }
-
+    public function get_customer($customer_id){
+        $query = $this->db->get_where('customers', array('id'=>$customer_id));
+        return $query->row();
+    }
 }
