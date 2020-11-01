@@ -49,6 +49,7 @@ class Opportunity extends CI_Controller
     public function add_opportunity()
     {
         $data['customer'] = array();
+        $data['opportunity'] = array();
         if (isset($_GET['customer_id'])) {
             $data['customer'] = $this->CustomerModel->get_customer($_GET['customer_id']);
         }elseif (isset($_GET['opportunity_id'])) {
