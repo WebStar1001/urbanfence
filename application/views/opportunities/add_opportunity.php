@@ -118,7 +118,7 @@
                                 <select name="customer_id" class="select2 w-full">
                                     <?php
                                     foreach ($customer_list as $cus) {
-                                        if ($customer) {
+                                        if (is_object($customer)) {
                                             if ($customer->id == $cus->id) {
                                                 echo '<option value="' . $cus->id . '" selected>' . $cus->customer . '</option>';
                                             } else {
@@ -151,7 +151,7 @@
                                 <select name="company_id" class="input w-full border flex-1">
                                     <?php
                                     foreach ($companies as $com) {
-                                        if ($opportunity) {
+                                        if (is_object($opportunity)) {
                                             if ($opportunity->company_id == $com->id) {
                                                 echo '<option value="' . $com->id . '" selected>' . $com->name . '</option>';
                                             } else {
@@ -176,12 +176,12 @@
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Status</label>
                         <input type="text" name="status" readonly
                                class="bg-gray-100 cursor-not-allowed input w-full sm:w-1/2 md:w-1/2 border mt-2 flex-1"
-                               value="<?php echo ($opportunity) ? $status[$opportunity->status] : ''; ?>">
+                               value="<?php echo (is_object($opportunity)) ? $status[$opportunity->status] : ''; ?>">
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Date </label>
                         <input type="Date" name="date" class="input w-full sm:w-1/2 md:w-1/2 border mt-2 flex-1"
-                               value="<?php echo ($opportunity) ? $opportunity->date : date('Y-m-d'); ?>" readonly>
+                               value="<?php echo (is_object($opportunity)) ? $opportunity->date : date('Y-m-d'); ?>" readonly>
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job Type </label>
@@ -190,7 +190,7 @@
                             foreach ($job_type as $key => $value) {
                                 if ($key == 0)
                                     continue;
-                                if ($opportunity) {
+                                if (is_object($opportunity)) {
                                     if ($opportunity->job_type == $key) {
                                         echo '<option value="' . $key . '" selected>' . $value . '</option>';
                                     } else {
@@ -210,7 +210,7 @@
                             foreach ($urgency as $key => $value) {
                                 if ($key == 0)
                                     continue;
-                                if ($opportunity) {
+                                if (is_object($opportunity)) {
                                     if ($opportunity->urgency == $key) {
                                         echo '<option value="' . $key . '" selected>' . $value . '</option>';
                                     } else {
@@ -226,12 +226,12 @@
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job Site *</label>
                         <input type="text" name="job_site" class="input w-full border mt-2 flex-1" required
-                               value="<?php echo ($opportunity) ? $opportunity->job_site : '' ?>">
+                               value="<?php echo (is_object($opportunity)) ? $opportunity->job_site : '' ?>">
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job Address *</label>
                         <input type="text" name="job_address" class="input w-full border mt-2 flex-1" required
-                               value="<?php echo ($opportunity) ? $opportunity->job_address : '' ?>">
+                               value="<?php echo (is_object($opportunity)) ? $opportunity->job_address : '' ?>">
                     </div>
 
                 </div>
@@ -243,7 +243,7 @@
                         <select name="sale_rep" class="select2 w-full">
                             <?php
                             foreach ($users as $user) {
-                                if ($opportunity) {
+                                if (is_object($opportunity)) {
                                     if ($opportunity->sales_rep == $key) {
                                         echo '<option value="' . $user->id . '" selected>' . $user->name . '</option>';
                                     } else {
@@ -260,7 +260,7 @@
                     <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0 mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3 ">Time</label>
                         <input type="text" name="time" class="input w-full border mt-2 flex-1"
-                               value="<?php echo ($opportunity) ? $opportunity->time : date('H:i:s'); ?>"
+                               value="<?php echo (is_object($opportunity)) ? $opportunity->time : date('H:i:s'); ?>"
                                readonly>
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
@@ -270,7 +270,7 @@
                             foreach ($sale_source as $key => $value) {
                                 if ($key == 0)
                                     continue;
-                                if ($opportunity) {
+                                if (is_object($opportunity)) {
                                     if ($opportunity->sale_source == $key) {
                                         echo '<option value="' . $key . '" selected>' . $value . '</option>';
                                     } else {
@@ -288,12 +288,12 @@
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Contact onsite</label>
                         <input type="text" name="contact_onsite" class="input w-full border mt-2 flex-1"
-                               value="<?php echo ($opportunity) ? $opportunity->contact_onsite : '' ?>">
+                               value="<?php echo (is_object($opportunity)) ? $opportunity->contact_onsite : '' ?>">
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job City *</label>
                         <input type="text" name="job_city" class="input w-full border mt-2 flex-1" required
-                               value="<?php echo ($opportunity) ? $opportunity->job_city : ''; ?>">
+                               value="<?php echo (is_object($opportunity)) ? $opportunity->job_city : ''; ?>">
                     </div>
                 </div>
             </div>
@@ -302,11 +302,11 @@
                 <div class="preview">
                     <div class="intro-y flex flex-col sm:flex-row">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3"> Details</label>
-                        <textarea class="input w-full border mt-2" name="details" placeholder=""><?php echo ($opportunity) ? $opportunity->details : ''; ?></textarea>
+                        <textarea class="input w-full border mt-2" name="details" placeholder=""><?php echo (is_object($opportunity)) ? $opportunity->details : ''; ?></textarea>
                     </div>
                 </div>
             </div>
-            <input type="hidden" name="opportunity_id" value="<?php echo ($opportunity) ? $opportunity->id : ''; ?>"/>
+            <input type="hidden" name="opportunity_id" value="<?php echo (is_object($opportunity)) ? $opportunity->id : ''; ?>"/>
             <div class="col-span-12">
                 <div class="preview">
                     <input type="submit" value="Create Opportunity"
