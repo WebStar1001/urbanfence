@@ -67,6 +67,14 @@
         <?php include(APPPATH . "views/inc/account_menu.php") ?>
         <!-- END: Account Menu -->
     </div>
+    <?php
+    $job_type = array(
+        '', 'Fence Repair', 'Gate Repair', 'Fence and Gate Repair', 'New Fence', 'New Gate', 'New Fence and Gate c/w  
+                Operator', 'Gate Opperator Service');
+    $sale_source = array('', 'Returned Customer', 'Yellow Pages', 'Facebook', 'Google Ad');
+    $status = array('', 'New', 'Assigned');
+    $urgency = array('', 'Normal', 'Urgent');
+    ?>
     <form name="opporForm" method="post" action="save_opportunity">
         <div class="grid grid-cols-12 gap-6 box mt-5 md:p-10 sm:p-5 p-5">
 
@@ -97,26 +105,35 @@
 
                     <div class="intro-y flex flex-col sm:flex-row">
                         <div class="col-span-4">
-                            <fieldset class="p-2 mb-3 sm:mb-0 sm:p-3 status_width fieldset_bd_color" style="width: 300px!important;">
+                            <fieldset class="p-2 mb-3 sm:mb-0 sm:p-3 status_width fieldset_bd_color"
+                                      style="width: 300px!important;">
                                 <legend class="legend_spacing">Customer</legend>
                                 <p>Customer Name : <?php echo (is_object($customer)) ? $customer->customer : ''; ?>
                                     <br>Address: <?php echo (is_object($customer)) ? $customer->address : ''; ?></p>
                             </fieldset>
                         </div>
-
                         <div class="col-span-4">
                             <div class="sm:w-ful col-span-3 sm:m-auto sm:pl-4 sm:pr-4 mt-3 sm:mt-0 mb-3 sm:mb-0">
                                 <label class="w-full text-left sm:pt-3">Search Customer</label>
                                 <select name="customer_id" class="select2 w-full">
                                     <?php
                                     foreach ($customer_list as $cus) {
-                                        echo '<option value="' . $cus->id . '">' . $cus->customer . '</option>';
+                                        if ($customer) {
+                                            if ($customer->id == $cus->id) {
+                                                echo '<option value="' . $cus->id . '" selected>' . $cus->customer . '</option>';
+                                            } else {
+                                                echo '<option value="' . $cus->id . '">' . $cus->customer . '</option>';
+                                            }
+                                        } else {
+                                            echo '<option value="' . $cus->id . '">' . $cus->customer . '</option>';
+                                        }
                                     }
                                     ?>
                                 </select>
                             </div>
 
                         </div>
+
                         <div class="col-span-4">
                             <label class="w-full w-1/3 text-left sm:pt-3 mr-3 sm:mr-0">Create New Customer</label>
                             <a href="<?php echo base_url('Opportunity/add_customer'); ?>"><i style="font-size: 30px;"
@@ -126,7 +143,7 @@
 
                     </div>
 
-                    <div class="intro-y flex flex-col sm:flex-row">
+                    <div class="intro-y flex flex-col sm:flex-row mt-3">
 
                         <div class="col-span-3">
                             <div class="sm:w-ful col-span-3 sm:m-auto sm:pl-4 sm:pr-4 mt-3 sm:mt-0 mb-3 sm:mb-0">
@@ -134,7 +151,15 @@
                                 <select name="company_id" class="input w-full border flex-1">
                                     <?php
                                     foreach ($companies as $com) {
-                                        echo '<option value="' . $com->id . '">' . $com->name . '</option>';
+                                        if ($opportunity) {
+                                            if ($opportunity->company_id == $com->id) {
+                                                echo '<option value="' . $com->id . '" selected>' . $com->name . '</option>';
+                                            } else {
+                                                echo '<option value="' . $com->id . '">' . $com->name . '</option>';
+                                            }
+                                        } else {
+                                            echo '<option value="' . $com->id . '">' . $com->name . '</option>';
+                                        }
                                     }
                                     ?>
                                 </select>
@@ -150,39 +175,63 @@
                     <div class="intro-y flex flex-col sm:flex-row">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Status</label>
                         <input type="text" name="status" readonly
-                               class="bg-gray-100 cursor-not-allowed input w-full sm:w-1/2 md:w-1/2 border mt-2 flex-1">
+                               class="bg-gray-100 cursor-not-allowed input w-full sm:w-1/2 md:w-1/2 border mt-2 flex-1"
+                               value="<?php echo ($opportunity) ? $status[$opportunity->status] : ''; ?>">
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Date </label>
                         <input type="Date" name="date" class="input w-full sm:w-1/2 md:w-1/2 border mt-2 flex-1"
-                               value="<?php echo date('Y-m-d'); ?>" readonly>
+                               value="<?php echo ($opportunity) ? $opportunity->date : date('Y-m-d'); ?>" readonly>
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job Type </label>
                         <select name="job_type" class="input w-full border mt-2 flex-1">
-                            <option value="1">Fence Repair</option>
-                            <option value="2">Gate Repair</option>
-                            <option value="3">Fence and Gate Repair</option>
-                            <option value="4">New Fence</option>
-                            <option value="5">New Gate</option>
-                            <option value="6">New Fence and Gate c/w Operator</option>
-                            <option value="7">Gate Operator Service</option>
+                            <?php
+                            foreach ($job_type as $key => $value) {
+                                if ($key == 0)
+                                    continue;
+                                if ($opportunity) {
+                                    if ($opportunity->job_type == $key) {
+                                        echo '<option value="' . $key . '" selected>' . $value . '</option>';
+                                    } else {
+                                        echo '<option value="' . $key . '">' . $value . '</option>';
+                                    }
+                                } else {
+                                    echo '<option value="' . $key . '">' . $value . '</option>';
+                                }
+                            }
+                            ?>
                         </select>
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Urgency</label>
                         <select name="urgency" class="input w-full border mt-2 flex-1">
-                            <option value="1">Normal</option>
-                            <option value="2">Urgent</option>
+                            <?php
+                            foreach ($urgency as $key => $value) {
+                                if ($key == 0)
+                                    continue;
+                                if ($opportunity) {
+                                    if ($opportunity->urgency == $key) {
+                                        echo '<option value="' . $key . '" selected>' . $value . '</option>';
+                                    } else {
+                                        echo '<option value="' . $key . '">' . $value . '</option>';
+                                    }
+                                } else {
+                                    echo '<option value="' . $key . '">' . $value . '</option>';
+                                }
+                            }
+                            ?>
                         </select>
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job Site *</label>
-                        <input type="text" name="job_site" class="input w-full border mt-2 flex-1" required>
+                        <input type="text" name="job_site" class="input w-full border mt-2 flex-1" required
+                               value="<?php echo ($opportunity) ? $opportunity->job_site : '' ?>">
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job Address *</label>
-                        <input type="text" name="job_address" class="input w-full border mt-2 flex-1" required>
+                        <input type="text" name="job_address" class="input w-full border mt-2 flex-1" required
+                               value="<?php echo ($opportunity) ? $opportunity->job_address : '' ?>">
                     </div>
 
                 </div>
@@ -194,33 +243,57 @@
                         <select name="sale_rep" class="select2 w-full">
                             <?php
                             foreach ($users as $user) {
-                                echo '<option value="' . $user->id . '">' . $user->username . '</option>';
+                                if ($opportunity) {
+                                    if ($opportunity->sales_rep == $key) {
+                                        echo '<option value="' . $user->id . '" selected>' . $user->name . '</option>';
+                                    } else {
+                                        echo '<option value="' . $user->id . '">' . $user->name . '</option>';
+                                    }
+                                } else {
+                                    echo '<option value="' . $user->id . '">' . $user->name . '</option>';
+                                }
+                                echo '<option value="' . $user->id . '">' . $user->name . '</option>';
                             }
                             ?>
                         </select>
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0 mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3 ">Time</label>
-                        <input type="text" name="time" class="input w-full border mt-2 flex-1" value="<?php echo date('H:i:s'); ?>"
+                        <input type="text" name="time" class="input w-full border mt-2 flex-1"
+                               value="<?php echo ($opportunity) ? $opportunity->time : date('H:i:s'); ?>"
                                readonly>
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Sales Source *</label>
                         <select class="input w-full border mt-2 flex-1" name="sale_source">
-                            <option value="1">Returned Customer</option>
-                            <option value="2">Yellow Pages</option>
-                            <option value="3">Facebook</option>
-                            <option value="4">Google Ad</option>
+                            <?php
+                            foreach ($sale_source as $key => $value) {
+                                if ($key == 0)
+                                    continue;
+                                if ($opportunity) {
+                                    if ($opportunity->sale_source == $key) {
+                                        echo '<option value="' . $key . '" selected>' . $value . '</option>';
+                                    } else {
+                                        echo '<option value="' . $key . '">' . $value . '</option>';
+                                    }
+                                } else {
+                                    echo '<option value="' . $key . '">' . $value . '</option>';
+                                }
+                            }
+                            ?>
+                            ?>
                         </select>
                     </div>
 
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Contact onsite</label>
-                        <input type="text" name="contact_onsite" class="input w-full border mt-2 flex-1">
+                        <input type="text" name="contact_onsite" class="input w-full border mt-2 flex-1"
+                               value="<?php echo ($opportunity) ? $opportunity->contact_onsite : '' ?>">
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job City *</label>
-                        <input type="text" name="job_city" class="input w-full border mt-2 flex-1" required>
+                        <input type="text" name="job_city" class="input w-full border mt-2 flex-1" required
+                               value="<?php echo ($opportunity) ? $opportunity->job_city : ''; ?>">
                     </div>
                 </div>
             </div>
@@ -229,11 +302,11 @@
                 <div class="preview">
                     <div class="intro-y flex flex-col sm:flex-row">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3"> Details</label>
-                        <textarea class="input w-full border mt-2" name="details" placeholder=""></textarea>
+                        <textarea class="input w-full border mt-2" name="details" placeholder=""><?php echo ($opportunity) ? $opportunity->details : ''; ?></textarea>
                     </div>
                 </div>
             </div>
-
+            <input type="hidden" name="opportunity_id" value="<?php echo ($opportunity) ? $opportunity->id : ''; ?>"/>
             <div class="col-span-12">
                 <div class="preview">
                     <input type="submit" value="Create Opportunity"

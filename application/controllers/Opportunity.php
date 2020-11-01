@@ -34,7 +34,7 @@ class Opportunity extends CI_Controller
     public function opportunity_list()
     {
         $this->load->view('inc/header');
-        $this->load->view('opportunities/index');
+        $this->load->view('opportunities/view_opportunity');
         $this->load->view('inc/footer');
     }
 
@@ -51,6 +51,9 @@ class Opportunity extends CI_Controller
         $data['customer'] = array();
         if (isset($_GET['customer_id'])) {
             $data['customer'] = $this->CustomerModel->get_customer($_GET['customer_id']);
+        }elseif (isset($_GET['opportunity_id'])) {
+            $data['opportunity'] = $this->OpportunityModel->get_opportunity($_GET['opportunity_id']);
+            $data['customer'] = $this->CustomerModel->get_customer($data['opportunity']->customer_id);
         }
         $data['customer_list'] = $this->CustomerModel->getCustomers();
         $data['companies'] = $this->CompanyModel->getCompanies();
@@ -62,6 +65,10 @@ class Opportunity extends CI_Controller
 
     public function add_customer()
     {
+        $data['customer'] = array();
+        if (isset($_GET['customer_id'])) {
+            $data['customer'] = $this->CustomerModel->get_customer($_GET['customer_id']);
+        }
         $companies = new CompanyModel;
         $data['company'] = $companies->getCompanies();
         $this->load->view('inc/header');
@@ -72,15 +79,29 @@ class Opportunity extends CI_Controller
     public function save_customer()
     {
         $data = $_POST;
-        $this->db->insert('customers', $data);
-        $customer_id = $this->db->insert_id();
+        $customer_id = $this->input->post('customer_id');
+        unset($data['customer_id']);
+        if($customer_id != ""){
+            $this->db->where('id', $customer_id);
+            $this->db->update('customers', $data);
+        }else{
+            $this->db->insert('customers', $data);
+            $customer_id = $this->db->insert_id();
+        }
         redirect('Opportunity/add_opportunity?customer_id=' . $customer_id);
     }
 
     public function save_opportunity()
     {
         $data = $_POST;
-        $this->db->insert('opportunities', $data);
+        $opportunity_id = $this->input->post('opportunity_id');
+        unset($data['opportunity_id']);
+        if($opportunity_id != ""){
+            $this->db->where('id', $opportunity_id);
+            $this->db->update('opportunities', $data);
+        }else{
+            $this->db->insert('opportunities', $data);
+        }
         redirect('Opportunity/pending_opportunities');
     }
 

@@ -130,7 +130,7 @@ tr.shown td.details-control {
                             <option value="0">All</option>
                             <?php
                             foreach ($users as $user) {
-                                echo '<option value="' . $user->id . '">' . $user->username . '</option>';
+                                echo '<option value="' . $user->id . '">' . $user->name . '</option>';
                             }
                             ?>
                         </select>
@@ -302,7 +302,7 @@ tr.shown td.details-control {
 
                 {
                     "data": null, render: function (data) {
-                        return "<a href='#'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
+                        return "<a href='<?php echo base_url('Opportunity/add_opportunity?opportunity_id=');?>"+ data.id +"'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
                     }
                 },
 

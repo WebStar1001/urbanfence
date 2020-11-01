@@ -82,10 +82,19 @@ tr.shown td.details-control {
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Oppor. Per Month</label>
                     <div class="mt-1">
-                        <select class="input border w-full" id="Oppor_per_month">
-                            <option>APR</option>
-                            <option>MAY</option>
-                            <option>JUN</option>
+                        <select class="input border w-full" id="oppor_per_month">
+                            <option value="0">All</option>
+                            <?php
+                            $months = array(1 => 'Jan.', 2 => 'Feb.', 3 => 'Mar.', 4 => 'Apr.', 5 => 'May', 6 => 'Jun.', 7 => 'Jul.',
+                                8 => 'Aug.', 9 => 'Sep.', 10 => 'Oct.', 11 => 'Nov.', 12 => 'Dec');
+                            foreach ($months as $key => $value) {
+                                if(date('m') == $key){
+                                    echo '<option value="' . $key . '" selected>' . $value . '</option>';
+                                }else{
+                                    echo '<option value="' . $key . '">' . $value . '</option>';
+                                }
+                            }
+                            ?>
                         </select>
                     </div>
                 </div>
@@ -121,7 +130,7 @@ tr.shown td.details-control {
                             <option value="0">All</option>
                             <?php
                             foreach ($users as $user) {
-                                echo '<option value="' . $user->id . '">' . $user->username . '</option>';
+                                echo '<option value="' . $user->id . '">' . $user->name . '</option>';
                             }
                             ?>
                         </select>
@@ -266,6 +275,7 @@ tr.shown td.details-control {
                     data.sale_rep = $('#sale_rep').val();
                     data.customer = $('#customer').val();
                     data.customer_id = $('#customer_id').val();
+                    data.oppor_per_month = $('#oppor_per_month').val();
                     data.id = $('#id').val();
                     data.date = $('#date').val();
                     data.job_city = $('#job_city').val();
@@ -292,7 +302,7 @@ tr.shown td.details-control {
 
                 {
                     "data": null, render: function (data) {
-                        return "<a href='#'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
+                        return "<a href='<?php echo base_url('Opportunity/add_opportunity?opportunity_id=');?>"+ data.id +"'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
                     }
                 },
 

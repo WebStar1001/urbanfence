@@ -57,10 +57,14 @@ class OpportunityModel extends CI_Model
             $this->db->where('urgency', $urgency);
         }
         $this->db->join('customers', 'customers.id=opportunities.customer_id', 'left');
+
         $this->db->join('users', 'users.id=opportunities.sale_rep', 'left');
 
         $query = $this->db->get();
         return $query->result_array();
     }
-
+    public function get_opportunity($opportunity_id){
+        $query = $this->db->get_where('opportunities', array('id'=>$opportunity_id));
+        return $query->row();
+    }
 }

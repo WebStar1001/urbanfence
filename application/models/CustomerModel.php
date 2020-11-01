@@ -12,7 +12,40 @@ class CustomerModel extends CI_Model {
     }
 
     public function getCustomers(){
-        $query = $this->db->get('customers');
+
+        $customer = $this->input->get('customer');
+        $customer_id = $this->input->get('customer_id');
+        $status = $this->input->get('status');
+        $contact_person = $this->input->get('contact_person');
+        $city = $this->input->get('city');
+        $last_job_type = $this->input->get('last_job_type');
+        $last_sale_rep = $this->input->get('last_sale_rep');
+        $last_quote_id = $this->input->get('last_quote_id');
+        $last_job_id = $this->input->get('last_job_id');
+        $this->db->select('customers.*');
+        $this->db->from('customers');
+        if($customer){
+            $this->db->where('customer', $customer);
+        }
+        if($customer_id){
+            $this->db->where('id', $customer_id);
+        }
+        if($status){
+            $this->db->where('status', $status);
+        }
+        if($contact_person){
+            $this->db->where('contact_person', $contact_person);
+        }
+        if($city){
+            $this->db->where('last_quote_id', $city);
+        }
+        if($last_job_id){
+            $this->db->where('last_job_id', $last_job_id);
+        }
+        if($last_quote_id){
+            $this->db->where('last_quote_id', $last_quote_id);
+        }
+        $query = $this->db->get();
         return $query->result();
     }
     public function get_customer($customer_id){
