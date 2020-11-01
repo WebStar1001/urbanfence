@@ -42,9 +42,13 @@ class OpportunityModel extends CI_Model
         if ($customer_id) {
             $this->db->where('customer_id', $customer_id);
         }
-        if ($date) {
-            list($start_date, $end_date) = explode('-', $date);
-            $this->db->where("date BETWEEN '".date('Y-m-d', strtotime($start_date))."' AND '".date('Y-m-d', strtotime($end_date))."'","", FALSE);
+        if ($oppor_per_month) {
+            $this->db->where("date BETWEEN '" . date('Y-' . $oppor_per_month . '-01') . "' AND '" . date('Y-' . $oppor_per_month . '-31') . "'", "", FALSE);
+        } else {
+            if ($date) {
+                list($start_date, $end_date) = explode('-', $date);
+                $this->db->where("date BETWEEN '" . date('Y-m-d', strtotime($start_date)) . "' AND '" . date('Y-m-d', strtotime($end_date)) . "'", "", FALSE);
+            }
         }
         if ($job_city) {
             $this->db->where('job_city', $job_city);

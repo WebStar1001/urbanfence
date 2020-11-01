@@ -96,15 +96,15 @@
                 <div class="preview">
 
                     <div class="intro-y flex flex-col sm:flex-row">
-                        <div class="col-span-3 sm:mr-4">
-                            <fieldset class="p-2 mb-3 sm:mb-0 sm:p-3 status_width fieldset_bd_color">
+                        <div class="col-span-4">
+                            <fieldset class="p-2 mb-3 sm:mb-0 sm:p-3 status_width fieldset_bd_color" style="width: 300px!important;">
                                 <legend class="legend_spacing">Customer</legend>
                                 <p>Customer Name : <?php echo (is_object($customer)) ? $customer->customer : ''; ?>
                                     <br>Address: <?php echo (is_object($customer)) ? $customer->address : ''; ?></p>
                             </fieldset>
                         </div>
 
-                        <div class="col-span-3">
+                        <div class="col-span-4">
                             <div class="sm:w-ful col-span-3 sm:m-auto sm:pl-4 sm:pr-4 mt-3 sm:mt-0 mb-3 sm:mb-0">
                                 <label class="w-full text-left sm:pt-3">Search Customer</label>
                                 <select name="customer_id" class="select2 w-full">
@@ -117,12 +117,17 @@
                             </div>
 
                         </div>
-                        <div class="col-span-3">
+                        <div class="col-span-4">
                             <label class="w-full w-1/3 text-left sm:pt-3 mr-3 sm:mr-0">Create New Customer</label>
                             <a href="<?php echo base_url('Opportunity/add_customer'); ?>"><i style="font-size: 30px;"
                                                                                              class="w-full fa fa-user-plus"
                                                                                              aria-hidden="true"></i></a>
                         </div>
+
+                    </div>
+
+                    <div class="intro-y flex flex-col sm:flex-row">
+
                         <div class="col-span-3">
                             <div class="sm:w-ful col-span-3 sm:m-auto sm:pl-4 sm:pr-4 mt-3 sm:mt-0 mb-3 sm:mb-0">
                                 <label class="w-full text-left sm:pt-3">Choose Quoting Company</label>
@@ -135,7 +140,6 @@
                                 </select>
                             </div>
                         </div>
-
                     </div>
 
                 </div>
@@ -187,7 +191,7 @@
                 <div class="preview">
                     <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3 ">Sales Rep</label>
-                        <select name="sale_rep" class="select2 w-full sm:w-2/6">
+                        <select name="sale_rep" class="select2 w-full">
                             <?php
                             foreach ($users as $user) {
                                 echo '<option value="' . $user->id . '">' . $user->username . '</option>';
