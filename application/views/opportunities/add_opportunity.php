@@ -104,7 +104,7 @@
                 <div class="preview">
 
                     <div class="intro-y flex flex-col sm:flex-row">
-                        <div class="col-span-4">
+                        <div class="col-span- w-full">
                             <fieldset class="p-2 mb-3 sm:mb-0 sm:p-3 status_width fieldset_bd_color"
                                       style="width: 300px!important;">
                                 <legend class="legend_spacing">Customer</legend>
@@ -112,17 +112,17 @@
                                     <br>Address: <?php echo (is_object($customer)) ? $customer->address : ''; ?></p>
                             </fieldset>
                         </div>
-                        <div class="col-span-4">
-                            <div class="sm:w-ful col-span-3 sm:m-auto sm:pl-4 sm:pr-4 mt-3 sm:mt-0 mb-3 sm:mb-0">
+                        <div class="col-span-4 w-full">
+                            <div class="sm:w-ful col-span-12 sm:m-auto sm:pl-4 sm:pr-4 mt-3 sm:mt-0 mb-3 sm:mb-0">
                                 <label class="w-full text-left sm:pt-3">Search Customer</label>
-                                <select name="customer_id" class="select2 w-full" id="search_customer">
+                                <select name="customer_id" class="select2 w-full col-span-10" id="search_customer">
 
                                 </select>
                             </div>
 
                         </div>
 
-                        <div class="col-span-4">
+                        <div class="col-span-4 w-full">
                             <label class="w-full w-1/3 text-left sm:pt-3 mr-3 sm:mr-0">Create New Customer</label>
                             <a href="<?php echo base_url('Opportunity/add_customer'); ?>"><i style="font-size: 30px;"
                                                                                              class="w-full fa fa-user-plus"
@@ -169,7 +169,8 @@
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Date </label>
                         <input type="Date" name="date" class="input w-full sm:w-1/2 md:w-1/2 border mt-2 flex-1"
-                               value="<?php echo (is_object($opportunity)) ? $opportunity->date : date('Y-m-d'); ?>" readonly>
+                               value="<?php echo (is_object($opportunity)) ? $opportunity->date : date('Y-m-d'); ?>"
+                               readonly>
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job Type </label>
@@ -275,11 +276,13 @@
                 <div class="preview">
                     <div class="intro-y flex flex-col sm:flex-row">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3"> Details</label>
-                        <textarea class="input w-full border mt-2" name="details" placeholder=""><?php echo (is_object($opportunity)) ? $opportunity->details : ''; ?></textarea>
+                        <textarea class="input w-full border mt-2" name="details"
+                                  placeholder=""><?php echo (is_object($opportunity)) ? $opportunity->details : ''; ?></textarea>
                     </div>
                 </div>
             </div>
-            <input type="hidden" name="opportunity_id" value="<?php echo (is_object($opportunity)) ? $opportunity->id : ''; ?>"/>
+            <input type="hidden" name="opportunity_id"
+                   value="<?php echo (is_object($opportunity)) ? $opportunity->id : ''; ?>"/>
             <div class="col-span-12">
                 <div class="preview">
                     <input type="submit" value="Create Opportunity"
@@ -290,17 +293,29 @@
     </form>
 </div>
 <script type="text/javascript">
-    $('#search_customer').select2({
-        ajax: {
-            url: 'get_search_customer',
-            data: function (params) {
-                var query = {
-                    search: params.term,
-                }
-                return query;
+    $(document).ready(function () {
+        $('#search_customer').select2({
+            tags: true,
+            minimumInputLength: 3,
+            ajax: {
+                url: 'get_search_customer',
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    var query = {
+                        search: params.term,
+                    }
+                    return query;
+                },
+                processResults: function (response) {
+                    return {
+                        results: response
+                    };
+                },
+                cache: true
             }
-        }
-    });
+        });
+    })
 </script>
 <!-- END: Content -->
  

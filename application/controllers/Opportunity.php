@@ -138,7 +138,11 @@ class Opportunity extends CI_Controller
 
     public function get_search_customer()
     {
-        print_r($_REQUEST);
-        exit;
+        $search = $this->input->get('search');
+        $this->db->select('customers.id, customers.customer AS text');
+        $this->db->from('customers');
+        $this->db->like('customer', $search);
+        $query = $this->db->get();
+        echo json_encode($query->result());
     }
 }
