@@ -88,9 +88,9 @@ tr.shown td.details-control {
                             $months = array(1 => 'Jan.', 2 => 'Feb.', 3 => 'Mar.', 4 => 'Apr.', 5 => 'May', 6 => 'Jun.', 7 => 'Jul.',
                                 8 => 'Aug.', 9 => 'Sep.', 10 => 'Oct.', 11 => 'Nov.', 12 => 'Dec');
                             foreach ($months as $key => $value) {
-                                if(date('m') == $key){
+                                if (date('m') == $key) {
                                     echo '<option value="' . $key . '" selected>' . $value . '</option>';
-                                }else{
+                                } else {
                                     echo '<option value="' . $key . '">' . $value . '</option>';
                                 }
                             }
@@ -224,8 +224,13 @@ tr.shown td.details-control {
     <!-- END: Datatable -->
 </div>
 <!-- END: Content -->
+<?php
 
+?>
 <script type="text/javascript">
+    var sale_users = <?php echo json_encode($sales);?>;
+    console.log(sale_users);
+
     function format(d) {
         /*console.log(d.JobCity);*/
         // `d` is the original data object for the row
@@ -298,11 +303,26 @@ tr.shown td.details-control {
                 {"data": "job_type"},
                 {"data": "sale_source"},
                 {"data": "status"},
-                {"data": "sale_rep"},
+                {
+                    "data": null, render: function (data) {
+                        console.log(data.sale_rep);
+                        var sales_rp_select = "<select name='fieldName' onchange='change_sale_rep(" + data.id + ")'><option value='0'>Please Select</option>";
+                        for (var i in sale_users) {
+                            if (sale_users[i].id == data.sale_rep) {
+                                sales_rp_select += '<option value="' + sale_users[i].id + '" selected>' + sale_users[i].name +
+                                    '</option>';
+                            }else{
+                                sales_rp_select += '<option value="' + sale_users[i].id + '">' + sale_users[i].name +
+                                    '</option>';
+                            }
+                        }
+                        return sales_rp_select;
+                    }
+                },
 
                 {
                     "data": null, render: function (data) {
-                        return "<a href='<?php echo base_url('Opportunity/add_opportunity?opportunity_id=');?>"+ data.id +"'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
+                        return "<a href='<?php echo base_url('Opportunity/add_opportunity?opportunity_id=');?>" + data.id + "'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
                     }
                 },
 
@@ -342,4 +362,17 @@ tr.shown td.details-control {
             table.ajax.reload(null, false);
         })
     });
+
+    function change_sale_rep(user_id) {
+        $.ajax('change_sale_rep', {
+            type: 'POST',  // http method
+            data: {user_id: event.target.value, oppor_id: user_id},  // data to submit
+            success: function (data, status, xhr) {
+                console.log(data);
+            },
+            error: function (jqXhr, textStatus, errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    }
 </script>

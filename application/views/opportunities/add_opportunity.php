@@ -115,20 +115,8 @@
                         <div class="col-span-4">
                             <div class="sm:w-ful col-span-3 sm:m-auto sm:pl-4 sm:pr-4 mt-3 sm:mt-0 mb-3 sm:mb-0">
                                 <label class="w-full text-left sm:pt-3">Search Customer</label>
-                                <select name="customer_id" class="select2 w-full">
-                                    <?php
-                                    foreach ($customer_list as $cus) {
-                                        if (is_object($customer)) {
-                                            if ($customer->id == $cus->id) {
-                                                echo '<option value="' . $cus->id . '" selected>' . $cus->customer . '</option>';
-                                            } else {
-                                                echo '<option value="' . $cus->id . '">' . $cus->customer . '</option>';
-                                            }
-                                        } else {
-                                            echo '<option value="' . $cus->id . '">' . $cus->customer . '</option>';
-                                        }
-                                    }
-                                    ?>
+                                <select name="customer_id" class="select2 w-full" id="search_customer">
+
                                 </select>
                             </div>
 
@@ -240,22 +228,9 @@
                 <div class="preview">
                     <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3 ">Sales Rep</label>
-                        <select name="sale_rep" class="select2 w-full">
-                            <?php
-                            foreach ($users as $user) {
-                                if (is_object($opportunity)) {
-                                    if ($opportunity->sales_rep == $key) {
-                                        echo '<option value="' . $user->id . '" selected>' . $user->name . '</option>';
-                                    } else {
-                                        echo '<option value="' . $user->id . '">' . $user->name . '</option>';
-                                    }
-                                } else {
-                                    echo '<option value="' . $user->id . '">' . $user->name . '</option>';
-                                }
-                                echo '<option value="' . $user->id . '">' . $user->name . '</option>';
-                            }
-                            ?>
-                        </select>
+                        <input type="text" class="input w-full border mt-2 flex-1"
+                               value="<?php echo (is_object($opportunity)) ? $opportunity->sale_rep : ''; ?>"
+                               readonly>
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0 mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3 ">Time</label>
@@ -268,8 +243,6 @@
                         <select class="input w-full border mt-2 flex-1" name="sale_source">
                             <?php
                             foreach ($sale_source as $key => $value) {
-                                if ($key == 0)
-                                    continue;
                                 if (is_object($opportunity)) {
                                     if ($opportunity->sale_source == $key) {
                                         echo '<option value="' . $key . '" selected>' . $value . '</option>';
@@ -316,6 +289,19 @@
         </div>
     </form>
 </div>
+<script type="text/javascript">
+    $('#search_customer').select2({
+        ajax: {
+            url: 'get_search_customer',
+            data: function (params) {
+                var query = {
+                    search: params.term,
+                }
+                return query;
+            }
+        }
+    });
+</script>
 <!-- END: Content -->
  
 

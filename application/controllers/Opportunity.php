@@ -40,7 +40,7 @@ class Opportunity extends CI_Controller
 
     public function pending_opportunities()
     {
-        $data['users'] = $this->UserModel->getUsers();
+        $data['sales'] = $this->UserModel->getSaleUsers();
         $this->load->view('inc/header');
         $this->load->view('opportunities/pending_assignment', $data);
         $this->load->view('inc/footer');
@@ -52,7 +52,7 @@ class Opportunity extends CI_Controller
         $data['opportunity'] = array();
         if (isset($_GET['customer_id'])) {
             $data['customer'] = $this->CustomerModel->get_customer($_GET['customer_id']);
-        }elseif (isset($_GET['opportunity_id'])) {
+        } elseif (isset($_GET['opportunity_id'])) {
             $data['opportunity'] = $this->OpportunityModel->get_opportunity($_GET['opportunity_id']);
             $data['customer'] = $this->CustomerModel->get_customer($data['opportunity']->customer_id);
         }
@@ -82,10 +82,10 @@ class Opportunity extends CI_Controller
         $data = $_POST;
         $customer_id = $this->input->post('customer_id');
         unset($data['customer_id']);
-        if($customer_id != ""){
+        if ($customer_id != "") {
             $this->db->where('id', $customer_id);
             $this->db->update('customers', $data);
-        }else{
+        } else {
             $this->db->insert('customers', $data);
             $customer_id = $this->db->insert_id();
         }
@@ -97,10 +97,10 @@ class Opportunity extends CI_Controller
         $data = $_POST;
         $opportunity_id = $this->input->post('opportunity_id');
         unset($data['opportunity_id']);
-        if($opportunity_id != ""){
+        if ($opportunity_id != "") {
             $this->db->where('id', $opportunity_id);
             $this->db->update('opportunities', $data);
-        }else{
+        } else {
             $this->db->insert('opportunities', $data);
         }
         redirect('Opportunity/pending_opportunities');
@@ -125,5 +125,20 @@ class Opportunity extends CI_Controller
             $data['data'][$key]['urgency'] = $urgency[$row['urgency']];
         }
         echo json_encode($data);
+    }
+
+    public function change_sale_rep()
+    {
+        $oppor_id = $this->input->post('oppor_id');
+        $sale_id = $this->input->post('user_id');
+        $this->db->where('id', $oppor_id);
+        $this->db->update('opportunities', array('sale_rep' => $sale_id));
+        echo 'Success';
+    }
+
+    public function get_search_customer()
+    {
+        print_r($_REQUEST);
+        exit;
     }
 }

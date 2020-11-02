@@ -25,7 +25,7 @@ class OpportunityModel extends CI_Model
         $date = $this->input->get('date');
         $job_city = $this->input->get('job_city');
         $urgency = $this->input->get('urgency');
-        $this->db->select('opportunities.*, customers.customer AS customer, users.username AS sale_rep');
+        $this->db->select('opportunities.*, customers.customer AS customer');
         $this->db->from('opportunities');
         if ($job_type) {
             $this->db->where('job_type', $job_type);
@@ -57,14 +57,15 @@ class OpportunityModel extends CI_Model
             $this->db->where('urgency', $urgency);
         }
         $this->db->join('customers', 'customers.id=opportunities.customer_id', 'left');
-
-        $this->db->join('users', 'users.id=opportunities.sale_rep', 'left');
-
         $query = $this->db->get();
         return $query->result_array();
     }
     public function get_opportunity($opportunity_id){
-        $query = $this->db->get_where('opportunities', array('id'=>$opportunity_id));
+        $this->db->select('opportunities.*, users.name as sale_rep');
+        $this->db->from('opportunities');
+        $this->db->where('opportunities.id', $opportunity_id);
+        $this->db->join('users', 'opportunities.sale_rep=users.id', 'left');
+        $query = $this->db->get();
         return $query->row();
     }
 }

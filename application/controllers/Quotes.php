@@ -2,11 +2,27 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Quotes extends CI_Controller {
-	
+
+
+    function __construct() {
+
+        parent::__construct();
+
+        $this->load->model('CustomerModel');
+        $this->load->model('CompanyModel');
+        $this->load->model('CatalogModel');
+//        $this->load->library('auth');
+//        $this->load->library('session');
+//        $this->auth->check_admin_auth();
+    }
+
 	public function add_quote()
 	{
+	    $data['catalogs'] = $this->CatalogModel->getCatalogs();
+	    $data['companies'] = $this->CompanyModel->getCompanies();
+	    $data['catalog_options'] = $this->CatalogModel->getCatalogOptions();
 		$this->load->view('inc/header');
-		$this->load->view('quotes/add_quote');
+		$this->load->view('quotes/add_quote', $data);
 		$this->load->view('inc/footer');
 	}
 	public function quotes_list()
