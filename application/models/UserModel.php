@@ -28,7 +28,7 @@ class UserModel extends CI_Model
     public function getSaleUsers()
     {
 
-        $query = $this->db->get_where('users', array('access_level' => 4));
+        $query = $this->db->get_where('users', array('access_level' => 'sales'));
         return $query->result();
     }
 }
