@@ -88,11 +88,7 @@ tr.shown td.details-control {
                             $months = array(1 => 'Jan.', 2 => 'Feb.', 3 => 'Mar.', 4 => 'Apr.', 5 => 'May', 6 => 'Jun.', 7 => 'Jul.',
                                 8 => 'Aug.', 9 => 'Sep.', 10 => 'Oct.', 11 => 'Nov.', 12 => 'Dec');
                             foreach ($months as $key => $value) {
-                                if (date('m') == $key) {
-                                    echo '<option value="' . $key . '" selected>' . $value . '</option>';
-                                } else {
-                                    echo '<option value="' . $key . '">' . $value . '</option>';
-                                }
+                                echo '<option value="' . $key . '">' . $value . '</option>';
                             }
                             ?>
                         </select>
@@ -162,7 +158,7 @@ tr.shown td.details-control {
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Date</label>
                     <div class="mt-1">
-                        <input data-daterange="true" value="<?php echo date('m/d/Y') . ' - ' . date('m/d/Y'); ?>"
+                        <input data-daterange="true" value="<?php echo date('1/1/Y') . ' - ' . date('12/31/Y'); ?>"
                                class="datepicker input pl-12 border w-full" id="date">
                     </div>
                 </div>
@@ -311,7 +307,7 @@ tr.shown td.details-control {
                             if (sale_users[i].id == data.sale_rep) {
                                 sales_rp_select += '<option value="' + sale_users[i].id + '" selected>' + sale_users[i].name +
                                     '</option>';
-                            }else{
+                            } else {
                                 sales_rp_select += '<option value="' + sale_users[i].id + '">' + sale_users[i].name +
                                     '</option>';
                             }

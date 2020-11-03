@@ -158,7 +158,7 @@ tr.shown td.details-control {
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Date</label>
                     <div class="mt-1">
-                        <input data-daterange="true" value=""
+                        <input data-daterange="true" value="<?php echo date('1/1/Y') . ' - ' . date('12/31/Y'); ?>"
                                class="datepicker input pl-12 border w-full" id="date">
                     </div>
                 </div>
@@ -264,7 +264,6 @@ tr.shown td.details-control {
     }
 
     $(document).ready(function () {
-        $('.datepicker').datepicker("setDate", "");
         var table = $('#opporTable').DataTable({
             "pageLength": 50,
             //"ajax": '<?php echo base_url("Opportunity/get_opportunities");?>',
