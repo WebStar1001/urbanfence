@@ -290,6 +290,7 @@
                 </div>
             </div>
         </div>
+        <input type="hidden" name="created_customer_id" value="<?php echo (is_object($customer)) ? $customer->id : ''; ?>"/>
     </form>
 </div>
 <script type="text/javascript">

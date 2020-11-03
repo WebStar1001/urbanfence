@@ -97,6 +97,9 @@ class Opportunity extends CI_Controller
         $data = $_POST;
         $opportunity_id = $this->input->post('opportunity_id');
         unset($data['opportunity_id']);
+        if($data['customer_id'] == ''){
+            $data['customer_id'] = $data['created_customer_id'];
+        }
         if ($opportunity_id != "") {
             $this->db->where('id', $opportunity_id);
             $this->db->update('opportunities', $data);

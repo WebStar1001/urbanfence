@@ -32,6 +32,9 @@ class Quotes extends CI_Controller {
 		$this->load->view('inc/footer');
 		
 	}
+	public function save_quote(){
+        print_r($_POST);exit;
+    }
  
 	public function getData()
 	{	
