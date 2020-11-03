@@ -18,10 +18,18 @@ class CatalogModel extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('product_catalogs');
+        $query = $this->db->get();
+        return $query->result();
+    }
+    public function getProductCategories()
+    {
+        $this->db->select('*');
+        $this->db->from('product_catalogs');
         $this->db->group_by('product_category');
         $query = $this->db->get();
         return $query->result();
     }
+
 
     public function get_user($customer_id)
     {

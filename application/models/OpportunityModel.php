@@ -12,12 +12,12 @@ class OpportunityModel extends CI_Model
 
     }
 
-    public function getOpportunities()
+    public function getOpportunities($status)
     {
         $job_type = $this->input->get('job_type');
         $oppor_per_month = $this->input->get('oppor_per_month');
         $sale_source = $this->input->get('sale_source');
-        $status = $this->input->get('status');
+//        $status = $this->input->get('status');
         $sale_rep = $this->input->get('sale_rep');
         $customer = $this->input->get('customer');
         $id = $this->input->get('id');

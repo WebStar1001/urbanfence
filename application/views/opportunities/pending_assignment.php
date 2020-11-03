@@ -266,9 +266,9 @@ tr.shown td.details-control {
     $(document).ready(function () {
         var table = $('#opporTable').DataTable({
             "pageLength": 50,
-            //"ajax": '<?php echo base_url("Opportunity/get_opportunities");?>',
+            //"ajax": '<?php echo base_url("Opportunity/get_pending_opportunities");?>',
             "ajax": {
-                url: '<?php echo base_url("Opportunity/get_opportunities");?>',
+                url: '<?php echo base_url("Opportunity/get_pending_opportunities");?>',
                 data: function (data) {
                     data.job_type = $('#job_type').val();
                     data.sale_source = $('#sale_source').val();

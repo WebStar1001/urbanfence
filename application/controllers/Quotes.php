@@ -18,6 +18,7 @@ class Quotes extends CI_Controller {
 
 	public function add_quote()
 	{
+	    $data['categories'] = $this->CatalogModel->getProductCategories();
 	    $data['catalogs'] = $this->CatalogModel->getCatalogs();
 	    $data['companies'] = $this->CompanyModel->getCompanies();
 	    $data['catalog_options'] = $this->CatalogModel->getCatalogOptions();

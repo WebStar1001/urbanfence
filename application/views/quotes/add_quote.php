@@ -164,6 +164,7 @@
 </style>
 <script>
     var catalogs =<?php echo json_encode($catalogs); ?>;
+    var categories =<?php echo json_encode($categories); ?>;
 </script>
 <div class="content">
     <!-- BEGIN: Top Bar -->
@@ -318,7 +319,7 @@
 
 
                 <fieldset class="p-1 mt-2 w-full fieldset_bd_color">
-                    <legend class="quote_legend_spacing">Labour</legend>
+                    <legend class="quote_legend_spacing">Labor</legend>
                     <div class="grid grid-cols-12 gap-6 mt-5">
 
                         <!-- BEGIN: labour -->
@@ -326,7 +327,7 @@
                             <table class="table table-report -mt-2 mb-5" id="labour">
                                 <thead>
                                 <tr id="labour_thead">
-                                    <th class="whitespace-no-wrap">Labour desc</th>
+                                    <th class="whitespace-no-wrap">Labor desc</th>
                                     <th class="whitespace-no-wrap"># of Man Day</th>
                                     <th class="text-center whitespace-no-wrap">Total price</th>
                                     <th class="text-center whitespace-no-wrap">ACTIONS</th>
@@ -377,13 +378,13 @@
                             <table class="table table-report -mt-2 mb-5" id="miscellaneous">
                                 <thead>
                                 <tr id="miscellaneous_thead">
-                                    <th class="whitespace-no-wrap">Misc #</th>
+                                    <th class="whitespace-no-wrap w-5">Misc #</th>
                                     <th class="whitespace-no-wrap">Misc desc</th>
-                                    <th class="text-center whitespace-no-wrap">Price per unit</th>
-                                    <th class="text-center whitespace-no-wrap">Quantity</th>
-                                    <th class="text-center whitespace-no-wrap">Total price</th>
+                                    <th class="text-center whitespace-no-wrap w-10">Price per unit</th>
+                                    <th class="text-center whitespace-no-wrap w-10">Quantity</th>
+                                    <th class="text-center whitespace-no-wrap w-10">Total price</th>
 
-                                    <th class="text-center whitespace-no-wrap">ACTIONS</th>
+                                    <th class="text-center whitespace-no-wrap w-10">ACTIONS</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -420,7 +421,7 @@
 
 
                 <fieldset class="p-1 mt-2 w-full fieldset_bd_color">
-                    <legend class="quote_legend_spacing">Ads-on</legend>
+                    <legend class="quote_legend_spacing">Add-On</legend>
                     <div class="grid grid-cols-12 gap-6 mt-5">
 
                         <!-- BEGIN: Ads-On -->
@@ -1132,23 +1133,14 @@
             var catalogOptions = '';
             var matOptions = '';
             var price_per_unit = '';
-            for (var i in catalogs) {
-                if (i == 0)
-                    firstCatalog = catalogs[i].product_category;
-                catalogOptions += '<option value="' + catalogs[i].product_category + '">' + catalogs[i].product_category + '</option>'
-            }
-            for (var j in catalogs) {
-                if (j == 0) {
-                    price_per_unit = catalogs[j].price_per_unit_tender;
-                }
-                if (catalogs[j].product_category == firstCatalog) {
-                    matOptions += '<option value="' + catalogs[j].mat_code + '">' + catalogs[j].mat_code + '</option>'
-                }
+            for (var i in categories) {
+                catalogOptions += '<option value="' + categories[i].product_category + '">' + categories[i].product_category + '</option>'
             }
             html += `<tr id="material-item-row` + nextRow + `" row="` + nextRow + `" class="intro-x material-item">
                                         <td class="w-40">
                                             <div class="flex">
                                                 <select class="input border mr-2" name="material_category[]" onchange="get_cate_code(` + nextRow + `)">
+                                                    <option value=""></option>
                                                     ` + catalogOptions + `
                                                 </select>
                                             </div>
@@ -1162,7 +1154,7 @@
                                             </div>
                                         </td>
                                         <td class="text-center">` + price_per_unit + `</td>
-                                        <td class="text-center"><input type="number" name="mat_quantity[]" placeholder="" onchange="change_mat_quantity(` + nextRow + `)"></td>
+                                        <td class="text-center"><input type="number" name="mat_quantity[]" onfocus="this.oldvalue = this.value;" onchange="change_mat_quantity(` + nextRow + `)"></td>
                                         <td class="text-center"></td>
                                         <td class="table-report__action w-56">
                                             <div class="flex justify-center items-center">
@@ -1179,6 +1171,7 @@
 
         function get_cate_code(rowId) {
             var selectedCatalog = event.target.value;
+            console.log(selectedCatalog);
             var matOptions = '';
             var price_per_unit = '';
             var first = 0;
@@ -1216,6 +1209,7 @@
             var quantity = $('#material-item-row' + rowId).children().eq(3).find('input').val();
             var total_price = $('#material-item-total').children().eq(2).html() * 1;
             var original_price = $('#material-item-row' + rowId).children().eq(4).html() * 1;
+
             if (quantity != '') {
                 $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
                 $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit);
@@ -1227,15 +1221,21 @@
             var quantity = $('#material-item-row' + rowId).children().eq(3).find('input').val();
             var total_price = $('#material-item-total').children().eq(2).html() * 1;
             var original_price = $('#material-item-row' + rowId).children().eq(4).html() * 1;
+            var total_quantity = $('#material-item-total').children().eq(1).html() * 1;
+            var original_quantity = event.target.oldvalue * 1;
             if (quantity != '' && price_per_unit != '') {
                 $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
                 $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
+            $('#material-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
         }
 
         function delete_material_item(rowId) {
             var total_price = $('#material-item-total').children().eq(2).html() * 1;
             var original_price = $('#material-item-row' + rowId).children().eq(4).html() * 1;
+            var total_quantity = $('#material-item-total').children().eq(1).html() * 1;
+            var original_quantity =  $('#material-item-row' + rowId).children().eq(3).find('input').val() * 1;
+            $('#material-item-total').children().eq(1).html(total_quantity - original_quantity);
             $('#material-item-total').children().eq(2).html(total_price - original_price)
             $("#material-item-row" + rowId).remove();
         }
@@ -1282,7 +1282,7 @@
                                            </div>
                                        </td>
 
-                                       <td class="text-center"><input type="number" name="labor_quantity[]" onchange="set_labour_price(` + nextRow + `)"></td>
+                                       <td class="text-center"><input type="number" name="labor_quantity[]"  onfocus="this.oldvalue = this.value;" onchange="set_labour_price(` + nextRow + `)"></td>
                                        <td></td>
                                        <td class="table-report__action w-56">
                                            <div class="flex justify-center items-center">
@@ -1300,17 +1300,23 @@
             var total_price = $('#labour-item-total').children().eq(2).html() * 1;
             var original_price = $('#labour-item-row' + rowId).children().eq(2).html() * 1;
             var quantity = $('#labour-item-row' + rowId).children().eq(1).find('input').val();
+            var total_quantity = $('#labour-item-total').children().eq(1).html() * 1;
+            var original_quantity = event.target.oldvalue * 1;
             if (quantity != '') {
                 $('#labour-item-row' + rowId).children().eq(2).html(quantity * 250);
                 $('#labour-item-total').children().eq(2).html(total_price - original_price + quantity * 250)
             }
+            $('#labour-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
         }
 
 
         function delete_labour_item(rowId) {
             var total_price = $('#labour-item-total').children().eq(2).html() * 1;
             var original_price = $('#labour-item-row' + rowId).children().eq(2).html() * 1;
-            $('#labour-item-total').children().eq(2).html(total_price - original_price)
+            $('#labour-item-total').children().eq(2).html(total_price - original_price);
+            var total_quantity = $('#labour-item-total').children().eq(1).html() * 1;
+            var original_quantity =  $('#labour-item-row' + rowId).children().eq(1).find('input').val() * 1;
+            $('#labour-item-total').children().eq(1).html(total_quantity - original_quantity);
             $("#labour-item-row" + rowId).remove();
         }
 
@@ -1337,12 +1343,12 @@
             let rowId = parseInt($(".miscellaneous-item").last().attr("row"));
             let nextRow = rowId + 1;
             html += `<tr id="miscellaneous-item-row` + nextRow + `" row="` + nextRow + `" class="intro-x miscellaneous-item">
-                                       <td class="w-40 text-center">` + nextRow + `</td>
+                                       <td class="text-center">` + nextRow + `</td>
                                        <td class="text-center"><input type="text" name="misc_desc[]" placeholder="" value=""></td>
-                                       <td class="text-center"><input type="number" name="misc_unit_price[]" placeholder="" onchange="set_mis_price(` + nextRow + `)"></td>
-                                       <td class="text-center"><input type="number" name="misc_quantity[]" placeholder="" onchange="set_mis_price(` + nextRow + `)"></td>
+                                       <td class="text-center"><input type="number" name="misc_unit_price[]" placeholder="" onchange="change_mis_unit(` + nextRow + `)"></td>
+                                       <td class="text-center"><input type="number" name="misc_quantity[]" onfocus="this.oldvalue = this.value;" placeholder="" onchange="change_mis_quantity(` + nextRow + `)"></td>
                                        <td class="text-center"></td>
-                                       <td class="table-report__action w-56">
+                                       <td class="table-report__action">
                                            <div class="flex justify-center items-center">
                                               <a style="background-color:unset;border:unset" class="flex items-center mr-3" onclick="delete_miscellaneous_item(` + nextRow + `)" href="javascript:;" ><i style="font-size: 20px;
     color: red;" class="fa fa-trash" aria-hidden="true"></i></a>
@@ -1353,7 +1359,7 @@
 
         }
 
-        function set_mis_price(rowId) {
+        function change_mis_unit(rowId) {
             var total_price = $('#miscellaneous-item-total').children().eq(2).html() * 1;
             var original_price = $('#miscellaneous-item-row' + rowId).children().eq(4).html() * 1;
             var price_per_unit = $('#miscellaneous-item-row' + rowId).children().eq(2).find('input').val();
@@ -1363,11 +1369,27 @@
                 $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
         }
+        function change_mis_quantity(rowId) {
+            var total_price = $('#miscellaneous-item-total').children().eq(2).html() * 1;
+            var original_price = $('#miscellaneous-item-row' + rowId).children().eq(4).html() * 1;
+            var price_per_unit = $('#miscellaneous-item-row' + rowId).children().eq(2).find('input').val();
+            var quantity = $('#miscellaneous-item-row' + rowId).children().eq(3).find('input').val();
+            var total_quantity = $('#miscellaneous-item-total').children().eq(1).html() * 1;
+            var original_quantity = event.target.oldvalue * 1;
+            if (quantity != '' && price_per_unit != '') {
+                $('#miscellaneous-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
+                $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
+            }
+            $('#miscellaneous-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
+        }
 
         function delete_miscellaneous_item(rowId) {
             var total_price = $('#miscellaneous-item-total').children().eq(2).html() * 1;
             var original_price = $('#miscellaneous-item-row' + rowId).children().eq(4).html() * 1;
-            $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price)
+            $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price);
+            var total_quantity = $('#miscellaneous-item-total').children().eq(1).html() * 1;
+            var original_quantity =  $('#miscellaneous-item-row' + rowId).children().eq(3).find('input').val() * 1;
+            $('#miscellaneous-item-total').children().eq(1).html(total_quantity - original_quantity);
             $("#miscellaneous-item-row" + rowId).remove();
         }
 
@@ -1395,8 +1417,8 @@
             let nextRow = rowId + 1;
             html += `<tr id="adsOn-item-row` + nextRow + `" row="` + nextRow + `" class="intro-x adsOn-item">
                                        <td class="text-center"><input type="text" name="addon_desc[]" placeholder=""></td>
-                                       <td class="text-center"><input type="number" name="addon_unit_price[]" placeholder="" onchange="set_adsOn_price(` + nextRow + `)"></td>
-                                       <td class="text-center"><input type="number" name="addon_quantity[]" placeholder="" onchange="set_adsOn_price(` + nextRow + `)"></td>
+                                       <td class="text-center"><input type="number" name="addon_unit_price[]" placeholder="" onchange="change_adsOn_unit(` + nextRow + `)"></td>
+                                       <td class="text-center"><input type="number" name="addon_quantity[]" placeholder="" onfocus="this.oldvalue = this.value;" onchange="change_adsOn_quantity(` + nextRow + `)"></td>
                                        <td class="text-center"></td>
                                        <td class="table-report__action w-56">
                                            <div class="flex justify-center items-center">
@@ -1409,7 +1431,7 @@
 
         }
 
-        function set_adsOn_price(rowId) {
+        function change_adsOn_unit(rowId) {
             var total_price = $('#adsOn-item-total').children().eq(2).html() * 1;
             var original_price = $('#adsOn-item-row' + rowId).children().eq(3).html() * 1;
             var price_per_unit = $('#adsOn-item-row' + rowId).children().eq(1).find('input').val();
@@ -1419,12 +1441,28 @@
                 $('#adsOn-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
         }
+        function change_adsOn_quantity(rowId) {
+            var total_price = $('#adsOn-item-total').children().eq(2).html() * 1;
+            var original_price = $('#adsOn-item-row' + rowId).children().eq(3).html() * 1;
+            var price_per_unit = $('#adsOn-item-row' + rowId).children().eq(1).find('input').val();
+            var quantity = $('#adsOn-item-row' + rowId).children().eq(2).find('input').val();
+            var total_quantity = $('#adsOn-item-total').children().eq(1).html() * 1;
+            var original_quantity = event.target.oldvalue * 1;
+            if (quantity != '' && price_per_unit != '') {
+                $('#adsOn-item-row' + rowId).children().eq(3).html(quantity * price_per_unit);
+                $('#adsOn-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
+            }
+            $('#adsOn-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
+        }
 
 
         function delete_adsOn_item(rowId) {
             var total_price = $('#adsOn-item-total').children().eq(2).html() * 1;
             var original_price = $('#adsOn-item-row' + rowId).children().eq(3).html() * 1;
-            $('#adsOn-item-total').children().eq(2).html(total_price - original_price)
+            $('#adsOn-item-total').children().eq(2).html(total_price - original_price);
+            var total_quantity = $('#adsOn-item-total').children().eq(1).html() * 1;
+            var original_quantity =  $('#adsOn-item-row' + rowId).children().eq(2).find('input').val() * 1;
+            $('#adsOn-item-total').children().eq(1).html(total_quantity - original_quantity);
             $("#adsOn-item-row" + rowId).remove();
         }
 
