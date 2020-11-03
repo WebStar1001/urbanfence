@@ -34,7 +34,7 @@ class OpportunityModel extends CI_Model
             $this->db->where('sale_source', $sale_source);
         }
         if ($status) {
-            $this->db->where('status', $status);
+            $this->db->where('opportunities.status', $status);
         }
         if ($sale_rep) {
             $this->db->where('sale_rep', $sale_rep);

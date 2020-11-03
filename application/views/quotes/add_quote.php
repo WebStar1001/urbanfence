@@ -1008,6 +1008,7 @@
                                 '')
                         }
                     });
+                    $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html($('#material-item-total').find('td').eq(2).html());
                     $('#labour').find('tr').each(function () {
                         var lab_rowId = $(this).attr('id');
                         if (lab_rowId != 'labour_thead' && lab_rowId != 'labour-item-row0' && lab_rowId != 'labour-item-total') {
@@ -1018,6 +1019,7 @@
                                 '')
                         }
                     });
+                    $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html($('#labour-item-total').find('td').eq(2).html());
                     $('#miscellaneous').find('tr').each(function (index) {
                         var mis_rowId = $(this).attr('id');
                         if (mis_rowId != 'miscellaneous_thead' && mis_rowId != 'miscellaneous-item-row0' && mis_rowId != 'miscellaneous-item-total') {
@@ -1030,7 +1032,9 @@
                                 '')
                         }
                     });
+                    $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html($('#miscellaneous-item-total').find('td').eq(2).html());
 
+                    $('#final_quote_table').find('tr').eq(4).children().eq(1).find('a').html($('#adsOn-item-total').find('td').eq(2).html());
                 } else {
                     $("#nextBtn").removeClass('bg-gray-100 cursor-not-allowed').removeAttr('disabled');
                     document.getElementById("nextBtn").innerHTML = "Next";
@@ -1190,8 +1194,11 @@
             $('#material-item-row' + rowId).children().eq(1).find('select').html(matOptions);
             $('#material-item-row' + rowId).children().eq(2).html(price_per_unit);
             var quantity = $('#material-item-row' + rowId).children().eq(3).find('input').val();
+            var total_price = $('#material-item-total').children().eq(2).html() * 1;
+            var original_price = $('#material-item-row' + rowId).children().eq(4).html() * 1;
             if (quantity != '') {
                 $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
+                $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit);
             }
         }
 
@@ -1207,20 +1214,29 @@
             }
             $('#material-item-row' + rowId).children().eq(2).html(price_per_unit);
             var quantity = $('#material-item-row' + rowId).children().eq(3).find('input').val();
+            var total_price = $('#material-item-total').children().eq(2).html() * 1;
+            var original_price = $('#material-item-row' + rowId).children().eq(4).html() * 1;
             if (quantity != '') {
                 $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
+                $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit);
             }
         }
 
         function change_mat_quantity(rowId) {
             var price_per_unit = $('#material-item-row' + rowId).children().eq(2).html();
             var quantity = $('#material-item-row' + rowId).children().eq(3).find('input').val();
+            var total_price = $('#material-item-total').children().eq(2).html() * 1;
+            var original_price = $('#material-item-row' + rowId).children().eq(4).html() * 1;
             if (quantity != '' && price_per_unit != '') {
                 $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
+                $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
         }
 
         function delete_material_item(rowId) {
+            var total_price = $('#material-item-total').children().eq(2).html() * 1;
+            var original_price = $('#material-item-row' + rowId).children().eq(4).html() * 1;
+            $('#material-item-total').children().eq(2).html(total_price - original_price)
             $("#material-item-row" + rowId).remove();
         }
 
@@ -1266,7 +1282,7 @@
                                            </div>
                                        </td>
 
-                                       <td class="text-center"><input type="number" name="labor_quantity[]" onchange="set_labor_price(` + nextRow + `)"></td>
+                                       <td class="text-center"><input type="number" name="labor_quantity[]" onchange="set_labour_price(` + nextRow + `)"></td>
                                        <td></td>
                                        <td class="table-report__action w-56">
                                            <div class="flex justify-center items-center">
@@ -1279,15 +1295,22 @@
             $("#labour-item-row" + rowId).after(html);
 
         }
+
         function set_labour_price(rowId) {
+            var total_price = $('#labour-item-total').children().eq(2).html() * 1;
+            var original_price = $('#labour-item-row' + rowId).children().eq(2).html() * 1;
             var quantity = $('#labour-item-row' + rowId).children().eq(1).find('input').val();
             if (quantity != '') {
                 $('#labour-item-row' + rowId).children().eq(2).html(quantity * 250);
+                $('#labour-item-total').children().eq(2).html(total_price - original_price + quantity * 250)
             }
         }
 
 
         function delete_labour_item(rowId) {
+            var total_price = $('#labour-item-total').children().eq(2).html() * 1;
+            var original_price = $('#labour-item-row' + rowId).children().eq(2).html() * 1;
+            $('#labour-item-total').children().eq(2).html(total_price - original_price)
             $("#labour-item-row" + rowId).remove();
         }
 
@@ -1318,7 +1341,7 @@
                                        <td class="text-center"><input type="text" name="misc_desc[]" placeholder="" value=""></td>
                                        <td class="text-center"><input type="number" name="misc_unit_price[]" placeholder="" onchange="set_mis_price(` + nextRow + `)"></td>
                                        <td class="text-center"><input type="number" name="misc_quantity[]" placeholder="" onchange="set_mis_price(` + nextRow + `)"></td>
-                                       <td class="text-center"><label></label></td>
+                                       <td class="text-center"></td>
                                        <td class="table-report__action w-56">
                                            <div class="flex justify-center items-center">
                                               <a style="background-color:unset;border:unset" class="flex items-center mr-3" onclick="delete_miscellaneous_item(` + nextRow + `)" href="javascript:;" ><i style="font-size: 20px;
@@ -1331,14 +1354,20 @@
         }
 
         function set_mis_price(rowId) {
+            var total_price = $('#miscellaneous-item-total').children().eq(2).html() * 1;
+            var original_price = $('#miscellaneous-item-row' + rowId).children().eq(4).html() * 1;
             var price_per_unit = $('#miscellaneous-item-row' + rowId).children().eq(2).find('input').val();
             var quantity = $('#miscellaneous-item-row' + rowId).children().eq(3).find('input').val();
             if (quantity != '' && price_per_unit != '') {
                 $('#miscellaneous-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
+                $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
         }
 
         function delete_miscellaneous_item(rowId) {
+            var total_price = $('#miscellaneous-item-total').children().eq(2).html() * 1;
+            var original_price = $('#miscellaneous-item-row' + rowId).children().eq(4).html() * 1;
+            $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price)
             $("#miscellaneous-item-row" + rowId).remove();
         }
 
@@ -1381,15 +1410,21 @@
         }
 
         function set_adsOn_price(rowId) {
+            var total_price = $('#adsOn-item-total').children().eq(2).html() * 1;
+            var original_price = $('#adsOn-item-row' + rowId).children().eq(3).html() * 1;
             var price_per_unit = $('#adsOn-item-row' + rowId).children().eq(1).find('input').val();
             var quantity = $('#adsOn-item-row' + rowId).children().eq(2).find('input').val();
             if (quantity != '' && price_per_unit != '') {
                 $('#adsOn-item-row' + rowId).children().eq(3).html(quantity * price_per_unit);
+                $('#adsOn-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
         }
 
 
         function delete_adsOn_item(rowId) {
+            var total_price = $('#adsOn-item-total').children().eq(2).html() * 1;
+            var original_price = $('#adsOn-item-row' + rowId).children().eq(3).html() * 1;
+            $('#adsOn-item-total').children().eq(2).html(total_price - original_price)
             $("#adsOn-item-row" + rowId).remove();
         }
 
