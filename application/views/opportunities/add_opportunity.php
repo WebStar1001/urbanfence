@@ -116,6 +116,11 @@
                             <div class="sm:w-ful col-span-12 sm:m-auto sm:pl-4 sm:pr-4 mt-3 sm:mt-0 mb-3 sm:mb-0">
                                 <label class="w-full text-left sm:pt-3">Search Customer</label>
                                 <select name="customer_id" class="select2 w-full col-span-10" id="search_customer">
+                                    <?php
+                                        if(is_object($customer)){
+                                            echo '<option value="'.$customer->id.'">'.$customer->customer.'</option>';
+                                        }
+                                    ?>
 
                                 </select>
                             </div>
@@ -290,7 +295,6 @@
                 </div>
             </div>
         </div>
-        <input type="hidden" name="created_customer_id" value="<?php echo (is_object($customer)) ? $customer->id : ''; ?>"/>
     </form>
 </div>
 <script type="text/javascript">

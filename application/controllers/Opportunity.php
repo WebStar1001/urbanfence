@@ -50,12 +50,12 @@ class Opportunity extends CI_Controller
     {
         $data['customer'] = array();
         $data['opportunity'] = array();
-        if (isset($_GET['customer_id'])) {
-            $data['customer'] = $this->CustomerModel->get_customer($_GET['customer_id']);
-        } elseif (isset($_GET['opportunity_id'])) {
-            $data['opportunity'] = $this->OpportunityModel->get_opportunity($_GET['opportunity_id']);
-            $data['customer'] = $this->CustomerModel->get_customer($data['opportunity']->customer_id);
-        }
+//        if (isset($_GET['customer_id'])) {
+            $data['customer'] = $this->CustomerModel->get_customer(1);
+//        } elseif (isset($_GET['opportunity_id'])) {
+//            $data['opportunity'] = $this->OpportunityModel->get_opportunity($_GET['opportunity_id']);
+//            $data['customer'] = $this->CustomerModel->get_customer($data['opportunity']->customer_id);
+//        }
         $data['customer_list'] = $this->CustomerModel->getCustomers();
         $data['companies'] = $this->CompanyModel->getCompanies();
         $data['users'] = $this->UserModel->getUsers();
@@ -95,6 +95,7 @@ class Opportunity extends CI_Controller
     public function save_opportunity()
     {
         $data = $_POST;
+        print_r($_POST);exit;
         $opportunity_id = $this->input->post('opportunity_id');
         unset($data['opportunity_id']);
         if($data['customer_id'] == ''){
