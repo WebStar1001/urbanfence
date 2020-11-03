@@ -39,6 +39,9 @@ class OpportunityModel extends CI_Model
         if ($sale_rep) {
             $this->db->where('sale_rep', $sale_rep);
         }
+        if ($customer) {
+            $this->db->like('customer', $customer);
+        }
         if ($customer_id) {
             $this->db->where('customer_id', $customer_id);
         }
@@ -56,7 +59,7 @@ class OpportunityModel extends CI_Model
         if ($urgency) {
             $this->db->where('urgency', $urgency);
         }
-        $this->db->join('customers', 'customers.id=opportunities.customer_id', 'left');
+        $this->db->join('customers', 'customers.id=opportunities.customer_id', 'inner');
         $query = $this->db->get();
         return $query->result_array();
     }

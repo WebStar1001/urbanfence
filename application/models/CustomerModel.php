@@ -25,7 +25,7 @@ class CustomerModel extends CI_Model {
         $this->db->select('customers.*');
         $this->db->from('customers');
         if($customer){
-            $this->db->where('customer', $customer);
+            $this->db->like('customer', $customer);
         }
         if($customer_id){
             $this->db->where('id', $customer_id);
@@ -34,10 +34,10 @@ class CustomerModel extends CI_Model {
             $this->db->where('status', $status);
         }
         if($contact_person){
-            $this->db->where('contact_person', $contact_person);
+            $this->db->like('contact_person', $contact_person);
         }
         if($city){
-            $this->db->where('last_quote_id', $city);
+            $this->db->like('city', $city);
         }
         if($last_job_id){
             $this->db->where('last_job_id', $last_job_id);

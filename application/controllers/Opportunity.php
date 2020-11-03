@@ -70,6 +70,7 @@ class Opportunity extends CI_Controller
         if (isset($_GET['customer_id'])) {
             $data['customer'] = $this->CustomerModel->get_customer($_GET['customer_id']);
         }
+        $data['status'] = 1;
         $companies = new CompanyModel;
         $data['company'] = $companies->getCompanies();
         $this->load->view('inc/header');
@@ -97,7 +98,7 @@ class Opportunity extends CI_Controller
         $data = $_POST;
         $opportunity_id = $this->input->post('opportunity_id');
         unset($data['opportunity_id']);
-        if($data['customer_id'] == ''){
+        if ($data['customer_id'] == '') {
             $data['customer_id'] = $data['created_customer_id'];
         }
         if ($opportunity_id != "") {
