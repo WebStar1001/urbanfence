@@ -672,9 +672,9 @@
 
                                         <div class="mt-1 mb-5 " style="text-align-last: end;">
 
-                                            <label class="mr-5">Labour Markup</label>
+                                            <label class="mr-5">Labor Markup</label>
                                             <input disabled placeholder="%" type="number"
-                                                   class="input-multiple-markup input border bg-gray-100 cursor-not-allowed"
+                                                   class="input-multiple-markup input border bg-gray-100 cursor-not-allowed single_markup"
                                                    style="width:15%" name="labor_markup_percent"
                                                    id="labor_markup_percent">
                                             <input disabled placeholder="Amount" type="number"
@@ -697,7 +697,7 @@
 
 
                                         <div class="mt-1 mb-5" style="text-align-last: end;">
-                                            <label class=" mr-5">Ads-On Markup</label>
+                                            <label class=" mr-5">Add-On Markup</label>
                                             <input disabled placeholder="%" type="number"
                                                    class="input-multiple-markup input border bg-gray-100 cursor-not-allowed single_markup"
                                                    style="width:15%" name="adson_markup_percent"
@@ -1240,17 +1240,17 @@
             } else if ($(this).attr('id') == 'material_markup_amount') {
                 mat_amount = $(this).val() * 1;
                 mat_percent = (mat_amount / mat_cost).toFixed(4) * 100;
-                $('#material_mark_percent').val(mat_percent);
+                $('#material_markup_percent').val(mat_percent);
             }
             var labour_cost = $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html() * 1;
-            if ($(this).attr('id') == 'labour_markup_percent') {
+            if ($(this).attr('id') == 'labor_markup_percent') {
                 labour_percent = $(this).val() * 1;
                 labour_amount = labour_cost * labour_percent / 100;
                 $('#labour_markup_amount').val(labour_amount);
             } else if ($(this).attr('id') == 'labour_markup_amount') {
                 labour_amount = $(this).val() * 1;
                 labour_percent = (labour_amount / labour_cost).toFixed(4) * 100;
-                $('#labour_mark_percent').val(labour_percent);
+                $('#labour_markup_percent').val(labour_percent);
             }
 
             var mis_cost = $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html() * 1;
@@ -1262,7 +1262,7 @@
             } else if ($(this).attr('id') == 'misc_markup_amount') {
                 mis_amount = $(this).val() * 1;
                 mis_percent = (mis_amount / mis_cost).toFixed(4) * 100;
-                $('#misc_mark_percent').val(mis_percent);
+                $('#misc_markup_percent').val(mis_percent);
             }
 
 
@@ -1275,7 +1275,7 @@
             } else if ($(this).attr('id') == 'adson_markup_amount') {
                 adson_amount = $(this).val() * 1;
                 adson_percent = (adson_amount / adson_cost).toFixed(4) * 100;
-                $('#adson_mark_percent').val(adson_percent);
+                $('#adson_markup_percent').val(adson_percent);
             }
 
             calculate_sale_table();
