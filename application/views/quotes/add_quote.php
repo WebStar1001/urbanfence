@@ -897,6 +897,12 @@
                     </div>
 
             </section>
+            <input type="hidden" name="opportunity_id"
+                   value="<?php echo (is_object($opportunity)) ? $opportunity->id : ''; ?>">
+            <input type="hidden" name="customer_id"
+                   value="<?php echo (is_object($opportunity)) ? $opportunity->customer_id : ''; ?>">
+            <input type="hidden" name="company_id"
+                   value="<?php echo (is_object($opportunity)) ? $opportunity->company_id : ''; ?>">
         </form>
 
         <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end mt-5">
@@ -1002,7 +1008,7 @@
             if (key == 13) {
                 e.preventDefault();
             }
-        })
+        });
 
 
         var currentTab = 0; // Current tab is set to be the first tab (0)
@@ -1196,15 +1202,15 @@
             $('#final_quote_table').find('tr').eq(9).children().eq(2).html(Math.round(total_selling * 100) / 100);
 
 
-            $('#last_quote_table').find('tr').eq(1).children(1).html(mat_cost + mat_profit);
-            $('#last_quote_table').find('tr').eq(2).children(1).html(labour_cost + labour_profit);
-            $('#last_quote_table').find('tr').eq(3).children(1).html(misc_cost + misc_profit);
-            $('#last_quote_table').find('tr').eq(4).children(1).html(adson_cost + adson_profit);
-            $('#last_quote_table').find('tr').eq(5).children(1).html(Math.round(subtotal_cost1 * 100) / 100);
-            $('#last_quote_table').find('tr').eq(6).children(1).html(Math.round(discount_selling * 100) / 100);
-            $('#last_quote_table').find('tr').eq(7).children(1).html(Math.round(subtotal_selling2 * 100) / 100);
-            $('#last_quote_table').find('tr').eq(8).children(1).html(Math.round(HST * 100) / 100);
-            $('#last_quote_table').find('tr').eq(9).children(1).html(Math.round(total_selling * 100) / 100);
+            $('#last_quote_table').find('tr').eq(1).children().eq(1).find('a').html(mat_cost + mat_profit);
+            $('#last_quote_table').find('tr').eq(2).children().eq(1).find('a').html(labour_cost + labour_profit);
+            $('#last_quote_table').find('tr').eq(3).children().eq(1).find('a').html(misc_cost + misc_profit);
+            $('#last_quote_table').find('tr').eq(4).children().eq(1).html(adson_cost + adson_profit);
+            $('#last_quote_table').find('tr').eq(5).children().eq(1).html(Math.round(subtotal_cost1 * 100) / 100);
+            $('#last_quote_table').find('tr').eq(6).children().eq(1).html(Math.round(discount_selling * 100) / 100);
+            $('#last_quote_table').find('tr').eq(7).children().eq(1).html(Math.round(subtotal_selling2 * 100) / 100);
+            $('#last_quote_table').find('tr').eq(8).children().eq(1).html(Math.round(HST * 100) / 100);
+            $('#last_quote_table').find('tr').eq(9).children().eq(1).html(Math.round(total_selling * 100) / 100);
 
         }
 
@@ -1261,11 +1267,11 @@
             if ($(this).attr('id') == 'labor_markup_percent') {
                 labour_percent = $(this).val() * 1;
                 labour_amount = labour_cost * labour_percent / 100;
-                $('#labour_markup_amount').val(labour_amount);
-            } else if ($(this).attr('id') == 'labour_markup_amount') {
+                $('#labor_markup_amount').val(labour_amount);
+            } else if ($(this).attr('id') == 'labor_markup_amount') {
                 labour_amount = $(this).val() * 1;
                 labour_percent = (labour_amount / labour_cost).toFixed(4) * 100;
-                $('#labour_markup_percent').val(labour_percent);
+                $('#labor_markup_percent').val(labour_percent);
             }
 
             var mis_cost = $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html() * 1;
@@ -1281,7 +1287,7 @@
             }
 
 
-            var adson_cost = $('#final_quote_table').find('tr').eq(4).children().eq(1).find('a').html() * 1;
+            var adson_cost = $('#final_quote_table').find('tr').eq(4).children().eq(1).html() * 1;
 
             if ($(this).attr('id') == 'adson_markup_percent') {
                 adson_percent = $(this).val() * 1;
@@ -1339,7 +1345,7 @@
                                             </div>
                                         </td>
                                         <td class="text-center">` + price_per_unit + `</td>
-                                        <td class="text-center"><input type="number" name="mat_quantity[]" onfocus="this.oldvalue = this.value;" onchange="change_mat_quantity(` + nextRow + `)"></td>
+                                        <td class="text-center"><input type="number" name="mat_quantity[]" onfocus="this.oldvalue = this.value;" onchange="change_mat_quantity(` + nextRow + `);this.oldvalue = this.value;"></td>
                                         <td class="text-center"></td>
                                         <td class="table-report__action w-56">
                                             <div class="flex justify-center items-center">
@@ -1408,6 +1414,7 @@
             var original_price = $('#material-item-row' + rowId).children().eq(4).html() * 1;
             var total_quantity = $('#material-item-total').children().eq(1).html() * 1;
             var original_quantity = event.target.oldvalue * 1;
+            console.log(original_quantity);
             if (quantity != '' && price_per_unit != '') {
                 $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
                 $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
@@ -1467,7 +1474,7 @@
                                            </div>
                                        </td>
 
-                                       <td class="text-center"><input type="number" name="labor_total_days[]"  onfocus="this.oldvalue = this.value;" onchange="set_labour_price(` + nextRow + `)"></td>
+                                       <td class="text-center"><input type="number" name="labor_total_days[]"  onfocus="this.oldvalue = this.value;" onchange="set_labour_price(` + nextRow + `);this.oldvalue = this.value;"></td>
                                        <td></td>
                                        <td class="table-report__action w-56">
                                            <div class="flex justify-center items-center">
@@ -1531,7 +1538,7 @@
                                        <td class="text-center">` + nextRow + `</td>
                                        <td class="text-center"><input type="text" name="misc_desc[]" placeholder="" value=""></td>
                                        <td class="text-center"><input type="number" name="misc_unit_price[]" placeholder="" onchange="change_mis_unit(` + nextRow + `)"></td>
-                                       <td class="text-center"><input type="number" name="misc_quantity[]" onfocus="this.oldvalue = this.value;" placeholder="" onchange="change_mis_quantity(` + nextRow + `)"></td>
+                                       <td class="text-center"><input type="number" name="misc_quantity[]" onfocus="this.oldvalue = this.value;" placeholder="" onchange="change_mis_quantity(` + nextRow + `);;this.oldvalue = this.value;"></td>
                                        <td class="text-center"></td>
                                        <td class="table-report__action">
                                            <div class="flex justify-center items-center">
@@ -1604,7 +1611,7 @@
             html += `<tr id="adsOn-item-row` + nextRow + `" row="` + nextRow + `" class="intro-x adsOn-item">
                                        <td class="text-center"><input type="text" name="addon_desc[]" placeholder=""></td>
                                        <td class="text-center"><input type="number" name="addon_unit_price[]" placeholder="" onchange="change_adsOn_unit(` + nextRow + `)"></td>
-                                       <td class="text-center"><input type="number" name="addon_quantity[]" placeholder="" onfocus="this.oldvalue = this.value;" onchange="change_adsOn_quantity(` + nextRow + `)"></td>
+                                       <td class="text-center"><input type="number" name="addon_quantity[]" placeholder="" onfocus="this.oldvalue = this.value;" onchange="change_adsOn_quantity(` + nextRow + `);this.oldvalue = this.value;"></td>
                                        <td class="text-center"></td>
                                        <td class="table-report__action w-56">
                                            <div class="flex justify-center items-center">
