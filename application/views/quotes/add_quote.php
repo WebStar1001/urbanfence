@@ -207,10 +207,14 @@
                         <fieldset class=" p-2 sm:p-3  fieldset_bd_color">
                             <legend class="legend_spacing">Quote #01</legend>
                             <p><b>
-                                    Customer Name: Aviad Kriaf <br>
-                                    Quote Type: New Fence <br>
-                                    Address: 207 Edgeley Blvd <br>
-                                    Payment Terms are: Net 30 Day
+                                    Customer
+                                    Name: <?php echo (is_object($opportunity)) ? $opportunity->customer_name : ''; ?>
+                                    <br>
+                                    Quote Type: <?php echo (is_object($opportunity)) ? $opportunity->job_type : ''; ?>
+                                    <br>
+                                    Address: <?php echo (is_object($opportunity)) ? $opportunity->job_address : ''; ?>
+                                    <br>
+                                    Payment Terms are: <span id="payment_terms_span"></span>
                                 </b></p>
                         </fieldset>
                     </div>
@@ -228,16 +232,14 @@
                             </select>
                         </div>
                         <div class="w-full sm:w-full m-auto mb-2" style="display:flex;">
-                            <p> Set Payment Terms </p>
-                            <select class="input border mr-2" name="payment_term">
+                            <p> Set Payment Terms * </p>
+                            <select class="input border mr-2" name="payment_term" required>
                                 <?php
-                                $payment_terms = array('', 'C.O.D', 'Net 30 Days', 'Net 45 Days', 'Net 60 Days', 'Master-Card', 'Amex'
+                                $payment_terms = array('C.O.D', 'Net 30 Days', 'Net 45 Days', 'Net 60 Days', 'Master-Card', 'Amex'
                                 , '30% Deposit - 70% Due 30 Days F', '50% Deposit - 50% Due 30 Days',
                                     '50% Deposit - 50% Due On Job C');
-                                foreach ($payment_terms as $key => $val) {
-                                    if ($key == 0)
-                                        continue;
-                                    echo '<option value="' . $key . '">' . $val . '</option>';
+                                foreach ($payment_terms as $val) {
+                                    echo '<option value="' . $val . '">' . $val . '</option>';
                                 }
                                 ?>
                             </select>
@@ -491,10 +493,15 @@
                                         <fieldset class=" p-3  fieldset_bd_color">
                                             <legend class="legend_spacing">Quote #01</legend>
                                             <p><b>
-                                                    Customer Name: Aviad Kriaf <br>
-                                                    Quote Type: New Fence <br>
-                                                    Address: 207 Edgeley Blvd <br>
-                                                    Payment Terms are: Net 30 Day
+                                                    Customer
+                                                    Name: <?php (is_object($opportunity)) ? $opportunity->customer_name : ''; ?>
+                                                    <br>
+                                                    Quote
+                                                    Type: <?php (is_object($opportunity)) ? $opportunity->job_type : ''; ?>
+                                                    <br>
+                                                    Address: <?php (is_object($opportunity)) ? $opportunity->job_address : ''; ?>
+                                                    <br>
+                                                    Payment Terms are: <span id="payment_terms"></span>
                                                 </b></p>
                                         </fieldset>
                                     </div>
@@ -517,51 +524,63 @@
                                                 <td class="border-b"><a href="#material-detailed"
                                                                         data-target="#material-detailed"
                                                                         data-toggle="modal"
-                                                                        style="text-decoration: underline;">4000</a>
+                                                                        style="text-decoration: underline;"></a>
                                                 </td>
-                                                <td class="border-b">5800</td>
-                                                <td class="border-b">1800</td>
+                                                <td class="border-b"></td>
+                                                <td class="border-b"></td>
                                             </tr>
                                             <tr>
                                                 <td class="border-b">Labour</td>
                                                 <td class="border-b"><a href="javascript:;"
                                                                         data-target="#labour-detailed"
                                                                         data-toggle="modal"
-                                                                        style="text-decoration: underline;">4000</a>
+                                                                        style="text-decoration: underline;"></a>
                                                 </td>
-                                                <td class="border-b">5800</td>
-                                                <td class="border-b">1800</td>
+                                                <td class="border-b"></td>
+                                                <td class="border-b"></td>
                                             </tr>
                                             <tr>
                                                 <td class="border-b">Misc</td>
                                                 <td class="border-b"><a href="javascript:;" data-target="#misc-detailed"
                                                                         data-toggle="modal"
-                                                                        style="text-decoration: underline;">1000</a>
-                                                <td class="border-b">1500</td>
-                                                <td class="border-b">500</td>
+                                                                        style="text-decoration: underline;"></a>
+                                                <td class="border-b"></td>
+                                                <td class="border-b"></td>
                                             </tr>
                                             <tr>
                                                 <td class="border-b">Add-On</td>
-                                                <td class="border-b">6750</td>
-                                                <td class="border-b">10800</td>
-                                                <td class="border-b">100</td>
+                                                <td class="border-b"></td>
+                                                <td class="border-b"></td>
+                                                <td class="border-b"></td>
                                             </tr>
                                             <tr class="sub-total1">
                                                 <td class="border-b">Sub Total 1</td>
-                                                <td class="border-b">15750</td>
-                                                <td class="border-b">23900</td>
-                                                <td class="border-b">4050</td>
+                                                <td class="border-b"></td>
+                                                <td class="border-b"></td>
+                                                <td class="border-b"></td>
+                                            </tr>
+                                            <tr class="discount-row">
+                                                <td class="border-b">Discount</td>
+                                                <td class="border-b">` + discount_percent + `%</td>
+                                                <td class="border-b">` + discount_amount + `</td>
+                                                <td class="border-b"></td>
+                                            </tr>
+                                            <tr class="sub-total2">
+                                                <td class="border-b">Sub Total 2</td>
+                                                <td class="border-b"></td>
+                                                <td class="border-b">` + (sub_total1 - discount_amount) + `</td>
+                                                <td class="border-b"></td>
                                             </tr>
                                             <tr>
                                                 <td class="border-b">HST</td>
                                                 <td class="border-b">13%</td>
-                                                <td class="border-b">3107</td>
+                                                <td class="border-b"></td>
                                                 <td class="border-b"></td>
                                             </tr>
                                             <tr>
                                                 <td class="border-b">Total</td>
                                                 <td class="border-b"></td>
-                                                <td class="border-b">27007</td>
+                                                <td class="border-b"></td>
                                                 <td class="border-b"></td>
                                             </tr>
                                             </tbody>
@@ -614,16 +633,18 @@
                                             <label class="float-left" style="margin-right: 8px;">Set Markup rate</label>
                                             <input type="radio" class="input border mr-2 float-left set_markup"
                                                    id="horizontal-radio-chris-evans" name="horizontal_radio_button"
-                                                   value="total_markup">
+                                                   checked>
                                             <label class="cursor-pointer select-none float-left"
                                                    for="horizontal-radio-chris-evans">Total Markup</label>
 
-                                            <input disabled type="text"
-                                                   class="input-total-markup bg-gray-100 cursor-not-allowed input border"
-                                                   placeholder="%" style="width:15%">
-                                            <input disabled type="text"
-                                                   class="input-total-markup bg-gray-100 cursor-not-allowed input border"
-                                                   placeholder="Amount" style="width:20%">
+                                            <input type="number"
+                                                   class="input-total-markup input border"
+                                                   placeholder="%" style="width:15%" name="total_markup_percent"
+                                                   id="total_markup_percent">
+                                            <input type="number"
+                                                   class="input-total-markup input border"
+                                                   placeholder="Amount" style="width:20%" name="total_markup_amount"
+                                                   id="total_markup_amount">
                                         </div>
 
 
@@ -631,64 +652,70 @@
                                             <label class="float-left" style="margin-right: 8px; visibility: hidden;">Set
                                                 Markup rate</label>
                                             <input type="radio" class="input border mr-2 float-left set_markup"
-                                                   id="horizontal-radio-chris-evans2" name="horizontal_radio_button"
-                                                   value="multiple_markup">
+                                                   id="horizontal-radio-chris-evans2" name="horizontal_radio_button">
                                             <label class="cursor-pointer select-none mr-2 float-left"
                                                    for="horizontal-radio-chris-evans2">Multiple Markups</label>
-
-
                                         </div>
-
 
                                         <div class="mt-1 mb-5 " style="text-align-last: end;">
 
                                             <label class="mr-5">Material Markup</label>
-                                            <input disabled placeholder="%" type="text"
-                                                   class="input-multiple-markup input border bg-gray-100 cursor-not-allowed"
-                                                   style="width:15%">
-                                            <input disabled placeholder="Amount" type="text"
-                                                   class="input-multiple-markup input border bg-gray-100 cursor-not-allowed"
-                                                   style="width:20%">
+                                            <input disabled placeholder="%" type="number"
+                                                   class="input-multiple-markup input border bg-gray-100 cursor-not-allowed single_markup"
+                                                   style="width:15%" name="material_markup_percent"
+                                                   id="material_markup_percent">
+                                            <input disabled placeholder="Amount" type="number"
+                                                   class="input-multiple-markup input border bg-gray-100 cursor-not-allowed single_markup"
+                                                   style="width:20%" name="material_markup_amount"
+                                                   id="material_markup_amount">
                                         </div>
 
                                         <div class="mt-1 mb-5 " style="text-align-last: end;">
 
                                             <label class="mr-5">Labour Markup</label>
-                                            <input disabled placeholder="%" type="text"
+                                            <input disabled placeholder="%" type="number"
                                                    class="input-multiple-markup input border bg-gray-100 cursor-not-allowed"
-                                                   style="width:15%">
-                                            <input disabled placeholder="Amount" type="text"
-                                                   class="input-multiple-markup input border bg-gray-100 cursor-not-allowed"
-                                                   style="width:20%">
+                                                   style="width:15%" name="labor_markup_percent"
+                                                   id="labor_markup_percent">
+                                            <input disabled placeholder="Amount" type="number"
+                                                   class="input-multiple-markup input border bg-gray-100 cursor-not-allowed single_markup"
+                                                   style="width:20%" name="labor_markup_amount"
+                                                   id="labor_markup_amount">
                                         </div>
 
 
                                         <div class="mt-1 mb-5" style="text-align-last: end;">
                                             <label class=" mr-5">Misc Markup</label>
-                                            <input disabled type="text" placeholder="%"
-                                                   class="input-multiple-markup input border ml-1 bg-gray-100 cursor-not-allowed"
-                                                   style="width:15%">
-                                            <input disabled placeholder="Amount" type="text"
-                                                   class="input-multiple-markup input border  bg-gray-100 cursor-not-allowed"
-                                                   style="width:20%">
+                                            <input disabled type="number" placeholder="%"
+                                                   class="input-multiple-markup input border ml-1 bg-gray-100 cursor-not-allowed single_markup"
+                                                   style="width:15%" name="misc_markup_percent"
+                                                   id="misc_markup_percent">
+                                            <input disabled placeholder="Amount" type="number"
+                                                   class="input-multiple-markup input border  bg-gray-100 cursor-not-allowed single_markup"
+                                                   style="width:20%" name="misc_markup_amount" id="misc_markup_amount">
                                         </div>
 
 
                                         <div class="mt-1 mb-5" style="text-align-last: end;">
                                             <label class=" mr-5">Ads-On Markup</label>
-                                            <input disabled placeholder="%" type="text"
-                                                   class="input-multiple-markup input border bg-gray-100 cursor-not-allowed"
-                                                   style="width:15%">
-                                            <input disabled placeholder="Amount" type="text"
-                                                   class="input-multiple-markup input border bg-gray-100 cursor-not-allowed"
-                                                   style="width:20%">
+                                            <input disabled placeholder="%" type="number"
+                                                   class="input-multiple-markup input border bg-gray-100 cursor-not-allowed single_markup"
+                                                   style="width:15%" name="adson_markup_percent"
+                                                   id="adson_markup_percent">
+                                            <input disabled placeholder="Amount" type="number"
+                                                   class="input-multiple-markup input border bg-gray-100 cursor-not-allowed single_markup"
+                                                   style="width:20%" name="adson_markup_amount"
+                                                   id="adson_markup_amount">
                                         </div>
                                         <div class="mt-10">
                                             <label class="mr-5">Add Discount</label>
-                                            <input type="text" class="add-discount input w-25 border col-span-4"
-                                                   placeholder="%" style="width:15%">
-                                            <input placeholder="Amount" type="text"
-                                                   class="add-discount input w-25 border col-span-4" style="width:20%">
+                                            <input type="number"
+                                                   class="add-discount input w-25 border col-span-4"
+                                                   placeholder="%" style="width:15%" name="discount_percent">
+                                            <input placeholder="Amount" type="number"
+                                                   class="add-discount input w-25 border col-span-4"
+                                                   style="width:20%"
+                                                   name="discount_amount">
 
                                         </div>
 
@@ -718,10 +745,15 @@
                                         <fieldset class=" p-3  fieldset_bd_color">
                                             <legend class="legend_spacing">Quote #01</legend>
                                             <p><b>
-                                                    Customer Name: Aviad Kriaf <br>
-                                                    Quote Type: New Fence <br>
-                                                    Address: 207 Edgeley Blvd <br>
-                                                    Payment Terms are: Net 30 Day
+                                                    Customer
+                                                    Name: <?php (is_object($opportunity)) ? $opportunity->customer_name : ''; ?>
+                                                    <br>
+                                                    Quote
+                                                    Type: <?php (is_object($opportunity)) ? $opportunity->job_type : ''; ?>
+                                                    <br>
+                                                    Address: <?php (is_object($opportunity)) ? $opportunity->job_address : ''; ?>
+                                                    <br>
+                                                    Payment Terms are: <span id="payment_terms"></span>
                                                 </b></p>
                                         </fieldset>
                                     </div>
@@ -812,7 +844,7 @@
                                                 <td class="border-b"><a href="#"
                                                                         data-target="#material-detailed"
                                                                         data-toggle="modal"
-                                                                        style="text-decoration: underline;">6000</a>
+                                                                        style="text-decoration: underline;"></a>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -820,39 +852,39 @@
                                                 <td class="border-b"><a href="javascript:;"
                                                                         data-target="#labour-detailed"
                                                                         data-toggle="modal"
-                                                                        style="text-decoration: underline;">6000</a>
+                                                                        style="text-decoration: underline;"></a>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="border-b">Misc</td>
                                                 <td class="border-b"><a href="javascript:;" data-target="#misc-detailed"
                                                                         data-toggle="modal"
-                                                                        style="text-decoration: underline;">1500</a>
+                                                                        style="text-decoration: underline;"></a>
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td class="border-b">Add-On</td>
-                                                <td class="border-b">10125</td>
+                                                <td class="border-b"></td>
                                             </tr>
                                             <tr>
                                                 <td class="border-b">Sub-Total1</td>
-                                                <td class="border-b">23625</td>
+                                                <td class="border-b"></td>
                                             </tr>
                                             <tr>
                                                 <td class="border-b">Discount 20%</td>
-                                                <td class="border-b">4725</td>
+                                                <td class="border-b"></td>
                                             </tr>
                                             <tr>
                                                 <td class="border-b">Sub-Total2</td>
-                                                <td class="border-b">18900</td>
+                                                <td class="border-b"></td>
                                             </tr>
                                             <tr>
                                                 <td class="border-b">HST 13%</td>
-                                                <td class="border-b">2457</td>
+                                                <td class="border-b"></td>
                                             </tr>
                                             <tr>
                                                 <td class="border-b">Total</td>
-                                                <td class="border-b">21357</td>
+                                                <td class="border-b"></td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -1009,7 +1041,8 @@
                                 '')
                         }
                     });
-                    $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html($('#material-item-total').find('td').eq(2).html());
+                    var mat_total = $('#material-item-total').find('td').eq(2).html() * 1;
+                    $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(mat_total);
                     $('#labour').find('tr').each(function () {
                         var lab_rowId = $(this).attr('id');
                         if (lab_rowId != 'labour_thead' && lab_rowId != 'labour-item-row0' && lab_rowId != 'labour-item-total') {
@@ -1020,7 +1053,8 @@
                                 '')
                         }
                     });
-                    $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html($('#labour-item-total').find('td').eq(2).html());
+                    var labour_total = $('#labour-item-total').find('td').eq(2).html() * 1;
+                    $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(labour_total);
                     $('#miscellaneous').find('tr').each(function (index) {
                         var mis_rowId = $(this).attr('id');
                         if (mis_rowId != 'miscellaneous_thead' && mis_rowId != 'miscellaneous-item-row0' && mis_rowId != 'miscellaneous-item-total') {
@@ -1033,9 +1067,18 @@
                                 '')
                         }
                     });
-                    $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html($('#miscellaneous-item-total').find('td').eq(2).html());
+                    var mis_total = $('#miscellaneous-item-total').find('td').eq(2).html() * 1;
+                    $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(mis_total);
 
-                    $('#final_quote_table').find('tr').eq(4).children().eq(1).find('a').html($('#adsOn-item-total').find('td').eq(2).html());
+                    var addon_total = $('#adsOn-item-total').find('td').eq(2).html() * 1;
+                    $('#final_quote_table').find('tr').eq(4).children().eq(1).html(addon_total);
+
+                    var sub_total1 = mat_total + mis_total + labour_total + addon_total;
+                    $('#total_markup_percent').val(10);
+                    $('#total_markup_amount').val(sub_total1 * 0.1);
+
+                    calculate_sale_table();
+
                 } else {
                     $("#nextBtn").removeClass('bg-gray-100 cursor-not-allowed').removeAttr('disabled');
                     document.getElementById("nextBtn").innerHTML = "Next";
@@ -1089,26 +1132,153 @@
             }
         });
 
-        $(".add-discount").keyup(function () {
-            let discount = $(this).val();
-            $(".discount-row,.sub-total2").remove();
-            let html = '';
-            if (discount) {
-                html += `<tr class="discount-row">
-                <td class="border-b">Discount</td>
-                <td class="border-b">` + discount + `%</td>
-                <td class="border-b">4725</td>
-                <td class="border-b">3150</td>
-            </tr>
-            <tr class="sub-total2">
-                <td class="border-b">Sub Total 2</td>
-                <td class="border-b">15750</td>
-                <td class="border-b">18900</td>
-                <td class="border-b">3150</td>
-            </tr>
-            `;
-                $(".sub-total1").after(html);
+        function calculate_sale_table() {
+            var mat_cost = $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html() * 1;
+
+            var labour_cost = $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html() * 1;
+
+            var misc_cost = $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html() * 1;
+
+            var adson_cost = $('#final_quote_table').find('tr').eq(4).children().eq(1).html() * 1;
+
+            var subtotal_cost1 = mat_cost + labour_cost + misc_cost + adson_cost;
+
+            var material_markup_percent = $('#material_markup_percent').val() * 1;
+            var labour_markup_percent = $('#labor_markup_percent').val() * 1;
+            var misc_markup_percent = $('#misc_markup_percent').val() * 1;
+            var adson_markup_percent = $('#adson_markup_percent').val() * 1;
+            if (document.getElementById('horizontal-radio-chris-evans').checked) {
+                material_markup_percent = $('#total_markup_percent').val() * 1;
+                labour_markup_percent = $('#total_markup_percent').val() * 1;
+                misc_markup_percent = $('#total_markup_percent').val() * 1;
+                adson_markup_percent = $('#total_markup_percent').val() * 1;
             }
+            var discount_percent = $('input[name="discount_percent"]').val() * 1;
+
+
+            var mat_profit = (mat_cost * material_markup_percent / 100);
+            var labour_profit = (labour_cost * labour_markup_percent / 100);
+            var misc_profit = (misc_cost * misc_markup_percent / 100);
+            var adson_profit = (adson_cost * adson_markup_percent / 100);
+
+            var subtotal_selling1 = subtotal_cost1 + mat_profit + labour_profit + misc_profit + adson_profit;
+
+            var discount_selling = (subtotal_selling1 * discount_percent / 100);
+
+            var subtotal_selling2 = subtotal_selling1 - discount_selling;
+
+            var HST = subtotal_selling2 * 13 / 100;
+
+            var total_selling = subtotal_selling1 + HST;
+
+            $('#final_quote_table').find('tr').eq(1).children().eq(2).html(mat_cost + mat_profit);
+            $('#final_quote_table').find('tr').eq(1).children().eq(3).html(mat_profit);
+            $('#final_quote_table').find('tr').eq(2).children().eq(2).html(labour_cost + labour_profit);
+            $('#final_quote_table').find('tr').eq(2).children().eq(3).html(labour_profit);
+            $('#final_quote_table').find('tr').eq(3).children().eq(2).html(misc_cost + misc_profit);
+            $('#final_quote_table').find('tr').eq(3).children().eq(3).html(misc_profit);
+            $('#final_quote_table').find('tr').eq(4).children().eq(2).html(adson_cost + adson_profit);
+            $('#final_quote_table').find('tr').eq(4).children().eq(3).html(adson_profit);
+
+            $('#final_quote_table').find('tr').eq(5).children().eq(1).html(Math.round(subtotal_cost1 * 100) / 100);
+            $('#final_quote_table').find('tr').eq(5).children().eq(2).html(Math.round(subtotal_selling1 * 100) / 100);
+
+            $('#final_quote_table').find('tr').eq(6).children().eq(1).html(discount_percent + '%');
+            $('#final_quote_table').find('tr').eq(6).children().eq(2).html(Math.round(discount_selling * 100) / 100);
+
+            $('#final_quote_table').find('tr').eq(7).children().eq(2).html(Math.round(subtotal_selling2 * 100) / 100);
+
+            $('#final_quote_table').find('tr').eq(8).children().eq(2).html(Math.round(HST * 100) / 100);
+            $('#final_quote_table').find('tr').eq(9).children().eq(2).html(Math.round(total_selling * 100) / 100);
+
+        }
+
+        $(".add-discount").keyup(function () {
+            var discount_percent = 0;
+            var discount_amount = 0;
+            var sub_total1 = $('#final_quote_table').find('tr').eq(5).children().eq(2).html() * 1;
+            if ($(this).attr('name') == 'discount_percent') {
+                discount_percent = $(this).val() * 1;
+                discount_amount = sub_total1 * discount_percent / 100;
+                $('input[name="discount_amount"]').val(discount_amount);
+            } else {
+                discount_amount = $(this).val() * 1;
+                discount_percent = (discount_amount / sub_total1).toFixed(4) * 100;
+                $('input[name="discount_percent"]').val(discount_percent);
+            }
+            calculate_sale_table();
+        });
+        $('#total_markup_percent, #total_markup_amount').keyup(function () {
+            var total_percent = 0;
+            var total_amount = 0;
+            var sub_total1 = $('#final_quote_table').find('tr').eq(5).children().eq(2).html() * 1;
+            if ($(this).attr('id') == 'total_markup_percent') {
+                total_percent = $(this).val() * 1;
+                total_amount = sub_total1 * total_percent / 100;
+                $('#total_markup_amount').val(total_amount);
+            } else {
+                total_amount = $(this).val() * 1;
+                total_percent = (total_amount / sub_total1).toFixed(4) * 100;
+                $('#total_mark_percent').val(total_percent);
+            }
+            calculate_sale_table();
+        });
+        $('.single_markup').keyup(function () {
+            var mat_percent = 0;
+            var mat_amount = 0;
+            var labour_percent = 0;
+            var labour_amount = 0;
+            var mis_percent = 0;
+            var mis_amount = 0;
+            var adson_percent = 0;
+            var adson_amount = 0;
+            var mat_cost = $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html() * 1;
+            if ($(this).attr('id') == 'material_markup_percent') {
+                mat_percent = $(this).val() * 1;
+                mat_amount = mat_cost * mat_percent / 100;
+                $('#material_markup_amount').val(mat_amount);
+            } else if ($(this).attr('id') == 'material_markup_amount') {
+                mat_amount = $(this).val() * 1;
+                mat_percent = (mat_amount / mat_cost).toFixed(4) * 100;
+                $('#material_mark_percent').val(mat_percent);
+            }
+            var labour_cost = $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html() * 1;
+            if ($(this).attr('id') == 'labour_markup_percent') {
+                labour_percent = $(this).val() * 1;
+                labour_amount = labour_cost * labour_percent / 100;
+                $('#labour_markup_amount').val(labour_amount);
+            } else if ($(this).attr('id') == 'labour_markup_amount') {
+                labour_amount = $(this).val() * 1;
+                labour_percent = (labour_amount / labour_cost).toFixed(4) * 100;
+                $('#labour_mark_percent').val(labour_percent);
+            }
+
+            var mis_cost = $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html() * 1;
+
+            if ($(this).attr('id') == 'misc_markup_percent') {
+                mis_percent = $(this).val() * 1;
+                mis_amount = mis_cost * mis_percent / 100;
+                $('#misc_markup_amount').val(mis_amount);
+            } else if ($(this).attr('id') == 'misc_markup_amount') {
+                mis_amount = $(this).val() * 1;
+                mis_percent = (mis_amount / mis_cost).toFixed(4) * 100;
+                $('#misc_mark_percent').val(mis_percent);
+            }
+
+
+            var adson_cost = $('#final_quote_table').find('tr').eq(4).children().eq(1).find('a').html() * 1;
+
+            if ($(this).attr('id') == 'adson_markup_percent') {
+                adson_percent = $(this).val() * 1;
+                adson_amount = adson_cost * adson_percent / 100;
+                $('#adson_markup_amount').val(adson_amount);
+            } else if ($(this).attr('id') == 'adson_markup_amount') {
+                adson_amount = $(this).val() * 1;
+                adson_percent = (adson_amount / adson_cost).toFixed(4) * 100;
+                $('#adson_mark_percent').val(adson_percent);
+            }
+
+            calculate_sale_table();
 
         });
 
@@ -1234,7 +1404,7 @@
             var total_price = $('#material-item-total').children().eq(2).html() * 1;
             var original_price = $('#material-item-row' + rowId).children().eq(4).html() * 1;
             var total_quantity = $('#material-item-total').children().eq(1).html() * 1;
-            var original_quantity =  $('#material-item-row' + rowId).children().eq(3).find('input').val() * 1;
+            var original_quantity = $('#material-item-row' + rowId).children().eq(3).find('input').val() * 1;
             $('#material-item-total').children().eq(1).html(total_quantity - original_quantity);
             $('#material-item-total').children().eq(2).html(total_price - original_price)
             $("#material-item-row" + rowId).remove();
@@ -1265,7 +1435,7 @@
             html += `<tr id="labour-item-row` + nextRow + `" row="` + nextRow + `" class="intro-x labour-item">
                                        <td class="w-40">
                                            <div class="flex">
-                                               <select class="input border mr-2" name="labor_desc[]">
+                                               <select class="input border mr-2" name="labor_type[]">
                                                   <option>Man Day with Digger</option>
                                                   <option>Man Day Set Posts</option>
                                                   <option>Man Day Drive Posts</option>
@@ -1282,7 +1452,7 @@
                                            </div>
                                        </td>
 
-                                       <td class="text-center"><input type="number" name="labor_quantity[]"  onfocus="this.oldvalue = this.value;" onchange="set_labour_price(` + nextRow + `)"></td>
+                                       <td class="text-center"><input type="number" name="labor_total_days[]"  onfocus="this.oldvalue = this.value;" onchange="set_labour_price(` + nextRow + `)"></td>
                                        <td></td>
                                        <td class="table-report__action w-56">
                                            <div class="flex justify-center items-center">
@@ -1315,7 +1485,7 @@
             var original_price = $('#labour-item-row' + rowId).children().eq(2).html() * 1;
             $('#labour-item-total').children().eq(2).html(total_price - original_price);
             var total_quantity = $('#labour-item-total').children().eq(1).html() * 1;
-            var original_quantity =  $('#labour-item-row' + rowId).children().eq(1).find('input').val() * 1;
+            var original_quantity = $('#labour-item-row' + rowId).children().eq(1).find('input').val() * 1;
             $('#labour-item-total').children().eq(1).html(total_quantity - original_quantity);
             $("#labour-item-row" + rowId).remove();
         }
@@ -1369,6 +1539,7 @@
                 $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
         }
+
         function change_mis_quantity(rowId) {
             var total_price = $('#miscellaneous-item-total').children().eq(2).html() * 1;
             var original_price = $('#miscellaneous-item-row' + rowId).children().eq(4).html() * 1;
@@ -1388,7 +1559,7 @@
             var original_price = $('#miscellaneous-item-row' + rowId).children().eq(4).html() * 1;
             $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price);
             var total_quantity = $('#miscellaneous-item-total').children().eq(1).html() * 1;
-            var original_quantity =  $('#miscellaneous-item-row' + rowId).children().eq(3).find('input').val() * 1;
+            var original_quantity = $('#miscellaneous-item-row' + rowId).children().eq(3).find('input').val() * 1;
             $('#miscellaneous-item-total').children().eq(1).html(total_quantity - original_quantity);
             $("#miscellaneous-item-row" + rowId).remove();
         }
@@ -1441,6 +1612,7 @@
                 $('#adsOn-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
         }
+
         function change_adsOn_quantity(rowId) {
             var total_price = $('#adsOn-item-total').children().eq(2).html() * 1;
             var original_price = $('#adsOn-item-row' + rowId).children().eq(3).html() * 1;
@@ -1461,7 +1633,7 @@
             var original_price = $('#adsOn-item-row' + rowId).children().eq(3).html() * 1;
             $('#adsOn-item-total').children().eq(2).html(total_price - original_price);
             var total_quantity = $('#adsOn-item-total').children().eq(1).html() * 1;
-            var original_quantity =  $('#adsOn-item-row' + rowId).children().eq(2).find('input').val() * 1;
+            var original_quantity = $('#adsOn-item-row' + rowId).children().eq(2).find('input').val() * 1;
             $('#adsOn-item-total').children().eq(1).html(total_quantity - original_quantity);
             $("#adsOn-item-row" + rowId).remove();
         }

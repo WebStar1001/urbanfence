@@ -325,7 +325,7 @@ tr.shown td.details-control {
 
                 {
                     "data": null, render: function (data) {
-                        return "<a href='<?php echo base_url('Quotes/add_quote');?>'><i class='fa fa-external-link' aria-hidden='true'></i></a>"
+                        return "<a href='<?php echo base_url('Quotes/add_quote?opportunity_id=');?>" + data.id + "'><i class='fa fa-external-link' aria-hidden='true'></i></a>"
                     }
                 }
             ],

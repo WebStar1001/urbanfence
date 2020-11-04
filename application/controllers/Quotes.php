@@ -11,6 +11,7 @@ class Quotes extends CI_Controller {
         $this->load->model('CustomerModel');
         $this->load->model('CompanyModel');
         $this->load->model('CatalogModel');
+        $this->load->model('OpportunityModel');
 //        $this->load->library('auth');
 //        $this->load->library('session');
 //        $this->auth->check_admin_auth();
@@ -18,6 +19,10 @@ class Quotes extends CI_Controller {
 
 	public function add_quote()
 	{
+	    $data['opportunity'] = array();
+	    if(isset($_GET['opportunity_id'])){
+	        $data['opportunity'] = $this->OpportunityModel->get_opportunity($_GET['opportunity_id']);
+        }
 	    $data['categories'] = $this->CatalogModel->getProductCategories();
 	    $data['catalogs'] = $this->CatalogModel->getCatalogs();
 	    $data['companies'] = $this->CompanyModel->getCompanies();
