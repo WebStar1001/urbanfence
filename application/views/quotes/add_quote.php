@@ -829,7 +829,7 @@
                                 <div class="preview">
                                     <div class="overflow-x-auto">
 
-                                        <table class="table mt-5" id="final_quote_table">
+                                        <table class="table mt-5" id="last_quote_table">
                                             <thead>
                                             <tr class="bg-gray-200 text-gray-700">
                                                 <th class="whitespace-no-wrap">Items</th>
@@ -991,6 +991,10 @@
     <!--    <script type="text/javascript" src="--><?php //echo base_url(); ?><!--assets/js/add_quote.js"/>-->
     <script>
         $(function () {
+            $('#payment_terms_span').html($('select[name="payment_term"]').val());
+            $('select[name="payment_term"]').change(function () {
+                $('#payment_terms_span').html($(this).val());
+            })
             $(".material-item,.labour-item,.miscellaneous-item,.adsOn-item").slideUp(1);
         });
         $('#quoteForm').keypress(function (e) {
@@ -1191,6 +1195,17 @@
             $('#final_quote_table').find('tr').eq(8).children().eq(2).html(Math.round(HST * 100) / 100);
             $('#final_quote_table').find('tr').eq(9).children().eq(2).html(Math.round(total_selling * 100) / 100);
 
+
+            $('#last_quote_table').find('tr').eq(1).children(1).html(mat_cost + mat_profit);
+            $('#last_quote_table').find('tr').eq(2).children(1).html(labour_cost + labour_profit);
+            $('#last_quote_table').find('tr').eq(3).children(1).html(misc_cost + misc_profit);
+            $('#last_quote_table').find('tr').eq(4).children(1).html(adson_cost + adson_profit);
+            $('#last_quote_table').find('tr').eq(5).children(1).html(Math.round(subtotal_cost1 * 100) / 100);
+            $('#last_quote_table').find('tr').eq(6).children(1).html(Math.round(discount_selling * 100) / 100);
+            $('#last_quote_table').find('tr').eq(7).children(1).html(Math.round(subtotal_selling2 * 100) / 100);
+            $('#last_quote_table').find('tr').eq(8).children(1).html(Math.round(HST * 100) / 100);
+            $('#last_quote_table').find('tr').eq(9).children(1).html(Math.round(total_selling * 100) / 100);
+
         }
 
         $(".add-discount").keyup(function () {
@@ -1318,7 +1333,7 @@
 
                                         <td class="w-40">
                                             <div class="flex">
-                                                <select class="input border mr-2" name="material_code[]" onchange="chage_mat_code(` + nextRow + `)">
+                                                <select class="input border mr-2" name="material_code[]" onchange="change_mat_code(` + nextRow + `)">
                                                     ` + matOptions + `
                                                 </select>
                                             </div>
@@ -1350,7 +1365,7 @@
                     if (first == 0)
                         price_per_unit = catalogs[j].price_per_unit_tender;
 
-                    matOptions += '<option value="' + catalogs[j].mat_code + '">' + catalogs[j].mat_code + '</option>';
+                    matOptions += '<option value="' + catalogs[j].mat_code + '">' + catalogs[j].mat_description + '</option>';
                     first++;
                 }
             }

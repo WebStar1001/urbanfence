@@ -69,11 +69,11 @@
     </div>
     <?php
     $job_type = array(
-        '', 'Fence Repair', 'Gate Repair', 'Fence and Gate Repair', 'New Fence', 'New Gate', 'New Fence and Gate c/w  
+        'Fence Repair', 'Gate Repair', 'Fence and Gate Repair', 'New Fence', 'New Gate', 'New Fence and Gate c/w  
                 Operator', 'Gate Opperator Service');
-    $sale_source = array('', 'Returned Customer', 'Yellow Pages', 'Facebook', 'Google Ad');
-    $status = array('', 'New', 'Assigned');
-    $urgency = array('', 'Normal', 'Urgent');
+    $sale_source = array('Returned Customer', 'Yellow Pages', 'Facebook', 'Google Ad');
+    $status = array('New', 'Assigned');
+    $urgency = array('Normal', 'Urgent');
     ?>
     <form name="opporForm" method="post" action="save_opportunity">
         <div class="grid grid-cols-12 gap-6 box mt-5 md:p-10 sm:p-5 p-5">
@@ -182,16 +182,14 @@
                         <select name="job_type" class="input w-full border mt-2 flex-1">
                             <?php
                             foreach ($job_type as $key => $value) {
-                                if ($key == 0)
-                                    continue;
                                 if (is_object($opportunity)) {
-                                    if ($opportunity->job_type == $key) {
-                                        echo '<option value="' . $key . '" selected>' . $value . '</option>';
+                                    if ($opportunity->job_type == $value) {
+                                        echo '<option value="' . $value . '" selected>' . $value . '</option>';
                                     } else {
-                                        echo '<option value="' . $key . '">' . $value . '</option>';
+                                        echo '<option value="' . $value . '">' . $value . '</option>';
                                     }
                                 } else {
-                                    echo '<option value="' . $key . '">' . $value . '</option>';
+                                    echo '<option value="' . $value . '">' . $value . '</option>';
                                 }
                             }
                             ?>
@@ -202,16 +200,14 @@
                         <select name="urgency" class="input w-full border mt-2 flex-1">
                             <?php
                             foreach ($urgency as $key => $value) {
-                                if ($key == 0)
-                                    continue;
                                 if (is_object($opportunity)) {
-                                    if ($opportunity->urgency == $key) {
-                                        echo '<option value="' . $key . '" selected>' . $value . '</option>';
+                                    if ($opportunity->urgency == $value) {
+                                        echo '<option value="' . $value . '" selected>' . $value . '</option>';
                                     } else {
-                                        echo '<option value="' . $key . '">' . $value . '</option>';
+                                        echo '<option value="' . $value . '">' . $value . '</option>';
                                     }
                                 } else {
-                                    echo '<option value="' . $key . '">' . $value . '</option>';
+                                    echo '<option value="' . $value . '">' . $value . '</option>';
                                 }
                             }
                             ?>
@@ -250,13 +246,13 @@
                             <?php
                             foreach ($sale_source as $key => $value) {
                                 if (is_object($opportunity)) {
-                                    if ($opportunity->sale_source == $key) {
-                                        echo '<option value="' . $key . '" selected>' . $value . '</option>';
+                                    if ($opportunity->sale_source == $value) {
+                                        echo '<option value="' . $value . '" selected>' . $value . '</option>';
                                     } else {
-                                        echo '<option value="' . $key . '">' . $value . '</option>';
+                                        echo '<option value="' . $value . '">' . $value . '</option>';
                                     }
                                 } else {
-                                    echo '<option value="' . $key . '">' . $value . '</option>';
+                                    echo '<option value="' . $value . '">' . $value . '</option>';
                                 }
                             }
                             ?>

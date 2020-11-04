@@ -106,49 +106,23 @@ class Opportunity extends CI_Controller
             $this->db->where('id', $opportunity_id);
             $this->db->update('opportunities', $data);
         } else {
+            $data['status'] = 'New';
             $this->db->insert('opportunities', $data);
         }
-        redirect('Opportunity/pending_opportunities');
+        redirect('Opportunity/opportunity_list');
     }
 
     public function get_opportunities()
     {
-        $job_type = array(
-            '', 'Fence Repair', 'Gate Repair', 'Fence and Gate Repair', 'New Fence', 'New Gate', 'New Fence and Gate c/w  
-                Operator', 'Gate Opperator Service');
-        $sale_source = array('', 'Returned Customer', 'Yellow Pages', 'Facebook', 'Google Ad');
-        $status = array('', 'New', 'Assigned');
-        $urgency = array('', 'Normal', 'Urgent');
-        $result = $this->OpportunityModel->getOpportunities(0);
-        $data = array();
-        $data['data'] = array();
-        foreach ($result as $key => $row) {
-            $data['data'][$key] = $row;
-            $data['data'][$key]['job_type'] = $job_type[$row['job_type']];
-            $data['data'][$key]['sale_source'] = $sale_source[$row['sale_source']];
-            $data['data'][$key]['status'] = $status[$row['status']];
-            $data['data'][$key]['urgency'] = $urgency[$row['urgency']];
-        }
+        $this->OpportunityModel->getOpportunities(0);
+        $data['data'] = $this->OpportunityModel->getOpportunities(0);
         echo json_encode($data);
     }
     public function get_pending_opportunities()
     {
-        $job_type = array(
-            '', 'Fence Repair', 'Gate Repair', 'Fence and Gate Repair', 'New Fence', 'New Gate', 'New Fence and Gate c/w  
-                Operator', 'Gate Opperator Service');
-        $sale_source = array('', 'Returned Customer', 'Yellow Pages', 'Facebook', 'Google Ad');
-        $status = array('', 'New', 'Assigned');
-        $urgency = array('', 'Normal', 'Urgent');
-        $result = $this->OpportunityModel->getOpportunities(1);
-        $data = array();
-        $data['data'] = array();
-        foreach ($result as $key => $row) {
-            $data['data'][$key] = $row;
-            $data['data'][$key]['job_type'] = $job_type[$row['job_type']];
-            $data['data'][$key]['sale_source'] = $sale_source[$row['sale_source']];
-            $data['data'][$key]['status'] = $status[$row['status']];
-            $data['data'][$key]['urgency'] = $urgency[$row['urgency']];
-        }
+        $this->OpportunityModel->getOpportunities(1);
+        $data['data'] = $this->OpportunityModel->getOpportunities(1);
+
         echo json_encode($data);
     }
 

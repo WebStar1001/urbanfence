@@ -68,13 +68,13 @@ tr.shown td.details-control {
                     <div class="mt-1">
                         <select class="input w-full border" id="job_type">
                             <option value="0">All</option>
-                            <option value="1">Fence Repair</option>
-                            <option value="2">Gate Repair</option>
-                            <option value="3">Fence and Gate Repair</option>
-                            <option value="4">New Fence</option>
-                            <option value="5">New Gate</option>
-                            <option value="6">New Fence and Gate c/w Operator</option>
-                            <option value="7">Gate Operator Service</option>
+                            <option value="Fence Repair">Fence Repair</option>
+                            <option value="Gate Repair">Gate Repair</option>
+                            <option value="Fence and Gate Repair">Fence and Gate Repair</option>
+                            <option value="New Fence">New Fence</option>
+                            <option value="New Gate">New Gate</option>
+                            <option value="New Fence and Gate c/w Operator">New Fence and Gate c/w Operator</option>
+                            <option value="Gate Operator Service">Gate Operator Service</option>
                         </select>
                     </div>
                 </div>
@@ -100,10 +100,10 @@ tr.shown td.details-control {
                     <div class="mt-1">
                         <select class="input border w-full" id="sale_source">
                             <option value="0">All</option>
-                            <option value="1">Returned Customer</option>
-                            <option value="2">Yellow Pages</option>
-                            <option value="3">Facebook</option>
-                            <option value="4">Google Ad</option>
+                            <option value="Returned Customer">Returned Customer</option>
+                            <option value="Yellow Pages">Yellow Pages</option>
+                            <option value="Facebook">Facebook</option>
+                            <option value="Facebook">Google Ad</option>
                         </select>
                     </div>
                 </div>
@@ -113,8 +113,8 @@ tr.shown td.details-control {
                     <div class="mt-1">
                         <select class="input border w-full" id="status">
                             <option value="0">All</option>
-                            <option value="1">New</option>
-                            <option value="2">Assigned</option>
+                            <option value="New">New</option>
+                            <option value="Assigned">Assigned</option>
                         </select>
                     </div>
                 </div>
@@ -176,8 +176,8 @@ tr.shown td.details-control {
                     <div class="mt-1">
                         <select class="input border w-full" id="urgency">
                             <option value="0">All</option>
-                            <option value="1">Normal</option>
-                            <option value="1">Urgent</option>
+                            <option value="Normal">Normal</option>
+                            <option value="Urgent">Urgent</option>
                         </select>
                     </div>
                 </div>
