@@ -898,6 +898,15 @@
                         </div>
                         <!-- END: Vertical Form -->
                     </div>
+                    <div class="col-span-12 md:pl-3 md:pr-3" id="address_div_mg">
+                        <div class="preview">
+                            <div class="intro-y flex flex-col sm:flex-row">
+                                <label class="sm:text-left md:mr-5 width6 pt-1 sm:pt-3"> Additional Notes for Quote</label>
+                                <textarea class="input w-full border mt-2" name="additional_info"
+                                          placeholder=""></textarea>
+                            </div>
+                        </div>
+                    </div>
 
             </section>
             <input type="hidden" name="opportunity_id"
@@ -1228,29 +1237,29 @@
             $('#final_quote_table').find('tr').eq(4).children().eq(2).html(adson_cost + adson_profit);
             $('#final_quote_table').find('tr').eq(4).children().eq(3).html(adson_profit);
 
-            $('#final_quote_table').find('tr').eq(5).children().eq(1).html(Math.round(subtotal_cost1 * 100) / 100);
-            $('#final_quote_table').find('tr').eq(5).children().eq(2).html(Math.round(subtotal_selling1 * 100) / 100);
-            $('#final_quote_table').find('tr').eq(5).children().eq(3).html(Math.round(total_profit1 * 100) / 100);
+            $('#final_quote_table').find('tr').eq(5).children().eq(1).html(Math.round(subtotal_cost1));
+            $('#final_quote_table').find('tr').eq(5).children().eq(2).html(Math.round(subtotal_selling1));
+            $('#final_quote_table').find('tr').eq(5).children().eq(3).html(Math.round(total_profit1));
 
             $('#final_quote_table').find('tr').eq(6).children().eq(1).html(discount_percent + '%');
-            $('#final_quote_table').find('tr').eq(6).children().eq(2).html(Math.round(discount_selling * 100) / 100);
+            $('#final_quote_table').find('tr').eq(6).children().eq(2).html(Math.round(discount_selling));
 
-            $('#final_quote_table').find('tr').eq(7).children().eq(2).html(Math.round(subtotal_selling2 * 100) / 100);
+            $('#final_quote_table').find('tr').eq(7).children().eq(2).html(Math.round(subtotal_selling2));
 
-            $('#final_quote_table').find('tr').eq(8).children().eq(2).html(Math.round(HST * 100) / 100);
-            $('#final_quote_table').find('tr').eq(9).children().eq(2).html(Math.round(total_selling * 100) / 100);
+            $('#final_quote_table').find('tr').eq(8).children().eq(2).html(Math.round(HST));
+            $('#final_quote_table').find('tr').eq(9).children().eq(2).html(Math.round(total_selling));
 
 
-            $('#last_quote_table').find('tr').eq(1).children().eq(1).find('a').html(Math.round((mat_cost + mat_profit) * 100) / 100);
-            $('#last_quote_table').find('tr').eq(2).children().eq(1).find('a').html(Math.round((labour_cost + labour_profit) * 100) / 100);
-            $('#last_quote_table').find('tr').eq(3).children().eq(1).find('a').html(Math.round((misc_cost + misc_profit) * 100) / 100);
-            $('#last_quote_table').find('tr').eq(4).children().eq(1).html(Math.round((adson_cost + adson_profit) * 100) / 100);
-            $('#last_quote_table').find('tr').eq(5).children().eq(1).html(Math.round(subtotal_cost1 * 100) / 100);
+            $('#last_quote_table').find('tr').eq(1).children().eq(1).find('a').html(Math.round(mat_cost + mat_profit));
+            $('#last_quote_table').find('tr').eq(2).children().eq(1).find('a').html(Math.round(labour_cost + labour_profit));
+            $('#last_quote_table').find('tr').eq(3).children().eq(1).find('a').html(Math.round(misc_cost + misc_profit));
+            $('#last_quote_table').find('tr').eq(4).children().eq(1).html(Math.round((adson_cost + adson_profit)));
+            $('#last_quote_table').find('tr').eq(5).children().eq(1).html(Math.round(subtotal_cost1));
             $('#last_quote_table').find('tr').eq(6).children().eq(0).html('Discount ' + discount_percent + '%');
-            $('#last_quote_table').find('tr').eq(6).children().eq(1).html(Math.round(discount_selling * 100) / 100);
-            $('#last_quote_table').find('tr').eq(7).children().eq(1).html(Math.round(subtotal_selling2 * 100) / 100);
-            $('#last_quote_table').find('tr').eq(8).children().eq(1).html(Math.round(HST * 100) / 100);
-            $('#last_quote_table').find('tr').eq(9).children().eq(1).html(Math.round(total_selling * 100) / 100);
+            $('#last_quote_table').find('tr').eq(6).children().eq(1).html(Math.round(discount_selling));
+            $('#last_quote_table').find('tr').eq(7).children().eq(1).html(Math.round(subtotal_selling2));
+            $('#last_quote_table').find('tr').eq(8).children().eq(1).html(Math.round(HST));
+            $('#last_quote_table').find('tr').eq(9).children().eq(1).html(Math.round(total_selling));
 
 
             $('#mat_net').val(mat_cost);
@@ -1727,13 +1736,13 @@
         }
 
         function save_quote() {
-            if ($("#ia_signed").is(':checked') || $("#form_signed").is(':checked')) {
-                $('#quoteForm').submit();
-            } else {
+            if (!$("#ia_signed").is(':checked') && !$("#form_signed").is(':checked')) {
                 $('#alert-modal').find('p').html('Customer must sign both IA and Quote form in order to proceed to the job');
                 $('#alert-modal').modal('show');
                 $('#ia_signed').focus();
                 return;
+            } else {
+                $('#quoteForm').submit();
             }
         }
     </script>

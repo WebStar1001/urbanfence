@@ -79,6 +79,13 @@ class Opportunity extends CI_Controller
         $this->load->view('inc/footer');
     }
 
+    public function create_customer(){
+        $data = $_POST;
+        $this->db->insert('customers', $data);
+        $customer_id = $this->db->insert_id();
+        echo $customer_id;
+    }
+
     public function save_customer()
     {
         $data = $_POST;

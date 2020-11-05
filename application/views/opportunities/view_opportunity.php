@@ -244,6 +244,9 @@ tr.shown td.details-control {
             '<td>Job Address:</td>' +
             '<td>' + d.job_address + '</td>' +
             '</tr>' +
+            '<td>Contact onsite:</td>' +
+            '<td>' + d.contact_onsite + '</td>' +
+            '</tr>' +
             '<tr>' +
             '<td>Job Site:</td>' +
             '<td>' + d.job_site + '.</td>' +

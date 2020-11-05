@@ -172,7 +172,7 @@
         return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-alight:center">' +
             '<tr>' +
             '<td>Date:</td>' +
-            '<td>' + d.date + '</td>' +
+            '<td>' + d.quote_date + '</td>' +
             '</tr>' +
             '<tr>' +
             '<td>Job City:</td>' +
@@ -184,7 +184,7 @@
             '</tr>' +
             '<tr>' +
             '<td>Discount Amount:</td>' +
-            '<td>' + d.discount_amount + '</td>' +
+            '<td>' + d.discount_set + '</td>' +
             '</tr>' +
             '<tr>' +
             '<td>Contact Person:</td>' +

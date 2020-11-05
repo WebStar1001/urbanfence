@@ -83,6 +83,7 @@ class Quotes extends CI_Controller
             'misc_factor' => $this->input->post('misc_factor'),
             'ads_on_factor' => $this->input->post('ads_on_factor'),
             'discount_set' => $this->input->post('discount_amount'),
+            'additional_info' => $this->input->post('discount_amount'),
             'hst' => $this->input->post('hst')
         );
 

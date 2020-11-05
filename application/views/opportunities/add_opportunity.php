@@ -71,7 +71,7 @@
     $job_type = array(
         'Fence Repair', 'Gate Repair', 'Fence and Gate Repair', 'New Fence', 'New Gate', 'New Fence and Gate c/w  
                 Operator', 'Gate Opperator Service');
-    $sale_source = array('Returned Customer', 'Yellow Pages', 'Facebook', 'Google Ad');
+    $sale_source = array('', 'Returned Customer', 'Yellow Pages', 'Facebook', 'Google Ad');
     $status = array('New', 'Assigned');
     $urgency = array('Normal', 'Urgent');
     ?>
@@ -126,13 +126,15 @@
                             </div>
 
                         </div>
-
-                        <div class="col-span-4 w-full">
-                            <label class="w-full w-1/3 text-left sm:pt-3 mr-3 sm:mr-0">Create New Customer</label>
-                            <a href="<?php echo base_url('Opportunity/add_customer'); ?>"><i style="font-size: 30px;"
-                                                                                             class="w-full fa fa-user-plus"
-                                                                                             aria-hidden="true"></i></a>
-                        </div>
+                        <?php if (!is_object($customer)) { ?>
+                            <div class="col-span-4 w-full">
+                                <label class="w-full w-1/3 text-left sm:pt-3 mr-3 sm:mr-0">Create New Customer</label>
+                                <a href="#add_customer_modal" data-toggle="modal" data-target="#add_customer_modal"><i
+                                            style="font-size: 30px;"
+                                            class="w-full fa fa-user-plus"
+                                            aria-hidden="true"></i></a>
+                            </div>
+                        <?php } ?>
 
                     </div>
 
@@ -169,7 +171,7 @@
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Status</label>
                         <input type="text" name="status" readonly
                                class="bg-gray-100 cursor-not-allowed input w-full sm:w-1/2 md:w-1/2 border mt-2 flex-1"
-                               value="<?php echo (is_object($opportunity)) ? $opportunity->status : ''; ?>">
+                               value="<?php echo (is_object($opportunity)) ? $opportunity->status : 'New'; ?>">
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Date </label>
@@ -246,18 +248,35 @@
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Sales Source *</label>
                         <select class="input w-full border mt-2 flex-1" name="sale_source">
                             <?php
-                            foreach ($sale_source as $key => $value) {
-                                if (is_object($opportunity)) {
-                                    if ($opportunity->sale_source == $value) {
-                                        echo '<option value="' . $value . '" selected>' . $value . '</option>';
+                            if (is_object($customer)) {
+                                if ($customer->status == 'Customer') {
+                                    echo '<option value="Returned Customer">Returned Customer</option>';
+                                } else {
+                                    foreach ($sale_source as $key => $value) {
+                                        if (is_object($opportunity)) {
+                                            if ($opportunity->sale_source == $value) {
+                                                echo '<option value="' . $value . '" selected>' . $value . '</option>';
+                                            } else {
+                                                echo '<option value="' . $value . '">' . $value . '</option>';
+                                            }
+                                        } else {
+                                            echo '<option value="' . $value . '">' . $value . '</option>';
+                                        }
+                                    }
+                                }
+                            } else {
+                                foreach ($sale_source as $key => $value) {
+                                    if (is_object($opportunity)) {
+                                        if ($opportunity->sale_source == $value) {
+                                            echo '<option value="' . $value . '" selected>' . $value . '</option>';
+                                        } else {
+                                            echo '<option value="' . $value . '">' . $value . '</option>';
+                                        }
                                     } else {
                                         echo '<option value="' . $value . '">' . $value . '</option>';
                                     }
-                                } else {
-                                    echo '<option value="' . $value . '">' . $value . '</option>';
                                 }
                             }
-                            ?>
                             ?>
                         </select>
                     </div>
@@ -295,6 +314,119 @@
         </div>
     </form>
 </div>
+<div class="modal" id="add_customer_modal">
+    <div class="modal__content modal__content--xl p-5 text-center">
+        <div class="flex items-center py-5 sm:py-3 border-b border-gray-200">
+            <h2 class="font-medium text-base mr-auto">Create New Customer</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <form id="add_customer_form">
+                <div class="grid grid-cols-12 gap-6 box mt-5 p-5 md:p-10">
+                    <div class="col-span-12">
+                        <div class="preview">
+                            <div class="intro-y flex flex-col sm:flex-row mt-2">
+                                <label class="mb-2 sm:mb-0 md:mr-2 mt-2"> Choose Quoting
+                                    Company</label>
+                                <select id="company_id" class="select2 w-full sm:w-2/6">
+                                    <?php
+                                    foreach ($companies as $com) {
+                                        if (is_object($customer)) {
+                                            if ($customer->company_id == $com->id) {
+                                                echo '<option value="' . $com->id . '" selected>' . $com->name . '</option>';
+                                            } else {
+                                                echo '<option value="' . $com->id . '">' . $com->name . '</option>';
+                                            }
+                                        } else {
+                                            echo '<option value="' . $com->id . '">' . $com->name . '</option>';
+                                        }
+                                    }
+                                    ?>
+                                </select>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="col-span-12 sm:col-span-6 md:col-span-6">
+                        <div class="intro-y flex flex-col sm:flex-row items-center">
+                                <label  class="sm:text-center pl-3" id="choose_label">Choose Quoting Company</label>
+                                <select class="select2 w-full ">
+                                <option>Urban Fence</option>
+                           </select>
+                            </div>
+                    </div> -->
+                    <div class="col-span-12 sm:col-span-6 md:col-span-6 set_extra_mg">
+                        <div class="preview">
+
+                            <div class="intro-y flex flex-col sm:flex-row mt-2">
+                                <label class="w-full width6 md:mr-5 pt-1 sm:pt-3"> Customer*</label>
+                                <input type="text" id="customer" class="input w-full border mt-2 flex-1" value="">
+                            </div>
+                            <!-- <div class="intro-y flex flex-col sm:flex-row items-center mt-2">
+                                <label class="w-full sm:w-20 sm:text-center sm:mr-5">Company</label>
+                                <input type="text" class="input w-full border mt-2 flex-1">
+                            </div> -->
+
+                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                                <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Phone 1*</label>
+                                <input type="text" id="phone1" class="input w-full border mt-2 flex-1" value="">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                                <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Email *</label>
+                                <input type="text" id="email" class="input w-full border mt-2 flex-1" value="">
+                            </div>
+
+
+                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                                <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Billing Address*</label>
+                                <input type="text" id="address" class="input w-full border mt-2 flex-1" value="">
+                            </div>
+
+
+                        </div>
+                    </div>
+                    <div class="col-span-12 sm:col-span-6 sm:mr-4 md:col-span-6 set_extra_mg">
+                        <div class="preview">
+                            <!-- <div class="intro-y flex flex-col sm:flex-row items-center">
+                                <label class="w-full sm:text-center sm:w-20 sm:mr-5">Time</label>
+                                <input  type="text" class=" input w-full border mt-2 flex-1">
+                            </div> -->
+                            <div class="intro-y flex flex-col sm:flex-row mt-2">
+                                <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Contact Person*</label>
+                                <input type="text" id="contact_person" class="input w-full border mt-2 flex-1" value="">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                                <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Phone 2</label>
+                                <input type="text" id="phone2" class="input w-full border mt-2 flex-1" value=""/>
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                                <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Fax</label>
+                                <input type="text" id="fax" class="input w-full border mt-2 flex-1" value=""/>
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                                <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">City*</label>
+                                <input type="text" id="city" class="input w-full border mt-2 flex-1" value=""/>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-span-12 sm:col-span-12 sm:mr-4 md:col-span-12"
+                         style="margin-bottom: 2%;margin-left: 1%;">
+                        <div class="preview">
+                            <input type="submit" value="Create Customer" style="float: right;"
+                                   id="create_customer_btn"
+                                   class="button bg-theme-1 text-white mt-5 p-2"/>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class=" py-3 text-right border-t border-gray-200">
+            <button data-dismiss="modal" type="button" class="button w-20 bg-theme-6 text-white">Close</button>
+        </div>
+    </div>
+
+</div>
 <script type="text/javascript">
     var customer_address = '<?php echo (is_object($customer)) ? $customer->address : '';?>';
     $(document).ready(function () {
@@ -322,6 +454,32 @@
                 cache: true
             }
         });
+        $('#add_customer_form').on('submit', function () {
+            event.preventDefault();
+            $.ajax('create_customer', {
+                type: 'POST',  // http method
+                data: {
+                    company_id: $('#add_customer_modal').find('#company_id').val(),
+                    customer: $('#add_customer_modal').find('#customer').val(),
+                    contact_person: $('#add_customer_modal').find('#contact_person').val(),
+                    phone1: $('#add_customer_modal').find('#phone1').val(),
+                    phone2: $('#add_customer_modal').find('#phone2').val(),
+                    address: $('#add_customer_modal').find('#address').val(),
+                    email: $('#add_customer_modal').find('#email').val(),
+                    fax: $('#add_customer_modal').find('#fax').val(),
+                    city: $('#add_customer_modal').find('#city').val()
+                },
+                success: function (data, status, xhr) {
+                    var customer_id = data;
+                    $('#search_customer').append('<option value="' + customer_id + '">' + $('#add_customer_modal').find('#customer').val() + '</option>');
+                    $('#add_customer_modal').modal('hide');
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log(errorMessage);
+                }
+            });
+        })
+        // $('#create_customer_btn').click
     })
 </script>
 <!-- END: Content -->
