@@ -245,7 +245,7 @@
 
                 {
                     "data": null, render: function (data) {
-                        return "<a href='<?php echo base_url('Opportunity/add_opportunity');?>'><i class='fa fa-external-link' aria-hidden='true'></i></a>"
+                        return "<a href='<?php echo base_url('Opportunity/add_opportunity?customer_id=');?>"+ data.id +"'><i class='fa fa-external-link' aria-hidden='true'></i></a>"
                     }
                 }
             ],
