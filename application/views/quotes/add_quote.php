@@ -494,12 +494,12 @@
                                             <legend class="legend_spacing">Quote #01</legend>
                                             <p><b>
                                                     Customer
-                                                    Name: <?php (is_object($opportunity)) ? $opportunity->customer_name : ''; ?>
+                                                    Name: <?php echo (is_object($opportunity)) ? $opportunity->customer_name : ''; ?>
                                                     <br>
                                                     Quote
-                                                    Type: <?php (is_object($opportunity)) ? $opportunity->job_type : ''; ?>
+                                                    Type: <?php echo (is_object($opportunity)) ? $opportunity->job_type : ''; ?>
                                                     <br>
-                                                    Address: <?php (is_object($opportunity)) ? $opportunity->job_address : ''; ?>
+                                                    Address: <?php echo (is_object($opportunity)) ? $opportunity->job_address : ''; ?>
                                                     <br>
                                                     Payment Terms are: <span id="payment_terms"></span>
                                                 </b></p>
@@ -608,7 +608,8 @@
                                 <div class="preview">
                                     <div class="overflow-x-auto">
                                         <div class="mt-1 mb-5">
-                                            <input type="checkbox" class="input border mr-2" id="credit-passed">
+                                            <input type="checkbox" class="input border mr-2" id="credit-passed"
+                                                   required>
                                             <label class="cursor-pointer select-none" for="credit-passed"
                                                    style="width: auto;">Customer passed Credit-Check</label>
                                         </div>
@@ -746,12 +747,12 @@
                                             <legend class="legend_spacing">Quote #01</legend>
                                             <p><b>
                                                     Customer
-                                                    Name: <?php (is_object($opportunity)) ? $opportunity->customer_name : ''; ?>
+                                                    Name: <?php echo (is_object($opportunity)) ? $opportunity->customer_name : ''; ?>
                                                     <br>
                                                     Quote
-                                                    Type: <?php (is_object($opportunity)) ? $opportunity->job_type : ''; ?>
+                                                    Type: <?php echo (is_object($opportunity)) ? $opportunity->job_type : ''; ?>
                                                     <br>
-                                                    Address: <?php (is_object($opportunity)) ? $opportunity->job_address : ''; ?>
+                                                    Address: <?php echo (is_object($opportunity)) ? $opportunity->job_address : ''; ?>
                                                     <br>
                                                     Payment Terms are: <span id="payment_terms"></span>
                                                 </b></p>
@@ -784,7 +785,8 @@
                                             </button>
                                         </div>
                                         <div style="width: 50%;display: inline;">
-                                            <input type="checkbox" class="input border  mr-2" id=""><label>IA is
+                                            <input type="checkbox" class="input border  mr-2" id="ia_signed"><label>IA
+                                                is
                                                 signed</label>
                                         </div>
 
@@ -797,7 +799,8 @@
                                             </button>
                                         </div>
                                         <div style="width: 50%;display: inline;">
-                                            <input type="checkbox" class="input border mr-2" id=""><label>Quote Form is
+                                            <input type="checkbox" class="input border mr-2" id="form_signed"><label>Quote
+                                                Form is
                                                 signed</label>
                                         </div>
 
@@ -913,6 +916,9 @@
                     onclick="nextPrev(1)">Next
             </button>
         </div>
+        <div class="alert alert-danger" role="alert">
+            This is a danger alert—check it out!
+        </div>
     </div>
     <!-- Start Modal -->
     <div class="modal" id="material-detailed">
@@ -993,6 +999,20 @@
         </div>
 
     </div>
+    <div class="modal" id="alert-modal">
+        <div class="modal__content modal__content--lg p-5 text-center">
+            <div class="flex items-center py-5 sm:py-3 border-b border-gray-200">
+                <h2 class="font-medium text-base mr-auto">Notification</h2>
+            </div>
+            <div class="overflow-x-auto">
+                <p>Customer must pass credit check in order to get a quote.</p>
+            </div>
+            <div class=" py-3 text-right border-t border-gray-200">
+                <button data-dismiss="modal" type="button" class="button w-20 bg-theme-6 text-white">OK</button>
+            </div>
+        </div>
+
+    </div>
     <!-- End Modal -->
     <!--    <script type="text/javascript" src="--><?php //echo base_url(); ?><!--assets/js/add_quote.js"/>-->
     <script>
@@ -1034,11 +1054,11 @@
 
                 if (n == 1) {
                     document.getElementById("nextBtn").innerHTML = "Next";
-                    if ($("#credit-passed").is(':checked')) {
-                        $("#nextBtn").removeClass('bg-gray-100 cursor-not-allowed').removeAttr('disabled');
-                    } else {
-                        $("#nextBtn").addClass('bg-gray-100 cursor-not-allowed quote-approval-btn').prop("disabled", true);
-                    }
+                    // if ($("#credit-passed").is(':checked')) {
+                    //     $("#nextBtn").removeClass('bg-gray-100 cursor-not-allowed').removeAttr('disabled');
+                    // } else {
+                    //     $("#nextBtn").addClass('bg-gray-100 cursor-not-allowed quote-approval-btn').prop("disabled", true);
+                    // }
                     $('#materials').find('tr').each(function () {
                         var mat_rowId = $(this).attr('id');
                         if (mat_rowId != 'material_thead' && mat_rowId != 'material-item-row0' && mat_rowId != 'material-item-total') {
@@ -1090,6 +1110,7 @@
                     calculate_sale_table();
 
                 } else {
+
                     $("#nextBtn").removeClass('bg-gray-100 cursor-not-allowed').removeAttr('disabled');
                     document.getElementById("nextBtn").innerHTML = "Next";
                 }
@@ -1101,6 +1122,13 @@
         }
 
         function nextPrev(n) {
+            if (!$("#credit-passed").is(':checked') && currentTab == 1 && n == 1) {
+                $('#alert-modal').modal('show');
+                $('#credit-passed').focus();
+                return;
+            }
+
+
             // This function will figure out which tab to display
             var x = document.getElementsByClassName("tab");
             // Exit the function if any field in the current tab is invalid:
@@ -1132,13 +1160,15 @@
         }
 
         $(".set_markup").click(function () {
-            let markup_type = $(this).val();
-            if (markup_type == "total_markup") {
+            let markup_type = $(this).attr('id');
+            if (markup_type == "horizontal-radio-chris-evans") {
                 $(".input-total-markup").removeClass('bg-gray-100 cursor-not-allowed').removeAttr('disabled');
                 $(".input-multiple-markup").addClass('bg-gray-100 cursor-not-allowed').prop("disabled", true);
+                $(".input-multiple-markup").val('');
             } else {
                 $(".input-multiple-markup").removeClass('bg-gray-100 cursor-not-allowed').removeAttr('disabled');
                 $(".input-total-markup").addClass('bg-gray-100 cursor-not-allowed').prop("disabled", true);
+                $(".input-total-markup").val('');
             }
         });
 
@@ -1205,10 +1235,10 @@
             $('#final_quote_table').find('tr').eq(9).children().eq(2).html(Math.round(total_selling * 100) / 100);
 
 
-            $('#last_quote_table').find('tr').eq(1).children().eq(1).find('a').html(mat_cost + mat_profit);
-            $('#last_quote_table').find('tr').eq(2).children().eq(1).find('a').html(labour_cost + labour_profit);
-            $('#last_quote_table').find('tr').eq(3).children().eq(1).find('a').html(misc_cost + misc_profit);
-            $('#last_quote_table').find('tr').eq(4).children().eq(1).html(adson_cost + adson_profit);
+            $('#last_quote_table').find('tr').eq(1).children().eq(1).find('a').html(Math.round((mat_cost + mat_profit) * 100) / 100);
+            $('#last_quote_table').find('tr').eq(2).children().eq(1).find('a').html(Math.round((labour_cost + labour_profit) * 100) / 100);
+            $('#last_quote_table').find('tr').eq(3).children().eq(1).find('a').html(Math.round((misc_cost + misc_profit) * 100) / 100);
+            $('#last_quote_table').find('tr').eq(4).children().eq(1).html(Math.round((adson_cost + adson_profit) * 100) / 100);
             $('#last_quote_table').find('tr').eq(5).children().eq(1).html(Math.round(subtotal_cost1 * 100) / 100);
             $('#last_quote_table').find('tr').eq(6).children().eq(0).html('Discount ' + discount_percent + '%');
             $('#last_quote_table').find('tr').eq(6).children().eq(1).html(Math.round(discount_selling * 100) / 100);
@@ -1308,15 +1338,15 @@
         });
 
 
-        $('#credit-passed').click(function () {
-            if ($(this).is(':checked')) {
-                $(".quote-approval-btn").removeClass('bg-gray-100 cursor-not-allowed').removeAttr('disabled');
-
-            } else {
-
-                $(".quote-approval-btn").addClass('bg-gray-100 cursor-not-allowed').prop("disabled", true);
-            }
-        });
+        // $('#credit-passed').click(function () {
+        //     if ($(this).is(':checked')) {
+        //         $(".quote-approval-btn").removeClass('bg-gray-100 cursor-not-allowed').removeAttr('disabled');
+        //
+        //     } else {
+        //
+        //         $(".quote-approval-btn").addClass('bg-gray-100 cursor-not-allowed').prop("disabled", true);
+        //     }
+        // });
 
 
         function add_material_item() {
@@ -1462,6 +1492,7 @@
                                        <td class="w-40">
                                            <div class="flex">
                                                <select class="input border mr-2" name="labor_type[]">
+                                                  <option></option>
                                                   <option>Man Day with Digger</option>
                                                   <option>Man Day Set Posts</option>
                                                   <option>Man Day Drive Posts</option>
@@ -1679,6 +1710,13 @@
         }
 
         function save_quote() {
-            $('#quoteForm').submit();
+            if (!$("#ia_signed").is(':checked') && !$("#form_signed").is(':checked')) {
+                $('#alert-modal').find('p').html('Customer must sign both IA and Quote form in order to proceed to the job');
+                $('#alert-modal').modal('show');
+                $('#ia_signed').focus();
+                return;
+            }else{
+                $('#quoteForm').submit();
+            }
         }
     </script>

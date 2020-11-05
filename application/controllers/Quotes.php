@@ -14,6 +14,8 @@ class Quotes extends CI_Controller
         $this->load->model('CompanyModel');
         $this->load->model('CatalogModel');
         $this->load->model('OpportunityModel');
+        $this->load->model('UserModel');
+        $this->load->model('QuoteModel');
 //        $this->load->library('auth');
 //        $this->load->library('session');
 //        $this->auth->check_admin_auth();
@@ -36,8 +38,9 @@ class Quotes extends CI_Controller
 
     public function quotes_list()
     {
+        $data['sales'] = $this->UserModel->getSaleUsers();
         $this->load->view('inc/header');
-        $this->load->view('quotes/view_quote');
+        $this->load->view('quotes/view_quote', $data);
         $this->load->view('inc/footer');
 
     }
@@ -148,6 +151,11 @@ class Quotes extends CI_Controller
             }
         }
         redirect('Quotes/quotes_list');
+    }
+
+    public function get_quotes(){
+        $data['data'] = $this->QuoteModel->getQuoteList();
+        echo json_encode($data);
     }
 
 } 

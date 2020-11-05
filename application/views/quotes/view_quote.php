@@ -40,7 +40,8 @@
             <h2 class="col-span-12 font-medium text-base  border-b border-gray-200">Filters</h2>
             <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
                 <div class=""><label>Quote ID</label>
-                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full" id="quote_id">
+                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full"
+                                             id="quote_id">
                     </div>
                 </div>
             </div>
@@ -48,27 +49,39 @@
                 <div><label>Status</label>
                     <div class="mt-1">
                         <select class="select2 w-full" id="status">
+                            <option>All</option>
                             <option>New</option>
+                            <option>Approved</option>
+                            <option>Job</option>
                         </select>
                     </div>
                 </div>
             </div>
             <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
                 <div class=""><label>Customer ID</label>
-                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full" id="customer_id">
+                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full"
+                                             id="customer_id">
                     </div>
                 </div>
             </div>
             <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
                 <div class=""><label>Quote Selling Total</label>
-                    <div class="mt-1"><input type="text" placeholder="Amount" class="input pl-12 border w-full" id="quote_selling_total">
+                    <div class="mt-1"><input type="text" placeholder="Amount" class="input pl-12 border w-full"
+                                             id="quote_selling_total">
                     </div>
                 </div>
             </div>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Job Type</label>
                     <div class="mt-1"><select class="select2 w-full" id="job_type">
-                            <option>New Fence</option>
+                            <option value="0">All</option>
+                            <option value="Fence Repair">Fence Repair</option>
+                            <option value="Gate Repair">Gate Repair</option>
+                            <option value="Fence and Gate Repair">Fence and Gate Repair</option>
+                            <option value="New Fence">New Fence</option>
+                            <option value="New Gate">New Gate</option>
+                            <option value="New Fence and Gate c/w Operator">New Fence and Gate c/w Operator</option>
+                            <option value="Gate Operator Service">Gate Operator Service</option>
                         </select>
                     </div>
                 </div>
@@ -76,43 +89,51 @@
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Quote Date</label>
                     <div class="mt-1">
-                        <input data-daterange="true" class="datepicker input pl-12 border w-full" name="">
+                        <input data-daterange="true" class="datepicker input pl-12 border w-full" id="quote_date"
+                               value="<?php echo date('1/1/Y') . ' - ' . date('12/31/Y'); ?>" />
                     </div>
                 </div>
             </div>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div class=""><label>Sales Rap.</label>
-                    <div class="mt-1"><select class="select2 w-full">
-                            <option>David</option>
-                            <option>Liam Neeson</option>
-                            <option>Daniel Craig</option>
+                    <div class="mt-1">
+                        <select class="select2 w-full" id="sales_rap">
+                            <option value="0">All</option>
+                            <?php
+                            foreach ($sales as $user) {
+                                echo '<option value="' . $user->id . '">' . $user->name . '</option>';
+                            }
+                            ?>
                         </select>
                     </div>
                 </div>
             </div>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Customer</label>
-                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full">
+                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full"
+                                             id="customer">
                     </div>
                 </div>
             </div>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Oppor ID</label>
-                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full">
+                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full"
+                                             id="oppor_id">
                     </div>
                 </div>
             </div>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Job City</label>
-                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full">
+                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full"
+                                             id="job_city">
                     </div>
                 </div>
             </div>
 
             <div class="col-span-12 sm:col-span-6 md:col-span-4 flex items-end">
                 <div>
-                    <button class="button w-24 mr-1  bg-theme-1 text-white">Clear filter</button>
-                    <button class="button w-24 mr-1 width_filter bg-theme-6 text-white">filter</button>
+                    <button class="button w-24 mr-1  bg-theme-1 text-white" id="clearFilter">Clear filter</button>
+                    <button class="button w-24 mr-1 width_filter bg-theme-6 text-white" id="applyFilter">filter</button>
                 </div>
             </div>
         </div>
@@ -193,9 +214,20 @@
             "pageLength": 50,
 
             "ajax": {
-                url: '<?php echo base_url("Quotes/getData");?>',
+                url: '<?php echo base_url("Quotes/get_quotes");?>',
                 type: 'GET',
-                // type:'JSON'
+                data: function (data) {
+                    data.quote_id = $('#quote_id').val();
+                    data.status = $('#status').val();
+                    data.customer_id = $('#customer_id').val();
+                    data.selling_total = $('#quote_selling_total').val();
+                    data.job_type = $('#job_type').val();
+                    data.quote_date = $('#quote_date').val();
+                    data.sales_rap = $('#sales_rap').val();
+                    data.customer = $('#customer').val();
+                    data.oppor_id = $('#oppor_id').val();
+                    data.job_city = $('#job_city').val();
+                }
             },
             "columns": [
                 {
@@ -210,10 +242,10 @@
                 {"data": "customer"},
                 {"data": "job_type"},
                 // { "data": "job_city" },
-                {"data": "mat"},
-                {"data": "lab"},
-                {"data": "misc"},
-                {"data": "ads_on"},
+                {"data": "mat_factor"},
+                {"data": "lab_factor"},
+                {"data": "misc_factor"},
+                {"data": "ads_on_factor"},
                 {"data": "hst"},
                 {
                     "data": null, render: function (data) {
