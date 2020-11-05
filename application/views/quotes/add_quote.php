@@ -1736,7 +1736,7 @@
         }
 
         function save_quote() {
-            if (!$("#ia_signed").is(':checked') && !$("#form_signed").is(':checked')) {
+            if (!$("#ia_signed").is(':checked') || !$("#form_signed").is(':checked')) {
                 $('#alert-modal').find('p').html('Customer must sign both IA and Quote form in order to proceed to the job');
                 $('#alert-modal').modal('show');
                 $('#ia_signed').focus();
