@@ -49,7 +49,7 @@
                 <div><label>Status</label>
                     <div class="mt-1">
                         <select class="select2 w-full" id="status">
-                            <option>All</option>
+                            <option value="0">All</option>
                             <option>New</option>
                             <option>Approved</option>
                             <option>Job</option>
@@ -90,7 +90,7 @@
                 <div><label>Quote Date</label>
                     <div class="mt-1">
                         <input data-daterange="true" class="datepicker input pl-12 border w-full" id="quote_date"
-                               value="<?php echo date('1/1/Y') . ' - ' . date('12/31/Y'); ?>" />
+                               value="<?php echo date('1/1/Y') . ' - ' . date('12/31/Y'); ?>"/>
                     </div>
                 </div>
             </div>
@@ -238,15 +238,35 @@
                 },
                 {"data": "id"},
                 // { "data": "date" },
-                {"data": "sales_rep"},
+                {"data": "sale_rep"},
                 {"data": "customer"},
                 {"data": "job_type"},
                 // { "data": "job_city" },
-                {"data": "mat_factor"},
-                {"data": "lab_factor"},
-                {"data": "misc_factor"},
-                {"data": "ads_on_factor"},
-                {"data": "hst"},
+                {
+                    "data": null, render: function (data) {
+                        return Math.round(data.mat_net * data.mat_factor * 100) / 100;
+                    }
+                },
+                {
+                    "data": null, render: function (data) {
+                        return Math.round(data.labour_net * data.lab_factor * 100) / 100;
+                    }
+                },
+                {
+                    "data": null, render: function (data) {
+                        return Math.round(data.misc_net * data.misc_factor * 100) / 100;
+                    }
+                },
+                {
+                    "data": null, render: function (data) {
+                        return Math.round(data.ads_on_net * data.ads_on_factor * 100) / 100;
+                    }
+                },
+                {
+                    "data": null, render: function (data) {
+                        return data.ads_on_net * data.ads_on_factor + data.misc_net * data.misc_factor + data.labour_net * data.lab_factor + data.mat_net * data.mat_factor;
+                    }
+                },
                 {
                     "data": null, render: function (data) {
                         return "<a href='#'><i class='fa fa-pencil' aria-hidden='true'></i></a>"

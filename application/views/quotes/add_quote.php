@@ -906,6 +906,15 @@
                    value="<?php echo (is_object($opportunity)) ? $opportunity->customer_id : ''; ?>">
             <input type="hidden" name="company_id"
                    value="<?php echo (is_object($opportunity)) ? $opportunity->company_id : ''; ?>">
+            <input type="hidden" name="mat_net" id="mat_net"/>
+            <input type="hidden" name="labour_net" id="labour_net"/>
+            <input type="hidden" name="misc_net" id="misc_net"/>
+            <input type="hidden" name="add_on_net" id="add_on_net"/>
+            <input type="hidden" name="mat_factor" id="mat_factor"/>
+            <input type="hidden" name="lab_factor" id="lab_factor"/>
+            <input type="hidden" name="misc_factor" id="misc_factor"/>
+            <input type="hidden" name="ads_on_factor" id="ads_on_factor"/>
+            <input type="hidden" name="hst" id="hst_amount"/>
         </form>
 
         <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end mt-5">
@@ -1245,6 +1254,17 @@
             $('#last_quote_table').find('tr').eq(7).children().eq(1).html(Math.round(subtotal_selling2 * 100) / 100);
             $('#last_quote_table').find('tr').eq(8).children().eq(1).html(Math.round(HST * 100) / 100);
             $('#last_quote_table').find('tr').eq(9).children().eq(1).html(Math.round(total_selling * 100) / 100);
+
+
+            $('#mat_net').val(mat_cost);
+            $('#labour_net').val(labour_cost);
+            $('#misc_net').val(misc_cost);
+            $('#add_on_net').val(adson_cost);
+            $('#mat_factor').val(material_markup_percent / 100 + 1)
+            $('#lab_factor').val(labour_markup_percent / 100 + 1)
+            $('#misc_factor').val(misc_markup_percent / 100 + 1)
+            $('#ads_on_factor').val(adson_markup_percent / 100 + 1)
+            $('#hst_amount').val(HST)
 
         }
 
@@ -1715,7 +1735,7 @@
                 $('#alert-modal').modal('show');
                 $('#ia_signed').focus();
                 return;
-            }else{
+            } else {
                 $('#quoteForm').submit();
             }
         }

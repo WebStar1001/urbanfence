@@ -74,24 +74,17 @@ class Quotes extends CI_Controller
             'oppor_id' => $opportunity_id,
             'payment_term' => $payment_term,
             'calc_mode' => $calc_mode,
-            'mat_net' => 1,
-            'labour_net' => 1,
-            'misc_net' => 1,
-            'ads_on_net' => 1,
-            'mat_factor' => $this->input->post('material_markup_percent'),
-            'lab_factor' => $this->input->post('labor_markup_percent'),
-            'misc_factor' => $this->input->post('misc_markup_percent'),
-            'ads_on_factor' => $this->input->post('adson_markup_percent'),
+            'mat_net' => $this->input->post('mat_net'),
+            'labour_net' => $this->input->post('labour_net'),
+            'misc_net' => $this->input->post('misc_net'),
+            'ads_on_net' => $this->input->post('add_on_net'),
+            'mat_factor' => $this->input->post('mat_factor'),
+            'lab_factor' => $this->input->post('lab_factor'),
+            'misc_factor' => $this->input->post('misc_factor'),
+            'ads_on_factor' => $this->input->post('ads_on_factor'),
             'discount_set' => $this->input->post('discount_percent'),
-            'hst' => 0
+            'hst' => $this->input->post('hst')
         );
-
-        if ($total_markup_percent) {
-            $quoteData['mat_factor'] = $this->input->post('total_markup_percent');
-            $quoteData['lab_factor'] = $this->input->post('total_markup_percent');
-            $quoteData['misc_factor'] = $this->input->post('total_markup_percent');
-            $quoteData['ads_on_factor'] = $this->input->post('total_markup_percent');
-        }
 
         if ($quote_id) {
             $this->db->where('id', $quote_id);
