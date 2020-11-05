@@ -169,7 +169,7 @@
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Status</label>
                         <input type="text" name="status" readonly
                                class="bg-gray-100 cursor-not-allowed input w-full sm:w-1/2 md:w-1/2 border mt-2 flex-1"
-                               value="<?php echo (is_object($opportunity)) ? $status[$opportunity->status] : ''; ?>">
+                               value="<?php echo (is_object($opportunity)) ? $opportunity->status : ''; ?>">
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Date </label>
