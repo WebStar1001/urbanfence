@@ -925,9 +925,6 @@
                     onclick="nextPrev(1)">Next
             </button>
         </div>
-        <div class="alert alert-danger" role="alert">
-            This is a danger alert—check it out!
-        </div>
     </div>
     <!-- Start Modal -->
     <div class="modal" id="material-detailed">
@@ -1290,11 +1287,11 @@
             if ($(this).attr('id') == 'total_markup_percent') {
                 total_percent = $(this).val() * 1;
                 total_amount = sub_total1 * total_percent / 100;
-                $('#total_markup_amount').val(total_amount);
+                $('#total_markup_amount').val(Math.round(total_amount * 100) / 100);
             } else {
                 total_amount = $(this).val() * 1;
                 total_percent = (total_amount / sub_total1).toFixed(4) * 100;
-                $('#total_mark_percent').val(total_percent);
+                $('#total_mark_percent').val(Math.round(total_percent * 10) / 10);
             }
             calculate_sale_table();
         });
@@ -1311,21 +1308,21 @@
             if ($(this).attr('id') == 'material_markup_percent') {
                 mat_percent = $(this).val() * 1;
                 mat_amount = mat_cost * mat_percent / 100;
-                $('#material_markup_amount').val(mat_amount);
+                $('#material_markup_amount').val(Math.round(mat_amount * 100) / 100);
             } else if ($(this).attr('id') == 'material_markup_amount') {
                 mat_amount = $(this).val() * 1;
                 mat_percent = (mat_amount / mat_cost).toFixed(4) * 100;
-                $('#material_markup_percent').val(mat_percent);
+                $('#material_markup_percent').val(Math.round(mat_percent * 10) / 10);
             }
             var labour_cost = $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html() * 1;
             if ($(this).attr('id') == 'labor_markup_percent') {
                 labour_percent = $(this).val() * 1;
                 labour_amount = labour_cost * labour_percent / 100;
-                $('#labor_markup_amount').val(labour_amount);
+                $('#labor_markup_amount').val(Math.round(labour_amount * 100) / 100);
             } else if ($(this).attr('id') == 'labor_markup_amount') {
                 labour_amount = $(this).val() * 1;
                 labour_percent = (labour_amount / labour_cost).toFixed(4) * 100;
-                $('#labor_markup_percent').val(labour_percent);
+                $('#labor_markup_percent').val(Math.round(labour_percent * 10) / 10);
             }
 
             var mis_cost = $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html() * 1;
@@ -1333,11 +1330,11 @@
             if ($(this).attr('id') == 'misc_markup_percent') {
                 mis_percent = $(this).val() * 1;
                 mis_amount = mis_cost * mis_percent / 100;
-                $('#misc_markup_amount').val(mis_amount);
+                $('#misc_markup_amount').val(Math.round(mis_amount * 100) / 100);
             } else if ($(this).attr('id') == 'misc_markup_amount') {
                 mis_amount = $(this).val() * 1;
                 mis_percent = (mis_amount / mis_cost).toFixed(4) * 100;
-                $('#misc_markup_percent').val(mis_percent);
+                $('#misc_markup_percent').val(Math.round(mis_percent * 10) / 10);
             }
 
 
@@ -1346,11 +1343,11 @@
             if ($(this).attr('id') == 'adson_markup_percent') {
                 adson_percent = $(this).val() * 1;
                 adson_amount = adson_cost * adson_percent / 100;
-                $('#adson_markup_amount').val(adson_amount);
+                $('#adson_markup_amount').val(Math.round(adson_amount * 100) / 100);
             } else if ($(this).attr('id') == 'adson_markup_amount') {
                 adson_amount = $(this).val() * 1;
                 adson_percent = (adson_amount / adson_cost).toFixed(4) * 100;
-                $('#adson_markup_percent').val(adson_percent);
+                $('#adson_markup_percent').val(Math.round(adson_percent * 10) / 10);
             }
 
             calculate_sale_table();
@@ -1730,13 +1727,13 @@
         }
 
         function save_quote() {
-            if (!$("#ia_signed").is(':checked') && !$("#form_signed").is(':checked')) {
+            if ($("#ia_signed").is(':checked') || $("#form_signed").is(':checked')) {
+                $('#quoteForm').submit();
+            } else {
                 $('#alert-modal').find('p').html('Customer must sign both IA and Quote form in order to proceed to the job');
                 $('#alert-modal').modal('show');
                 $('#ia_signed').focus();
                 return;
-            } else {
-                $('#quoteForm').submit();
             }
         }
     </script>

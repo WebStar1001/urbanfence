@@ -117,9 +117,9 @@
                                 <label class="w-full text-left sm:pt-3">Search Customer</label>
                                 <select name="customer_id" class="select2 w-full col-span-10" id="search_customer">
                                     <?php
-                                        if(is_object($customer)){
-                                            echo '<option value="'.$customer->id.'">'.$customer->customer.'</option>';
-                                        }
+                                    if (is_object($customer)) {
+                                        echo '<option value="' . $customer->id . '">' . $customer->customer . '</option>';
+                                    }
                                     ?>
 
                                 </select>
@@ -222,6 +222,8 @@
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job Address *</label>
                         <input type="text" name="job_address" class="input w-full border mt-2 flex-1" required
                                value="<?php echo (is_object($opportunity)) ? $opportunity->job_address : '' ?>">
+                        <input type="button" value="Use billing address" style="float: right;" id="copy_from_address"
+                               class="button bg-theme-1 text-white mt-5 p-2 ml-2"/>
                     </div>
 
                 </div>
@@ -294,7 +296,11 @@
     </form>
 </div>
 <script type="text/javascript">
+    var customer_address = '<?php echo (is_object($customer)) ? $customer->address : '';?>';
     $(document).ready(function () {
+        $('#copy_from_address').click(function () {
+            $('input[name="job_address"]').val(customer_address);
+        })
         $('#search_customer').select2({
             tags: true,
             minimumInputLength: 3,

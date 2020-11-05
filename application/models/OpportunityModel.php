@@ -25,7 +25,7 @@ class OpportunityModel extends CI_Model
         $date = $this->input->get('date');
         $job_city = $this->input->get('job_city');
         $urgency = $this->input->get('urgency');
-        $this->db->select('opportunities.*, customers.customer AS customer');
+        $this->db->select('opportunities.*, customers.customer AS customer, customers.contact_person AS contact_person');
         $this->db->from('opportunities');
         if ($job_type) {
             $this->db->where('job_type', $job_type);

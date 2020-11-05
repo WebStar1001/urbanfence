@@ -129,7 +129,7 @@
 
 
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
-                        <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Address*</label>
+                        <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Billing Address*</label>
                         <input type="text" name="address" class="input w-full border mt-2 flex-1" value="<?php echo (is_object($customer)) ? $customer->address : ''; ?>">
                     </div>
 
@@ -145,6 +145,8 @@
                     <div class="intro-y flex flex-col sm:flex-row mt-2">
                         <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Contact Person*</label>
                         <input type="text" name="contact_person" class="input w-full border mt-2 flex-1" value="<?php echo (is_object($customer)) ? $customer->contact_person : ''; ?>">
+                        <input type="button" value="Use Same Name" style="float: right;" id="copy_from_customer"
+                               class="button bg-theme-1 text-white mt-5 p-2 ml-2"/>
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Phone 2</label>
@@ -171,6 +173,11 @@
         </div>
     </form>
 </div>
+<script type="text/javascript">
+    $('#copy_from_customer').click(function(){
+        $('input[name="contact_person"]').val($('input[name="customer"]').val());
+    })
+</script>
 <!-- END: Content -->
 
 
