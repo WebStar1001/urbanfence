@@ -49,6 +49,7 @@ class Quotes extends CI_Controller
         $calc_mode = $this->input->post('calc_mode');
         $customer_id = $this->input->post('customer_id');
         $company_id = $this->input->post('company_id');
+        $quote_id = $this->input->post('quote_id');
 
         $mat_category = $this->input->post('material_category');
         $material_code = $this->input->post('material_code');
@@ -79,11 +80,24 @@ class Quotes extends CI_Controller
             'discount_set' => $this->input->post('discount_percent'),
             'hst' => 0
         );
-        $this->db->insert('quotes', $quoteData);
-        $quote_id = $this->db->insert_id();
+        if($quote_id){
+            $this->db->where('id', $quote_id);
+            $this->db->update('quotes', $quoteData);
+        }else{
+            $this->db->insert('quotes', $quoteData);
+            $quote_id = $this->db->insert_id();
+        }
 
         if(sizeof($mat_category) > 0){
-
+            foreach($mat_category as $key=>$category){
+                $mat_data = array(
+                    'quote_id'=>$quote_id,
+                    'mat_category'=>$category,
+                    'code'=>$material_code[$key],
+                    'quantity' => $mat_quantity[$key]
+                );
+                $this->db->insert('mat_details', $mat_data);
+            }
         }
     }
 

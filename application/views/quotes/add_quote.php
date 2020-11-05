@@ -1179,7 +1179,9 @@
 
             var HST = subtotal_selling2 * 13 / 100;
 
-            var total_selling = subtotal_selling1 + HST;
+            var total_selling = subtotal_selling2 + HST;
+
+            var total_profit1 = mat_profit + labour_profit + misc_profit + adson_profit;
 
             $('#final_quote_table').find('tr').eq(1).children().eq(2).html(mat_cost + mat_profit);
             $('#final_quote_table').find('tr').eq(1).children().eq(3).html(mat_profit);
@@ -1192,6 +1194,7 @@
 
             $('#final_quote_table').find('tr').eq(5).children().eq(1).html(Math.round(subtotal_cost1 * 100) / 100);
             $('#final_quote_table').find('tr').eq(5).children().eq(2).html(Math.round(subtotal_selling1 * 100) / 100);
+            $('#final_quote_table').find('tr').eq(5).children().eq(3).html(Math.round(total_profit1 * 100) / 100);
 
             $('#final_quote_table').find('tr').eq(6).children().eq(1).html(discount_percent + '%');
             $('#final_quote_table').find('tr').eq(6).children().eq(2).html(Math.round(discount_selling * 100) / 100);
@@ -1207,6 +1210,7 @@
             $('#last_quote_table').find('tr').eq(3).children().eq(1).find('a').html(misc_cost + misc_profit);
             $('#last_quote_table').find('tr').eq(4).children().eq(1).html(adson_cost + adson_profit);
             $('#last_quote_table').find('tr').eq(5).children().eq(1).html(Math.round(subtotal_cost1 * 100) / 100);
+            $('#last_quote_table').find('tr').eq(6).children().eq(0).html('Discount ' + discount_percent + '%');
             $('#last_quote_table').find('tr').eq(6).children().eq(1).html(Math.round(discount_selling * 100) / 100);
             $('#last_quote_table').find('tr').eq(7).children().eq(1).html(Math.round(subtotal_selling2 * 100) / 100);
             $('#last_quote_table').find('tr').eq(8).children().eq(1).html(Math.round(HST * 100) / 100);
