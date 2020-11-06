@@ -48,7 +48,7 @@
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Status</label>
                     <div class="mt-1">
-                        <select class="select2 w-full" id="status">
+                        <select class="input border w-full" id="status">
                             <option value="0">All</option>
                             <option>New</option>
                             <option>Approved</option>
@@ -73,7 +73,7 @@
             </div>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Job Type</label>
-                    <div class="mt-1"><select class="select2 w-full" id="job_type">
+                    <div class="mt-1"><select class="input border w-full" id="job_type">
                             <option value="0">All</option>
                             <option value="Fence Repair">Fence Repair</option>
                             <option value="Gate Repair">Gate Repair</option>
@@ -294,7 +294,7 @@
         $('#filterForm').on('submit', function () {
             event.preventDefault();
         });
-        $('#apply_filter').click(function () {
+        $('#applyFilter').click(function () {
             table.ajax.reload(null, false);
         });
         $('#clearFilter').click(function () {
