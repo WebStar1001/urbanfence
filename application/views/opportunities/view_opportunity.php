@@ -113,12 +113,13 @@ tr.shown td.details-control {
                     <div class="mt-1">
                         <select class="input border w-full" id="status">
                             <option value="0">All</option>
-                            <option value="New" selected>New</option>
+                            <option value="New" <?php echo ($status == 'New') ? 'selected' : ''; ?>>New</option>
                             <option value="Assigned">Assigned</option>
                         </select>
                     </div>
                 </div>
             </div>
+            <?php echo $this->uri->segment(3);?>
             <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
                 <div class=""><label>Sale Rep</label>
                     <div class="mt-1">
