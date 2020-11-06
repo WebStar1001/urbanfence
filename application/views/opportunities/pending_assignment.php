@@ -63,22 +63,7 @@ tr.shown td.details-control {
     <form id="filterForm">
         <div class="intro-y grid grid-cols-12 p-5 mt-5 gap-2 box">
             <h2 class="col-span-12 font-medium text-base  border-b border-gray-200">Filters</h2>
-            <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                <div><label>Job Type</label>
-                    <div class="mt-1">
-                        <select class="input w-full border" id="job_type">
-                            <option value="0">All</option>
-                            <option value="Fence Repair">Fence Repair</option>
-                            <option value="Gate Repair">Gate Repair</option>
-                            <option value="Fence and Gate Repair">Fence and Gate Repair</option>
-                            <option value="New Fence">New Fence</option>
-                            <option value="New Gate">New Gate</option>
-                            <option value="New Fence and Gate c/w Operator">New Fence and Gate c/w Operator</option>
-                            <option value="Gate Operator Service">Gate Operator Service</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
+
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Oppor. Per Month</label>
                     <div class="mt-1">

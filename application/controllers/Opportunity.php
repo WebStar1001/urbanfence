@@ -121,14 +121,12 @@ class Opportunity extends CI_Controller
 
     public function get_opportunities()
     {
-        $this->OpportunityModel->getOpportunities(0);
         $data['data'] = $this->OpportunityModel->getOpportunities(0);
         echo json_encode($data);
     }
     public function get_pending_opportunities()
     {
-        $this->OpportunityModel->getOpportunities(1);
-        $data['data'] = $this->OpportunityModel->getOpportunities(1);
+        $data['data'] = $this->OpportunityModel->getOpportunities('New');
 
         echo json_encode($data);
     }
