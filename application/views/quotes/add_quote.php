@@ -1088,6 +1088,10 @@
                     });
                     var mat_total = $('#material-item-total').find('td').eq(2).html() * 1;
                     $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(mat_total);
+                    if(mat_total == 0){
+                        $('#material_markup_percent').attr('readonly', true);
+                        $('#material_markup_amount').attr('readonly', true);
+                    }
                     $('#labour').find('tr').each(function () {
                         var lab_rowId = $(this).attr('id');
                         if (lab_rowId != 'labour_thead' && lab_rowId != 'labour-item-row0' && lab_rowId != 'labour-item-total') {
@@ -1100,6 +1104,10 @@
                     });
                     var labour_total = $('#labour-item-total').find('td').eq(2).html() * 1;
                     $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(labour_total);
+                    if(labour_total == 0){
+                        $('#labor_markup_percent').attr('readonly', true);
+                        $('#labor_markup_amount').attr('readonly', true);
+                    }
                     $('#miscellaneous').find('tr').each(function (index) {
                         var mis_rowId = $(this).attr('id');
                         if (mis_rowId != 'miscellaneous_thead' && mis_rowId != 'miscellaneous-item-row0' && mis_rowId != 'miscellaneous-item-total') {
@@ -1112,11 +1120,22 @@
                                 '')
                         }
                     });
+
                     var mis_total = $('#miscellaneous-item-total').find('td').eq(2).html() * 1;
                     $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(mis_total);
 
+                    if(mis_total == 0){
+                        $('#misc_markup_percent').attr('readonly', true);
+                        $('#misc_markup_amount').attr('readonly', true);
+                    }
+
                     var addon_total = $('#adsOn-item-total').find('td').eq(2).html() * 1;
                     $('#final_quote_table').find('tr').eq(4).children().eq(1).html(addon_total);
+
+                    if(addon_total == 0){
+                        $('#adson_markup_percent').attr('readonly', true);
+                        $('#adson_markup_amount').attr('readonly', true);
+                    }
 
                     var sub_total1 = mat_total + mis_total + labour_total + addon_total;
                     $('#total_markup_percent').val(10);
@@ -1228,14 +1247,14 @@
 
             var total_profit1 = mat_profit + labour_profit + misc_profit + adson_profit;
 
-            $('#final_quote_table').find('tr').eq(1).children().eq(2).html(mat_cost + mat_profit);
-            $('#final_quote_table').find('tr').eq(1).children().eq(3).html(mat_profit);
-            $('#final_quote_table').find('tr').eq(2).children().eq(2).html(labour_cost + labour_profit);
-            $('#final_quote_table').find('tr').eq(2).children().eq(3).html(labour_profit);
-            $('#final_quote_table').find('tr').eq(3).children().eq(2).html(misc_cost + misc_profit);
-            $('#final_quote_table').find('tr').eq(3).children().eq(3).html(misc_profit);
-            $('#final_quote_table').find('tr').eq(4).children().eq(2).html(adson_cost + adson_profit);
-            $('#final_quote_table').find('tr').eq(4).children().eq(3).html(adson_profit);
+            $('#final_quote_table').find('tr').eq(1).children().eq(2).html(Math.round(mat_cost + mat_profit));
+            $('#final_quote_table').find('tr').eq(1).children().eq(3).html(Math.round(mat_profit));
+            $('#final_quote_table').find('tr').eq(2).children().eq(2).html(Math.round(labour_cost + labour_profit));
+            $('#final_quote_table').find('tr').eq(2).children().eq(3).html(Math.round(labour_profit));
+            $('#final_quote_table').find('tr').eq(3).children().eq(2).html(Math.round(misc_cost + misc_profit));
+            $('#final_quote_table').find('tr').eq(3).children().eq(3).html(Math.round(misc_profit));
+            $('#final_quote_table').find('tr').eq(4).children().eq(2).html(Math.round(adson_cost + adson_profit));
+            $('#final_quote_table').find('tr').eq(4).children().eq(3).html(Math.round(adson_profit));
 
             $('#final_quote_table').find('tr').eq(5).children().eq(1).html(Math.round(subtotal_cost1));
             $('#final_quote_table').find('tr').eq(5).children().eq(2).html(Math.round(subtotal_selling1));

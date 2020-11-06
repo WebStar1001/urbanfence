@@ -68,7 +68,7 @@
         <!-- END: Account Menu -->
     </div>
     <?php
-    $job_type = array(
+    $job_type = array('',
         'Fence Repair', 'Gate Repair', 'Fence and Gate Repair', 'New Fence', 'New Gate', 'New Fence and Gate c/w  
                 Operator', 'Gate Opperator Service');
     $sale_source = array('', 'Returned Customer', 'Yellow Pages', 'Facebook', 'Google Ad');
@@ -114,8 +114,8 @@
                         </div>
                         <div class="col-span-4 w-full">
                             <div class="sm:w-ful col-span-12 sm:m-auto sm:pl-4 sm:pr-4 mt-3 sm:mt-0 mb-3 sm:mb-0">
-                                <label class="w-full text-left sm:pt-3">Search Customer</label>
-                                <select name="customer_id" class="select2 w-full col-span-10" id="search_customer">
+                                <label class="w-full text-left sm:pt-3">Search Customer *</label>
+                                <select name="customer_id" class="select2 w-full col-span-10" id="search_customer" required>
                                     <?php
                                     if (is_object($customer)) {
                                         echo '<option value="' . $customer->id . '">' . $customer->customer . '</option>';
@@ -180,8 +180,8 @@
                                readonly>
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
-                        <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job Type </label>
-                        <select name="job_type" class="input w-full border mt-2 flex-1">
+                        <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job Type * </label>
+                        <select name="job_type" class="input w-full border mt-2 flex-1" required>
                             <?php
                             foreach ($job_type as $key => $value) {
                                 if (is_object($opportunity)) {
@@ -246,25 +246,14 @@
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Sales Source *</label>
-                        <select class="input w-full border mt-2 flex-1" name="sale_source">
-                            <?php
-                            if (is_object($customer)) {
-                                if ($customer->status == 'Customer') {
-                                    echo '<option value="Returned Customer">Returned Customer</option>';
-                                } else {
-                                    foreach ($sale_source as $key => $value) {
-                                        if (is_object($opportunity)) {
-                                            if ($opportunity->sale_source == $value) {
-                                                echo '<option value="' . $value . '" selected>' . $value . '</option>';
-                                            } else {
-                                                echo '<option value="' . $value . '">' . $value . '</option>';
-                                            }
-                                        } else {
-                                            echo '<option value="' . $value . '">' . $value . '</option>';
-                                        }
-                                    }
-                                }
+
+                        <?php
+                        if (is_object($customer)) {
+                            if ($customer->status == 'Customer') {
+                                echo '<select class="input w-full border mt-2 flex-1" name="sale_source" disabled>
+                                        <option value="Returned Customer">Returned Customer</option></select>';
                             } else {
+                                echo '<select class="input w-full border mt-2 flex-1" name="sale_source" required>';
                                 foreach ($sale_source as $key => $value) {
                                     if (is_object($opportunity)) {
                                         if ($opportunity->sale_source == $value) {
@@ -276,8 +265,24 @@
                                         echo '<option value="' . $value . '">' . $value . '</option>';
                                     }
                                 }
+                                echo '</select>';
                             }
-                            ?>
+                        } else {
+                            echo '<select class="input w-full border mt-2 flex-1" name="sale_source" required>';
+                            foreach ($sale_source as $key => $value) {
+                                if (is_object($opportunity)) {
+                                    if ($opportunity->sale_source == $value) {
+                                        echo '<option value="' . $value . '" selected>' . $value . '</option>';
+                                    } else {
+                                        echo '<option value="' . $value . '">' . $value . '</option>';
+                                    }
+                                } else {
+                                    echo '<option value="' . $value . '">' . $value . '</option>';
+                                }
+                            }
+                            echo '</select>';
+                        }
+                        ?>
                         </select>
                     </div>
 

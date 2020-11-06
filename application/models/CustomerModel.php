@@ -28,7 +28,7 @@ class CustomerModel extends CI_Model {
             $this->db->like('customer', $customer);
         }
         if($customer_id){
-            $this->db->where('id', $customer_id);
+            $this->db->where('customers.id', $customer_id);
         }
         if($status){
             $this->db->where('status', $status);

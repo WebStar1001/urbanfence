@@ -191,9 +191,6 @@
             '<td>' + d.last_quote_id + '</td>' +
             '</tr>' +
             '<tr>' +
-            '<td>Last Job ID:</td>' +
-            '<td>' + d.last_job_id + '</td>' +
-            '</tr>' +
             '</table>';
     }
 
