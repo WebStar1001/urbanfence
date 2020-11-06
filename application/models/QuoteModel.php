@@ -57,6 +57,9 @@ class QuoteModel extends CI_Model {
         if($job_city){
             $this->db->where('opportunities.job_type', $job_city);
         }
+        if($quote_selling_total){
+
+        }
         $query = $this->db->get();
         return $query->result_array();
     }

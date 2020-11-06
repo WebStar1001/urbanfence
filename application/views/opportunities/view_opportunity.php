@@ -119,7 +119,7 @@ tr.shown td.details-control {
                     </div>
                 </div>
             </div>
-            <?php echo $this->uri->segment(3);?>
+            <?php echo $this->uri->segment(3); ?>
             <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
                 <div class=""><label>Sale Rep</label>
                     <div class="mt-1">
@@ -160,7 +160,7 @@ tr.shown td.details-control {
                 <div><label>Date</label>
                     <div class="mt-1">
                         <input data-daterange="true" value="<?php echo date('1/1/Y') . ' - ' . date('12/31/Y'); ?>"
-                               class="datepicker input pl-12 border w-full" id="date">
+                               class="date_range input pl-12 border w-full" id="date">
                     </div>
                 </div>
             </div>
@@ -226,7 +226,6 @@ tr.shown td.details-control {
 ?>
 <script type="text/javascript">
     var sale_users = <?php echo json_encode($sales);?>;
-    console.log(sale_users);
 
     function format(d) {
         /*console.log(d.JobCity);*/
@@ -268,6 +267,12 @@ tr.shown td.details-control {
     }
 
     $(document).ready(function () {
+        $('.date_range').daterangepicker({
+            "showDropdowns": true,
+            "minYear": 2010,
+            "startDate": '<?php echo date("1/1/Y");?>',
+            "endDate": '<?php echo date("12/31/Y");?>'
+        });
         var table = $('#opporTable').DataTable({
             "pageLength": 50,
             //"ajax": '<?php echo base_url("Opportunity/get_opportunities");?>',
