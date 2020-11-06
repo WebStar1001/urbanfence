@@ -31,12 +31,6 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="<?php echo base_url("Opportunity/pending_opportunities");?>" class="side-menu <?=($this->uri->segment(2)=='pending_opportunities')?'side-menu--active':''?>">
-                                    <div class="side-menu__icon"> <i class="fa fa-clock-o" aria-hidden="true"></i> </div>
-                                    <div class="side-menu__title"> Pending Opportunities </div>
-                                </a>
-                            </li>
-                            <li>
                                 <a href="<?php echo base_url("Opportunity/opportunity_list");?>" class="side-menu <?=($this->uri->segment(2)=='opportunity_list')?'side-menu--active':''?>">
                                     <div class="side-menu__icon"> <i class="fa fa-list" aria-hidden="true"></i></i> </div>
                                     <div class="side-menu__title"> View Opportunities </div>

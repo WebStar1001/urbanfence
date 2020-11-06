@@ -25,7 +25,6 @@
                         <ul class="shortcut-box">
                             <li><a href="<?php echo base_url("Opportunity/add_customer");?>">Add Customer</a></li>
                             <li><a href="<?php echo base_url("Opportunity/add_opportunity");?>">Add Opportunity</a></li>
-                            <li ><a href="<?php echo base_url("Opportunity/pending_opportunities");?>">Pending Opportunities</a></li>
                             <li>
                                 <a href="<?php echo base_url("Opportunity/opportunity_list");?>">View Opportunities</a>
                            </li>

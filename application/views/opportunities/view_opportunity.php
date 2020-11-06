@@ -113,7 +113,7 @@ tr.shown td.details-control {
                     <div class="mt-1">
                         <select class="input border w-full" id="status">
                             <option value="0">All</option>
-                            <option value="New">New</option>
+                            <option value="New" selected>New</option>
                             <option value="Assigned">Assigned</option>
                         </select>
                     </div>
