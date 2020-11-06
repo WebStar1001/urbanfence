@@ -43,14 +43,6 @@ class Opportunity extends CI_Controller
         $this->load->view('inc/footer');
     }
 
-    public function pending_opportunities()
-    {
-        $data['sales'] = $this->UserModel->getSaleUsers();
-        $this->load->view('inc/header');
-        $this->load->view('opportunities/pending_assignment', $data);
-        $this->load->view('inc/footer');
-    }
-
     public function add_opportunity()
     {
         $data['customer'] = array();
@@ -125,13 +117,7 @@ class Opportunity extends CI_Controller
 
     public function get_opportunities()
     {
-        $data['data'] = $this->OpportunityModel->getOpportunities(0);
-        echo json_encode($data);
-    }
-    public function get_pending_opportunities()
-    {
-        $data['data'] = $this->OpportunityModel->getOpportunities('New');
-
+        $data['data'] = $this->OpportunityModel->getOpportunities();
         echo json_encode($data);
     }
 
@@ -140,7 +126,7 @@ class Opportunity extends CI_Controller
         $oppor_id = $this->input->post('oppor_id');
         $sale_id = $this->input->post('user_id');
         $this->db->where('id', $oppor_id);
-        $this->db->update('opportunities', array('sale_rep' => $sale_id));
+        $this->db->update('opportunities', array('sale_rep' => $sale_id, 'status'=>'Assigned'));
         echo 'Success';
     }
 

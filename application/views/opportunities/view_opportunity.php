@@ -126,7 +126,7 @@ tr.shown td.details-control {
                         <select class="select2 w-full" id="sale_rep">
                             <option value="0">All</option>
                             <?php
-                            foreach ($users as $user) {
+                            foreach ($sales as $user) {
                                 echo '<option value="' . $user->id . '">' . $user->name . '</option>';
                             }
                             ?>

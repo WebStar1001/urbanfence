@@ -50,7 +50,6 @@
                         <div class="side-menu__title"> View Opportunities</div>
                     </a>
                 </li>
-
             </ul>
         </li>
         <li>
