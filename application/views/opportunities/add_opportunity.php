@@ -115,7 +115,8 @@
                         <div class="col-span-4 w-full">
                             <div class="sm:w-ful col-span-12 sm:m-auto sm:pl-4 sm:pr-4 mt-3 sm:mt-0 mb-3 sm:mb-0">
                                 <label class="w-full text-left sm:pt-3">Search Customer *</label>
-                                <select name="customer_id" class="select2 w-full col-span-10" id="search_customer" required>
+                                <select name="customer_id" class="select2 w-full col-span-10" id="search_customer"
+                                        required>
                                     <?php
                                     if (is_object($customer)) {
                                         echo '<option value="' . $customer->id . '">' . $customer->customer . '</option>';
@@ -215,18 +216,7 @@
                             ?>
                         </select>
                     </div>
-                    <div class="intro-y flex flex-col sm:flex-row mt-3">
-                        <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job Site *</label>
-                        <input type="text" name="job_site" class="input w-full border mt-2 flex-1" required
-                               value="<?php echo (is_object($opportunity)) ? $opportunity->job_site : '' ?>">
-                    </div>
-                    <div class="intro-y flex flex-col sm:flex-row mt-3">
-                        <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job Address *</label>
-                        <input type="text" name="job_address" class="input w-full border mt-2 flex-1" required
-                               value="<?php echo (is_object($opportunity)) ? $opportunity->job_address : '' ?>">
-                        <input type="button" value="Use billing address" style="float: right;" id="copy_from_address"
-                               class="button bg-theme-1 text-white mt-5 p-2 ml-2"/>
-                    </div>
+
 
                 </div>
             </div>
@@ -291,14 +281,44 @@
                         <input type="text" name="contact_onsite" class="input w-full border mt-2 flex-1"
                                value="<?php echo (is_object($opportunity)) ? $opportunity->contact_onsite : '' ?>">
                     </div>
-                    <div class="intro-y flex flex-col sm:flex-row mt-3">
-                        <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job City *</label>
-                        <input type="text" name="job_city" class="input w-full border mt-2 flex-1" required
-                               value="<?php echo (is_object($opportunity)) ? $opportunity->job_city : ''; ?>">
-                    </div>
                 </div>
             </div>
-
+            <fieldset class="fieldset_bd_color w-full col-span-12">
+                <legend class="legend_spacing">Job Site</legend>
+                <div class="grid grid-cols-12 gap-6 box sm:p-5 p-5">
+                    <div class="col-span-12 sm:col-span-6 md:col-span-6 md:ml-3" id="add_opppor_left_info">
+                        <div class="preview">
+                            <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
+                                <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site City *</label>
+                                <input type="text" name="site_city" class="input border mt-2 flex-1" required
+                                       value="<?php echo (is_object($opportunity)) ? $opportunity->site_city : ''; ?>">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
+                                <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site Desc *</label>
+                                <input type="text" name="site_desc" class="input border mt-2 flex-1" required
+                                       value="<?php echo (is_object($opportunity)) ? $opportunity->site_desc : '' ?>">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-span-12 sm:col-span-6 md:col-span-6 md:mr-3" id="add_opppor_right_info">
+                        <div class="preview">
+                            <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
+                                <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site Postal Code</label>
+                                <input type="text" name="site_postal_code" class="input border mt-2 flex-1" required
+                                       value="<?php echo (is_object($opportunity)) ? $opportunity->postal_code : '' ?>">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
+                                <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site Address *</label>
+                                <input type="text" name="site_address" class="input border mt-2 flex-1" required
+                                       value="<?php echo (is_object($opportunity)) ? $opportunity->site_address : '' ?>">
+                            </div>
+                            <input type="button" value="Use Customer Info" style="float: right;"
+                                   id="copy_from_customer"
+                                   class="button bg-theme-1 text-white mt-5 p-2 ml-2"/>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
             <div class="col-span-12 md:pl-3 md:pr-3" id="address_div_mg">
                 <div class="preview">
                     <div class="intro-y flex flex-col sm:flex-row">
@@ -308,6 +328,7 @@
                     </div>
                 </div>
             </div>
+
             <input type="hidden" name="opportunity_id"
                    value="<?php echo (is_object($opportunity)) ? $opportunity->id : ''; ?>"/>
             <div class="col-span-12">
@@ -351,15 +372,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- <div class="col-span-12 sm:col-span-6 md:col-span-6">
-                        <div class="intro-y flex flex-col sm:flex-row items-center">
-                                <label  class="sm:text-center pl-3" id="choose_label">Choose Quoting Company</label>
-                                <select class="select2 w-full ">
-                                <option>Urban Fence</option>
-                           </select>
-                            </div>
-                    </div> -->
                     <div class="col-span-12 sm:col-span-6 md:col-span-6 set_extra_mg">
                         <div class="preview">
 
@@ -367,10 +379,6 @@
                                 <label class="w-full width6 md:mr-5 pt-1 sm:pt-3"> Customer*</label>
                                 <input type="text" id="customer" class="input w-full border mt-2 flex-1" value="">
                             </div>
-                            <!-- <div class="intro-y flex flex-col sm:flex-row items-center mt-2">
-                                <label class="w-full sm:w-20 sm:text-center sm:mr-5">Company</label>
-                                <input type="text" class="input w-full border mt-2 flex-1">
-                            </div> -->
 
                             <div class="intro-y flex flex-col sm:flex-row mt-3">
                                 <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Phone 1*</label>
@@ -392,11 +400,7 @@
                     </div>
                     <div class="col-span-12 sm:col-span-6 sm:mr-4 md:col-span-6 set_extra_mg">
                         <div class="preview">
-                            <!-- <div class="intro-y flex flex-col sm:flex-row items-center">
-                                <label class="w-full sm:text-center sm:w-20 sm:mr-5">Time</label>
-                                <input  type="text" class=" input w-full border mt-2 flex-1">
-                            </div> -->
-                            <div class="intro-y flex flex-col sm:flex-row mt-2">
+                           <div class="intro-y flex flex-col sm:flex-row mt-2">
                                 <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Contact Person*</label>
                                 <input type="text" id="contact_person" class="input w-full border mt-2 flex-1" value="">
                             </div>
@@ -435,8 +439,27 @@
 <script type="text/javascript">
     var customer_address = '<?php echo (is_object($customer)) ? $customer->address : '';?>';
     $(document).ready(function () {
-        $('#copy_from_address').click(function () {
-            $('input[name="job_address"]').val(customer_address);
+        $('#copy_from_customer').click(function () {
+            var customer_id = $('#search_customer').val();
+            if(customer_id != ''){
+                $.ajax('get_customer', {
+                    type: 'GET',  // http method
+                    data: {
+                       customer_id : customer_id,
+                    },
+                    dataType : 'json',
+                    success: function (data, status, xhr) {
+                        $('input[name="site_address"]').val(data.address);
+                        $('input[name="site_city"]').val(data.city);
+                        $('input[name="site_postal_code"]').val(data.postal_code);
+                        $('input[name="site_desc"]').val('home');
+                    },
+                    error: function (jqXhr, textStatus, errorMessage) {
+                        console.log(errorMessage);
+                    }
+                });
+            }
+
         })
         $('#search_customer').select2({
             tags: true,

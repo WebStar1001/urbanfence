@@ -166,9 +166,9 @@ tr.shown td.details-control {
             </div>
 
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                <div><label>Job City</label>
+                <div><label>Site City</label>
                     <div class="mt-1">
-                        <input type="text" placeholder="Search" class="input pl-12 border w-full" id="job_city">
+                        <input type="text" placeholder="Search" class="input pl-12 border w-full" id="site_city">
                     </div>
                 </div>
             </div>
@@ -211,6 +211,7 @@ tr.shown td.details-control {
                 <th>Sale Sourse</th>
                 <th>Status</th>
                 <th>Sales Rep</th>
+                <th></th>
                 <th>Edit</th>
                 <th>Create Quote</th>
             </tr>
@@ -233,23 +234,27 @@ tr.shown td.details-control {
         return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-alight:center">' +
 
             '<tr>' +
-            '<td>Job City:</td>' +
-            '<td>' + d.job_city + '</td>' +
+            '<td>Site City:</td>' +
+            '<td>' + d.site_city + '</td>' +
             '</tr>' +
             '<tr>' +
             '<td>Contact Person:</td>' +
             '<td>' + d.contact_person + '</td>' +
             '</tr>' +
             '<tr>' +
-            '<td>Job Address:</td>' +
-            '<td>' + d.job_address + '</td>' +
+            '<td>Site Postal Code:</td>' +
+            '<td>' + d.site_postal_code + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td>Site Address:</td>' +
+            '<td>' + d.site_address + '</td>' +
             '</tr>' +
             '<td>Contact onsite:</td>' +
             '<td>' + d.contact_onsite + '</td>' +
             '</tr>' +
             '<tr>' +
-            '<td>Job Site:</td>' +
-            '<td>' + d.job_site + '.</td>' +
+            '<td>Site Desc:</td>' +
+            '<td>' + d.site_desc + '.</td>' +
             '</tr>' +
             '<tr>' +
             '<td>Urgency:</td>' +
@@ -288,7 +293,7 @@ tr.shown td.details-control {
                     data.oppor_per_month = $('#oppor_per_month').val();
                     data.id = $('#id').val();
                     data.date = $('#date').val();
-                    data.job_city = $('#job_city').val();
+                    data.site_city = $('#site_city').val();
                     data.urgency = $('#urgency').val();
                 },
                 type: 'GET',
@@ -310,8 +315,7 @@ tr.shown td.details-control {
                 {"data": "status"},
                 {
                     "data": null, render: function (data) {
-                        console.log(data.sale_rep);
-                        var sales_rp_select = "<select name='fieldName' onchange='change_sale_rep(" + data.id + ")'><option value='0'>Please Select</option>";
+                        var sales_rp_select = "<select id='sale_rep_" + data.id + "'><option value='0'>Please Select</option>";
                         for (var i in sale_users) {
                             if (sale_users[i].id == data.sale_rep) {
                                 sales_rp_select += '<option value="' + sale_users[i].id + '" selected>' + sale_users[i].name +
@@ -324,14 +328,16 @@ tr.shown td.details-control {
                         return sales_rp_select;
                     }
                 },
-
+                {
+                    "data": null, render: function (data) {
+                        return "<button class='button border' onclick='set_sale_rep(" + data.id + ");'>Set</button>"
+                    }
+                },
                 {
                     "data": null, render: function (data) {
                         return "<a href='<?php echo base_url('Opportunity/add_opportunity?opportunity_id=');?>" + data.id + "'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
                     }
                 },
-
-
                 {
                     "data": null, render: function (data) {
                         return "<a href='<?php echo base_url('Quotes/add_quote?opportunity_id=');?>" + data.id + "'><i class='fa fa-external-link' aria-hidden='true'></i></a>"
@@ -368,10 +374,11 @@ tr.shown td.details-control {
         })
     });
 
-    function change_sale_rep(user_id) {
+    function set_sale_rep(oppor_id) {
+        var selected_sale_rep = $('#sale_rep_' + oppor_id).val();
         $.ajax('change_sale_rep', {
             type: 'POST',  // http method
-            data: {user_id: event.target.value, oppor_id: user_id},  // data to submit
+            data: {user_id: selected_sale_rep, oppor_id: oppor_id},  // data to submit
             success: function (data, status, xhr) {
                 console.log(data);
             },

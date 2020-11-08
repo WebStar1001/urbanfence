@@ -23,7 +23,7 @@ class OpportunityModel extends CI_Model
         $id = $this->input->get('id');
         $customer_id = $this->input->get('customer_id');
         $date = $this->input->get('date');
-        $job_city = $this->input->get('job_city');
+        $site_city = $this->input->get('site_city');
         $urgency = $this->input->get('urgency');
         $this->db->select('opportunities.*, customers.customer AS customer, customers.contact_person AS contact_person');
         $this->db->from('opportunities');
@@ -56,8 +56,8 @@ class OpportunityModel extends CI_Model
                 $this->db->where("date BETWEEN '" . date('Y-m-d', strtotime($start_date)) . "' AND '" . date('Y-m-d', strtotime($end_date)) . "'", "", FALSE);
             }
         }
-        if ($job_city) {
-            $this->db->where('job_city', $job_city);
+        if ($site_city) {
+            $this->db->where('site_city', $site_city);
         }
         if ($urgency) {
             $this->db->where('urgency', $urgency);

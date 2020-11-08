@@ -178,6 +178,10 @@
             '<td>' + d.address + '</td>' +
             '</tr>' +
             '<tr>' +
+            '<td>Postal Code:</td>' +
+            '<td>' + d.postal_code + '</td>' +
+            '</tr>' +
+            '<tr>' +
             '<td>Fax:</td>' +
             '<td>' + d.fax + '</td>' +
             '</tr>' +

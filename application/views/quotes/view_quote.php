@@ -51,6 +51,7 @@
                         <select class="input border w-full" id="status">
                             <option value="0">All</option>
                             <option>New</option>
+                            <option <?php echo (isset($_GET['status'])) ? 'selected' : ''; ?>>Pending</option>
                             <option>Approved</option>
                             <option>Job</option>
                         </select>
@@ -123,9 +124,9 @@
                 </div>
             </div>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                <div><label>Job City</label>
+                <div><label>Site City</label>
                     <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full"
-                                             id="job_city">
+                                             id="site_city">
                     </div>
                 </div>
             </div>
@@ -147,15 +148,12 @@
             <tr>
                 <th>Additional Info</th>
                 <th>ID</th>
-                <!-- <th>Date</th> -->
+                <th>Date</th>
                 <th>Sale Rep</th>
                 <th>Customer</th>
+                <th>Status</th>
                 <th>Job Type</th>
-                <!--  <th>Job City</th> -->
-                <th>MAT</th>
-                <th>LAB</th>
-                <th>MISC</th>
-                <th>Ads-On</th>
+                <th>Job City</th>
                 <th>Costing Total</th>
                 <th>Edit</th>
             </tr>
@@ -171,34 +169,38 @@
         // `d` is the original data object for the row
         return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-alight:center">' +
             '<tr>' +
-            '<td>Date:</td>' +
-            '<td>' + d.quote_date + '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td>Job City:</td>' +
-            '<td>' + d.job_city + '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td>Status:</td>' +
-            '<td>' + d.status + '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td>Discount Amount:</td>' +
-            '<td>' + d.discount_set + '</td>' +
-            '</tr>' +
-            '<tr>' +
             '<td>Contact Person:</td>' +
             '<td>' + d.contact_person + '</td>' +
             '</tr>' +
             '<tr>' +
-            '<td>Job Address:</td>' +
-            '<td>' + d.job_address + '.</td>' +
+            '<td>Site Address:</td>' +
+            '<td>' + d.site_address + '.</td>' +
             '</tr>' +
             '<tr>' +
-            '<td>Job Site:</td>' +
-            '<td>' + d.job_site + '</td>' +
+            '<td>Site Desc:</td>' +
+            '<td>' + d.site_desc + '</td>' +
             '</tr>' +
             '<tr>' +
+            '<td>MAT:</td>' +
+            '<td>' + d.mat_net * d.mat_factor + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td>LAB:</td>' +
+            '<td>' + d.labour_net * d.lab_factor + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td>MISC:</td>' +
+            '<td>' + d.misc_net * d.misc_factor + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td>Add-On:</td>' +
+            '<td>' + d.ads_on_net * d.ads_on_factor + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<tr>' +
+            '<td>Discount Amount:</td>' +
+            '<td>' + d.discount_set + '</td>' +
+            '</tr>' +
             '<td>Customer ID:</td>' +
             '<td>' + d.customer_id + '</td>' +
             '</tr>' +
@@ -226,7 +228,7 @@
                     data.sales_rap = $('#sales_rap').val();
                     data.customer = $('#customer').val();
                     data.oppor_id = $('#oppor_id').val();
-                    data.job_city = $('#job_city').val();
+                    data.site_city = $('#site_city').val();
                 }
             },
             "columns": [
@@ -237,31 +239,12 @@
                     "defaultContent": ''
                 },
                 {"data": "id"},
-                // { "data": "date" },
+                {"data": "quote_date"},
                 {"data": "sale_rep"},
                 {"data": "customer"},
+                {"data": "status"},
                 {"data": "job_type"},
-                // { "data": "job_city" },
-                {
-                    "data": null, render: function (data) {
-                        return Math.round(data.mat_net * data.mat_factor * 100) / 100;
-                    }
-                },
-                {
-                    "data": null, render: function (data) {
-                        return Math.round(data.labour_net * data.lab_factor * 100) / 100;
-                    }
-                },
-                {
-                    "data": null, render: function (data) {
-                        return Math.round(data.misc_net * data.misc_factor * 100) / 100;
-                    }
-                },
-                {
-                    "data": null, render: function (data) {
-                        return Math.round(data.ads_on_net * data.ads_on_factor * 100) / 100;
-                    }
-                },
+                {"data": "site_city"},
                 {
                     "data": null, render: function (data) {
                         return Math.round((data.ads_on_net * data.ads_on_factor + data.misc_net * data.misc_factor + data.labour_net * data.lab_factor + data.mat_net * data.mat_factor) * 100) / 100;
@@ -269,7 +252,7 @@
                 },
                 {
                     "data": null, render: function (data) {
-                        return "<a href='#'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
+                        return "<a href='<?php echo base_url('Quotes/add_quote?quote_id=');?>" + data.id + "'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
                     }
                 }
             ],

@@ -46,8 +46,8 @@
                     <div class="font-medium text-center text-base mt-3">Quotes</div>
                     <div class="text-gray-600 mt-2 w-3/4 text-center mx-auto">
                     <ul class="shortcut-box">
-                            <li><a href="<?php echo base_url("Quotes/quotes_list");?>">Create New Quote</a></li>
-                            <li><a href="<?php echo base_url("Quotes/quotes_list");?>">View Previous Quote</a></li>
+                            <li><a href="<?php echo base_url("Quotes/quotes_list?status=Pending"); ?>">Pending Quotes</a></li>
+                            <li><a href="<?php echo base_url("Quotes/quotes_list");?>">View Quotes</a></li>
                     </ul>
                 </div>
                 </div>

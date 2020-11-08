@@ -139,4 +139,9 @@ class Opportunity extends CI_Controller
         $query = $this->db->get();
         echo json_encode($query->result());
     }
+    public function get_customer(){
+        $customer_id = $this->input->get('customer_id');
+        $data = $this->CustomerModel->get_customer($customer_id);
+        echo json_encode($data);
+    }
 }

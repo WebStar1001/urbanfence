@@ -78,17 +78,17 @@
             </a>
             <ul class="<?= ($this->uri->segment(1) == 'Quotes') ? 'side-menu__sub-open' : '' ?>">
                 <li>
-                    <a href="<?php echo base_url("Quotes/add_quote"); ?>"
-                       class="side-menu <?= ($this->uri->segment(2) == 'add_quote') ? 'side-menu--active' : '' ?>">
+                    <a href="<?php echo base_url("Quotes/quotes_list?status=Pending"); ?>"
+                       class="side-menu <?= ($this->uri->segment(2) == 'quotes_list'&&isset($_GET['status'])) ? 'side-menu--active' : '' ?>">
                         <div class="side-menu__icon"><i data-feather="edit"></i></div>
-                        <div class="side-menu__title"> Create New Quote</div>
+                        <div class="side-menu__title"> Pending Quotes</div>
                     </a>
                 </li>
                 <li>
                     <a href="<?php echo base_url("Quotes/quotes_list"); ?>"
-                       class="side-menu <?= ($this->uri->segment(2) == 'quotes_list') ? 'side-menu--active' : '' ?>">
+                       class="side-menu <?= ($this->uri->segment(2) == 'quotes_list'&&!isset($_GET['status'])) ? 'side-menu--active' : '' ?>">
                         <div class="side-menu__icon"><i data-feather="eye"></i></div>
-                        <div class="side-menu__title"> View Previous Quotes</div>
+                        <div class="side-menu__title"> View Quotes</div>
                     </a>
                 </li>
 

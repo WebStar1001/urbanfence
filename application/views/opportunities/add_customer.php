@@ -69,13 +69,13 @@
                     <div class="intro-y flex flex-col sm:flex-row mt-2">
                         <label class="w-full w-full sm:w-1/3 md:w-1/4 lg:w-1/6 mb-2 sm:mb-0 md:mr-2"> Choose Quoting
                             Company</label>
-                        <select name="company_id" class="select2 w-full sm:w-2/6">
+                        <select name="company_id" class="select2 w-full sm:w-2/6" tabindex="0">
                             <?php
                             foreach ($company as $com) {
                                 if (is_object($customer)) {
-                                    if($customer->company_id == $com->id){
+                                    if ($customer->company_id == $com->id) {
                                         echo '<option value="' . $com->id . '" selected>' . $com->name . '</option>';
-                                    }else{
+                                    } else {
                                         echo '<option value="' . $com->id . '">' . $com->name . '</option>';
                                     }
                                 } else {
@@ -111,7 +111,8 @@
 
                     <div class="intro-y flex flex-col sm:flex-row mt-2">
                         <label class="w-full width6 md:mr-5 pt-1 sm:pt-3"> Customer*</label>
-                        <input type="text" name="customer" class="input w-full border mt-2 flex-1" value="<?php echo (is_object($customer)) ? $customer->customer : ''; ?>">
+                        <input type="text" name="customer" class="input w-full border mt-2 flex-1"
+                               value="<?php echo (is_object($customer)) ? $customer->customer : ''; ?>" tabindex="1">
                     </div>
                     <!-- <div class="intro-y flex flex-col sm:flex-row items-center mt-2">
                         <label class="w-full sm:w-20 sm:text-center sm:mr-5">Company</label>
@@ -120,19 +121,26 @@
 
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Phone 1*</label>
-                        <input type="text" name="phone1" class="input w-full border mt-2 flex-1" value="<?php echo (is_object($customer)) ? $customer->phone1 : ''; ?>">
+                        <input type="text" name="phone1" class="input w-full border mt-2 flex-1"
+                               value="<?php echo (is_object($customer)) ? $customer->phone1 : ''; ?>" tabindex="3">
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Email *</label>
-                        <input type="text" name="email" class="input w-full border mt-2 flex-1" value="<?php echo (is_object($customer)) ? $customer->email : ''; ?>">
+                        <input type="text" name="email" class="input w-full border mt-2 flex-1"
+                               value="<?php echo (is_object($customer)) ? $customer->email : ''; ?>" tabindex="5">
                     </div>
 
 
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Billing Address*</label>
-                        <input type="text" name="address" class="input w-full border mt-2 flex-1" value="<?php echo (is_object($customer)) ? $customer->address : ''; ?>">
+                        <input type="text" name="address" class="input w-full border mt-2 flex-1"
+                               value="<?php echo (is_object($customer)) ? $customer->address : ''; ?>" tabindex="7">
                     </div>
-
+                    <div class="intro-y flex flex-col sm:flex-row mt-3">
+                        <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Postal Code</label>
+                        <input type="text" name="postal_code" class="input w-full border mt-2 flex-1"
+                               value="<?php echo (is_object($customer)) ? $customer->postal_code : ''; ?>" tabindex="9"/>
+                    </div>
 
                 </div>
             </div>
@@ -144,37 +152,39 @@
                     </div> -->
                     <div class="intro-y flex flex-col sm:flex-row mt-2">
                         <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Contact Person*</label>
-                        <input type="text" name="contact_person" class="input w-full border mt-2 flex-1" value="<?php echo (is_object($customer)) ? $customer->contact_person : ''; ?>">
+                        <input type="text" name="contact_person" class="input w-full border mt-2 flex-1"
+                               value="<?php echo (is_object($customer)) ? $customer->contact_person : ''; ?>" tabindex="2">
                         <input type="button" value="Use Same Name" style="float: right;" id="copy_from_customer"
                                class="button bg-theme-1 text-white mt-5 p-2 ml-2"/>
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Phone 2</label>
-                        <input type="text" name="phone2" class="input w-full border mt-2 flex-1" value="<?php echo (is_object($customer)) ? $customer->phone2 : ''; ?>"/>
+                        <input type="text" name="phone2" class="input w-full border mt-2 flex-1"
+                               value="<?php echo (is_object($customer)) ? $customer->phone2 : ''; ?>" tabindex="4"/>
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Fax</label>
-                        <input type="text" name="fax" class="input w-full border mt-2 flex-1" value="<?php echo (is_object($customer)) ? $customer->fax : ''; ?>"/>
+                        <input type="text" name="fax" class="input w-full border mt-2 flex-1"
+                               value="<?php echo (is_object($customer)) ? $customer->fax : ''; ?>" tabindex="6"/>
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">City*</label>
-                        <input type="text" name="city" class="input w-full border mt-2 flex-1" value="<?php echo (is_object($customer)) ? $customer->city : ''; ?>"/>
+                        <input type="text" name="city" class="input w-full border mt-2 flex-1"
+                               value="<?php echo (is_object($customer)) ? $customer->city : ''; ?>" tabindex="8"/>
+                    </div>
+                    <div class="preview">
+                        <input type="submit" value="Continue to Opportunity" style="float: right;" type="button"
+                               class="button bg-theme-1 text-white mt-5 p-2"  tabindex="10"/>
                     </div>
 
                 </div>
             </div>
             <input type="hidden" name="customer_id" value="<?php echo (is_object($customer)) ? $customer->id : ''; ?>"/>
-            <div class="col-span-12 sm:col-span-12 sm:mr-4 md:col-span-12" style="margin-bottom: 2%;margin-left: 1%;">
-                <div class="preview">
-                    <input type="submit" value="Continue to Opportunity" style="float: right;" type="button"
-                           class="button bg-theme-1 text-white mt-5 p-2"/>
-                </div>
-            </div>
         </div>
     </form>
 </div>
 <script type="text/javascript">
-    $('#copy_from_customer').click(function(){
+    $('#copy_from_customer').click(function () {
         $('input[name="contact_person"]').val($('input[name="customer"]').val());
     })
 </script>

@@ -165,6 +165,7 @@
 <script>
     var catalogs =<?php echo json_encode($catalogs); ?>;
     var categories =<?php echo json_encode($categories); ?>;
+    var status = '<?php echo (is_object($quote)) ? $quote->status : 'New';?>'
 </script>
 <div class="content">
     <!-- BEGIN: Top Bar -->
@@ -181,758 +182,956 @@
     <!-- END: Top Bar -->
 
     <!-- BEGIN: Wizard Layout -->
-    <div class="intro-y box py-10 sm:py-20 mt-5">
+    <div class="intro-y box">
 
-        <div class="wizard flex flex-col lg:flex-row justify-center px-5 sm:px-20" id="section_step">
-            <div class="intro-x lg:text-center flex items-center lg:block flex-1 z-10">
-                <button class="w-10 h-10 rounded-full button step">1</button>
-                <div class="lg:w-32 font-medium text-base lg:mt-3 ml-3 lg:mx-auto">Create New Quote</div>
-            </div>
-            <div class="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button class="w-10 h-10 rounded-full button step">2</button>
-                <div class="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-gray-700">Pre Approved Quote</div>
-            </div>
-            <div class="intro-x lg:text-center flex items-center mt-5 lg:mt-0 lg:block flex-1 z-10">
-                <button class="w-10 h-10 rounded-full button step">3</button>
-                <div class="lg:w-32 text-base lg:mt-3 ml-3 lg:mx-auto text-gray-700">Final Quote</div>
-            </div>
-
-            <div class="wizard__line hidden lg:block w-2/4 bg-gray-200 absolute mt-5" id="steps_line"></div>
-        </div>
         <form id="quoteForm" method="post" action="save_quote">
-            <section id="section_1" class="tab">
-                <!-- qoute info start-->
-                <div class="intro-y grid grid-cols-12 sm:grid-cols-8 p-5 mt-1 md:mt-5 gap-2 box">
-                    <div class="col-span-4" style="margin-right: 5%;">
-                        <fieldset class=" p-2 sm:p-3  fieldset_bd_color">
-                            <legend class="legend_spacing">Quote #01</legend>
-                            <p><b>
-                                    Customer
-                                    Name: <?php echo (is_object($opportunity)) ? $opportunity->customer_name : ''; ?>
-                                    <br>
-                                    Quote Type: <?php echo (is_object($opportunity)) ? $opportunity->job_type : ''; ?>
-                                    <br>
-                                    Address: <?php echo (is_object($opportunity)) ? $opportunity->job_address : ''; ?>
-                                    <br>
-                                    Payment Terms are: <span id="payment_terms_span"></span>
-                                </b></p>
-                        </fieldset>
-                    </div>
+            <!-- qoute info start-->
+            <div class="intro-y grid grid-cols-12 sm:grid-cols-8 p-5 gap-2">
+                <div class="col-span-4" style="margin-right: 5%;">
+                    <fieldset class=" p-2 sm:p-3  fieldset_bd_color">
+                        <legend class="legend_spacing">Quote #01</legend>
+                        <p><b>
+                                Customer
+                                Name: <?php echo (is_object($opportunity)) ? $opportunity->customer_name : ''; ?>
+                                <br>
+                                Quote Type: <?php echo (is_object($opportunity)) ? $opportunity->job_type : ''; ?>
+                                <br>
+                                Address: <?php echo (is_object($opportunity)) ? $opportunity->site_address : ''; ?>
+                                <br>
+                                Payment Terms are: <span id="payment_terms_span"></span>
+                            </b></p>
+                    </fieldset>
+                </div>
 
-                    <div class="col-span-12 sm:col-span-6 md:col-span-4 sm:pl-3 ml-5 lg:m-auto" id="right_info_part">
-                        <div class="w-full sm:w-full m-auto mb-2" style="display:flex;">
-                            <p> Set Quoting Company </p>
-                            <select class="input border mr-2">
-                                <?php
-                                foreach ($companies as $com) {
+                <div class="col-span-12 sm:col-span-6 md:col-span-4 sm:pl-3 ml-5 lg:m-auto" id="right_info_part">
+                    <div class="w-full sm:w-full m-auto mb-2" style="display:flex;">
+                        <p> Set Quoting Company </p>
+                        <select class="input border mr-2">
+                            <?php
+                            foreach ($companies as $com) {
+                                if (is_object($quote)) {
+                                    if ($quote->company_id == $com->id) {
+                                        echo '<option value="' . $com->id . '" selected>' . $com->name . '</option>';
+                                    } else {
+                                        echo '<option value="' . $com->id . '">' . $com->name . '</option>';
+                                    }
+                                } else {
                                     echo '<option value="' . $com->id . '">' . $com->name . '</option>';
                                 }
-                                ?>
+                            }
+                            ?>
 
-                            </select>
-                        </div>
-                        <div class="w-full sm:w-full m-auto mb-2" style="display:flex;">
-                            <p> Set Payment Terms * </p>
-                            <select class="input border mr-2" name="payment_term" required>
-                                <?php
-                                $payment_terms = array('C.O.D', 'Net 30 Days', 'Net 45 Days', 'Net 60 Days', 'Master-Card', 'Amex'
-                                , '30% Deposit - 70% Due 30 Days F', '50% Deposit - 50% Due 30 Days',
-                                    '50% Deposit - 50% Due On Job C');
-                                foreach ($payment_terms as $val) {
+                        </select>
+                    </div>
+                    <div class="w-full sm:w-full m-auto mb-2" style="display:flex;">
+                        <p> Set Payment Terms * </p>
+                        <select class="input border mr-2" name="payment_term" required>
+                            <?php
+                            $payment_terms = array('C.O.D', 'Net 30 Days', 'Net 45 Days', 'Net 60 Days', 'Master-Card', 'Amex'
+                            , '30% Deposit - 70% Due 30 Days F', '50% Deposit - 50% Due 30 Days',
+                                '50% Deposit - 50% Due On Job C');
+                            foreach ($payment_terms as $val) {
+                                if (is_object($quote)) {
+                                    if ($quote->payment_term == $val) {
+                                        echo '<option value="' . $val . '" selected>' . $val . '</option>';
+                                    } else {
+                                        echo '<option value="' . $val . '">' . $val . '</option>';
+                                    }
+                                } else {
                                     echo '<option value="' . $val . '">' . $val . '</option>';
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div class="w-full sm:w-full m-auto" style="display:flex;">
+                        <p classs="">Set Calc Mode
+                        <p>
+                            <select class="input border mr-2" name="calc_mode">
+                                <?php
+                                $calc_mode = array('Contractor', 'Tender');
+                                foreach ($calc_mode as $key => $val) {
+                                    if (is_object($quote)) {
+                                        if ($quote->calc_mode == $val) {
+                                            echo '<option value="' . $val . '" selected>' . $val . '</option>';
+                                        } else {
+                                            echo '<option value="' . $val . '">' . $val . '</option>';
+                                        }
+                                    } else {
+                                        echo '<option value="' . $val . '">' . $val . '</option>';
+                                    }
                                 }
                                 ?>
                             </select>
-                        </div>
-                        <div class="w-full sm:w-full m-auto" style="display:flex;">
-                            <p classs="">Set Calc Mode
-                            <p>
-                                <select class="input border mr-2" name="calc_mode">
-                                    <?php
-                                    $calc_mode = array('', 'Contractor', 'Tender');
-                                    foreach ($calc_mode as $key => $val) {
-                                        if ($key == 0)
-                                            continue;
-                                        echo '<option value="' . $key . '">' . $val . '</option>';
-                                    }
-                                    ?>
-                                </select>
-                        </div>
                     </div>
                 </div>
-                <!--quote info close-->
+            </div>
+            <!--quote info close-->
 
-                <!--table section start-->
-                <fieldset class="p-1 w-full fieldset_bd_color">
-                    <legend class="quote_legend_spacing">Materials</legend>
-                    <div class="grid grid-cols-12 gap-6 mt-5">
+            <!--table section start-->
+            <fieldset class="p-1 w-full fieldset_bd_color">
+                <legend class="quote_legend_spacing">Materials</legend>
+                <div class="grid grid-cols-12 gap-6 mt-5">
 
-                        <!-- BEGIN: materials -->
-                        <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
-
-
-                            <table class="table table-report -mt-2 mb-5" id="materials">
-                                <thead>
-                                <tr id="material_thead">
-                                    <th class="whitespace-no-wrap">Category</th>
-                                    <th class="whitespace-no-wrap">Code</th>
-                                    <th class="text-center whitespace-no-wrap">Price per unit</th>
-                                    <th class="text-center whitespace-no-wrap">Quantity</th>
-                                    <th class="text-center whitespace-no-wrap">Total price</th>
-
-                                    <th class="text-center whitespace-no-wrap">ACTIONS</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-
-                                <tr id="material-item-row0" row="0" class="intro-x material-item">
-                                    <td colspan="5"></td>
-                                    <td class="table-report__action w-56">
-                                        <div class="flex justify-center items-center">
-                                            <a class="flex items-center mr-3" onclick="add_material_item()"
-                                               href="javascript:;">+</a>
-
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="material-item-total" class="intro-x">
-                                    <td colspan="3" class="w-40 text-center">Total</td>
-
-                                    <td></td>
-                                    <td></td>
-                                    <td class="table-report__action w-56">
-                                        <div class="flex justify-center items-center">
-
-                                            <i style="font-size: 20px;cursor: pointer;"
-                                               onclick="toogle_material_item(this)"
-                                               class="fa fa-angle-down"></i>
-                                        </div>
-                                    </td>
-                                </tr>
+                    <!-- BEGIN: materials -->
+                    <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
 
 
-                                </tbody>
-                            </table>
+                        <table class="table table-report -mt-2 mb-5" id="materials">
+                            <thead>
+                            <tr id="material_thead">
+                                <th class="whitespace-no-wrap">Category</th>
+                                <th class="whitespace-no-wrap">Code</th>
+                                <th class="text-center whitespace-no-wrap">Price per unit</th>
+                                <th class="text-center whitespace-no-wrap">Quantity</th>
+                                <th class="text-center whitespace-no-wrap">Total price</th>
 
-                        </div>
-                        <!-- END: materials -->
+                                <th class="text-center whitespace-no-wrap">ACTIONS</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr id="material-item-row0" row="0" class="intro-x material-item">
+                                <td colspan="5"></td>
+                                <td class="table-report__action w-56">
+                                    <div class="flex justify-center items-center">
+                                        <a class="flex items-center mr-3" onclick="add_material_item()"
+                                           href="javascript:;">+</a>
+
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php
+                            $mat_total_quantity = 0;
+                            $mat_total_price = 0;
+                            if (is_object($quote)):
+                                if (sizeof($mat_info) > 0):
+                                    for ($i = 0;
+                                         $i < sizeof($mat_info);
+                                         $i++):
+                                        $nextRow = $i + 1;
+                                        $mat_total_quantity += $mat_info[$i]->quantity;
+                                        ?>
+                                        <tr id="material-item-row<?php echo $nextRow; ?>" row="<?php echo $nextRow; ?>"
+                                            class="intro-x material-item">
+                                            <td class="w-40">
+                                                <div class="flex">
+                                                    <select class="input border mr-2" name="material_category[]"
+                                                            onchange="get_cate_code(<?php echo $nextRow; ?>)">
+                                                        <option value=""></option>
+                                                        <?php
+                                                        foreach ($categories as $category) {
+                                                            if ($category->product_category == $mat_info[$i]->mat_category) {
+                                                                echo '<option selected>' . $category->product_category . '</option>';
+                                                            } else {
+                                                                echo '<option>' . $category->product_category . '</option>';
+                                                            }
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                            </td>
+
+                                            <td class="w-40">
+                                                <div class="flex">
+                                                    <select class="input border mr-2" name="material_code[]"
+                                                            onchange="change_mat_code(<?php echo $nextRow; ?>)">
+                                                        <option></option>
+                                                        <?php
+                                                        foreach ($catalogs as $cat) {
+                                                            if ($cat->product_category == $mat_info[$i]->mat_category) {
+                                                                if ($cat->mat_code == $mat_info[$i]->code) {
+                                                                    $price_per_unit = $cat->price_per_unit_contractor;
+                                                                    if ($quote->calc_mode == 'Tender') {
+                                                                        $price_per_unit = $cat->price_per_unit_tender;
+                                                                    }
+                                                                    echo '<option selected>' . $cat->mat_code . '</option>';
+                                                                } else {
+                                                                    echo '<option>' . $cat->mat_code . '</option>';
+                                                                }
+                                                            }
+                                                        }
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td class="text-center"><?php echo $price_per_unit; ?></td>
+                                            <td class="text-center"><input type="number" name="mat_quantity[]"
+                                                                           onfocus="this.oldvalue = this.value;"
+                                                                           value="<?php echo $mat_info[$i]->quantity; ?>"
+                                                                           onchange="change_mat_quantity(<?php echo $nextRow; ?>);this.oldvalue = this.value;">
+                                            </td>
+                                            <td class="text-center">
+                                                <?php
+                                                $mat_total_price += $mat_info[$i]->quantity * $price_per_unit;
+                                                echo $price_per_unit * $mat_info[$i]->quantity;
+                                                ?>
+                                            </td>
+                                            <td class="table-report__action w-56">
+                                                <div class="flex justify-center items-center">
+                                                    <a style="background-color:unset;border:unset"
+                                                       class="flex items-center mr-3"
+                                                       onclick="delete_material_item(<?php echo $nextRow; ?>)"
+                                                       href="javascript:;"><i style="font-size: 20px;
+    color: red;" class="fa fa-trash" aria-hidden="true"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <?php
+                                    endfor;
+                                endif;
+                            endif;
+                            ?>
+                            <tr id="material-item-total" class="intro-x">
+                                <td colspan="3" class="w-40 text-center">Total</td>
+
+                                <td><?php echo $mat_total_quantity; ?></td>
+                                <td><?php echo $mat_total_price; ?></td>
+                                <td class="table-report__action w-56">
+                                    <div class="flex justify-center items-center">
+
+                                        <i style="font-size: 20px;cursor: pointer;"
+                                           onclick="toogle_material_item(this)"
+                                           class="fa fa-angle-down"></i>
+                                    </div>
+                                </td>
+                            </tr>
+
+
+                            </tbody>
+                        </table>
+
                     </div>
-                </fieldset>
+                    <!-- END: materials -->
+                </div>
+            </fieldset>
 
 
-                <fieldset class="p-1 mt-2 w-full fieldset_bd_color">
-                    <legend class="quote_legend_spacing">Labor</legend>
-                    <div class="grid grid-cols-12 gap-6 mt-5">
+            <fieldset class="p-1 mt-2 w-full fieldset_bd_color">
+                <legend class="quote_legend_spacing">Labor</legend>
+                <div class="grid grid-cols-12 gap-6 mt-5">
 
-                        <!-- BEGIN: labour -->
-                        <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
-                            <table class="table table-report -mt-2 mb-5" id="labour">
-                                <thead>
-                                <tr id="labour_thead">
-                                    <th class="whitespace-no-wrap">Labor desc</th>
-                                    <th class="whitespace-no-wrap"># of Man Day</th>
-                                    <th class="text-center whitespace-no-wrap">Total price</th>
-                                    <th class="text-center whitespace-no-wrap">ACTIONS</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                    <!-- BEGIN: labour -->
+                    <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
+                        <table class="table table-report -mt-2 mb-5" id="labour">
+                            <thead>
+                            <tr id="labour_thead">
+                                <th class="whitespace-no-wrap">Labor desc</th>
+                                <th class="whitespace-no-wrap"># of Man Day</th>
+                                <th class="text-center whitespace-no-wrap">Total price</th>
+                                <th class="text-center whitespace-no-wrap">ACTIONS</th>
+                            </tr>
+                            </thead>
+                            <tbody>
 
-                                <tr id="labour-item-row0" row="0" class="intro-x labour-item">
-                                    <td colspan="3"></td>
-                                    <td class="table-report__action w-56">
-                                        <div class="flex justify-center items-center">
-                                            <a class="flex items-center mr-3" onclick="add_labour_item()"
-                                               href="javascript:;">+</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="labour-item-total" class="intro-x">
-                                    <td class="w-40 text-center">
-                                        Total Man Day
-                                    </td>
+                            <tr id="labour-item-row0" row="0" class="intro-x labour-item">
+                                <td colspan="3"></td>
+                                <td class="table-report__action w-56">
+                                    <div class="flex justify-center items-center">
+                                        <a class="flex items-center mr-3" onclick="add_labour_item()"
+                                           href="javascript:;">+</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php
+                            $lab_total_days = 0;
+                            if (is_object($quote)):
+                                if (sizeof($lab_info) > 0):
+                                    for ($i = 0;
+                                         $i < sizeof($lab_info);
+                                         $i++):
+                                        $nextRow = $i + 1;
+                                        $lab_total_days += $lab_info[$i]->total_days;
+                                        ?>
+                                        <tr id="labour-item-row<?php echo $nextRow; ?>" row="<?php echo $nextRow; ?>"
+                                            class="intro-x labour-item">
+                                            <td class="w-40">
+                                                <div class="flex">
+                                                    <select class="input border mr-2" name="labor_type[]">
+                                                        <option></option>
+                                                        <option <?php echo ($lab_info[$i]->labour_type == 'Man Day with Digger') ? 'selected' : ''; ?>>
+                                                            Man Day with Digger
+                                                        </option>
+                                                        <option <?php echo ($lab_info[$i]->labour_type == 'Man Day Set Posts') ? 'selected' : ''; ?>>
+                                                            Man Day Set Posts
+                                                        </option>
+                                                        <option <?php echo ($lab_info[$i]->labour_type == 'Man Day Drive Posts') ? 'selected' : ''; ?>>
+                                                            Man Day Drive Posts
+                                                        </option>
+                                                        <option <?php echo ($lab_info[$i]->labour_type == 'Man Day Clean Dirt') ? 'selected' : ''; ?>>
+                                                            Man Day Clean Dirt
+                                                        </option>
+                                                        <option <?php echo ($lab_info[$i]->labour_type == 'Man Day Frame and Mesh') ? 'selected' : ''; ?>>
+                                                            Man Day Frame and Mesh
+                                                        </option>
+                                                        <option <?php echo ($lab_info[$i]->labour_type == 'Man Day Frame') ? 'selected' : ''; ?>>
+                                                            Man Day Frame
+                                                        </option>
+                                                        <option <?php echo ($lab_info[$i]->labour_type == 'Man Day Mesh') ? 'selected' : ''; ?>>
+                                                            Man Day Mesh
+                                                        </option>
+                                                        <option <?php echo ($lab_info[$i]->labour_type == 'Man Day Tying Fence') ? 'selected' : ''; ?>>
+                                                            Man Day Tying Fence
+                                                        </option>
+                                                        <option <?php echo ($lab_info[$i]->labour_type == 'Man Day Hang Gates') ? 'selected' : ''; ?>>
+                                                            Man Day Hang Gates
+                                                        </option>
+                                                        <option <?php echo ($lab_info[$i]->labour_type == 'Man Day Removal') ? 'selected' : ''; ?>>
+                                                            Man Day Removal
+                                                        </option>
+                                                        <option <?php echo ($lab_info[$i]->labour_type == 'Man Day Cut Brush') ? 'selected' : ''; ?>>
+                                                            Man Day Cut Brush
+                                                        </option>
+                                                        <option <?php echo ($lab_info[$i]->labour_type == 'Man Day Travel') ? 'selected' : ''; ?>>
+                                                            Man Day Travel
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </td>
 
-                                    <td></td>
-                                    <td></td>
-                                    <td class="table-report__action w-56">
-                                        <div class="flex justify-center items-center">
+                                            <td class="text-center">
+                                                <input type="number" name="labor_total_days[]"
+                                                       onfocus="this.oldvalue = this.value;"
+                                                       value="<?php echo $lab_info[$i]->total_days; ?>"
+                                                       onchange="set_labour_price(<?php echo $nextRow; ?>);this.oldvalue = this.value;">
+                                            </td>
+                                            <td><?php echo $lab_info[$i]->total_days * 250; ?></td>
+                                            <td class="table-report__action w-56">
+                                                <div class="flex justify-center items-center">
 
-                                            <i style="font-size: 20px;cursor: pointer;"
-                                               onclick="toogle_labour_item(this)"
-                                               class="fa fa-angle-down"></i>
-                                        </div>
-                                    </td>
-                                </tr>
+                                                    <a style="background-color:unset;border:unset"
+                                                       class="flex items-center mr-3"
+                                                       onclick="delete_labour_item(<?php echo $nextRow; ?>)"
+                                                       href="javascript:;"><i style="font-size: 20px;
+    color: red;" class="fa fa-trash" aria-hidden="true"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <?php
+                                    endfor;
+                                endif;
+                            endif;
+                            ?>
+                            <tr id="labour-item-total" class="intro-x">
+                                <td class="w-40 text-center">
+                                    Total Man Day
+                                </td>
 
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- END: labour -->
+                                <td><?php echo $lab_total_days; ?></td>
+                                <td><?php echo $lab_total_days * 250; ?></td>
+                                <td class="table-report__action w-56">
+                                    <div class="flex justify-center items-center">
+
+                                        <i style="font-size: 20px;cursor: pointer;"
+                                           onclick="toogle_labour_item(this)"
+                                           class="fa fa-angle-down"></i>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
                     </div>
-                </fieldset>
+                    <!-- END: labour -->
+                </div>
+            </fieldset>
 
 
-                <fieldset class="p-1 mt-2 w-full fieldset_bd_color">
-                    <legend class="quote_legend_spacing">Miscellaneous</legend>
-                    <div class="grid grid-cols-12 gap-6 mt-5">
+            <fieldset class="p-1 mt-2 w-full fieldset_bd_color">
+                <legend class="quote_legend_spacing">Miscellaneous</legend>
+                <div class="grid grid-cols-12 gap-6 mt-5">
 
-                        <!-- BEGIN: miscellaneous -->
-                        <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
-                            <table class="table table-report -mt-2 mb-5" id="miscellaneous">
-                                <thead>
-                                <tr id="miscellaneous_thead">
-                                    <th class="whitespace-no-wrap w-5">Misc #</th>
-                                    <th class="whitespace-no-wrap">Misc desc</th>
-                                    <th class="text-center whitespace-no-wrap w-10">Price per unit</th>
-                                    <th class="text-center whitespace-no-wrap w-10">Quantity</th>
-                                    <th class="text-center whitespace-no-wrap w-10">Total price</th>
+                    <!-- BEGIN: miscellaneous -->
+                    <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
+                        <table class="table table-report -mt-2 mb-5" id="miscellaneous">
+                            <thead>
+                            <tr id="miscellaneous_thead">
+                                <th class="whitespace-no-wrap w-5">Misc #</th>
+                                <th class="whitespace-no-wrap">Misc desc</th>
+                                <th class="text-center whitespace-no-wrap w-10">Price per unit</th>
+                                <th class="text-center whitespace-no-wrap w-10">Quantity</th>
+                                <th class="text-center whitespace-no-wrap w-10">Total price</th>
 
-                                    <th class="text-center whitespace-no-wrap w-10">ACTIONS</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                                <th class="text-center whitespace-no-wrap w-10">ACTIONS</th>
+                            </tr>
+                            </thead>
+                            <tbody>
 
-                                <tr id="miscellaneous-item-row0" row="0" class="intro-x miscellaneous-item">
-                                    <td colspan="5"></td>
+                            <tr id="miscellaneous-item-row0" row="0" class="intro-x miscellaneous-item">
+                                <td colspan="5"></td>
 
-                                    <td class="table-report__action w-56">
-                                        <div class="flex justify-center items-center">
-                                            <a class="flex items-center mr-3" onclick="add_miscellaneous_item()"
-                                               href="javascript:;">+</a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr id="miscellaneous-item-total" class="intro-x">
-                                    <td colspan="3" class="w-40 text-center">Total Miscellaneous</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td class="table-report__action w-56">
-                                        <div class="flex justify-center items-center">
-                                            <i style="font-size: 20px;cursor: pointer;"
-                                               onclick="toogle_miscellaneous_item(this)" class="fa fa-angle-down"></i>
-                                        </div>
-                                    </td>
-                                </tr>
+                                <td class="table-report__action w-56">
+                                    <div class="flex justify-center items-center">
+                                        <a class="flex items-center mr-3" onclick="add_miscellaneous_item()"
+                                           href="javascript:;">+</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php
+                            $misc_total_quantity = 0;
+                            $misc_total_price = 0;
+                            if (is_object($quote)):
+                                if (sizeof($misc_info) > 0):
+                                    for ($i = 0;
+                                         $i < sizeof($misc_info);
+                                         $i++):
+                                        $nextRow = $i + 1;
+                                        $misc_total_quantity += $misc_info[$i]->quantity;
+                                        $misc_total_price += $misc_info[$i]->quantity * $misc_info[$i]->price_per_unit;
+                                        ?>
+                                        <tr id="miscellaneous-item-row<?php echo $nextRow; ?>"
+                                            row="<?php echo $nextRow; ?>" class="intro-x miscellaneous-item">
+                                            <td class="text-center"><?php echo $nextRow; ?></td>
+                                            <td class="text-center"><input type="text" name="misc_desc[]" placeholder=""
+                                                                           value="<?php echo $misc_info[$i]->misc_description; ?>">
+                                            </td>
+                                            <td class="text-center"><input type="number" name="misc_unit_price[]"
+                                                                           placeholder=""
+                                                                           value="<?php echo $misc_info[$i]->price_per_unit; ?>"
+                                                                           onchange="change_mis_unit(<?php echo $nextRow; ?>)">
+                                            </td>
+                                            <td class="text-center"><input type="number" name="misc_quantity[]"
+                                                                           onfocus="this.oldvalue = this.value;"
+                                                                           placeholder=""
+                                                                           value="<?php echo $misc_info[$i]->quantity; ?>"
+                                                                           onchange="change_mis_quantity(<?php echo $misc_info[$i]->price_per_unit; ?>);;this.oldvalue = this.value;">
+                                            </td>
+                                            <td class="text-center"><?php echo $misc_info[$i]->quantity * $misc_info[$i]->price_per_unit; ?></td>
+                                            <td class="table-report__action">
+                                                <div class="flex justify-center items-center">
+                                                    <a style="background-color:unset;border:unset"
+                                                       class="flex items-center mr-3"
+                                                       onclick="delete_miscellaneous_item(<?php echo $nextRow; ?>)"
+                                                       href="javascript:;"><i style="font-size: 20px;
+    color: red;" class="fa fa-trash" aria-hidden="true"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <?php
+                                    endfor;
+                                endif;
+                            endif;
+                            ?>
+                            <tr id="miscellaneous-item-total" class="intro-x">
+                                <td colspan="3" class="w-40 text-center">Total Miscellaneous</td>
+                                <td><?php echo $misc_total_quantity; ?></td>
+                                <td><?php echo $misc_total_price; ?></td>
+                                <td class="table-report__action w-56">
+                                    <div class="flex justify-center items-center">
+                                        <i style="font-size: 20px;cursor: pointer;"
+                                           onclick="toogle_miscellaneous_item(this)" class="fa fa-angle-down"></i>
+                                    </div>
+                                </td>
+                            </tr>
 
 
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- END: miscellaneous -->
+                            </tbody>
+                        </table>
                     </div>
-                </fieldset>
+                    <!-- END: miscellaneous -->
+                </div>
+            </fieldset>
 
 
-                <fieldset class="p-1 mt-2 w-full fieldset_bd_color">
-                    <legend class="quote_legend_spacing">Add-On</legend>
-                    <div class="grid grid-cols-12 gap-6 mt-5">
+            <fieldset class="p-1 mt-2 w-full fieldset_bd_color">
+                <legend class="quote_legend_spacing">Add-On</legend>
+                <div class="grid grid-cols-12 gap-6 mt-5">
 
-                        <!-- BEGIN: Ads-On -->
-                        <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
-                            <table class="table table-report -mt-2" id="adsOn">
-                                <thead>
-                                <tr>
-                                    <th class="whitespace-no-wrap">Add-On desc</th>
-                                    <th class="text-center whitespace-no-wrap">Price per unit</th>
-                                    <th class="text-center whitespace-no-wrap">Quantity</th>
-                                    <th class="text-center whitespace-no-wrap">Total price</th>
-                                    <th class="text-center whitespace-no-wrap">ACTIONS</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+                    <!-- BEGIN: Ads-On -->
+                    <div class="intro-y col-span-12 overflow-auto lg:overflow-visible">
+                        <table class="table table-report -mt-2" id="adsOn">
+                            <thead>
+                            <tr>
+                                <th class="whitespace-no-wrap">Add-On desc</th>
+                                <th class="text-center whitespace-no-wrap">Price per unit</th>
+                                <th class="text-center whitespace-no-wrap">Quantity</th>
+                                <th class="text-center whitespace-no-wrap">Total price</th>
+                                <th class="text-center whitespace-no-wrap">ACTIONS</th>
+                            </tr>
+                            </thead>
+                            <tbody>
 
-                                <tr id="adsOn-item-row0" row="0" class="intro-x adsOn-item">
-                                    <td colspan="4"></td>
-                                    <td class="table-report__action w-56">
-                                        <div class="flex justify-center items-center">
-                                            <a class="flex items-center mr-3" onclick="add_adsOn_item()"
-                                               href="javascript:;">+</a>
-                                        </div>
-                                    </td>
-                                </tr>
+                            <tr id="adsOn-item-row0" row="0" class="intro-x adsOn-item">
+                                <td colspan="4"></td>
+                                <td class="table-report__action w-56">
+                                    <div class="flex justify-center items-center">
+                                        <a class="flex items-center mr-3" onclick="add_adsOn_item()"
+                                           href="javascript:;">+</a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <?php
+                            $add_on_total_quantity = 0;
+                            $add_on_total_price = 0;
+                            if (is_object($quote)):
+                                if (sizeof($add_on_info) > 0):
+                                    for ($i = 0;
+                                         $i < sizeof($add_on_info);
+                                         $i++):
+                                        $nextRow = $i + 1;
+                                        $add_on_total_quantity += $add_on_info[$i]->quantity;
+                                        $add_on_total_price += $add_on_info[$i]->quantity * $add_on_info[$i]->net_price_per_unit;
+                                        ?>
+                                        <tr id="adsOn-item-row<?php echo $nextRow; ?>" row="<?php echo $nextRow; ?>"
+                                            class="intro-x adsOn-item">
+                                            <td class="text-center"><input type="text" name="addon_desc[]"
+                                                                           value="<?php echo $add_on_info[$i]->add_on_description; ?>">
+                                            </td>
+                                            <td class="text-center"><input type="number" name="addon_unit_price[]"
+                                                                           value="<?php echo $add_on_info[$i]->net_price_per_unit; ?>"
+                                                                           onchange="change_adsOn_unit(<?php echo $nextRow; ?>)">
+                                            </td>
+                                            <td class="text-center"><input type="number" name="addon_quantity[]"
+                                                                           value="<?php echo $add_on_info[$i]->quantity; ?>"
+                                                                           onfocus="this.oldvalue = this.value;"
+                                                                           onchange="change_adsOn_quantity(<?php echo $nextRow; ?>);this.oldvalue = this.value;">
+                                            </td>
+                                            <td class="text-center"><?php echo $add_on_info[$i]->quantity * $add_on_info[$i]->net_price_per_unit; ?></td>
+                                            <td class="table-report__action w-56">
+                                                <div class="flex justify-center items-center">
+                                                    <a style="background-color:unset;border:unset"
+                                                       class="flex items-center mr-3"
+                                                       onclick="delete_adsOn_item(<?php echo $nextRow; ?>)"
+                                                       href="javascript:;"><i
+                                                                style="font-size: 20px;
+    color: red;" class="fa fa-trash" aria-hidden="true"></i></a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <?php
+                                    endfor;
+                                endif;
+                            endif;
+                            ?>
+                            <tr id="adsOn-item-total" class="intro-x">
+                                <td colspan="2" class="text-center">Total Add-Ons</td>
 
-                                <tr id="adsOn-item-total" class="intro-x">
-                                    <td colspan="2" class="text-center">Total Add-Ons</td>
+                                <td><?php echo $add_on_total_quantity; ?></td>
+                                <td><?php echo $add_on_total_price; ?></td>
+                                <td class="table-report__action w-56">
+                                    <div class="flex justify-center items-center">
 
-                                    <td></td>
-                                    <td></td>
-                                    <td class="table-report__action w-56">
-                                        <div class="flex justify-center items-center">
+                                        <i style="font-size: 20px;cursor: pointer;"
+                                           onclick="toogle_adsOn_item(this)"
+                                           class="fa fa-angle-down"></i>
+                                    </div>
+                                </td>
+                            </tr>
 
-                                            <i style="font-size: 20px;cursor: pointer;"
-                                               onclick="toogle_adsOn_item(this)"
-                                               class="fa fa-angle-down"></i>
-                                        </div>
-                                    </td>
-                                </tr>
-
-                                </tbody>
-                            </table>
-                        </div>
-                        <!-- END: Ads-On -->
+                            </tbody>
+                        </table>
                     </div>
-                </fieldset>
-
-                <!--table section close-->
-                <!-- END: Wizard Layout -->
-            </section>
-
-
-            <section id="section_2" class="tab">
-                <!-- <div class="intro-y flex items-center mt-8">
-                   <h2 class="text-lg font-medium mr-auto">
-                       Regular Form
-                   </h2>
-                </div> -->
-                <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
-                    <div class="intro-y col-span-12 lg:col-span-6">
-                        <!-- BEGIN: Input -->
-                        <div class="intro-y box">
-                            <div class="p-5" id="input">
-                                <div class="preview">
-                                    <div class="col-span-2">
-                                        <fieldset class=" p-3  fieldset_bd_color">
-                                            <legend class="legend_spacing">Quote #01</legend>
-                                            <p><b>
-                                                    Customer
-                                                    Name: <?php echo (is_object($opportunity)) ? $opportunity->customer_name : ''; ?>
-                                                    <br>
-                                                    Quote
-                                                    Type: <?php echo (is_object($opportunity)) ? $opportunity->job_type : ''; ?>
-                                                    <br>
-                                                    Address: <?php echo (is_object($opportunity)) ? $opportunity->job_address : ''; ?>
-                                                    <br>
-                                                    Payment Terms are: <span id="payment_terms"></span>
-                                                </b></p>
-                                        </fieldset>
-                                    </div>
+                    <!-- END: Ads-On -->
+                </div>
+            </fieldset>
+            <?php
+            if (is_object($quote)):
+                if ($quote->status == 'Pending'):
+                    ?>
 
 
-                                    <div class="overflow-x-auto">
+                    <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
+                        <div class="intro-y col-span-12 lg:col-span-6">
+                            <!-- BEGIN: Input -->
+                            <div class="intro-y box">
+                                <div class="p-5" id="input">
+                                    <div class="preview">
+                                        <div class="overflow-x-auto">
 
-                                        <table class="table" style="margin-top: 4rem" id="final_quote_table">
-                                            <thead>
-                                            <tr class="bg-gray-200 text-gray-700">
-                                                <th class="whitespace-no-wrap">Items</th>
-                                                <th class="whitespace-no-wrap">Costs</th>
-                                                <th class="whitespace-no-wrap">Selling Numbers</th>
-                                                <th class="whitespace-no-wrap">Profit</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td class="border-b">Material</td>
-                                                <td class="border-b"><a href="#material-detailed"
-                                                                        data-target="#material-detailed"
-                                                                        data-toggle="modal"
-                                                                        style="text-decoration: underline;"></a>
-                                                </td>
-                                                <td class="border-b"></td>
-                                                <td class="border-b"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="border-b">Labour</td>
-                                                <td class="border-b"><a href="javascript:;"
-                                                                        data-target="#labour-detailed"
-                                                                        data-toggle="modal"
-                                                                        style="text-decoration: underline;"></a>
-                                                </td>
-                                                <td class="border-b"></td>
-                                                <td class="border-b"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="border-b">Misc</td>
-                                                <td class="border-b"><a href="javascript:;" data-target="#misc-detailed"
-                                                                        data-toggle="modal"
-                                                                        style="text-decoration: underline;"></a>
-                                                <td class="border-b"></td>
-                                                <td class="border-b"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="border-b">Add-On</td>
-                                                <td class="border-b"></td>
-                                                <td class="border-b"></td>
-                                                <td class="border-b"></td>
-                                            </tr>
-                                            <tr class="sub-total1">
-                                                <td class="border-b">Sub Total 1</td>
-                                                <td class="border-b"></td>
-                                                <td class="border-b"></td>
-                                                <td class="border-b"></td>
-                                            </tr>
-                                            <tr class="discount-row">
-                                                <td class="border-b">Discount</td>
-                                                <td class="border-b">` + discount_percent + `%</td>
-                                                <td class="border-b">` + discount_amount + `</td>
-                                                <td class="border-b"></td>
-                                            </tr>
-                                            <tr class="sub-total2">
-                                                <td class="border-b">Sub Total 2</td>
-                                                <td class="border-b"></td>
-                                                <td class="border-b">` + (sub_total1 - discount_amount) + `</td>
-                                                <td class="border-b"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="border-b">HST</td>
-                                                <td class="border-b">13%</td>
-                                                <td class="border-b"></td>
-                                                <td class="border-b"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="border-b">Total</td>
-                                                <td class="border-b"></td>
-                                                <td class="border-b"></td>
-                                                <td class="border-b"></td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-
-                                </div>
-                                <div class="source-code hidden">
-                                    <button data-target="#copy-input"
-                                            class="copy-code button button--sm border flex items-center text-gray-700">
-                                        <i
-                                                data-feather="file" class="w-4 h-4 mr-2"></i> Copy code
-                                    </button>
-
-                                </div>
-                            </div>
-                        </div>
-                        <!-- END: Input -->
-                    </div>
-                    <div class="intro-y col-span-12 lg:col-span-6">
-                        <!-- BEGIN: Vertical Form -->
-                        <div class="intro-y box">
-                            <div class="p-5" id="vertical-form">
-                                <div class="preview">
-                                    <div class="overflow-x-auto">
-                                        <div class="mt-1 mb-5">
-                                            <input type="checkbox" class="input border mr-2" id="credit-passed"
-                                                   required>
-                                            <label class="cursor-pointer select-none" for="credit-passed"
-                                                   style="width: auto;">Customer passed Credit-Check</label>
-                                        </div>
-                                        <!-- <div class="mt-1 mb-5">
-                                            <label class="mr-1">Assign Installer </label>
-                                            <select class="input border mr-2">
-                                                <option>Choose</option>
-                                                <option>Liam Neeson</option>
-                                                <option>Daniel Craig</option>
-                                            </select>
-                                        </div> -->
-                                        <!-- <div class="mt-1 mb-5">
-                                            <label class="mr-2">Set Calc Mode </label>
-                                            <select class="input border mr-2" style="margin-left: 3px;">
-                                                <option>Contractor</option>
-                                                <option>Liam Neeson</option>
-                                                <option>Daniel Craig</option>
-                                            </select>
-                                        </div> -->
-
-                                        <div class="mt-1 mb-5" style="text-align-last: end">
-                                            <label class="float-left" style="margin-right: 8px;">Set Markup rate</label>
-                                            <input type="radio" class="input border mr-2 float-left set_markup"
-                                                   id="horizontal-radio-chris-evans" name="horizontal_radio_button"
-                                                   checked>
-                                            <label class="cursor-pointer select-none float-left"
-                                                   for="horizontal-radio-chris-evans">Total Markup</label>
-
-                                            <input type="number"
-                                                   class="input-total-markup input border"
-                                                   placeholder="%" style="width:15%" name="total_markup_percent"
-                                                   id="total_markup_percent">
-                                            <input type="number"
-                                                   class="input-total-markup input border"
-                                                   placeholder="Amount" style="width:20%" name="total_markup_amount"
-                                                   id="total_markup_amount">
-                                        </div>
-
-
-                                        <div class="mt-1 mb-5" style="display: inline-block;">
-                                            <label class="float-left" style="margin-right: 8px; visibility: hidden;">Set
-                                                Markup rate</label>
-                                            <input type="radio" class="input border mr-2 float-left set_markup"
-                                                   id="horizontal-radio-chris-evans2" name="horizontal_radio_button">
-                                            <label class="cursor-pointer select-none mr-2 float-left"
-                                                   for="horizontal-radio-chris-evans2">Multiple Markups</label>
-                                        </div>
-
-                                        <div class="mt-1 mb-5 " style="text-align-last: end;">
-
-                                            <label class="mr-5">Material Markup</label>
-                                            <input disabled placeholder="%" type="number"
-                                                   class="input-multiple-markup input border bg-gray-100 cursor-not-allowed single_markup"
-                                                   style="width:15%" name="material_markup_percent"
-                                                   id="material_markup_percent">
-                                            <input disabled placeholder="Amount" type="number"
-                                                   class="input-multiple-markup input border bg-gray-100 cursor-not-allowed single_markup"
-                                                   style="width:20%" name="material_markup_amount"
-                                                   id="material_markup_amount">
-                                        </div>
-
-                                        <div class="mt-1 mb-5 " style="text-align-last: end;">
-
-                                            <label class="mr-5">Labor Markup</label>
-                                            <input disabled placeholder="%" type="number"
-                                                   class="input-multiple-markup input border bg-gray-100 cursor-not-allowed single_markup"
-                                                   style="width:15%" name="labor_markup_percent"
-                                                   id="labor_markup_percent">
-                                            <input disabled placeholder="Amount" type="number"
-                                                   class="input-multiple-markup input border bg-gray-100 cursor-not-allowed single_markup"
-                                                   style="width:20%" name="labor_markup_amount"
-                                                   id="labor_markup_amount">
-                                        </div>
-
-
-                                        <div class="mt-1 mb-5" style="text-align-last: end;">
-                                            <label class=" mr-5">Misc Markup</label>
-                                            <input disabled type="number" placeholder="%"
-                                                   class="input-multiple-markup input border ml-1 bg-gray-100 cursor-not-allowed single_markup"
-                                                   style="width:15%" name="misc_markup_percent"
-                                                   id="misc_markup_percent">
-                                            <input disabled placeholder="Amount" type="number"
-                                                   class="input-multiple-markup input border  bg-gray-100 cursor-not-allowed single_markup"
-                                                   style="width:20%" name="misc_markup_amount" id="misc_markup_amount">
-                                        </div>
-
-
-                                        <div class="mt-1 mb-5" style="text-align-last: end;">
-                                            <label class=" mr-5">Add-On Markup</label>
-                                            <input disabled placeholder="%" type="number"
-                                                   class="input-multiple-markup input border bg-gray-100 cursor-not-allowed single_markup"
-                                                   style="width:15%" name="adson_markup_percent"
-                                                   id="adson_markup_percent">
-                                            <input disabled placeholder="Amount" type="number"
-                                                   class="input-multiple-markup input border bg-gray-100 cursor-not-allowed single_markup"
-                                                   style="width:20%" name="adson_markup_amount"
-                                                   id="adson_markup_amount">
-                                        </div>
-                                        <div class="mt-10">
-                                            <label class="mr-5">Add Discount</label>
-                                            <input type="number"
-                                                   class="add-discount input w-25 border col-span-4"
-                                                   placeholder="%" style="width:15%" name="discount_percent">
-                                            <input placeholder="Amount" type="number"
-                                                   class="add-discount input w-25 border col-span-4"
-                                                   style="width:20%"
-                                                   name="discount_amount">
-
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <!-- END: Vertical Form -->
-                    </div>
-
-            </section>
-
-            <section id="section_3" class="tab">
-                <!-- <div class="intro-y flex items-center mt-8">
-                   <h2 class="text-lg font-medium mr-auto">
-                       Regular Form
-                   </h2>
-                </div> -->
-                <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
-                    <div class="intro-y col-span-12 lg:col-span-6">
-                        <!-- BEGIN: Input -->
-                        <div class="intro-y box">
-                            <div class="p-5" id="input">
-                                <div class="preview">
-                                    <div class="col-span-2">
-                                        <fieldset class=" p-3  fieldset_bd_color">
-                                            <legend class="legend_spacing">Quote #01</legend>
-                                            <p><b>
-                                                    Customer
-                                                    Name: <?php echo (is_object($opportunity)) ? $opportunity->customer_name : ''; ?>
-                                                    <br>
-                                                    Quote
-                                                    Type: <?php echo (is_object($opportunity)) ? $opportunity->job_type : ''; ?>
-                                                    <br>
-                                                    Address: <?php echo (is_object($opportunity)) ? $opportunity->job_address : ''; ?>
-                                                    <br>
-                                                    Payment Terms are: <span id="payment_terms"></span>
-                                                </b></p>
-                                        </fieldset>
-                                    </div>
-
-                                    <div class="w-full sm:w-1/3 mt-2 mb-3">
-                                        <fieldset class="p-2 w-full fieldset_bd_color">
-                                            <legend class="legend_spacing">Status</legend>
-                                            <p class="p-2">Approved</p>
-                                        </fieldset>
-                                    </div>
-
-                                    <!-- hidden -->
-                                    <div class="mt-1 mb-5 hidden">
-                                        <label class="mr-5">Assign Installer </label>
-                                        <select class="input border mr-2">
-                                            <option>Chris Evans</option>
-                                            <option>Liam Neeson</option>
-                                            <option>Daniel Craig</option>
-                                        </select>
-                                    </div>
-                                    <!-- close -->
-
-                                    <div class="mt-5">
-                                        <div style="width: 40%;display: inline-block;">
-                                            <button class="button bg-gray-200 text-gray-600 mr-5"
-                                                    style="float: inherit;">
-                                                Generate IA
-                                            </button>
-                                        </div>
-                                        <div style="width: 50%;display: inline;">
-                                            <input type="checkbox" class="input border  mr-2" id="ia_signed"><label>IA
-                                                is
-                                                signed</label>
+                                            <table class="table" style="" id="final_quote_table">
+                                                <thead>
+                                                <tr class="bg-gray-200 text-gray-700">
+                                                    <th class="whitespace-no-wrap">Items</th>
+                                                    <th class="whitespace-no-wrap">Costs</th>
+                                                    <th class="whitespace-no-wrap">Selling Numbers</th>
+                                                    <th class="whitespace-no-wrap">Profit</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td class="border-b">Material</td>
+                                                    <td class="border-b"><a href="#material-detailed"
+                                                                            data-target="#material-detailed"
+                                                                            data-toggle="modal"
+                                                                            style="text-decoration: underline;"></a>
+                                                    </td>
+                                                    <td class="border-b"></td>
+                                                    <td class="border-b"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border-b">Labour</td>
+                                                    <td class="border-b"><a href="javascript:;"
+                                                                            data-target="#labour-detailed"
+                                                                            data-toggle="modal"
+                                                                            style="text-decoration: underline;"></a>
+                                                    </td>
+                                                    <td class="border-b"></td>
+                                                    <td class="border-b"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border-b">Misc</td>
+                                                    <td class="border-b"><a href="javascript:;"
+                                                                            data-target="#misc-detailed"
+                                                                            data-toggle="modal"
+                                                                            style="text-decoration: underline;"></a>
+                                                    <td class="border-b"></td>
+                                                    <td class="border-b"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border-b">Add-On</td>
+                                                    <td class="border-b"></td>
+                                                    <td class="border-b"></td>
+                                                    <td class="border-b"></td>
+                                                </tr>
+                                                <tr class="sub-total1">
+                                                    <td class="border-b">Sub Total 1</td>
+                                                    <td class="border-b"></td>
+                                                    <td class="border-b"></td>
+                                                    <td class="border-b"></td>
+                                                </tr>
+                                                <tr class="discount-row">
+                                                    <td class="border-b">Discount</td>
+                                                    <td class="border-b">` + discount_percent + `%</td>
+                                                    <td class="border-b">` + discount_amount + `</td>
+                                                    <td class="border-b"></td>
+                                                </tr>
+                                                <tr class="sub-total2">
+                                                    <td class="border-b">Sub Total 2</td>
+                                                    <td class="border-b"></td>
+                                                    <td class="border-b">` + (sub_total1 - discount_amount) + `</td>
+                                                    <td class="border-b"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border-b">HST</td>
+                                                    <td class="border-b">13%</td>
+                                                    <td class="border-b"></td>
+                                                    <td class="border-b"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="border-b">Total</td>
+                                                    <td class="border-b"></td>
+                                                    <td class="border-b"></td>
+                                                    <td class="border-b"></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
 
 
                                     </div>
-                                    <div class="mt-3">
-                                        <div style="width: 40%;display: inline-block;">
-                                            <button class="button bg-gray-200 text-gray-600" style="float: inherit;">
-                                                Generate Quote Form
-                                            </button>
-                                        </div>
-                                        <div style="width: 50%;display: inline;">
-                                            <input type="checkbox" class="input border mr-2" id="form_signed"><label>Quote
-                                                Form is
-                                                signed</label>
-                                        </div>
-
-                                    </div>
-                                    <div class="mt-3">
-                                        <button class="button bg-gray-200 text-gray-600" style="float: inherit;">
-                                            Generate
-                                            Blank Form
+                                    <div class="source-code hidden">
+                                        <button data-target="#copy-input"
+                                                class="copy-code button button--sm border flex items-center text-gray-700">
+                                            <i
+                                                    data-feather="file" class="w-4 h-4 mr-2"></i> Copy code
                                         </button>
 
                                     </div>
                                 </div>
-                                <div class="source-code hidden">
-                                    <button data-target="#copy-input"
-                                            class="copy-code button button--sm border flex items-center text-gray-700">
-                                        <i
-                                                data-feather="file" class="w-4 h-4 mr-2"></i> Copy code
+                            </div>
+                            <!-- END: Input -->
+                        </div>
+                        <div class="intro-y col-span-12 lg:col-span-6">
+                            <!-- BEGIN: Vertical Form -->
+                            <div class="intro-y box">
+                                <div class="p-5" id="vertical-form">
+                                    <div class="preview">
+                                        <div class="overflow-x-auto">
+                                            <div class="mt-1 mb-5">
+                                                <input type="checkbox" class="input border mr-2" id="credit-passed"
+                                                       required>
+                                                <label class="cursor-pointer select-none" for="credit-passed"
+                                                       style="width: auto;">Customer passed Credit-Check</label>
+                                            </div>
+                                            <div class="mt-1 mb-5" style="text-align-last: end">
+                                                <label class="float-left" style="margin-right: 8px;">Set Markup
+                                                    rate</label>
+                                                <input type="radio" class="input border mr-2 float-left set_markup"
+                                                       id="horizontal-radio-chris-evans" name="horizontal_radio_button">
+                                                <label class="cursor-pointer select-none float-left"
+                                                       for="horizontal-radio-chris-evans">Total Markup</label>
+
+                                                <input type="number"
+                                                       class="input-total-markup input border bg-gray-100 cursor-not-allowed"
+                                                       placeholder="%" style="width:15%" name="total_markup_percent"
+                                                       disabled
+                                                       id="total_markup_percent">
+                                                <input type="number"
+                                                       class="input-total-markup input border bg-gray-100 cursor-not-allowed"
+                                                       placeholder="Amount" style="width:20%" name="total_markup_amount"
+                                                       disabled
+                                                       id="total_markup_amount">
+                                            </div>
+
+
+                                            <div class="mt-1 mb-5" style="display: inline-block;">
+                                                <label class="float-left"
+                                                       style="margin-right: 8px; visibility: hidden;">Set
+                                                    Markup rate</label>
+                                                <input type="radio" class="input border mr-2 float-left set_markup"
+                                                       id="horizontal-radio-chris-evans2"
+                                                       name="horizontal_radio_button" checked>
+                                                <label class="cursor-pointer select-none mr-2 float-left"
+                                                       for="horizontal-radio-chris-evans2">Multiple Markups</label>
+                                            </div>
+
+                                            <div class="mt-1 mb-5 " style="text-align-last: end;">
+
+                                                <label class="mr-5">Material Markup</label>
+                                                <input placeholder="%" type="number"
+                                                       class="input-multiple-markup input border single_markup"
+                                                       style="width:15%" name="material_markup_percent"
+                                                       id="material_markup_percent"
+                                                       value="<?php echo ($quote->mat_factor) ? ($quote->mat_factor - 1) * 100 : 0; ?>">
+                                                <input placeholder="Amount" type="number"
+                                                       class="input-multiple-markup input border single_markup"
+                                                       style="width:20%" name="material_markup_amount"
+                                                       id="material_markup_amount"
+                                                       value="<?php echo $quote->mat_factor * $quote->mat_net; ?>">
+                                            </div>
+
+                                            <div class="mt-1 mb-5 " style="text-align-last: end;">
+
+                                                <label class="mr-5">Labor Markup</label>
+                                                <input placeholder="%" type="number"
+                                                       class="input-multiple-markup input border single_markup"
+                                                       style="width:15%" name="labor_markup_percent"
+                                                       id="labor_markup_percent"
+                                                       value="<?php echo ($quote->lab_factor) ? ($quote->lab_factor - 1) * 100 : 0; ?>">
+                                                <input placeholder="Amount" type="number"
+                                                       class="input-multiple-markup input border single_markup"
+                                                       style="width:20%" name="labor_markup_amount"
+                                                       id="labor_markup_amount"
+                                                       value="<?php echo $quote->lab_factor * $quote->labour_net; ?>">
+                                            </div>
+
+
+                                            <div class="mt-1 mb-5" style="text-align-last: end;">
+                                                <label class=" mr-5">Misc Markup</label>
+                                                <input type="number" placeholder="%"
+                                                       class="input-multiple-markup input border ml-1 single_markup"
+                                                       style="width:15%" name="misc_markup_percent"
+                                                       id="misc_markup_percent"
+                                                       value="<?php echo ($quote->misc_factor) ? ($quote->misc_factor - 1) * 100 : 0; ?>">
+                                                <input placeholder="Amount" type="number"
+                                                       class="input-multiple-markup input border single_markup"
+                                                       style="width:20%" name="misc_markup_amount"
+                                                       id="misc_markup_amount"
+                                                       value="<?php echo $quote->misc_factor * $quote->misc_net; ?>">
+                                            </div>
+
+
+                                            <div class="mt-1 mb-5" style="text-align-last: end;">
+                                                <label class=" mr-5">Add-On Markup</label>
+                                                <input placeholder="%" type="number"
+                                                       class="input-multiple-markup input border single_markup"
+                                                       style="width:15%" name="adson_markup_percent"
+                                                       id="adson_markup_percent"
+                                                       value="<?php echo ($quote->ads_on_factor) ? ($quote->ads_on_factor - 1) * 100 : 0; ?>">
+                                                <input placeholder="Amount" type="number"
+                                                       class="input-multiple-markup input border single_markup"
+                                                       style="width:20%" name="adson_markup_amount"
+                                                       id="adson_markup_amount"
+                                                       value="<?php echo $quote->ads_on_factor * $quote->ads_on_net; ?>">
+                                            </div>
+                                            <div class="mt-10">
+                                                <?php
+                                                $total_amount = $quote->mat_net * $quote->mat_factor + $quote->labour_net * $quote->lab_factor
+                                                    + $quote->misc_net * $quote->misc_factor + $quote->ads_on_net * $quote->ads_on_factor;
+                                                $discount_amount = $total_amount * $quote->discount_set / 100;
+                                                ?>
+                                                <label class="mr-5">Add Discount</label>
+                                                <input type="number"
+                                                       class="add-discount input w-25 border col-span-4"
+                                                       placeholder="%" style="width:15%" name="discount_percent"
+                                                       value="<?php echo $quote->discount_set; ?>">
+                                                <input placeholder="Amount" type="number"
+                                                       class="add-discount input w-25 border col-span-4"
+                                                       style="width:20%"
+                                                       name="discount_amount" value="<?php echo $discount_amount; ?>">
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- END: Vertical Form -->
+                        </div>
+                    </div>
+                <?php
+                endif;
+            endif;
+            if (is_object($quote)):
+            if ($quote->status == 'Approved'):
+            ?>
+            <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
+                <div class="intro-y col-span-12 lg:col-span-6">
+                    <!-- BEGIN: Input -->
+                    <div class="intro-y box">
+                        <div class="p-5" id="input">
+                            <div class="preview">
+                                <!-- hidden -->
+                                <div class="mt-1 mb-5 hidden">
+                                    <label class="mr-5">Assign Installer </label>
+                                    <select class="input border mr-2">
+                                        <option>Chris Evans</option>
+                                        <option>Liam Neeson</option>
+                                        <option>Daniel Craig</option>
+                                    </select>
+                                </div>
+                                <!-- close -->
+
+                                <div class="mt-5">
+                                    <div style="width: 40%;display: inline-block;">
+                                        <button class="button bg-gray-200 text-gray-600 mr-5"
+                                                style="float: inherit;">
+                                            Generate IA
+                                        </button>
+                                    </div>
+                                    <div style="width: 50%;display: inline;">
+                                        <input type="checkbox" class="input border  mr-2" id="ia_signed"><label>IA
+                                            is
+                                            signed</label>
+                                    </div>
+
+
+                                </div>
+                                <div class="mt-3">
+                                    <div style="width: 40%;display: inline-block;">
+                                        <button class="button bg-gray-200 text-gray-600" style="float: inherit;">
+                                            Generate Quote Form
+                                        </button>
+                                    </div>
+                                    <div style="width: 50%;display: inline;">
+                                        <input type="checkbox" class="input border mr-2" id="form_signed"><label>Quote
+                                            Form is
+                                            signed</label>
+                                    </div>
+
+                                </div>
+                                <div class="mt-3">
+                                    <button class="button bg-gray-200 text-gray-600" style="float: inherit;">
+                                        Generate
+                                        Blank Form
                                     </button>
 
                                 </div>
                             </div>
-                        </div>
-                        <!-- END: Input -->
-                    </div>
-                    <div class="intro-y col-span-12 lg:col-span-6">
-                        <!-- BEGIN: Vertical Form -->
-                        <div class="intro-y box">
-                            <div class="p-5" id="vertical-form">
-                                <div class="preview">
-                                    <div class="overflow-x-auto">
-
-                                        <table class="table mt-5" id="last_quote_table">
-                                            <thead>
-                                            <tr class="bg-gray-200 text-gray-700">
-                                                <th class="whitespace-no-wrap">Items</th>
-                                                <th class="whitespace-no-wrap">Costs</th>
-
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-
-                                                <td class="border-b">Material</td>
-                                                <td class="border-b"><a href="#"
-                                                                        data-target="#material-detailed"
-                                                                        data-toggle="modal"
-                                                                        style="text-decoration: underline;"></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="border-b">Labour</td>
-                                                <td class="border-b"><a href="javascript:;"
-                                                                        data-target="#labour-detailed"
-                                                                        data-toggle="modal"
-                                                                        style="text-decoration: underline;"></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="border-b">Misc</td>
-                                                <td class="border-b"><a href="javascript:;" data-target="#misc-detailed"
-                                                                        data-toggle="modal"
-                                                                        style="text-decoration: underline;"></a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="border-b">Add-On</td>
-                                                <td class="border-b"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="border-b">Sub-Total1</td>
-                                                <td class="border-b"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="border-b">Discount 20%</td>
-                                                <td class="border-b"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="border-b">Sub-Total2</td>
-                                                <td class="border-b"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="border-b">HST 13%</td>
-                                                <td class="border-b"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="border-b">Total</td>
-                                                <td class="border-b"></td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
+                            <div class="source-code hidden">
+                                <button data-target="#copy-input"
+                                        class="copy-code button button--sm border flex items-center text-gray-700">
+                                    <i
+                                            data-feather="file" class="w-4 h-4 mr-2"></i> Copy code
+                                </button>
 
                             </div>
                         </div>
-                        <!-- END: Vertical Form -->
                     </div>
-                    <div class="col-span-12 md:pl-3 md:pr-3" id="address_div_mg">
-                        <div class="preview">
-                            <div class="intro-y flex flex-col sm:flex-row">
-                                <label class="sm:text-left md:mr-5 width6 pt-1 sm:pt-3"> Additional Notes for Quote</label>
-                                <textarea class="input w-full border mt-2" name="additional_info"
-                                          placeholder=""></textarea>
-                            </div>
+                    <!-- END: Input -->
+                </div>
+                <div class="col-span-12 md:pl-3 md:pr-3" id="address_div_mg">
+                    <div class="preview">
+                        <div class="intro-y flex flex-col sm:flex-row">
+                            <label class="sm:text-left md:mr-5 width6 pt-1 sm:pt-3"> Additional Notes for
+                                Quote</label>
+                            <textarea class="input w-full border mt-2" name="additional_info"
+                                      placeholder=""></textarea>
                         </div>
                     </div>
+                </div>
+                <?php
+                endif;
+                endif;
+                ?>
 
-            </section>
-            <input type="hidden" name="opportunity_id"
-                   value="<?php echo (is_object($opportunity)) ? $opportunity->id : ''; ?>">
-            <input type="hidden" name="customer_id"
-                   value="<?php echo (is_object($opportunity)) ? $opportunity->customer_id : ''; ?>">
-            <input type="hidden" name="company_id"
-                   value="<?php echo (is_object($opportunity)) ? $opportunity->company_id : ''; ?>">
-            <input type="hidden" name="mat_net" id="mat_net"/>
-            <input type="hidden" name="labour_net" id="labour_net"/>
-            <input type="hidden" name="misc_net" id="misc_net"/>
-            <input type="hidden" name="add_on_net" id="add_on_net"/>
-            <input type="hidden" name="mat_factor" id="mat_factor"/>
-            <input type="hidden" name="lab_factor" id="lab_factor"/>
-            <input type="hidden" name="misc_factor" id="misc_factor"/>
-            <input type="hidden" name="ads_on_factor" id="ads_on_factor"/>
-            <input type="hidden" name="hst" id="hst_amount"/>
+                <input type="hidden" name="opportunity_id"
+                       value="<?php echo (is_object($opportunity)) ? $opportunity->id : ''; ?>">
+                <input type="hidden" name="customer_id"
+                       value="<?php echo (is_object($opportunity)) ? $opportunity->customer_id : ''; ?>">
+                <input type="hidden" name="company_id"
+                       value="<?php echo (is_object($opportunity)) ? $opportunity->company_id : ''; ?>">
+                <input type="hidden" name="quote_id"
+                       value="<?php echo (is_object($quote)) ? $quote->id : ''; ?>">
+                <input type="hidden" name="status"
+                       value="<?php echo (is_object($quote)) ? $quote->status : ''; ?>">
+                <input type="hidden" name="action" id="action" value="">
+                <input type="hidden" name="mat_net" id="mat_net"/>
+                <input type="hidden" name="labour_net" id="labour_net"/>
+                <input type="hidden" name="misc_net" id="misc_net"/>
+                <input type="hidden" name="add_on_net" id="add_on_net"/>
+                <input type="hidden" name="mat_factor" id="mat_factor"/>
+                <input type="hidden" name="lab_factor" id="lab_factor"/>
+                <input type="hidden" name="misc_factor" id="misc_factor"/>
+                <input type="hidden" name="ads_on_factor" id="ads_on_factor"/>
+                <input type="hidden" name="hst" id="hst_amount"/>
+            </div>
         </form>
 
         <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end mt-5">
-            <button class="button w-24 justify-center block bg-gray-200 text-gray-600" id="prevBtn"
-                    onclick="nextPrev(-1)">Previous
-            </button>
-            <button class="button w-24 justify-center block bg-theme-1 text-white ml-2 mr-3" id="nextBtn"
-                    onclick="nextPrev(1)">Next
-            </button>
+            <?php
+            if (!is_object($quote)):
+                ?>
+                <button class="button w-24 justify-center block bg-theme-1 text-white" id="save_new_quote"
+                        onclick="save_new_quote();">Save
+                </button>
+                <button class="button w-50 justify-center block bg-theme-1 text-white ml-2 mr-3"
+                        id="submit_new_quote"
+                        onclick="submit_new_quote();">Save & Submit
+                </button>
+            <?php
+            endif;
+            if (is_object($quote)):
+                if ($quote->status == 'New'):
+                    ?>
+                    <button class="button w-24 justify-center block bg-theme-1 text-white" id="save_new_quote"
+                            onclick="save_new_quote();">Save
+                    </button>
+                    <button class="button w-50 justify-center block bg-theme-1 text-white ml-2 mr-3"
+                            id="submit_new_quote"
+                            onclick="submit_new_quote();">Save & Submit
+                    </button>
+                <?php
+                endif;
+            endif;
+            if (is_object($quote)):
+                if ($quote->status == 'Pending'):
+
+                    ?>
+                    <button class="button w-24 justify-center block bg-theme-1 text-white" id="reject_pending_quote"
+                            onclick="reject_pending_quote();">Reject
+                    </button>
+                    <button class="button w-24 justify-center block bg-theme-1 text-white ml-2 mr-3"
+                            id="save_pending_quote"
+                            onclick="save_pending_quote();">Save
+                    </button>
+                    <button class="button w-50 justify-center block bg-theme-1 text-white ml-2 mr-3"
+                            id="approve_pending_quote"
+                            onclick="approve_pending_quote();">Approve
+                    </button>
+                <?php
+                endif;
+            endif;
+            if (is_object($quote)):
+                if ($quote->status == 'Approved'):
+
+                    ?>
+                    <button class="button w-24 justify-center block bg-theme-1 text-white" id="reject_approved_quote"
+                            onclick="reject_approved_quote();">Reject
+                    </button>
+                    <button class="button w-24 justify-center block bg-theme-1 text-white ml-2 mr-3"
+                            id="save_approved_quote"
+                            onclick="save_approved_quote();">Save
+                    </button>
+                    <button class="button w-50 justify-center block bg-theme-1 text-white ml-2 mr-3"
+                            id="create_job"
+                            onclick="create_job();">Create Job
+                    </button>
+                <?php
+                endif;
+            endif;
+            ?>
         </div>
     </div>
     <!-- Start Modal -->
@@ -1029,14 +1228,85 @@
 
     </div>
     <!-- End Modal -->
-    <!--    <script type="text/javascript" src="--><?php //echo base_url(); ?><!--assets/js/add_quote.js"/>-->
+    <!--    <script type="text/javascript" src="--><?php //echo base_url();
+    ?><!--assets/js/add_quote.js"/>-->
     <script>
         $(function () {
             $('#payment_terms_span').html($('select[name="payment_term"]').val());
             $('select[name="payment_term"]').change(function () {
                 $('#payment_terms_span').html($(this).val());
-            })
-            $(".material-item,.labour-item,.miscellaneous-item,.adsOn-item").slideUp(1);
+            });
+            if (status == 'Pending') {
+
+                $('#materials').find('tr').each(function () {
+                    var mat_rowId = $(this).attr('id');
+                    if (mat_rowId != 'material_thead' && mat_rowId != 'material-item-row0' && mat_rowId != 'material-item-total') {
+                        $('#mat_modal_tbody').append('<tr>' +
+                            '<td>' + $(this).find('td').eq(0).find('select').val() + '</td>' +
+                            '<td>' + $(this).find('td').eq(1).find('select').val() + '</td>' +
+                            '<td>' + $(this).find('td').eq(2).html() + '</td>' +
+                            '<td>' + $(this).find('td').eq(3).find('input').val() + '</td>' +
+                            '<td>' + $(this).find('td').eq(4).html() + '</td>' +
+                            '')
+                    }
+                });
+                var mat_total = $('#material-item-total').find('td').eq(2).html() * 1;
+                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(mat_total);
+                if (mat_total == 0) {
+                    $('#material_markup_percent').attr('readonly', true);
+                    $('#material_markup_amount').attr('readonly', true);
+                }
+                $('#labour').find('tr').each(function () {
+                    var lab_rowId = $(this).attr('id');
+                    if (lab_rowId != 'labour_thead' && lab_rowId != 'labour-item-row0' && lab_rowId != 'labour-item-total') {
+                        $('#labor_modal_tbody').append('<tr>' +
+                            '<td>' + $(this).find('td').eq(0).find('select').val() + '</td>' +
+                            '<td>' + $(this).find('td').eq(1).find('input').val() + '</td>' +
+                            '<td>' + $(this).find('td').eq(2).html() + '</td>' +
+                            '')
+                    }
+                });
+                var labour_total = $('#labour-item-total').find('td').eq(2).html() * 1;
+                $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(labour_total);
+                // if (labour_total == 0) {
+                //     $('#labor_markup_percent').attr('readonly', true);
+                //     $('#labor_markup_amount').attr('readonly', true);
+                // }
+                $('#miscellaneous').find('tr').each(function (index) {
+                    var mis_rowId = $(this).attr('id');
+                    if (mis_rowId != 'miscellaneous_thead' && mis_rowId != 'miscellaneous-item-row0' && mis_rowId != 'miscellaneous-item-total') {
+                        $('#mis_modal_tbody').append('<tr>' +
+                            '<td>' + (index + 1) + '</td>' +
+                            '<td>' + $(this).find('td').eq(1).find('input').val() + '</td>' +
+                            '<td>' + $(this).find('td').eq(2).find('input').val() + '</td>' +
+                            '<td>' + $(this).find('td').eq(3).find('input').val() + '</td>' +
+                            '<td>' + $(this).find('td').eq(4).html() + '</td>' +
+                            '')
+                    }
+                });
+
+                var mis_total = $('#miscellaneous-item-total').find('td').eq(2).html() * 1;
+                $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(mis_total);
+
+                // if (mis_total == 0) {
+                //     $('#misc_markup_percent').attr('readonly', true);
+                //     $('#misc_markup_amount').attr('readonly', true);
+                // }
+
+                var addon_total = $('#adsOn-item-total').find('td').eq(2).html() * 1;
+                $('#final_quote_table').find('tr').eq(4).children().eq(1).html(addon_total);
+
+                // if (addon_total == 0) {
+                //     $('#adson_markup_percent').attr('readonly', true);
+                //     $('#adson_markup_amount').attr('readonly', true);
+                // }
+
+                // var sub_total1 = mat_total + mis_total + labour_total + addon_total;
+                // $('#total_markup_percent').val(10);
+                // $('#total_markup_amount').val(sub_total1 * 0.1);
+
+                calculate_sale_table();
+            }
         });
         $('#quoteForm').keypress(function (e) {
             var key = e.charCode || e.keyCode || 0;
@@ -1045,153 +1315,6 @@
             }
         });
 
-
-        var currentTab = 0; // Current tab is set to be the first tab (0)
-
-        showTab(currentTab); // Display the current tab
-
-        function showTab(n) {
-            // This function will display the specified tab of the form...
-            var x = document.getElementsByClassName("tab");
-            x[n].style.display = "block";
-            //... and fix the Previous/Next buttons:
-            if (n == 0) {
-                document.getElementById("prevBtn").style.display = "none";
-            } else {
-                document.getElementById("prevBtn").style.display = "inline";
-            }
-            if (n == (x.length - 1)) {
-                $("#nextBtn").removeClass('bg-gray-100 cursor-not-allowed').removeAttr('disabled');
-                document.getElementById("nextBtn").innerHTML = "Create Job"
-                document.getElementById("nextBtn").setAttribute("onclick", "save_quote()");
-
-            } else {
-
-                if (n == 1) {
-                    document.getElementById("nextBtn").innerHTML = "Next";
-                    // if ($("#credit-passed").is(':checked')) {
-                    //     $("#nextBtn").removeClass('bg-gray-100 cursor-not-allowed').removeAttr('disabled');
-                    // } else {
-                    //     $("#nextBtn").addClass('bg-gray-100 cursor-not-allowed quote-approval-btn').prop("disabled", true);
-                    // }
-                    $('#materials').find('tr').each(function () {
-                        var mat_rowId = $(this).attr('id');
-                        if (mat_rowId != 'material_thead' && mat_rowId != 'material-item-row0' && mat_rowId != 'material-item-total') {
-                            $('#mat_modal_tbody').append('<tr>' +
-                                '<td>' + $(this).find('td').eq(0).find('select').val() + '</td>' +
-                                '<td>' + $(this).find('td').eq(1).find('select').val() + '</td>' +
-                                '<td>' + $(this).find('td').eq(2).html() + '</td>' +
-                                '<td>' + $(this).find('td').eq(3).find('input').val() + '</td>' +
-                                '<td>' + $(this).find('td').eq(4).html() + '</td>' +
-                                '')
-                        }
-                    });
-                    var mat_total = $('#material-item-total').find('td').eq(2).html() * 1;
-                    $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(mat_total);
-                    if(mat_total == 0){
-                        $('#material_markup_percent').attr('readonly', true);
-                        $('#material_markup_amount').attr('readonly', true);
-                    }
-                    $('#labour').find('tr').each(function () {
-                        var lab_rowId = $(this).attr('id');
-                        if (lab_rowId != 'labour_thead' && lab_rowId != 'labour-item-row0' && lab_rowId != 'labour-item-total') {
-                            $('#labor_modal_tbody').append('<tr>' +
-                                '<td>' + $(this).find('td').eq(0).find('select').val() + '</td>' +
-                                '<td>' + $(this).find('td').eq(1).find('input').val() + '</td>' +
-                                '<td>' + $(this).find('td').eq(2).html() + '</td>' +
-                                '')
-                        }
-                    });
-                    var labour_total = $('#labour-item-total').find('td').eq(2).html() * 1;
-                    $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(labour_total);
-                    if(labour_total == 0){
-                        $('#labor_markup_percent').attr('readonly', true);
-                        $('#labor_markup_amount').attr('readonly', true);
-                    }
-                    $('#miscellaneous').find('tr').each(function (index) {
-                        var mis_rowId = $(this).attr('id');
-                        if (mis_rowId != 'miscellaneous_thead' && mis_rowId != 'miscellaneous-item-row0' && mis_rowId != 'miscellaneous-item-total') {
-                            $('#mis_modal_tbody').append('<tr>' +
-                                '<td>' + (index + 1) + '</td>' +
-                                '<td>' + $(this).find('td').eq(1).find('input').val() + '</td>' +
-                                '<td>' + $(this).find('td').eq(2).find('input').val() + '</td>' +
-                                '<td>' + $(this).find('td').eq(3).find('input').val() + '</td>' +
-                                '<td>' + $(this).find('td').eq(4).html() + '</td>' +
-                                '')
-                        }
-                    });
-
-                    var mis_total = $('#miscellaneous-item-total').find('td').eq(2).html() * 1;
-                    $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(mis_total);
-
-                    if(mis_total == 0){
-                        $('#misc_markup_percent').attr('readonly', true);
-                        $('#misc_markup_amount').attr('readonly', true);
-                    }
-
-                    var addon_total = $('#adsOn-item-total').find('td').eq(2).html() * 1;
-                    $('#final_quote_table').find('tr').eq(4).children().eq(1).html(addon_total);
-
-                    if(addon_total == 0){
-                        $('#adson_markup_percent').attr('readonly', true);
-                        $('#adson_markup_amount').attr('readonly', true);
-                    }
-
-                    var sub_total1 = mat_total + mis_total + labour_total + addon_total;
-                    $('#total_markup_percent').val(10);
-                    $('#total_markup_amount').val(sub_total1 * 0.1);
-
-                    calculate_sale_table();
-
-                } else {
-
-                    $("#nextBtn").removeClass('bg-gray-100 cursor-not-allowed').removeAttr('disabled');
-                    document.getElementById("nextBtn").innerHTML = "Next";
-                }
-
-                $("#nextBtn").attr("onclick", "nextPrev(1)");
-            }
-            //... and run a function that will display the correct step indicator:
-            fixStepIndicator(n)
-        }
-
-        function nextPrev(n) {
-            if (!$("#credit-passed").is(':checked') && currentTab == 1 && n == 1) {
-                $('#alert-modal').modal('show');
-                $('#credit-passed').focus();
-                return;
-            }
-
-
-            // This function will figure out which tab to display
-            var x = document.getElementsByClassName("tab");
-            // Exit the function if any field in the current tab is invalid:
-            // Hide the current tab:
-            x[currentTab].style.display = "none";
-            // Increase or decrease the current tab by 1:
-            currentTab = currentTab + n;
-            // if you have reached the end of the form...
-            if (currentTab >= x.length) {
-
-                //window.location.replace("/urbanfence/Jobs/jobs_list");
-                /*document.getElementById("regForm").submit()*/
-                ;
-
-                return false;
-            }
-            // Otherwise, display the correct tab:
-            showTab(currentTab);
-        }
-
-        function fixStepIndicator(n) {
-            // This function removes the "active" class of all steps...
-            var i, x = document.getElementsByClassName("step");
-            for (i = 0; i < x.length; i++) {
-                x[i].className = x[i].className.replace(" active", "");
-            }
-            //... and adds the "active" class on the current step:
-            x[n].className += " active";
-        }
 
         $(".set_markup").click(function () {
             let markup_type = $(this).attr('id');
@@ -1382,18 +1505,6 @@
 
         });
 
-
-        // $('#credit-passed').click(function () {
-        //     if ($(this).is(':checked')) {
-        //         $(".quote-approval-btn").removeClass('bg-gray-100 cursor-not-allowed').removeAttr('disabled');
-        //
-        //     } else {
-        //
-        //         $(".quote-approval-btn").addClass('bg-gray-100 cursor-not-allowed').prop("disabled", true);
-        //     }
-        // });
-
-
         function add_material_item() {
 
             let html = '';
@@ -1463,6 +1574,10 @@
                 $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
                 $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit);
             }
+            if (status == 'Pending') {
+                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
+                calculate_sale_table();
+            }
         }
 
         function change_mat_code(rowId) {
@@ -1484,6 +1599,10 @@
                 $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
                 $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit);
             }
+            if (status == 'Pending') {
+                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
+                calculate_sale_table();
+            }
         }
 
         function change_mat_quantity(rowId) {
@@ -1499,6 +1618,10 @@
                 $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
             $('#material-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
+            if (status == 'Pending') {
+                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
+                calculate_sale_table();
+            }
         }
 
         function delete_material_item(rowId) {
@@ -1509,6 +1632,7 @@
             $('#material-item-total').children().eq(1).html(total_quantity - original_quantity);
             $('#material-item-total').children().eq(2).html(total_price - original_price)
             $("#material-item-row" + rowId).remove();
+            calculate_sale_table();
         }
 
 
@@ -1579,6 +1703,10 @@
                 $('#labour-item-total').children().eq(2).html(total_price - original_price + quantity * 250)
             }
             $('#labour-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
+            if (status == 'Pending') {
+                $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(total_price - original_price + quantity * 250);
+                calculate_sale_table();
+            }
         }
 
 
@@ -1590,6 +1718,7 @@
             var original_quantity = $('#labour-item-row' + rowId).children().eq(1).find('input').val() * 1;
             $('#labour-item-total').children().eq(1).html(total_quantity - original_quantity);
             $("#labour-item-row" + rowId).remove();
+            calculate_sale_table();
         }
 
 
@@ -1640,6 +1769,10 @@
                 $('#miscellaneous-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
                 $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
+            if (status == 'Pending') {
+                $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
+                calculate_sale_table();
+            }
         }
 
         function change_mis_quantity(rowId) {
@@ -1654,6 +1787,10 @@
                 $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
             $('#miscellaneous-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
+            if (status == 'Pending') {
+                $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
+                calculate_sale_table();
+            }
         }
 
         function delete_miscellaneous_item(rowId) {
@@ -1664,6 +1801,7 @@
             var original_quantity = $('#miscellaneous-item-row' + rowId).children().eq(3).find('input').val() * 1;
             $('#miscellaneous-item-total').children().eq(1).html(total_quantity - original_quantity);
             $("#miscellaneous-item-row" + rowId).remove();
+            calculate_sale_table();
         }
 
 
@@ -1713,6 +1851,10 @@
                 $('#adsOn-item-row' + rowId).children().eq(3).html(quantity * price_per_unit);
                 $('#adsOn-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
+            if (status == 'Pending') {
+                $('#final_quote_table').find('tr').eq(34).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
+                calculate_sale_table();
+            }
         }
 
         function change_adsOn_quantity(rowId) {
@@ -1727,6 +1869,10 @@
                 $('#adsOn-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
             $('#adsOn-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
+            if (status == 'Pending') {
+                $('#final_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
+                calculate_sale_table();
+            }
         }
 
 
@@ -1738,6 +1884,7 @@
             var original_quantity = $('#adsOn-item-row' + rowId).children().eq(2).find('input').val() * 1;
             $('#adsOn-item-total').children().eq(1).html(total_quantity - original_quantity);
             $("#adsOn-item-row" + rowId).remove();
+            calculate_sale_table();
         }
 
 
@@ -1751,6 +1898,53 @@
                 $(obj).removeClass("fa-angle-down");
                 $(obj).addClass("fa-angle-up");
                 $(".adsOn-item").slideDown();
+            }
+        }
+
+        function save_new_quote() {
+            $('#action').val('save_new_quote');
+            $('#quoteForm').submit();
+        }
+
+        function submit_new_quote() {
+            $('#action').val('submit_new_quote');
+            $('#quoteForm').submit();
+        }
+
+        function reject_pending_quote() {
+            $('#action').val('reject_pending_quote');
+            $('#quoteForm').submit();
+        }
+
+        function save_pending_quote() {
+            $('#action').val('save_pending_quote');
+            $('#quoteForm').submit();
+        }
+
+        function approve_pending_quote() {
+            $('#action').val('approve_pending_quote');
+            $('#quoteForm').submit();
+        }
+
+        function reject_approved_quote() {
+            $('#action').val('reject_approved_quote');
+            $('#quoteForm').submit();
+        }
+
+        function save_approved_quote() {
+            $('#action').val('save_approved_quote');
+            $('#quoteForm').submit();
+        }
+
+        function create_job() {
+            $('#action').val('create_job');
+            if (!$("#ia_signed").is(':checked') || !$("#form_signed").is(':checked')) {
+                $('#alert-modal').find('p').html('Customer must sign both IA and Quote form in order to proceed to the job');
+                $('#alert-modal').modal('show');
+                $('#ia_signed').focus();
+                return;
+            } else {
+                $('#quoteForm').submit();
             }
         }
 
