@@ -69,7 +69,8 @@
     </div>
     <?php
     $job_type = array('',
-        'Fence Repair', 'Gate Repair', 'Fence and Gate Repair', 'New Fence', 'New Gate', 'New Fence and Gate c/w Operator', 'Gate Opperator Service');
+        'Fence Repair', 'Gate Repair', 'Fence and Gate Repair', 'New Fence', 'New Gate', 'New Fence and Gate c/w',
+        'Gate Operator Service');
     $sale_source = array('', 'Returned Customer', 'Yellow Pages', 'Facebook', 'Google Ad');
     $status = array('New', 'Assigned');
     $urgency = array('Normal', 'Urgent');
