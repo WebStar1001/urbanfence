@@ -69,8 +69,7 @@
     </div>
     <?php
     $job_type = array('',
-        'Fence Repair', 'Gate Repair', 'Fence and Gate Repair', 'New Fence', 'New Gate', 'New Fence and Gate c/w  
-                Operator', 'Gate Opperator Service');
+        'Fence Repair', 'Gate Repair', 'Fence and Gate Repair', 'New Fence', 'New Gate', 'New Fence and Gate c/w Operator', 'Gate Opperator Service');
     $sale_source = array('', 'Returned Customer', 'Yellow Pages', 'Facebook', 'Google Ad');
     $status = array('New', 'Assigned');
     $urgency = array('Normal', 'Urgent');
@@ -176,7 +175,8 @@
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Date </label>
-                        <input type="Date" name="date" class="input w-full sm:w-1/2 md:w-1/2 border mt-2 flex-1" tabindex="6"
+                        <input type="Date" name="date" class="input w-full sm:w-1/2 md:w-1/2 border mt-2 flex-1"
+                               tabindex="6"
                                value="<?php echo (is_object($opportunity)) ? $opportunity->date : date('Y-m-d'); ?>"
                                readonly>
                     </div>
@@ -290,12 +290,14 @@
                         <div class="preview">
                             <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
                                 <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site City *</label>
-                                <input type="text" name="site_city" class="input border mt-2 flex-1" required tabindex="12"
+                                <input type="text" name="site_city" class="input border mt-2 flex-1" required
+                                       tabindex="12"
                                        value="<?php echo (is_object($opportunity)) ? $opportunity->site_city : ''; ?>">
                             </div>
                             <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
                                 <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site Desc *</label>
-                                <input type="text" name="site_desc" class="input border mt-2 flex-1" required tabindex="14"
+                                <input type="text" name="site_desc" class="input border mt-2 flex-1" required
+                                       tabindex="14"
                                        value="<?php echo (is_object($opportunity)) ? $opportunity->site_desc : '' ?>">
                             </div>
                         </div>
@@ -304,12 +306,14 @@
                         <div class="preview">
                             <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
                                 <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site Postal Code</label>
-                                <input type="text" name="site_postal_code" class="input border mt-2 flex-1" required tabindex="13"
-                                       value="<?php echo (is_object($opportunity)) ? $opportunity->postal_code : '' ?>">
+                                <input type="text" name="site_postal_code" class="input border mt-2 flex-1" required
+                                       tabindex="13"
+                                       value="<?php echo (is_object($opportunity)) ? $opportunity->site_postal_code : '' ?>">
                             </div>
                             <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
                                 <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site Address *</label>
-                                <input type="text" name="site_address" class="input border mt-2 flex-1" required tabindex="15"
+                                <input type="text" name="site_address" class="input border mt-2 flex-1" required
+                                       tabindex="15"
                                        value="<?php echo (is_object($opportunity)) ? $opportunity->site_address : '' ?>">
                             </div>
                             <input type="button" value="Use Customer Info" style="float: right;"
@@ -400,7 +404,7 @@
                     </div>
                     <div class="col-span-12 sm:col-span-6 sm:mr-4 md:col-span-6 set_extra_mg">
                         <div class="preview">
-                           <div class="intro-y flex flex-col sm:flex-row mt-2">
+                            <div class="intro-y flex flex-col sm:flex-row mt-2">
                                 <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Contact Person*</label>
                                 <input type="text" id="contact_person" class="input w-full border mt-2 flex-1" value="">
                             </div>
@@ -441,13 +445,13 @@
     $(document).ready(function () {
         $('#copy_from_customer').click(function () {
             var customer_id = $('#search_customer').val();
-            if(customer_id != ''){
+            if (customer_id != '') {
                 $.ajax('get_customer', {
                     type: 'GET',  // http method
                     data: {
-                       customer_id : customer_id,
+                        customer_id: customer_id,
                     },
-                    dataType : 'json',
+                    dataType: 'json',
                     success: function (data, status, xhr) {
                         $('input[name="site_address"]').val(data.address);
                         $('input[name="site_city"]').val(data.city);
