@@ -82,12 +82,34 @@ class Quotes extends CI_Controller
         $addon_quantity = $this->input->post('addon_quantity');
         $action = $this->input->post('action');
 
-        if ($action == 'submit_new_quote' || $action == 'reject_approved_quote') {
-            $quoteData['status'] = 'Pending';
-        }elseif ($action == 'create_job') {
+        if ($action == 'submit_new_quote' || $action == 'save_new_quote' || $action == 'save_pending_quote' || $action == 'save_approved_quote') {
+            $quoteData = array(
+                'company_id' => $company_id,
+                'customer_id' => $customer_id,
+                'oppor_id' => $opportunity_id,
+                'payment_term' => $payment_term,
+                'calc_mode' => $calc_mode,
+                'mat_net' => $this->input->post('mat_net'),
+                'labour_net' => $this->input->post('labour_net'),
+                'misc_net' => $this->input->post('misc_net'),
+                'ads_on_net' => $this->input->post('add_on_net'),
+                'mat_factor' => $this->input->post('mat_factor'),
+                'lab_factor' => $this->input->post('lab_factor'),
+                'misc_factor' => $this->input->post('misc_factor'),
+                'ads_on_factor' => $this->input->post('ads_on_factor'),
+                'discount_set' => $this->input->post('discount_percent'),
+                'additional_info' => $this->input->post('discount_amount'),
+                'hst' => $this->input->post('hst')
+            );
+            if ($action == 'sumbit_new_quote') {
+                $quoteData['status'] = 'Pending';
+            }
+        } elseif ($action == 'create_job') {
             $quoteData['status'] = 'Job';
         } elseif ($action == 'reject_pending_quote') {
             $quoteData['status'] = 'New';
+        } elseif ($action == 'reject_approved_quote') {
+            $quoteData['status'] = 'Pending';
         } elseif ($action == 'approve_pending_quote') {
             $quoteData['status'] = 'Approved';
         } else {

@@ -882,7 +882,7 @@
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:15%" name="material_markup_percent"
                                                        id="material_markup_percent"
-                                                       value="<?php echo ($quote->mat_factor) ? ($quote->mat_factor - 1) * 100 : 0; ?>">
+                                                       value="<?php echo ($quote->mat_factor != 0) ? ($quote->mat_factor - 1) * 100 : 0; ?>">
                                                 <input placeholder="Amount" type="number"
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:20%" name="material_markup_amount"
@@ -897,7 +897,7 @@
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:15%" name="labor_markup_percent"
                                                        id="labor_markup_percent"
-                                                       value="<?php echo ($quote->lab_factor) ? ($quote->lab_factor - 1) * 100 : 0; ?>">
+                                                       value="<?php echo ($quote->lab_factor != 0) ? ($quote->lab_factor - 1) * 100 : 0; ?>">
                                                 <input placeholder="Amount" type="number"
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:20%" name="labor_markup_amount"
@@ -912,7 +912,7 @@
                                                        class="input-multiple-markup input border ml-1 single_markup"
                                                        style="width:15%" name="misc_markup_percent"
                                                        id="misc_markup_percent"
-                                                       value="<?php echo ($quote->misc_factor) ? ($quote->misc_factor - 1) * 100 : 0; ?>">
+                                                       value="<?php echo ($quote->misc_factor != 0) ? ($quote->misc_factor - 1) * 100 : 0; ?>">
                                                 <input placeholder="Amount" type="number"
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:20%" name="misc_markup_amount"
@@ -927,7 +927,7 @@
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:15%" name="adson_markup_percent"
                                                        id="adson_markup_percent"
-                                                       value="<?php echo ($quote->ads_on_factor) ? ($quote->ads_on_factor - 1) * 100 : 0; ?>">
+                                                       value="<?php echo ($quote->ads_on_factor != 0) ? ($quote->ads_on_factor - 1) * 100 : 0; ?>">
                                                 <input placeholder="Amount" type="number"
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:20%" name="adson_markup_amount"

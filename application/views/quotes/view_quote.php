@@ -182,19 +182,19 @@
             '</tr>' +
             '<tr>' +
             '<td>MAT:</td>' +
-            '<td>' + d.mat_net * d.mat_factor + '</td>' +
+            '<td>' + Math.round(d.mat_net * d.mat_factor) + '</td>' +
             '</tr>' +
             '<tr>' +
             '<td>LAB:</td>' +
-            '<td>' + d.labour_net * d.lab_factor + '</td>' +
+            '<td>' + Math.round(d.labour_net * d.lab_factor) + '</td>' +
             '</tr>' +
             '<tr>' +
             '<td>MISC:</td>' +
-            '<td>' + d.misc_net * d.misc_factor + '</td>' +
+            '<td>' + Math.round(d.misc_net * d.misc_factor) + '</td>' +
             '</tr>' +
             '<tr>' +
             '<td>Add-On:</td>' +
-            '<td>' + d.ads_on_net * d.ads_on_factor + '</td>' +
+            '<td>' + Math.round(d.ads_on_net * d.ads_on_factor) + '</td>' +
             '</tr>' +
             '<tr>' +
             '<tr>' +
