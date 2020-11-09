@@ -192,26 +192,28 @@ class Quotes extends CI_Controller
 
     public function generate_quote_pdf()
     {
+//        $quote_id = $_GET['quote_id'];
+        $quote_id = 2;
+        $quote = $this->QuoteModel->getQuoteDatas($quote_id);
+        $this->load->view('quotes/quote_form', array('quote'=>$quote));
 
-        $this->load->view('quotes/add_quotes');
-
-        $html = $this->output->get_output();
-
-        // Load pdf library
-        $this->load->library('pdf');
-
-        // Load HTML content
-        $this->pdf->loadHtml($html);
-
-        // (Optional) Setup the paper size and orientation
-        $this->pdf->setPaper('A4', 'portrait');
-
-        // Render the HTML as PDF
-        $this->pdf->render();
-
-        // Output the generated PDF (1 = download and 0 = preview)
-        $this->pdf->stream("welcome.pdf", array("Attachment" => 0));
-        echo 'success';
-        exit;
+//        $html = $this->output->get_output();
+//
+//        // Load pdf library
+//        $this->load->library('pdf');
+//
+//        // Load HTML content
+//        $this->pdf->loadHtml($html);
+//
+//        // (Optional) Setup the paper size and orientation
+//        $this->pdf->setPaper('A4', 'portrait');
+//
+//        // Render the HTML as PDF
+//        $this->pdf->render();
+//
+//        // Output the generated PDF (1 = download and 0 = preview)
+//        $this->pdf->stream("welcome.pdf", array("Attachment" => 0));
+//        echo 'success';
+//        exit;
     }
 } 

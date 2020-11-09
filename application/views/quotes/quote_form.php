@@ -38,20 +38,19 @@
 
 <body>
 <div class="pageheader">
-    <h1>Header text</h1>
+    <h3>Installation Agreement</h3>
 </div>
-
-<div class="pagefooter">
-    <p>Footer text</p>
-    <p>Page <span id="pagenumber"/> of <span id="pagecount"/></p>
-</div>
-
 <div class="pagebody">
-    <p>Page 1.</p>
+    <p>Terms agreed on by
+        <?php
+            echo $quote->company_name;
 
-    <p style="page-break-after:always;"/>
+        ?> and
+            <Bialik Hebrew School> (insert relevant Customer name) (“the Customer”) for
+                <New Fence and Gate c
+                /w Operator> (insert relevant Job_Type value) job at the following job site address:
+    </p>
 
-    <p>Page 2.</p>
 </div>
 </body>
 </html>

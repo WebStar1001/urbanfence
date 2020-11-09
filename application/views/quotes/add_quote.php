@@ -392,7 +392,7 @@
 
                                         <i style="font-size: 20px;cursor: pointer;"
                                            onclick="toogle_material_item(this)"
-                                           class="fa fa-angle-down"></i>
+                                           class="fa fa-angle-down toggle-action"></i>
                                     </div>
                                 </td>
                             </tr>
@@ -524,7 +524,7 @@
 
                                         <i style="font-size: 20px;cursor: pointer;"
                                            onclick="toogle_labour_item(this)"
-                                           class="fa fa-angle-down"></i>
+                                           class="fa fa-angle-down toggle-action"></i>
                                     </div>
                                 </td>
                             </tr>
@@ -619,7 +619,7 @@
                                 <td class="table-report__action w-56">
                                     <div class="flex justify-center items-center">
                                         <i style="font-size: 20px;cursor: pointer;"
-                                           onclick="toogle_miscellaneous_item(this)" class="fa fa-angle-down"></i>
+                                           onclick="toogle_miscellaneous_item(this)" class="fa fa-angle-down toggle-action"></i>
                                     </div>
                                 </td>
                             </tr>
@@ -713,7 +713,7 @@
 
                                         <i style="font-size: 20px;cursor: pointer;"
                                            onclick="toogle_adsOn_item(this)"
-                                           class="fa fa-angle-down"></i>
+                                           class="fa fa-angle-down toggle-action"></i>
                                     </div>
                                 </td>
                             </tr>
@@ -1236,6 +1236,14 @@
             $('select[name="payment_term"]').change(function () {
                 $('#payment_terms_span').html($(this).val());
             });
+            if(status != ''){
+                $('.toggle-action').removeClass("fa-angle-up");
+                $('.toggle-action').addClass("fa-angle-down");
+                $(".material-item").slideUp();
+                $(".labour-item").slideUp();
+                $(".miscellaneous-item").slideUp();
+                $(".adsOn-item").slideUp();
+            }
             if (status == 'Pending') {
 
                 $('#materials').find('tr').each(function () {

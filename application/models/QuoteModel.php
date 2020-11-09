@@ -89,4 +89,13 @@ class QuoteModel extends CI_Model
         $query = $this->db->get_where('add_on_details', array('quote_id' => $quote_id));
         return $query->result();
     }
+    public function getQuoteDatas($quote_id){
+        $this->db->select('quotes.*,companies.name AS company_name,customers.customer AS customer_name');
+        $this->db->from('quotes');
+        $this->db->where('quotes.id', $quote_id);
+        $this->db->join('companies', 'quotes.company_id=companies.id', 'left');
+        $this->db->join('customers', 'quotes.customer_id=customers.id', 'left');
+        $query = $this->db->get();
+        return $query->row();
+    }
 }
