@@ -203,12 +203,11 @@ tr.shown td.details-control {
             <thead>
             <tr>
                 <th>Additional Info</th>
-                <th>Id</th>
+                <th>ID</th>
                 <th>Customer ID</th>
                 <th>Date</th>
                 <th>Customer</th>
                 <th class="whitespace-no-wrap">Job Type</th>
-                <th>Sale Sourse</th>
                 <th>Status</th>
                 <th>Sales Rep</th>
                 <th></th>
@@ -240,6 +239,10 @@ tr.shown td.details-control {
             '<tr>' +
             '<td>Contact Person:</td>' +
             '<td>' + d.contact_person + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td>Sale Source:</td>' +
+            '<td>' + d.sale_source + '</td>' +
             '</tr>' +
             '<tr>' +
             '<td>Site Postal Code:</td>' +
@@ -303,15 +306,13 @@ tr.shown td.details-control {
                     "className": 'details-control',
                     "orderable": false,
                     "data": null,
-                    "defaultContent": ''
+                    "defaultContent": '', "width":"5%"
                 },
-                {"data": "id"},
-                {"data": "customer_id"},
-                {"data": "date"},
+                {"data": "id", "width":"5%"},
+                {"data": "customer_id", "width":"5%"},
+                {"data": "date", "width":"13%"},
                 {"data": "customer"},
-                // { "data": "jobcity" },
                 {"data": "job_type"},
-                {"data": "sale_source"},
                 {"data": "status"},
                 {
                     "data": null, render: function (data) {
@@ -332,16 +333,17 @@ tr.shown td.details-control {
                     "data": null, render: function (data) {
                         return "<button class='button border' onclick='set_sale_rep(" + data.id + ");'>Set</button>"
                     }
+                    , "width":"2%"
                 },
                 {
                     "data": null, render: function (data) {
                         return "<a href='<?php echo base_url('Opportunity/add_opportunity?opportunity_id=');?>" + data.id + "'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
-                    }
+                    }, "width":"2%"
                 },
                 {
                     "data": null, render: function (data) {
                         return "<a href='<?php echo base_url('Quotes/add_quote?opportunity_id=');?>" + data.id + "'><i class='fa fa-external-link' aria-hidden='true'></i></a>"
-                    }
+                    }, "width":"2%"
                 }
             ],
             "order": [[0, 'asc']]
