@@ -116,7 +116,7 @@
                             <div class="sm:w-ful col-span-12 sm:m-auto sm:pl-4 sm:pr-4 mt-3 sm:mt-0 mb-3 sm:mb-0">
                                 <label class="w-full text-left sm:pt-3">Search Customer *</label>
                                 <select name="customer_id" class="select2 w-full col-span-10" id="search_customer"
-                                        required>
+                                        required tabindex="1">
                                     <?php
                                     if (is_object($customer)) {
                                         echo '<option value="' . $customer->id . '">' . $customer->customer . '</option>';
@@ -133,7 +133,7 @@
                                 <a href="#add_customer_modal" data-toggle="modal" data-target="#add_customer_modal"><i
                                             style="font-size: 30px;"
                                             class="w-full fa fa-user-plus"
-                                            aria-hidden="true"></i></a>
+                                            aria-hidden="true" tabindex="2"></i></a>
                             </div>
                         <?php } ?>
 
@@ -144,7 +144,7 @@
                         <div class="col-span-3">
                             <div class="sm:w-ful col-span-3 sm:m-auto sm:pl-4 sm:pr-4 mt-3 sm:mt-0 mb-3 sm:mb-0">
                                 <label class="w-full text-left sm:pt-3">Choose Quoting Company</label>
-                                <select name="company_id" class="input w-full border flex-1">
+                                <select name="company_id" class="input w-full border flex-1" tabindex="3">
                                     <?php
                                     foreach ($companies as $com) {
                                         if (is_object($opportunity)) {
@@ -170,19 +170,19 @@
                 <div class="preview">
                     <div class="intro-y flex flex-col sm:flex-row">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Status</label>
-                        <input type="text" name="status" readonly
+                        <input type="text" name="status" readonly tabindex="4"
                                class="bg-gray-100 cursor-not-allowed input w-full sm:w-1/2 md:w-1/2 border mt-2 flex-1"
                                value="<?php echo (is_object($opportunity)) ? $opportunity->status : 'New'; ?>">
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Date </label>
-                        <input type="Date" name="date" class="input w-full sm:w-1/2 md:w-1/2 border mt-2 flex-1"
+                        <input type="Date" name="date" class="input w-full sm:w-1/2 md:w-1/2 border mt-2 flex-1" tabindex="6"
                                value="<?php echo (is_object($opportunity)) ? $opportunity->date : date('Y-m-d'); ?>"
                                readonly>
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Job Type * </label>
-                        <select name="job_type" class="input w-full border mt-2 flex-1" required>
+                        <select name="job_type" class="input w-full border mt-2 flex-1" required tabindex="8">
                             <?php
                             foreach ($job_type as $key => $value) {
                                 if (is_object($opportunity)) {
@@ -200,7 +200,7 @@
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Urgency</label>
-                        <select name="urgency" class="input w-full border mt-2 flex-1">
+                        <select name="urgency" class="input w-full border mt-2 flex-1" tabindex="10">
                             <?php
                             foreach ($urgency as $key => $value) {
                                 if (is_object($opportunity)) {
@@ -224,13 +224,13 @@
                 <div class="preview">
                     <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3 ">Sales Rep</label>
-                        <input type="text" class="input w-full border mt-2 flex-1"
+                        <input type="text" class="input w-full border mt-2 flex-1" tabindex="5"
                                value="<?php echo (is_object($opportunity)) ? $opportunity->sale_rep : ''; ?>"
                                readonly>
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0 mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3 ">Time</label>
-                        <input type="text" name="time" class="input w-full border mt-2 flex-1"
+                        <input type="text" name="time" class="input w-full border mt-2 flex-1" tabindex="7"
                                value="<?php echo (is_object($opportunity)) ? $opportunity->time : date('H:i:s'); ?>"
                                readonly>
                     </div>
@@ -240,10 +240,10 @@
                         <?php
                         if (is_object($customer)) {
                             if ($customer->status == 'Customer') {
-                                echo '<select class="input w-full border mt-2 flex-1" name="sale_source" disabled>
+                                echo '<select class="input w-full border mt-2 flex-1" name="sale_source" disabled  tabindex="9">
                                         <option value="Returned Customer">Returned Customer</option></select>';
                             } else {
-                                echo '<select class="input w-full border mt-2 flex-1" name="sale_source" required>';
+                                echo '<select class="input w-full border mt-2 flex-1" name="sale_source" required tabindex="9">';
                                 foreach ($sale_source as $key => $value) {
                                     if (is_object($opportunity)) {
                                         if ($opportunity->sale_source == $value) {
@@ -258,7 +258,7 @@
                                 echo '</select>';
                             }
                         } else {
-                            echo '<select class="input w-full border mt-2 flex-1" name="sale_source" required>';
+                            echo '<select class="input w-full border mt-2 flex-1" name="sale_source" required tabindex="9">';
                             foreach ($sale_source as $key => $value) {
                                 if (is_object($opportunity)) {
                                     if ($opportunity->sale_source == $value) {
@@ -278,7 +278,7 @@
 
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Contact onsite</label>
-                        <input type="text" name="contact_onsite" class="input w-full border mt-2 flex-1"
+                        <input type="text" name="contact_onsite" class="input w-full border mt-2 flex-1" tabindex="11"
                                value="<?php echo (is_object($opportunity)) ? $opportunity->contact_onsite : '' ?>">
                     </div>
                 </div>
@@ -290,12 +290,12 @@
                         <div class="preview">
                             <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
                                 <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site City *</label>
-                                <input type="text" name="site_city" class="input border mt-2 flex-1" required
+                                <input type="text" name="site_city" class="input border mt-2 flex-1" required tabindex="12"
                                        value="<?php echo (is_object($opportunity)) ? $opportunity->site_city : ''; ?>">
                             </div>
                             <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
                                 <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site Desc *</label>
-                                <input type="text" name="site_desc" class="input border mt-2 flex-1" required
+                                <input type="text" name="site_desc" class="input border mt-2 flex-1" required tabindex="14"
                                        value="<?php echo (is_object($opportunity)) ? $opportunity->site_desc : '' ?>">
                             </div>
                         </div>
@@ -304,17 +304,17 @@
                         <div class="preview">
                             <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
                                 <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site Postal Code</label>
-                                <input type="text" name="site_postal_code" class="input border mt-2 flex-1" required
+                                <input type="text" name="site_postal_code" class="input border mt-2 flex-1" required tabindex="13"
                                        value="<?php echo (is_object($opportunity)) ? $opportunity->postal_code : '' ?>">
                             </div>
                             <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
                                 <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site Address *</label>
-                                <input type="text" name="site_address" class="input border mt-2 flex-1" required
+                                <input type="text" name="site_address" class="input border mt-2 flex-1" required tabindex="15"
                                        value="<?php echo (is_object($opportunity)) ? $opportunity->site_address : '' ?>">
                             </div>
                             <input type="button" value="Use Customer Info" style="float: right;"
                                    id="copy_from_customer"
-                                   class="button bg-theme-1 text-white mt-5 p-2 ml-2"/>
+                                   class="button bg-theme-1 text-white mt-5 p-2 ml-2" tabindex="16"/>
                         </div>
                     </div>
                 </div>
@@ -323,7 +323,7 @@
                 <div class="preview">
                     <div class="intro-y flex flex-col sm:flex-row">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3"> Details</label>
-                        <textarea class="input w-full border mt-2" name="details"
+                        <textarea class="input w-full border mt-2" name="details" tabindex="17"
                                   placeholder=""><?php echo (is_object($opportunity)) ? $opportunity->details : ''; ?></textarea>
                     </div>
                 </div>
@@ -334,7 +334,7 @@
             <div class="col-span-12">
                 <div class="preview">
                     <input type="submit" value="Create Opportunity"
-                           style="float: right;" class="button bg-theme-1 text-white mt-5 sm:p-2"/>
+                           style="float: right;" class="button bg-theme-1 text-white mt-5 sm:p-2" tabindex="18"/>
                 </div>
             </div>
         </div>
