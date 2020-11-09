@@ -490,7 +490,7 @@
                                             </td>
 
                                             <td class="text-center">
-                                                <input type="number" name="labor_total_days[]"
+                                                <input type="number" step="0.01" name="labor_total_days[]"
                                                        onfocus="this.oldvalue = this.value;"
                                                        value="<?php echo $lab_info[$i]->total_days; ?>"
                                                        onchange="set_labour_price(<?php echo $nextRow; ?>);this.oldvalue = this.value;">
@@ -619,7 +619,8 @@
                                 <td class="table-report__action w-56">
                                     <div class="flex justify-center items-center">
                                         <i style="font-size: 20px;cursor: pointer;"
-                                           onclick="toogle_miscellaneous_item(this)" class="fa fa-angle-down toggle-action"></i>
+                                           onclick="toogle_miscellaneous_item(this)"
+                                           class="fa fa-angle-down toggle-action"></i>
                                     </div>
                                 </td>
                             </tr>
@@ -837,12 +838,6 @@
                                 <div class="p-5" id="vertical-form">
                                     <div class="preview">
                                         <div class="overflow-x-auto">
-                                            <div class="mt-1 mb-5">
-                                                <input type="checkbox" class="input border mr-2" id="credit-passed"
-                                                       required>
-                                                <label class="cursor-pointer select-none" for="credit-passed"
-                                                       style="width: auto;">Customer passed Credit-Check</label>
-                                            </div>
                                             <div class="mt-1 mb-5" style="text-align-last: end">
                                                 <label class="float-left" style="margin-right: 8px;">Set Markup
                                                     rate</label>
@@ -882,12 +877,13 @@
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:15%" name="material_markup_percent"
                                                        id="material_markup_percent"
-                                                       value="<?php echo ($quote->mat_factor != 0) ? ($quote->mat_factor - 1) * 100 : 0; ?>">
+                                                       value="<?php $material_markup_percent = ($quote->mat_factor != 0) ? ($quote->mat_factor - 1) * 100 : 0;
+                                                       echo $material_markup_percent; ?>">
                                                 <input placeholder="Amount" type="number"
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:20%" name="material_markup_amount"
                                                        id="material_markup_amount"
-                                                       value="<?php echo $quote->mat_factor * $quote->mat_net; ?>">
+                                                       value="<?php echo $material_markup_percent * $quote->mat_net / 100; ?>">
                                             </div>
 
                                             <div class="mt-1 mb-5 " style="text-align-last: end;">
@@ -897,12 +893,13 @@
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:15%" name="labor_markup_percent"
                                                        id="labor_markup_percent"
-                                                       value="<?php echo ($quote->lab_factor != 0) ? ($quote->lab_factor - 1) * 100 : 0; ?>">
+                                                       value="<?php $labor_markup_percent = ($quote->lab_factor != 0) ? ($quote->lab_factor - 1) * 100 : 0;
+                                                       echo $labor_markup_percent; ?>">
                                                 <input placeholder="Amount" type="number"
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:20%" name="labor_markup_amount"
                                                        id="labor_markup_amount"
-                                                       value="<?php echo $quote->lab_factor * $quote->labour_net; ?>">
+                                                       value="<?php echo $quote->labour_net * $labor_markup_percent / 100; ?>">
                                             </div>
 
 
@@ -912,12 +909,13 @@
                                                        class="input-multiple-markup input border ml-1 single_markup"
                                                        style="width:15%" name="misc_markup_percent"
                                                        id="misc_markup_percent"
-                                                       value="<?php echo ($quote->misc_factor != 0) ? ($quote->misc_factor - 1) * 100 : 0; ?>">
+                                                       value="<?php $misc_markup_percent = ($quote->misc_factor != 0) ? ($quote->misc_factor - 1) * 100 : 0;
+                                                       echo $misc_markup_percent; ?>">
                                                 <input placeholder="Amount" type="number"
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:20%" name="misc_markup_amount"
                                                        id="misc_markup_amount"
-                                                       value="<?php echo $quote->misc_factor * $quote->misc_net; ?>">
+                                                       value="<?php echo $misc_markup_percent * $quote->misc_net / 100; ?>">
                                             </div>
 
 
@@ -927,12 +925,13 @@
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:15%" name="adson_markup_percent"
                                                        id="adson_markup_percent"
-                                                       value="<?php echo ($quote->ads_on_factor != 0) ? ($quote->ads_on_factor - 1) * 100 : 0; ?>">
+                                                       value="<?php $adson_markup_percent = ($quote->ads_on_factor != 0) ? ($quote->ads_on_factor - 1) * 100 : 0;
+                                                       echo $adson_markup_percent; ?>">
                                                 <input placeholder="Amount" type="number"
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:20%" name="adson_markup_amount"
                                                        id="adson_markup_amount"
-                                                       value="<?php echo $quote->ads_on_factor * $quote->ads_on_net; ?>">
+                                                       value="<?php echo $adson_markup_percent * $quote->ads_on_net / 100; ?>">
                                             </div>
                                             <div class="mt-10">
                                                 <?php
@@ -980,6 +979,12 @@
                                         <option>Liam Neeson</option>
                                         <option>Daniel Craig</option>
                                     </select>
+                                </div>
+                                <div class="mt-1 mb-5">
+                                    <input type="checkbox" class="input border mr-2" id="credit-passed"
+                                           required>
+                                    <label class="cursor-pointer select-none" for="credit-passed"
+                                           style="width: auto;">Customer passed Credit-Check</label>
                                 </div>
                                 <!-- close -->
 
@@ -1236,7 +1241,7 @@
             $('select[name="payment_term"]').change(function () {
                 $('#payment_terms_span').html($(this).val());
             });
-            if(status != ''){
+            if (status != '') {
                 $('.toggle-action').removeClass("fa-angle-up");
                 $('.toggle-action').addClass("fa-angle-down");
                 $(".material-item").slideUp();
@@ -1396,7 +1401,7 @@
 
             $('#final_quote_table').find('tr').eq(7).children().eq(2).html(Math.round(subtotal_selling2));
 
-            $('#final_quote_table').find('tr').eq(8).children().eq(2).html(Math.round(HST));
+            $('#final_quote_table').find('tr').eq(8).children().eq(2).html(Math.round(HST * 100) / 100);
             $('#final_quote_table').find('tr').eq(9).children().eq(2).html(Math.round(total_selling));
 
 
@@ -1408,7 +1413,7 @@
             $('#last_quote_table').find('tr').eq(6).children().eq(0).html('Discount ' + discount_percent + '%');
             $('#last_quote_table').find('tr').eq(6).children().eq(1).html(Math.round(discount_selling));
             $('#last_quote_table').find('tr').eq(7).children().eq(1).html(Math.round(subtotal_selling2));
-            $('#last_quote_table').find('tr').eq(8).children().eq(1).html(Math.round(HST));
+            $('#last_quote_table').find('tr').eq(8).children().eq(1).html(Math.round(HST * 100) / 100);
             $('#last_quote_table').find('tr').eq(9).children().eq(1).html(Math.round(total_selling));
 
 
@@ -1442,7 +1447,7 @@
         $('#total_markup_percent, #total_markup_amount').keyup(function () {
             var total_percent = 0;
             var total_amount = 0;
-            var sub_total1 = $('#final_quote_table').find('tr').eq(5).children().eq(2).html() * 1;
+            var sub_total1 = $('#final_quote_table').find('tr').eq(5).children().eq(1).html() * 1;
             if ($(this).attr('id') == 'total_markup_percent') {
                 total_percent = $(this).val() * 1;
                 total_amount = sub_total1 * total_percent / 100;
@@ -1946,7 +1951,7 @@
 
         function create_job() {
             $('#action').val('create_job');
-            if (!$("#ia_signed").is(':checked') || !$("#form_signed").is(':checked')) {
+            if (!$("#ia_signed").is(':checked') || !$("#form_signed").is(':checked') || !$('#credit-passed').is(':checked')) {
                 $('#alert-modal').find('p').html('Customer must sign both IA and Quote form in order to proceed to the job');
                 $('#alert-modal').modal('show');
                 $('#ia_signed').focus();
