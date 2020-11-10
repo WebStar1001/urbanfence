@@ -71,35 +71,12 @@
     $job_type = array('',
         'Fence Repair', 'Gate Repair', 'Fence and Gate Repair', 'New Fence', 'New Gate', 'New Fence and Gate c/w',
         'Gate Operator Service');
-    $sale_source = array('', 'Returned Customer', 'Yellow Pages', 'Facebook', 'Google Ad');
+    $sale_source = array('', 'Returned Customer', 'Yellow Pages', 'Facebook', 'Google Ad', "Friend's Referral");
     $status = array('New', 'Assigned');
     $urgency = array('Normal', 'Urgent');
     ?>
     <form name="opporForm" method="post" action="save_opportunity">
         <div class="grid grid-cols-12 gap-6 box mt-5 md:p-10 sm:p-5 p-5">
-
-            <!-- update mokeup hide session --
-                    <div class="col-span-12 md:col-span-12">
-                        <div class="intro-y flex flex-col sm:flex-row items-left md:pl-3 md:pr-3">
-                            <label class="w-full select_label_width sm:text-left sm:mr-5">Choose Quoting Company</label>
-                            <select class="select2 w-full ">
-                                <option>Urban Fence</option>
-                           </select> 
-                        </div>
-                    </div>
-                    <div class="col-span-12 md:col-span-12">
-                        <div class="intro-y flex flex-col sm:flex-row items-left md:pl-3 md:pr-3">
-                                <label class="w-full select_label_width sm:mr-5">Choose Customer</label>
-                                <select class="select2 w-full">
-                                <option>Gil Naor</option>
-                           </select>
-                           <a href="<?php echo base_url(); ?>Opportunity/add_customer" class="add_icon_width">
-                            <i class="fa fa-user-plus sm:ml-2 md:ml-2" style="font-size: 30px;" aria-hidden="true"></i>
-                            </a>
-                            <button style="border:1px solid #1C3FAA; background-color: #1C3FAA; color: white;" onclick="window.location.href='<?php echo base_url(); ?>Opportunity/add_customer'" type="button" class="button float-right p-0 sm:ml-3 md:p-1">Add Customer</button> --
-                        </div>
-                    </div>
-   -->
             <div class="col-span-12">
                 <div class="preview">
 

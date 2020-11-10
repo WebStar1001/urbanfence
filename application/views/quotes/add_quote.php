@@ -1336,6 +1336,10 @@
                 $('body').find('select').attr('readonly', true);
                 $('body').find('textarea').attr('readonly', true);
             }
+            else if(status == 'Approved'){
+                $('body').find('input').attr('readonly', true);
+                $('body').find('select').attr('readonly', true);
+            }
         });
         $('#quoteForm').keypress(function (e) {
             var key = e.charCode || e.keyCode || 0;
@@ -2008,7 +2012,7 @@
         function create_job() {
             $('#action').val('create_job');
             if (!$("#ia_signed").is(':checked') || !$("#form_signed").is(':checked') || !$('#credit_passed').is(':checked')) {
-                $('#alert-modal').find('p').html('Customer must sign both IA and Quote form in order to proceed to the job');
+                $('#alert-modal').find('p').html('Customer must pass credit check and sign both IA and Quote form in order to proceed to the job');
                 $('#alert-modal').modal('show');
                 $('#ia_signed').focus();
                 return;

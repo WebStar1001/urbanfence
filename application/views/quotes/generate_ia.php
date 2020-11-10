@@ -136,7 +136,7 @@
             whole contract between the parties.
         </li>
         <div style="text-align: center;padding-top: 20px;">
-            <span>Client’s Signature____________________</span><span><?php echo $quote->company_name ?>_______________________</span>
+            <span>Client’s Signature____________________</span><span style="margin-left: 80px;"><?php echo $quote->company_name ?>_______________________</span>
         </div>
     </ol>
 </div>
