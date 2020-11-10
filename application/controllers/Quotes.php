@@ -82,7 +82,23 @@ class Quotes extends CI_Controller
         $addon_quantity = $this->input->post('addon_quantity');
         $action = $this->input->post('action');
         $quoteData = array();
-        if ($action == 'submit_new_quote' || $action == 'save_new_quote' || $action == 'save_pending_quote' || $action == 'save_approved_quote') {
+        if ($action == 'submit_new_quote' || $action == 'save_new_quote' || $action == 'save_approved_quote') {
+            $quoteData = array(
+                'company_id' => $company_id,
+                'customer_id' => $customer_id,
+                'oppor_id' => $opportunity_id,
+                'payment_term' => $payment_term,
+                'calc_mode' => $calc_mode,
+            );
+            if ($action == 'submit_new_quote') {
+                $quoteData['status'] = 'Pending';
+            } elseif ($action == 'save_approved_quote') {
+                $quoteData['additional_info'] = $this->input->post('additional_info');
+                $quoteData['ia_signed'] = $this->input->post('ia_signed');
+                $quoteData['form_signed'] = $this->input->post('form_signed');
+                $quoteData['credit_passed'] = $this->input->post('credit_passed');
+            }
+        } elseif ($action == 'save_pending_quote') {
             $quoteData = array(
                 'company_id' => $company_id,
                 'customer_id' => $customer_id,
@@ -98,12 +114,8 @@ class Quotes extends CI_Controller
                 'misc_factor' => $this->input->post('misc_factor'),
                 'ads_on_factor' => $this->input->post('ads_on_factor'),
                 'discount_set' => $this->input->post('discount_percent'),
-                'additional_info' => $this->input->post('discount_amount'),
                 'hst' => $this->input->post('hst')
             );
-            if ($action == 'submit_new_quote') {
-                $quoteData['status'] = 'Pending';
-            }
         } elseif ($action == 'create_job') {
             $quoteData['status'] = 'Job';
         } elseif ($action == 'reject_pending_quote') {
@@ -195,7 +207,7 @@ class Quotes extends CI_Controller
         $quote_id = $_GET['quote_id'];
 //        $quote_id = 2;
         $quote = $this->QuoteModel->getQuoteDatas($quote_id);
-        $this->load->view('quotes/generate_ia', array('quote'=>$quote));
+        $this->load->view('quotes/generate_ia', array('quote' => $quote));
 
         $html = $this->output->get_output();
 

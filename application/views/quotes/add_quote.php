@@ -189,7 +189,8 @@
             <div class="intro-y grid grid-cols-12 sm:grid-cols-8 p-5 gap-2">
                 <div class="col-span-4" style="margin-right: 5%;">
                     <fieldset class=" p-2 sm:p-3  fieldset_bd_color">
-                        <legend class="legend_spacing">Quote #01</legend>
+                        <legend class="legend_spacing">Quote
+                            #<?php echo (is_object($quote)) ? $quote->id : ''; ?></legend>
                         <p><b>
                                 Customer
                                 Name: <?php echo (is_object($opportunity)) ? $opportunity->customer_name : ''; ?>
@@ -247,7 +248,7 @@
                     <div class="w-full sm:w-full m-auto" style="display:flex;">
                         <p classs="">Set Calc Mode
                         <p>
-                            <select class="input border mr-2" name="calc_mode">
+                            <select class="input border mr-2" name="calc_mode" id="calc_mode">
                                 <?php
                                 $calc_mode = array('Contractor', 'Tender');
                                 foreach ($calc_mode as $key => $val) {
@@ -345,9 +346,9 @@
                                                                     if ($quote->calc_mode == 'Tender') {
                                                                         $price_per_unit = $cat->price_per_unit_tender;
                                                                     }
-                                                                    echo '<option selected>' . $cat->mat_code . '</option>';
+                                                                    echo '<option value="' . $cat->mat_code . '" selected>' . $cat->mat_description . '</option>';
                                                                 } else {
-                                                                    echo '<option>' . $cat->mat_code . '</option>';
+                                                                    echo '<option value="' . $cat->mat_code . '">' . $cat->mat_description . '</option>';
                                                                 }
                                                             }
                                                         }
@@ -963,7 +964,7 @@
                 endif;
             endif;
             if (is_object($quote)):
-            if ($quote->status == 'Approved'):
+            if ($quote->status == 'Approved' || $quote->status == 'Job'):
             ?>
             <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
                 <div class="intro-y col-span-12 lg:col-span-6">
@@ -991,7 +992,9 @@
                                         </a>
                                     </div>
                                     <div style="width: 50%;display: inline;">
-                                        <input type="checkbox" class="input border  mr-2" id="ia_signed"><label>IA
+                                        <input type="checkbox" class="input border  mr-2" id="ia_signed"
+                                               name="ia_signed"
+                                               value="1" <?php echo ($quote->ia_signed == 1) ? 'checked' : ''; ?>><label>IA
                                             is
                                             signed</label>
                                     </div>
@@ -1006,7 +1009,9 @@
                                         </a>
                                     </div>
                                     <div style="width: 50%;display: inline;">
-                                        <input type="checkbox" class="input border mr-2" id="form_signed"><label>Quote
+                                        <input type="checkbox" class="input border mr-2" id="form_signed"
+                                               name="form_signed"
+                                               value="1" <?php echo ($quote->form_signed == 1) ? 'checked' : ''; ?>><label>Quote
                                             Form is
                                             signed</label>
                                     </div>
@@ -1021,8 +1026,10 @@
                                         </a>
                                     </div>
                                     <div style="width: 50%;display: inline;">
-                                        <input type="checkbox" class="input border" id="credit-passed">
-                                        <label class="cursor-pointer select-none" for="credit-passed"
+                                        <input type="checkbox" class="input border" id="credit_passed"
+                                               name="credit_passed"
+                                               value="1" <?php echo ($quote->credit_passed == 1) ? 'checked' : ''; ?>>
+                                        <label class="cursor-pointer select-none" for="credit_passed"
                                                style="width: auto;">Customer passed Credit-Check</label>
                                     </div>
 
@@ -1046,7 +1053,7 @@
                             <label class="sm:text-left md:mr-5 width6 pt-1 sm:pt-3"> Additional Notes for
                                 Quote</label>
                             <textarea class="input w-full border mt-2" name="additional_info"
-                                      placeholder=""></textarea>
+                                      placeholder=""><?php echo $quote->additional_info; ?></textarea>
                         </div>
                     </div>
                 </div>
@@ -1323,6 +1330,10 @@
                 // $('#total_markup_amount').val(sub_total1 * 0.1);
 
                 calculate_sale_table();
+            }else if(status == 'Job'){
+                $('body').find('input').attr('readonly', true);
+                $('body').find('select').attr('readonly', true);
+                $('body').find('textarea').attr('readonly', true);
             }
         });
         $('#quoteForm').keypress(function (e) {
@@ -1331,6 +1342,36 @@
                 e.preventDefault();
             }
         });
+        $('#calc_mode').change(function () {
+            var calc_mode = $('#calc_mode').val();
+            var material_total = 0;
+            $('#materials').find('tr').each(function (index) {
+                if ($(this).attr('id') != 'material-item-row0' && $(this).attr('id') != 'material-item-total' && $(this).attr('id') != 'material_thead') {
+                    var row_category = $(this).children().eq(0).find('select').val();
+                    var row_code = $(this).children().eq(1).find('select').val();
+                    for (var i in catalogs) {
+                        if (catalogs[i].product_category == row_category) {
+                            if (catalogs[i].mat_code == row_code) {
+                                var price_per_unit = catalogs[i].price_per_unit_contractor;
+                                if (calc_mode == 'Tender') {
+                                    price_per_unit = catalogs[i].price_per_unit_tender;
+                                }
+                                $(this).children().eq(2).html(price_per_unit)
+                                var quantity = $(this).children().eq(3).find('input').val() * 1
+                                var row_total = quantity * price_per_unit;
+                                $(this).children().eq(4).html(row_total)
+                                material_total += row_total;
+                            }
+                        }
+                    }
+                }
+            })
+            $('#material-item-total').children().eq(2).html(material_total);
+            if (status == 'Pending') {
+                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(material_total);
+                calculate_sale_table();
+            }
+        })
 
 
         $(".set_markup").click(function () {
@@ -1387,38 +1428,38 @@
 
             var total_profit1 = mat_profit + labour_profit + misc_profit + adson_profit;
 
-            $('#final_quote_table').find('tr').eq(1).children().eq(2).html(Math.round(mat_cost + mat_profit));
-            $('#final_quote_table').find('tr').eq(1).children().eq(3).html(Math.round(mat_profit));
-            $('#final_quote_table').find('tr').eq(2).children().eq(2).html(Math.round(labour_cost + labour_profit));
-            $('#final_quote_table').find('tr').eq(2).children().eq(3).html(Math.round(labour_profit));
-            $('#final_quote_table').find('tr').eq(3).children().eq(2).html(Math.round(misc_cost + misc_profit));
-            $('#final_quote_table').find('tr').eq(3).children().eq(3).html(Math.round(misc_profit));
-            $('#final_quote_table').find('tr').eq(4).children().eq(2).html(Math.round(adson_cost + adson_profit));
-            $('#final_quote_table').find('tr').eq(4).children().eq(3).html(Math.round(adson_profit));
+            $('#final_quote_table').find('tr').eq(1).children().eq(2).html(Math.round((mat_cost + mat_profit) * 100) / 100);
+            $('#final_quote_table').find('tr').eq(1).children().eq(3).html(Math.round(mat_profit * 100) / 100);
+            $('#final_quote_table').find('tr').eq(2).children().eq(2).html(Math.round((labour_cost + labour_profit) * 100) / 100);
+            $('#final_quote_table').find('tr').eq(2).children().eq(3).html(Math.round(labour_profit * 100) / 100);
+            $('#final_quote_table').find('tr').eq(3).children().eq(2).html(Math.round((misc_cost + misc_profit) * 100) / 100);
+            $('#final_quote_table').find('tr').eq(3).children().eq(3).html(Math.round(misc_profit * 100) / 100);
+            $('#final_quote_table').find('tr').eq(4).children().eq(2).html(Math.round((adson_cost + adson_profit) * 100) / 100);
+            $('#final_quote_table').find('tr').eq(4).children().eq(3).html(Math.round(adson_profit * 100) / 100);
 
-            $('#final_quote_table').find('tr').eq(5).children().eq(1).html(Math.round(subtotal_cost1));
-            $('#final_quote_table').find('tr').eq(5).children().eq(2).html(Math.round(subtotal_selling1));
-            $('#final_quote_table').find('tr').eq(5).children().eq(3).html(Math.round(total_profit1));
+            $('#final_quote_table').find('tr').eq(5).children().eq(1).html(Math.round(subtotal_cost1 * 100) / 100);
+            $('#final_quote_table').find('tr').eq(5).children().eq(2).html(Math.round(subtotal_selling1 * 100) / 100);
+            $('#final_quote_table').find('tr').eq(5).children().eq(3).html(Math.round(total_profit1 * 100) / 100);
 
             $('#final_quote_table').find('tr').eq(6).children().eq(1).html(discount_percent + '%');
-            $('#final_quote_table').find('tr').eq(6).children().eq(2).html(Math.round(discount_selling));
+            $('#final_quote_table').find('tr').eq(6).children().eq(2).html(Math.round(discount_selling * 100) / 100);
 
-            $('#final_quote_table').find('tr').eq(7).children().eq(2).html(Math.round(subtotal_selling2));
+            $('#final_quote_table').find('tr').eq(7).children().eq(2).html(Math.round(subtotal_selling2 * 100) / 100);
 
             $('#final_quote_table').find('tr').eq(8).children().eq(2).html(Math.round(HST * 100) / 100);
-            $('#final_quote_table').find('tr').eq(9).children().eq(2).html(Math.round(total_selling));
+            $('#final_quote_table').find('tr').eq(9).children().eq(2).html(Math.round(total_selling * 100) / 100);
 
 
-            $('#last_quote_table').find('tr').eq(1).children().eq(1).find('a').html(Math.round(mat_cost + mat_profit));
-            $('#last_quote_table').find('tr').eq(2).children().eq(1).find('a').html(Math.round(labour_cost + labour_profit));
-            $('#last_quote_table').find('tr').eq(3).children().eq(1).find('a').html(Math.round(misc_cost + misc_profit));
-            $('#last_quote_table').find('tr').eq(4).children().eq(1).html(Math.round((adson_cost + adson_profit)));
-            $('#last_quote_table').find('tr').eq(5).children().eq(1).html(Math.round(subtotal_cost1));
-            $('#last_quote_table').find('tr').eq(6).children().eq(0).html('Discount ' + discount_percent + '%');
-            $('#last_quote_table').find('tr').eq(6).children().eq(1).html(Math.round(discount_selling));
-            $('#last_quote_table').find('tr').eq(7).children().eq(1).html(Math.round(subtotal_selling2));
-            $('#last_quote_table').find('tr').eq(8).children().eq(1).html(Math.round(HST * 100) / 100);
-            $('#last_quote_table').find('tr').eq(9).children().eq(1).html(Math.round(total_selling));
+            // $('#last_quote_table').find('tr').eq(1).children().eq(1).find('a').html(Math.round(mat_cost + mat_profit));
+            // $('#last_quote_table').find('tr').eq(2).children().eq(1).find('a').html(Math.round(labour_cost + labour_profit));
+            // $('#last_quote_table').find('tr').eq(3).children().eq(1).find('a').html(Math.round(misc_cost + misc_profit));
+            // $('#last_quote_table').find('tr').eq(4).children().eq(1).html(Math.round((adson_cost + adson_profit)));
+            // $('#last_quote_table').find('tr').eq(5).children().eq(1).html(Math.round(subtotal_cost1));
+            // $('#last_quote_table').find('tr').eq(6).children().eq(0).html('Discount ' + discount_percent + '%');
+            // $('#last_quote_table').find('tr').eq(6).children().eq(1).html(Math.round(discount_selling));
+            // $('#last_quote_table').find('tr').eq(7).children().eq(1).html(Math.round(subtotal_selling2));
+            // $('#last_quote_table').find('tr').eq(8).children().eq(1).html(Math.round(HST * 100) / 100);
+            // $('#last_quote_table').find('tr').eq(9).children().eq(1).html(Math.round(total_selling));
 
 
             $('#mat_net').val(mat_cost);
@@ -1575,8 +1616,13 @@
             var first = 0;
             for (var j in catalogs) {
                 if (catalogs[j].product_category == selectedCatalog) {
-                    if (first == 0)
-                        price_per_unit = catalogs[j].price_per_unit_tender;
+                    if (first == 0) {
+                        if ($('#calc_mode').val() == 'Contractor') {
+                            price_per_unit = catalogs[j].price_per_unit_contractor;
+                        } else {
+                            price_per_unit = catalogs[j].price_per_unit_tender;
+                        }
+                    }
 
                     matOptions += '<option value="' + catalogs[j].mat_code + '">' + catalogs[j].mat_description + '</option>';
                     first++;
@@ -1603,8 +1649,13 @@
             var price_per_unit = '';
             for (var j in catalogs) {
                 if (catalogs[j].product_category == selected_category) {
-                    if (catalogs[j].mat_code == selected_mat_code)
-                        price_per_unit = catalogs[j].price_per_unit_tender;
+                    if (catalogs[j].mat_code == selected_mat_code) {
+                        if ($('#calc_mode').val() == 'Contractor') {
+                            price_per_unit = catalogs[j].price_per_unit_contractor;
+                        } else {
+                            price_per_unit = catalogs[j].price_per_unit_tender;
+                        }
+                    }
                 }
             }
             $('#material-item-row' + rowId).children().eq(2).html(price_per_unit);
@@ -1955,7 +2006,7 @@
 
         function create_job() {
             $('#action').val('create_job');
-            if (!$("#ia_signed").is(':checked') || !$("#form_signed").is(':checked') || !$('#credit-passed').is(':checked')) {
+            if (!$("#ia_signed").is(':checked') || !$("#form_signed").is(':checked') || !$('#credit_passed').is(':checked')) {
                 $('#alert-modal').find('p').html('Customer must sign both IA and Quote form in order to proceed to the job');
                 $('#alert-modal').modal('show');
                 $('#ia_signed').focus();
