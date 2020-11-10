@@ -159,7 +159,7 @@ tr.shown td.details-control {
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Date</label>
                     <div class="mt-1">
-                        <input data-daterange="true" value="<?php echo date('1/1/Y') . ' - ' . date('12/31/Y'); ?>"
+                        <input data-daterange="true"
                                class="date_range input pl-12 border w-full" id="date">
                     </div>
                 </div>
@@ -265,7 +265,7 @@ tr.shown td.details-control {
             "showDropdowns": true,
             "minYear": 2010,
             "startDate": '<?php echo date("1/1/Y");?>',
-            "endDate": '<?php echo date("12/21/Y");?>'
+            "endDate": '<?php echo date("12/21/2021");?>'
         });
         var table = $('#opporTable').DataTable({
             "pageLength": 50,

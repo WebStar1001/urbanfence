@@ -228,4 +228,30 @@ class Quotes extends CI_Controller
         echo 'success';
         exit;
     }
+    public function generate_qa_form()
+    {
+        $quote_id = $_GET['quote_id'];
+//        $quote_id = 2;
+        $quote = $this->QuoteModel->getQuoteDatas($quote_id);
+        $this->load->view('quotes/qa_form', array('quote' => $quote));
+
+        $html = $this->output->get_output();
+
+        // Load pdf library
+        $this->load->library('Pdf');
+
+        // Load HTML content
+        $this->pdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation
+        $this->pdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $this->pdf->render();
+
+        // Output the generated PDF (1 = download and 0 = preview)
+        $this->pdf->stream("welcome.pdf", array("Attachment" => 0));
+        echo 'success';
+        exit;
+    }
 } 

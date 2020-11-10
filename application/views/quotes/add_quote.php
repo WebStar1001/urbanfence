@@ -1330,13 +1330,12 @@
                 // $('#total_markup_amount').val(sub_total1 * 0.1);
 
                 calculate_sale_table();
-            }else if(status == 'Job'){
+            } else if (status == 'Job') {
                 $('body').find('input').attr('readonly', true);
                 $('body').find('input:checkbox').attr('disabled', true);
                 $('body').find('select').attr('readonly', true);
                 $('body').find('textarea').attr('readonly', true);
-            }
-            else if(status == 'Approved'){
+            } else if (status == 'Approved') {
                 $('body').find('input').attr('readonly', true);
                 $('body').find('select').attr('readonly', true);
             }
@@ -1703,9 +1702,12 @@
             var total_quantity = $('#material-item-total').children().eq(1).html() * 1;
             var original_quantity = $('#material-item-row' + rowId).children().eq(3).find('input').val() * 1;
             $('#material-item-total').children().eq(1).html(total_quantity - original_quantity);
-            $('#material-item-total').children().eq(2).html(total_price - original_price)
+            $('#material-item-total').children().eq(2).html(total_price - original_price);
             $("#material-item-row" + rowId).remove();
-            calculate_sale_table();
+            if(status == 'Pending') {
+                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price);
+                calculate_sale_table();
+            }
         }
 
 
@@ -1791,7 +1793,10 @@
             var original_quantity = $('#labour-item-row' + rowId).children().eq(1).find('input').val() * 1;
             $('#labour-item-total').children().eq(1).html(total_quantity - original_quantity);
             $("#labour-item-row" + rowId).remove();
-            calculate_sale_table();
+            if(status == 'Pending') {
+                $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(total_price - original_price);
+                calculate_sale_table();
+            }
         }
 
 
@@ -1874,7 +1879,10 @@
             var original_quantity = $('#miscellaneous-item-row' + rowId).children().eq(3).find('input').val() * 1;
             $('#miscellaneous-item-total').children().eq(1).html(total_quantity - original_quantity);
             $("#miscellaneous-item-row" + rowId).remove();
-            calculate_sale_table();
+            if (status == 'Pending') {
+                $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price);
+                calculate_sale_table();
+            }
         }
 
 
@@ -1956,8 +1964,12 @@
             var total_quantity = $('#adsOn-item-total').children().eq(1).html() * 1;
             var original_quantity = $('#adsOn-item-row' + rowId).children().eq(2).find('input').val() * 1;
             $('#adsOn-item-total').children().eq(1).html(total_quantity - original_quantity);
+
             $("#adsOn-item-row" + rowId).remove();
-            calculate_sale_table();
+            if (status == 'Pending') {
+                $('#final_quote_table').find('tr').eq(4).children().eq(1).find('a').html(total_price - original_price);
+                calculate_sale_table();
+            }
         }
 
 
