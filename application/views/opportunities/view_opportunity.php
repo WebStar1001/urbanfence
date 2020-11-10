@@ -73,7 +73,7 @@ tr.shown td.details-control {
                             <option value="Fence and Gate Repair">Fence and Gate Repair</option>
                             <option value="New Fence">New Fence</option>
                             <option value="New Gate">New Gate</option>
-                            <option value="New Fence and Gate c/w Operator">New Fence and Gate c/w Operator</option>
+                            <option value="New Fence and Gate c/w Operator">New Fence and Gate c/w</option>
                             <option value="Gate Operator Service">Gate Operator Service</option>
                         </select>
                     </div>
