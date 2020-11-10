@@ -296,8 +296,8 @@
                                        value="<?php echo (is_object($opportunity)) ? $opportunity->site_city : ''; ?>">
                             </div>
                             <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
-                                <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site Desc *</label>
-                                <input type="text" name="site_desc" class="input border mt-2 flex-1" required
+                                <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site Desc</label>
+                                <input type="text" name="site_desc" class="input border mt-2 flex-1"
                                        tabindex="14"
                                        value="<?php echo (is_object($opportunity)) ? $opportunity->site_desc : '' ?>">
                             </div>
@@ -306,16 +306,16 @@
                     <div class="col-span-12 sm:col-span-6 md:col-span-6 md:mr-3" id="add_opppor_right_info">
                         <div class="preview">
                             <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
-                                <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site Postal Code</label>
-                                <input type="text" name="site_postal_code" class="input border mt-2 flex-1" required
-                                       tabindex="13"
-                                       value="<?php echo (is_object($opportunity)) ? $opportunity->site_postal_code : '' ?>">
-                            </div>
-                            <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
                                 <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site Address *</label>
                                 <input type="text" name="site_address" class="input border mt-2 flex-1" required
                                        tabindex="15"
                                        value="<?php echo (is_object($opportunity)) ? $opportunity->site_address : '' ?>">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
+                                <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site Postal Code</label>
+                                <input type="text" name="site_postal_code" class="input border mt-2 flex-1" required
+                                       tabindex="13"
+                                       value="<?php echo (is_object($opportunity)) ? $opportunity->site_postal_code : '' ?>">
                             </div>
                             <input type="button" value="Use Customer Info" style="float: right;"
                                    id="copy_from_customer"

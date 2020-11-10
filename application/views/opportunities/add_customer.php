@@ -111,7 +111,7 @@
 
                     <div class="intro-y flex flex-col sm:flex-row mt-2">
                         <label class="w-full width6 md:mr-5 pt-1 sm:pt-3"> Customer*</label>
-                        <input type="text" name="customer" class="input w-full border mt-2 flex-1"
+                        <input type="text" name="customer" class="input w-full border mt-2 flex-1" required
                                value="<?php echo (is_object($customer)) ? $customer->customer : ''; ?>" tabindex="1">
                     </div>
                     <!-- <div class="intro-y flex flex-col sm:flex-row items-center mt-2">
@@ -121,19 +121,19 @@
 
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Phone 1*</label>
-                        <input type="text" name="phone1" class="input w-full border mt-2 flex-1"
+                        <input type="text" name="phone1" class="input w-full border mt-2 flex-1" required
                                value="<?php echo (is_object($customer)) ? $customer->phone1 : ''; ?>" tabindex="3">
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Email *</label>
-                        <input type="text" name="email" class="input w-full border mt-2 flex-1"
+                        <input type="text" name="email" class="input w-full border mt-2 flex-1" required
                                value="<?php echo (is_object($customer)) ? $customer->email : ''; ?>" tabindex="5">
                     </div>
 
 
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Billing Address*</label>
-                        <input type="text" name="address" class="input w-full border mt-2 flex-1"
+                        <input type="text" name="address" class="input w-full border mt-2 flex-1" required
                                value="<?php echo (is_object($customer)) ? $customer->address : ''; ?>" tabindex="7">
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
@@ -152,7 +152,7 @@
                     </div> -->
                     <div class="intro-y flex flex-col sm:flex-row mt-2">
                         <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Contact Person*</label>
-                        <input type="text" name="contact_person" class="input w-full border mt-2 flex-1"
+                        <input type="text" name="contact_person" class="input w-full border mt-2 flex-1" required
                                value="<?php echo (is_object($customer)) ? $customer->contact_person : ''; ?>" tabindex="2">
                         <input type="button" value="Use Same Name" style="float: right;" id="copy_from_customer"
                                class="button bg-theme-1 text-white mt-5 p-2 ml-2"/>
@@ -169,7 +169,7 @@
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
                         <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">City*</label>
-                        <input type="text" name="city" class="input w-full border mt-2 flex-1"
+                        <input type="text" name="city" class="input w-full border mt-2 flex-1" required
                                value="<?php echo (is_object($customer)) ? $customer->city : ''; ?>" tabindex="8"/>
                     </div>
                     <div class="preview">

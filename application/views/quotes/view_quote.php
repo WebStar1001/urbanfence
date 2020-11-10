@@ -90,8 +90,8 @@
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Quote Date</label>
                     <div class="mt-1">
-                        <input data-daterange="true" class="datepicker input pl-12 border w-full" id="quote_date"
-                               value="<?php echo date('1/1/Y') . ' - ' . date('12/31/Y'); ?>"/>
+                        <input data-daterange="true" class="date_range input pl-12 border w-full" id="quote_date"
+                               value="<?php echo date('1/1/Y') . ' - ' . date('12/21/Y'); ?>"/>
                     </div>
                 </div>
             </div>
@@ -153,8 +153,8 @@
                 <th>Customer</th>
                 <th>Status</th>
                 <th>Job Type</th>
-                <th>Job City</th>
-                <th>Costing Total</th>
+                <th>Site City</th>
+                <th>Quote Total</th>
                 <th>Edit</th>
             </tr>
             </thead>
@@ -167,44 +167,35 @@
     function format(d) {
         /*console.log(d.JobCity);*/
         // `d` is the original data object for the row
-        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-alight:center">' +
-            '<tr>' +
-            '<td>Contact Person:</td>' +
-            '<td>' + d.contact_person + '</td>' +
+        return '<table cellpadding="5" cellspacing="0" border="1px" style="padding-left:50px; text-alight:center">' +
             '</tr>' +
             '<tr>' +
+            '<td>MAT Total:</td>' +
+            '<td>' + Math.round(d.mat_net * d.mat_factor) + '</td>' +
+            '<td>LAB Total:</td>' +
+            '<td>' + Math.round(d.labour_net * d.lab_factor) + '</td>' +
+            '<td>MISC Total:</td>' +
+            '<td>' + Math.round(d.misc_net * d.misc_factor) + '</td>' +
+            '<td>Add-On Total:</td>' +
+            '<td>' + Math.round(d.ads_on_net * d.ads_on_factor) + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td>Discount Amount:</td>' +
+            '<td>' + (Math.round((d.ads_on_net * d.ads_on_factor + d.misc_net * d.misc_factor + d.labour_net * d.lab_factor + d.mat_net * d.mat_factor) * d.discount_set) / 100) + '</td>' +
+            '<td>HST:</td>' +
+            '<td>' + d.hst + '</td>' +
+            '<td>Contact Person:</td>' +
+            '<td>' + d.contact_person + '</td>' +
             '<td>Site Address:</td>' +
             '<td>' + d.site_address + '.</td>' +
             '</tr>' +
             '<tr>' +
+            '<td>Sales Rap:</td>' +
+            '<td>' + d.sale_rep + '</td>' +
             '<td>Site Desc:</td>' +
             '<td>' + d.site_desc + '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td>MAT:</td>' +
-            '<td>' + Math.round(d.mat_net * d.mat_factor) + '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td>LAB:</td>' +
-            '<td>' + Math.round(d.labour_net * d.lab_factor) + '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td>MISC:</td>' +
-            '<td>' + Math.round(d.misc_net * d.misc_factor) + '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td>Add-On:</td>' +
-            '<td>' + Math.round(d.ads_on_net * d.ads_on_factor) + '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<tr>' +
-            '<td>Discount Amount:</td>' +
-            '<td>' + d.discount_set + '</td>' +
-            '</tr>' +
             '<td>Customer ID:</td>' +
             '<td>' + d.customer_id + '</td>' +
-            '</tr>' +
-            '<tr>' +
             '<td>Oppor. ID:</td>' +
             '<td>' + d.oppor_id + '</td>' +
             '</tr>' +
@@ -212,6 +203,12 @@
     }
 
     $(document).ready(function () {
+        $('.date_range').daterangepicker({
+            "showDropdowns": true,
+            "minYear": 2010,
+            "startDate": '<?php echo date("1/1/Y");?>',
+            "endDate": '<?php echo date("12/21/Y");?>'
+        });
         var table = $('#quoteTable').DataTable({
             "pageLength": 50,
 

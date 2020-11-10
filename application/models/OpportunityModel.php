@@ -25,7 +25,7 @@ class OpportunityModel extends CI_Model
         $date = $this->input->get('date');
         $site_city = $this->input->get('site_city');
         $urgency = $this->input->get('urgency');
-        $this->db->select('opportunities.*, customers.customer AS customer, customers.contact_person AS contact_person');
+        $this->db->select('opportunities.*, customers.customer AS customer, customers.contact_person AS contact_person, quotes.id AS quote_id');
         $this->db->from('opportunities');
         if($id){
             $this->db->where('opportunities.id', $id);
@@ -63,6 +63,7 @@ class OpportunityModel extends CI_Model
             $this->db->where('urgency', $urgency);
         }
         $this->db->join('customers', 'customers.id=opportunities.customer_id', 'inner');
+        $this->db->join('quotes', 'quotes.oppor_id=opportunities.id', 'left');
         $query = $this->db->get();
         return $query->result_array();
     }

@@ -204,7 +204,7 @@ tr.shown td.details-control {
             <tr>
                 <th>Additional Info</th>
                 <th>ID</th>
-                <th>Customer ID</th>
+                <th>Sale Source</th>
                 <th>Date</th>
                 <th>Customer</th>
                 <th class="whitespace-no-wrap">Job Type</th>
@@ -233,44 +233,30 @@ tr.shown td.details-control {
         return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-alight:center">' +
 
             '<tr>' +
-            '<td>Site City:</td>' +
-            '<td>' + d.site_city + '</td>' +
-            '</tr>' +
-            '<tr>' +
             '<td>Contact Person:</td>' +
             '<td>' + d.contact_person + '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td>Sale Source:</td>' +
-            '<td>' + d.sale_source + '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td>Site Postal Code:</td>' +
-            '<td>' + d.site_postal_code + '</td>' +
+            '<td>Site City:</td>' +
+            '<td>' + d.site_city + '</td>' +
+            '<td>Urgency:</td>' +
+            '<td>' + d.urgency + '</td>' +
+            '<td>Details:</td>' +
+            '<td>' + d.details + '</td>' +
             '</tr>' +
             '<tr>' +
             '<td>Site Address:</td>' +
             '<td>' + d.site_address + '</td>' +
-            '</tr>' +
-            '<td>Contact onsite:</td>' +
-            '<td>' + d.contact_onsite + '</td>' +
-            '</tr>' +
-            '<tr>' +
+            '<td>Site Postal Code:</td>' +
+            '<td>' + d.site_postal_code + '</td>' +
             '<td>Site Desc:</td>' +
             '<td>' + d.site_desc + '.</td>' +
             '</tr>' +
             '<tr>' +
-            '<td>Urgency:</td>' +
-            '<td>' + d.urgency + '</td>' +
-            '</tr>' +
-            '<tr>' +
+            '<td>Contact onsite:</td>' +
+            '<td>' + d.contact_onsite + '</td>' +
             '<td>Time:</td>' +
             '<td>' + d.time + '..</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td>Details:</td>' +
-            '<td>' + d.details + '</td>' +
-            '</tr>' +
+            '<td>Customer ID:</td>' +
+            '<td>' + d.customer_id + '</td>' +
             '</table>';
     }
 
@@ -279,7 +265,7 @@ tr.shown td.details-control {
             "showDropdowns": true,
             "minYear": 2010,
             "startDate": '<?php echo date("1/1/Y");?>',
-            "endDate": '<?php echo date("12/31/Y");?>'
+            "endDate": '<?php echo date("12/21/Y");?>'
         });
         var table = $('#opporTable').DataTable({
             "pageLength": 50,
@@ -306,11 +292,11 @@ tr.shown td.details-control {
                     "className": 'details-control',
                     "orderable": false,
                     "data": null,
-                    "defaultContent": '', "width":"5%"
+                    "defaultContent": '', "width": "5%"
                 },
-                {"data": "id", "width":"5%"},
-                {"data": "customer_id", "width":"5%"},
-                {"data": "date", "width":"13%"},
+                {"data": "id"},
+                {"data": "sale_source", "width": "5%"},
+                {"data": "date", "width": "13%"},
                 {"data": "customer"},
                 {"data": "job_type"},
                 {"data": "status"},
@@ -333,17 +319,29 @@ tr.shown td.details-control {
                     "data": null, render: function (data) {
                         return "<button class='button border' onclick='set_sale_rep(" + data.id + ");'>Set</button>"
                     }
-                    , "width":"2%"
+                    , "width": "2%"
                 },
                 {
                     "data": null, render: function (data) {
-                        return "<a href='<?php echo base_url('Opportunity/add_opportunity?opportunity_id=');?>" + data.id + "'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
-                    }, "width":"2%"
+                        if (data.status == 'New') {
+                            return "<a href='<?php echo base_url('Opportunity/add_opportunity?opportunity_id=');?>" + data.id + "'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
+                        } else {
+                            return "<a href='javascript:alert(\"Can not edit Opportunity which is already assigned to a Sales Rap.\")'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
+                        }
+                    }, "width": "2%"
                 },
                 {
                     "data": null, render: function (data) {
-                        return "<a href='<?php echo base_url('Quotes/add_quote?opportunity_id=');?>" + data.id + "'><i class='fa fa-external-link' aria-hidden='true'></i></a>"
-                    }, "width":"2%"
+                        if (data.status == 'Assigned') {
+                            if (data.quote_id != null) {
+                                return "<a href='javascript:alert(\"Opportunity already created Quote.\")'><i class='fa fa-external-link' aria-hidden='true'></i></a>"
+                            } else {
+                                return "<a href='<?php echo base_url('Quotes/add_quote?opportunity_id=');?>" + data.id + "'><i class='fa fa-external-link' aria-hidden='true'></i></a>"
+                            }
+                        } else {
+                            return "<a href='javascript:alert(\"Opportunity needs to get assigned to Sales Rap prior Quote creation.\")'><i class='fa fa-external-link' aria-hidden='true'></i></a>"
+                        }
+                    }, "width": "2%"
                 }
             ],
             "order": [[0, 'asc']]
