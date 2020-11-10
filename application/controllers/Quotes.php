@@ -212,7 +212,7 @@ class Quotes extends CI_Controller
         $html = $this->output->get_output();
 
         // Load pdf library
-        $this->load->library('pdf');
+        $this->load->library('Pdf');
 
         // Load HTML content
         $this->pdf->loadHtml($html);
