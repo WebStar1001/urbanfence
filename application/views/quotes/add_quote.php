@@ -1332,6 +1332,7 @@
                 calculate_sale_table();
             }else if(status == 'Job'){
                 $('body').find('input').attr('readonly', true);
+                $('body').find('input:checkbox').attr('disabled', true);
                 $('body').find('select').attr('readonly', true);
                 $('body').find('textarea').attr('readonly', true);
             }
