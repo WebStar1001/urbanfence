@@ -982,12 +982,13 @@
                                 </div>
                                 <!-- close -->
 
-                                <div class="mt-5">
+                                <div>
                                     <div style="width: 40%;display: inline-block;">
-                                        <button class="button bg-gray-200 text-gray-600 mr-5"
-                                                style="float: inherit;">
+                                        <a class="button bg-gray-200 text-gray-600 mr-5"
+                                           href="generate_ia?quote_id=<?php echo $quote->id; ?>" target="_blank"
+                                           style="float: inherit;">
                                             Generate IA
-                                        </button>
+                                        </a>
                                     </div>
                                     <div style="width: 50%;display: inline;">
                                         <input type="checkbox" class="input border  mr-2" id="ia_signed"><label>IA
@@ -997,31 +998,30 @@
 
 
                                 </div>
-                                <div class="mt-3">
+                                <div class="mt-5">
                                     <div style="width: 40%;display: inline-block;">
-                                        <button class="button bg-gray-200 text-gray-600" style="float: inherit;">
+                                        <a class="button bg-gray-200 text-gray-600" style="float: inherit;"
+                                           href="generate_ia?quote_id=<?php echo $quote->id; ?>" target="_blank">
                                             Generate Quote Form
-                                        </button>
+                                        </a>
                                     </div>
                                     <div style="width: 50%;display: inline;">
                                         <input type="checkbox" class="input border mr-2" id="form_signed"><label>Quote
                                             Form is
                                             signed</label>
                                     </div>
-
-
                                 </div>
-                                <div class="mt-3">
+                                <div class="mt-5">
 
                                     <div style="width: 40%;display: inline-block;">
-                                        <button class="button bg-gray-200 text-gray-600" style="float: inherit;">
+                                        <a class="button bg-gray-200 text-gray-600" style="float: inherit;"
+                                           href="generate_ia?quote_id=<?php echo $quote->id; ?>" target="_blank">
                                             Generate
                                             Blank Form
-                                        </button>
+                                        </a>
                                     </div>
                                     <div style="width: 50%;display: inline;">
-                                        <input type="checkbox" class="input border" id="credit-passed"
-                                               required>
+                                        <input type="checkbox" class="input border" id="credit-passed">
                                         <label class="cursor-pointer select-none" for="credit-passed"
                                                style="width: auto;">Customer passed Credit-Check</label>
                                     </div>

@@ -190,12 +190,12 @@ class Quotes extends CI_Controller
         echo json_encode($data);
     }
 
-    public function generate_quote_pdf()
+    public function generate_ia()
     {
-//        $quote_id = $_GET['quote_id'];
-        $quote_id = 2;
+        $quote_id = $_GET['quote_id'];
+//        $quote_id = 2;
         $quote = $this->QuoteModel->getQuoteDatas($quote_id);
-        $this->load->view('quotes/quote_form', array('quote'=>$quote));
+        $this->load->view('quotes/generate_ia', array('quote'=>$quote));
 
         $html = $this->output->get_output();
 
