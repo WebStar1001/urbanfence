@@ -980,12 +980,6 @@
                                         <option>Daniel Craig</option>
                                     </select>
                                 </div>
-                                <div class="mt-1 mb-5">
-                                    <input type="checkbox" class="input border mr-2" id="credit-passed"
-                                           required>
-                                    <label class="cursor-pointer select-none" for="credit-passed"
-                                           style="width: auto;">Customer passed Credit-Check</label>
-                                </div>
                                 <!-- close -->
 
                                 <div class="mt-5">
@@ -1015,12 +1009,22 @@
                                             signed</label>
                                     </div>
 
+
                                 </div>
                                 <div class="mt-3">
-                                    <button class="button bg-gray-200 text-gray-600" style="float: inherit;">
-                                        Generate
-                                        Blank Form
-                                    </button>
+
+                                    <div style="width: 40%;display: inline-block;">
+                                        <button class="button bg-gray-200 text-gray-600" style="float: inherit;">
+                                            Generate
+                                            Blank Form
+                                        </button>
+                                    </div>
+                                    <div style="width: 50%;display: inline;">
+                                        <input type="checkbox" class="input border" id="credit-passed"
+                                               required>
+                                        <label class="cursor-pointer select-none" for="credit-passed"
+                                               style="width: auto;">Customer passed Credit-Check</label>
+                                    </div>
 
                                 </div>
                             </div>
