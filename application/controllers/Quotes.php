@@ -228,12 +228,15 @@ class Quotes extends CI_Controller
         echo 'success';
         exit;
     }
+
     public function generate_qa_form()
     {
         $quote_id = $_GET['quote_id'];
 //        $quote_id = 2;
         $quote = $this->QuoteModel->getQuoteDatas($quote_id);
-        $this->load->view('quotes/qa_form', array('quote' => $quote));
+        $customer = $this->CustomerModel->get_customer($quote->customer_id);
+
+        $this->load->view('quotes/qa_form', array('quote' => $quote, 'customer' => $customer));
 
         $html = $this->output->get_output();
 

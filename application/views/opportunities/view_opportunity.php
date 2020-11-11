@@ -230,33 +230,35 @@ tr.shown td.details-control {
     function format(d) {
         /*console.log(d.JobCity);*/
         // `d` is the original data object for the row
-        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-alight:center">' +
+        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;text-align: left;">' +
 
             '<tr>' +
             '<td>Contact Person:</td>' +
             '<td>' + d.contact_person + '</td>' +
+            '<td>Site Address:</td>' +
+            '<td>' + d.site_address + '</td>' +
+            '<td>Contact onsite:</td>' +
+            '<td>' + d.contact_onsite + '</td>' +
+            '<tr>' +
             '<td>Site City:</td>' +
             '<td>' + d.site_city + '</td>' +
+            '<td>Site Postal Code:</td>' +
+            '<td>' + d.site_postal_code + '</td>' +
+            '<td>Time:</td>' +
+            '<td>' + d.time + '..</td>' +
+            '</tr>' +
+            '<tr>' +
             '<td>Urgency:</td>' +
             '<td>' + d.urgency + '</td>' +
+            '<td>Site Desc:</td>' +
+            '<td>' + d.site_desc + '.</td>' +
+            '<td>Customer ID:</td>' +
+            '<td>' + d.customer_id + '</td>' +
+            '</tr>' +
+            '<tr>' +
             '<td>Details:</td>' +
             '<td>' + d.details + '</td>' +
             '</tr>' +
-            '<tr>' +
-            '<td>Site Address:</td>' +
-            '<td>' + d.site_address + '</td>' +
-            '<td>Site Postal Code:</td>' +
-            '<td>' + d.site_postal_code + '</td>' +
-            '<td>Site Desc:</td>' +
-            '<td>' + d.site_desc + '.</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td>Contact onsite:</td>' +
-            '<td>' + d.contact_onsite + '</td>' +
-            '<td>Time:</td>' +
-            '<td>' + d.time + '..</td>' +
-            '<td>Customer ID:</td>' +
-            '<td>' + d.customer_id + '</td>' +
             '</table>';
     }
 
