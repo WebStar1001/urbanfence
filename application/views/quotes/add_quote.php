@@ -1004,7 +1004,7 @@
                                 <div class="mt-5">
                                     <div style="width: 40%;display: inline-block;">
                                         <a class="button bg-gray-200 text-gray-600" style="float: inherit;"
-                                           href="generate_ia?quote_id=<?php echo $quote->id; ?>" target="_blank">
+                                           href="generate_qa_form?quote_id=<?php echo $quote->id; ?>" target="_blank">
                                             Generate Quote Form
                                         </a>
                                     </div>
@@ -1020,7 +1020,7 @@
 
                                     <div style="width: 40%;display: inline-block;">
                                         <a class="button bg-gray-200 text-gray-600" style="float: inherit;"
-                                           href="generate_ia?quote_id=<?php echo $quote->id; ?>" target="_blank">
+                                           href="generate_qa_blank?quote_id=<?php echo $quote->id; ?>" target="_blank">
                                             Generate
                                             Blank Form
                                         </a>
@@ -1704,7 +1704,7 @@
             $('#material-item-total').children().eq(1).html(total_quantity - original_quantity);
             $('#material-item-total').children().eq(2).html(total_price - original_price);
             $("#material-item-row" + rowId).remove();
-            if(status == 'Pending') {
+            if (status == 'Pending') {
                 $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price);
                 calculate_sale_table();
             }
@@ -1793,7 +1793,7 @@
             var original_quantity = $('#labour-item-row' + rowId).children().eq(1).find('input').val() * 1;
             $('#labour-item-total').children().eq(1).html(total_quantity - original_quantity);
             $("#labour-item-row" + rowId).remove();
-            if(status == 'Pending') {
+            if (status == 'Pending') {
                 $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(total_price - original_price);
                 calculate_sale_table();
             }

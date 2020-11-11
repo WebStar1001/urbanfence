@@ -181,7 +181,7 @@ $total = $sub_total2 + $quote->hst;
         </tr>
         <tr>
             <td>G.S.T # 848724076RT0001</td>
-            <td colspan="2"><?php echo $quote->payment_term; ?></td>
+            <td colspan="2">Payment Terms are <?php echo $quote->payment_term; ?></td>
         </tr>
     </table>
 </div>
