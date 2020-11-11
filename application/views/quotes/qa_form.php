@@ -86,7 +86,7 @@
 <div class="table">
     <table style="margin: 10px 50px">
         <tr>
-            <td height="15px" width="80px">To :</td>
+            <td height="15px" width="85px">To :</td>
             <td width="135px"><?php echo $customer->customer; ?></td>
             <td width="80px">Date:</td>
             <td width="140px"><?php echo date('Y-m-d'); ?></td>

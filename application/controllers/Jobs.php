@@ -1,60 +1,51 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
-class Jobs extends CI_Controller {
+class Jobs extends CI_Controller
+{
+    function __construct()
+    {
 
-	public function jobs_list()
-	{
-		$this->load->view('inc/header');
-		$this->load->view('jobs/index');
-		$this->load->view('inc/footer');
-	}
+        parent::__construct();
 
-	public function job_detail()
-	{
-		$this->load->view('inc/header');
-		$this->load->view('jobs/job_detail');
-		$this->load->view('inc/footer');
-	}
+//        $this->load->model('CustomerModel');
+//        $this->load->model('CompanyModel');
+//        $this->load->model('CatalogModel');
+//        $this->load->model('OpportunityModel');
+        $this->load->model('UserModel');
+//        $this->load->model('QuoteModel');
+//        $this->load->library('auth');
+//        $this->load->library('session');
+//        $this->auth->check_admin_auth();
+    }
 
+    public function jobs_list()
+    {
+        $data['sales'] = $this->UserModel->getSaleUsers();
+        $this->load->view('inc/header');
+        $this->load->view('jobs/view_job', $data);
+        $this->load->view('inc/footer');
+    }
 
-	public function getData()
-	{	
-	   $abc =
-	    '{ "data":[
-	    {
-	      "id": "1",
-	      "status": "MAT delivered",
-	      "installer": "Benjamin",
-	      "start_date": "20/8/2020",
-	      "end_date": "15/9/2020",
-	      "customer": "Gil Naor",
-	      "job_type": "New Fence",
-	      "mat": "1123",
-	      "lab": "1123",
-	      "misc": "1500",
-	      "add_on": "1123",
-
-	      "total": "13560",
-	      "job_balance": "6780",
-
-	      "contact_person":"John Smith",
-	      "job_address":"207 Edgeley Blvd",
-	      "job_city":"Concord",
-	      "job_site":"New Fence+ Gate",
-	      "customer_id":"3",
-	      "oppor_id":"2",
-	      "quote_id":"7"
-	    }
-	]}';
-    	echo $abc;
-	 }
+    public function job_detail()
+    {
+        $this->load->view('inc/header');
+        $this->load->view('jobs/job_detail');
+        $this->load->view('inc/footer');
+    }
 
 
-public function credits_debits_tracking()
-	{	
-		   $abc =
-		    '{ "data":[
+    public function get_jobs()
+    {
+        $data['data'] = $this->JobModel->getJobs();
+        echo json_encode($data);
+    }
+
+
+    public function credits_debits_tracking()
+    {
+        $abc =
+            '{ "data":[
 	   	
 	   		{
 		      "invoice_id": "10125",
@@ -95,9 +86,9 @@ public function credits_debits_tracking()
 		   
 		    
 		]}';
-    	echo $abc;
-	 }
+        echo $abc;
+    }
 
-	
+
 }
 

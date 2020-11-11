@@ -231,15 +231,15 @@ tr.shown td.details-control {
     function format(d) {
         /*console.log(d.JobCity);*/
         // `d` is the original data object for the row
-        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;text-align: left;">' +
+        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;text-align: left;width: 100%;">' +
 
             '<tr>' +
-            '<td>Contact Person:</td>' +
-            '<td width="150px">' + d.contact_person + '</td>' +
-            '<td width="150px">Site Address:</td>' +
-            '<td>' + d.site_address + '</td>' +
-            '<td>Contact onsite:</td>' +
-            '<td width="150px">' + d.contact_onsite + '</td>' +
+            '<td style="width:15%;">Contact Person:</td>' +
+            '<td style="width:20%;">' + d.contact_person + '</td>' +
+            '<td  style="width:15%;">Site Address:</td>' +
+            '<td style="width:20%;">' + d.site_address + '</td>' +
+            '<td style="width:13%;">Contact onsite:</td>' +
+            '<td style="width:17%;">' + d.contact_onsite + '</td>' +
             '<tr>' +
             '<td>Site City:</td>' +
             '<td>' + d.site_city + '</td>' +

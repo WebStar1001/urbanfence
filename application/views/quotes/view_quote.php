@@ -167,7 +167,7 @@
     function format(d) {
         /*console.log(d.JobCity);*/
         // `d` is the original data object for the row
-        return '<table cellpadding="5" cellspacing="0" border="1px" style="padding-left:50px; text-align:left;">' +
+        return '<table cellpadding="5" cellspacing="0" border="1px" style="padding-left:50px; text-align:left; width: 100%;">' +
             '</tr>' +
             '<tr>' +
             '<td>MAT Total:</td>' +
@@ -210,7 +210,7 @@
             "minYear": 2010,
             "startDate": '<?php echo date("1/1/Y");?>',
             "endDate": '<?php echo date("12/21/Y");?>',
-            "linkedCalendars" : false
+            "linkedCalendars": false
         });
         var table = $('#quoteTable').DataTable({
             "pageLength": 50,

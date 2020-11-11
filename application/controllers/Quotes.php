@@ -146,14 +146,27 @@ class Quotes extends CI_Controller
             );
         } elseif ($action == 'reject_approved_quote') {
             $quoteData['status'] = 'Pending';
-        } else{
+        } else {
             $quoteData = array(
                 'additional_info' => $this->input->post('additional_info'),
                 'ia_signed' => $this->input->post('ia_signed'),
                 'form_signed' => $this->input->post('form_signed'),
                 'credit_passed' => $this->input->post('credit_passed'),
-                'status'=>'Job'
+                'status' => 'Approved'
             );
+            $quote = $this->QuoteModel->get_quote($quote_id);
+            $quote_total = $quote->mat_net * $quote->mat_factor + $quote->labour_net * $quote->lab_factor+
+                + $quote->misc_net * $quote->misc_factor + $quote->ads_on_net * $quote->ads_on_factor;
+            $discount_amount = $quote_total * $quote->discount_set / 100;
+            $hst = $quote->hst;
+            $jobData = array(
+                'customer_id' => $customer_id,
+                'oppor_id' => $opportunity_id,
+                'quote_id' => $quote_id,
+                'job_balance' => $quote_total - $discount_amount + $hst,
+                'company_id' => $company_id
+            );
+            $this->db->insert('jobs', $jobData);
         }
         if ($quote_id) {
             $this->db->where('id', $quote_id);

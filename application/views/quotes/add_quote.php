@@ -339,6 +339,7 @@
                                                             onchange="change_mat_code(<?php echo $nextRow; ?>)">
                                                         <option></option>
                                                         <?php
+                                                        $price_per_unit = 0;
                                                         foreach ($catalogs as $cat) {
                                                             if ($cat->product_category == $mat_info[$i]->mat_category) {
                                                                 if ($cat->mat_code == $mat_info[$i]->code) {
