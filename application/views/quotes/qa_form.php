@@ -34,18 +34,18 @@
             /*border-spacing: 10px;*/
             position: relative;
             z-index: 1;
-            height: 132px;
+            height: 137px;
         }
 
         .table:before {
             content: "";
             display: block;
             position: absolute;
-            top: -5px;
+            top: -4px;
             border: solid 7px black;
             border-radius: 47px;
             width: 100%;
-            height: 128px;
+            height: 132px;
             z-index: 10;
         }
 
@@ -86,10 +86,10 @@
 <div class="table">
     <table style="margin: 10px 50px">
         <tr>
-            <td height="15px" width="100px">To :</td>
-            <td width="130px"><?php echo $customer->customer; ?></td>
-            <td width="100px">Date:</td>
-            <td width="130px"><?php echo date('Y-m-d'); ?></td>
+            <td height="15px" width="80px">To :</td>
+            <td width="135px"><?php echo $customer->customer; ?></td>
+            <td width="80px">Date:</td>
+            <td width="140px"><?php echo date('Y-m-d'); ?></td>
         </tr>
         <tr>
             <td>Address :</td>
@@ -126,13 +126,13 @@
 </div>
 <div>
     <h3>We are pleased to submit our quotation for <?php echo $quote->job_type; ?> job:</h3>
-    <table width="100%" cellpadding="0" border="1" cellspacing="0" style="border: solid 2px black;text-align: center">
+    <table width="100%" cellpadding="0" border="1" cellspacing="0" style="border: solid 2px black;text-align: center;font-size:12px;">
         <tr>
-            <td height="40px">TYPE</td>
-            <td>FABRIC</td>
-            <td>TOP RAIL</td>
-            <td>LINE POST</td>
-            <td>HEIGHT</td>
+            <td height="40px" valign="top">TYPE</td>
+            <td valign="top">FABRIC</td>
+            <td valign="top">TOP RAIL</td>
+            <td valign="top">LINE POST</td>
+            <td valign="top">HEIGHT</td>
         </tr>
     </table>
 </div>
@@ -147,14 +147,14 @@ $total = $sub_total2 + $quote->hst;
 <div style="margin-top:20px;">
     <table width="100%" id="detail_table">
         <thead>
-        <tr>
+        <tr style="font-weight:bolder;">
             <td>Notes</td>
             <td>Item</td>
             <td>Cost</td>
         </tr>
         </thead>
         <tr>
-            <td rowspan="9"><?php echo $quote->additional_info; ?></td>
+            <td rowspan="9"><?php echo nl2br($quote->additional_info); ?></td>
             <td>Materials</td>
             <td><?php echo $quote->mat_net * $quote->mat_factor; ?></td>
         </tr>
@@ -192,11 +192,11 @@ $total = $sub_total2 + $quote->hst;
             <td>HST</td>
             <td><?php echo $quote->hst; ?></td>
         </tr>
-        <tr>
+        <tr style="font-weight:bolder;">
             <td>Total</td>
             <td><?php echo $total; ?></td>
         </tr>
-        <tr>
+        <tr style="font-weight:bolder;">
             <td>G.S.T # 848724076RT0001</td>
             <td colspan="2">Payment Terms are <?php echo $quote->payment_term; ?></td>
         </tr>

@@ -167,35 +167,37 @@
     function format(d) {
         /*console.log(d.JobCity);*/
         // `d` is the original data object for the row
-        return '<table cellpadding="5" cellspacing="0" border="1px" style="padding-left:50px; text-alight:center">' +
+        return '<table cellpadding="5" cellspacing="0" border="1px" style="padding-left:50px; text-align:left;">' +
             '</tr>' +
             '<tr>' +
             '<td>MAT Total:</td>' +
-            '<td>' + Math.round(d.mat_net * d.mat_factor) + '</td>' +
-            '<td>LAB Total:</td>' +
-            '<td>' + Math.round(d.labour_net * d.lab_factor) + '</td>' +
-            '<td>MISC Total:</td>' +
-            '<td>' + Math.round(d.misc_net * d.misc_factor) + '</td>' +
-            '<td>Add-On Total:</td>' +
-            '<td>' + Math.round(d.ads_on_net * d.ads_on_factor) + '</td>' +
-            '</tr>' +
-            '<tr>' +
+            '<td width="100px">' + Math.round(d.mat_net * d.mat_factor) + '</td>' +
             '<td>Discount Amount:</td>' +
             '<td>' + (Math.round((d.ads_on_net * d.ads_on_factor + d.misc_net * d.misc_factor + d.labour_net * d.lab_factor + d.mat_net * d.mat_factor) * d.discount_set) / 100) + '</td>' +
-            '<td>HST:</td>' +
-            '<td>' + d.hst + '</td>' +
-            '<td>Contact Person:</td>' +
-            '<td>' + d.contact_person + '</td>' +
-            '<td>Site Address:</td>' +
-            '<td>' + d.site_address + '.</td>' +
+            '<td>Sales Rap:</td>' +
+            '<td width="100px">' + d.sale_rep + '</td>' +
             '</tr>' +
             '<tr>' +
-            '<td>Sales Rap:</td>' +
-            '<td>' + d.sale_rep + '</td>' +
+            '<td>LAB Total:</td>' +
+            '<td>' + Math.round(d.labour_net * d.lab_factor) + '</td>' +
+            '<td>HST:</td>' +
+            '<td>' + d.hst + '</td>' +
             '<td>Site Desc:</td>' +
             '<td>' + d.site_desc + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td>MISC Total:</td>' +
+            '<td>' + Math.round(d.misc_net * d.misc_factor) + '</td>' +
+            '<td>Contact Person:</td>' +
+            '<td>' + d.contact_person + '</td>' +
             '<td>Customer ID:</td>' +
             '<td>' + d.customer_id + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td>Add-On Total:</td>' +
+            '<td>' + Math.round(d.ads_on_net * d.ads_on_factor) + '</td>' +
+            '<td>Site Address:</td>' +
+            '<td>' + d.site_address + '.</td>' +
             '<td>Oppor. ID:</td>' +
             '<td>' + d.oppor_id + '</td>' +
             '</tr>' +

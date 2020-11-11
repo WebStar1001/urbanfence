@@ -1507,8 +1507,8 @@
                 $('#total_markup_amount').val(Math.round(total_amount * 100) / 100);
             } else {
                 total_amount = $(this).val() * 1;
-                total_percent = (total_amount / sub_total1).toFixed(4) * 100;
-                $('#total_mark_percent').val(Math.round(total_percent * 10) / 10);
+                total_percent = (total_amount / sub_total1) * 100;
+                $('#total_markup_percent').val(Math.round(total_percent * 100) / 100);
             }
             calculate_sale_table();
         });

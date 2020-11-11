@@ -18,7 +18,7 @@
 
         div.pageheader {
             text-align: center;
-            margin-top: -20px;
+            margin-top: -10px;
         }
 
         body {

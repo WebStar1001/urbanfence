@@ -162,7 +162,7 @@ class Quotes extends CI_Controller
             $this->db->insert('quotes', $quoteData);
             $quote_id = $this->db->insert_id();
         }
-        if ($action == 'save_new_quote' || $action == 'submit_new_quote' || $action == 'save_pending_quote' || $action == 'save_approved_quote') {
+        if ($action == 'save_new_quote' || $action == 'submit_new_quote' || $action == 'save_pending_quote' || $action == 'approve_pending_quote') {
             $this->db->delete('mat_details', array('quote_id' => $quote_id));
             $this->db->delete('lab_details', array('quote_id' => $quote_id));
             $this->db->delete('misc_details', array('quote_id' => $quote_id));

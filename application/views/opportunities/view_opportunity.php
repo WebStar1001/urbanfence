@@ -235,11 +235,11 @@ tr.shown td.details-control {
 
             '<tr>' +
             '<td>Contact Person:</td>' +
-            '<td>' + d.contact_person + '</td>' +
-            '<td>Site Address:</td>' +
+            '<td width="150px">' + d.contact_person + '</td>' +
+            '<td width="150px">Site Address:</td>' +
             '<td>' + d.site_address + '</td>' +
             '<td>Contact onsite:</td>' +
-            '<td>' + d.contact_onsite + '</td>' +
+            '<td width="150px">' + d.contact_onsite + '</td>' +
             '<tr>' +
             '<td>Site City:</td>' +
             '<td>' + d.site_city + '</td>' +
@@ -338,7 +338,7 @@ tr.shown td.details-control {
                     "data": null, render: function (data) {
                         if (data.status == 'Assigned') {
                             if (data.quote_id != null) {
-                                return "<a href='javascript:alert(\"Opportunity already created Quote.\")'><i class='fa fa-external-link' aria-hidden='true'></i></a>"
+                                return "<a href='javascript:alert(\"Opportunity is already linked with created quote.\")'><i class='fa fa-external-link' aria-hidden='true'></i></a>"
                             } else {
                                 return "<a href='<?php echo base_url('Quotes/add_quote?opportunity_id=');?>" + data.id + "'><i class='fa fa-external-link' aria-hidden='true'></i></a>"
                             }
