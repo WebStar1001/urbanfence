@@ -226,6 +226,7 @@ tr.shown td.details-control {
 ?>
 <script type="text/javascript">
     var sale_users = <?php echo json_encode($sales);?>;
+    var status = '<?php echo $status;?>';
 
     function format(d) {
         /*console.log(d.JobCity);*/
@@ -378,11 +379,20 @@ tr.shown td.details-control {
 
     function set_sale_rep(oppor_id) {
         var selected_sale_rep = $('#sale_rep_' + oppor_id).val();
+        var obj = event.target;
+        if (selected_sale_rep == 0) {
+            alert('Please select Sales Rep');
+            return;
+        }
         $.ajax('change_sale_rep', {
             type: 'POST',  // http method
             data: {user_id: selected_sale_rep, oppor_id: oppor_id},  // data to submit
             success: function (data, status, xhr) {
-                console.log(data);
+                if (status == 'New') {
+                    $(obj).parent().parent().remove();
+                } else {
+                    window.location.reload();
+                }
             },
             error: function (jqXhr, textStatus, errorMessage) {
                 console.log(errorMessage);

@@ -35,7 +35,7 @@
             border-spacing: 10px;
             position: relative;
             z-index: 1;
-            height: 180px;
+            height: 160px;
         }
 
         .table:before {
@@ -46,7 +46,7 @@
             border: solid 10px red;
             border-radius: 50px;
             width: 100%;
-            height: 223px;
+            height: 215px;
             z-index: 10;
         }
 
@@ -111,7 +111,7 @@
     <h3>We are pleased to submit our quotation for <?php echo $quote->job_type; ?> job:</h3>
     <table width="100%" cellpadding="0" border="1" cellspacing="0" style="border: solid 2px black;text-align: center">
         <tr>
-            <td height="50px">TYPE</td>
+            <td height="30px">TYPE</td>
             <td>FABRIC</td>
             <td>TOP RAIL</td>
             <td>LINE POST</td>
