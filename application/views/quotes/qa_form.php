@@ -28,25 +28,24 @@
 
         .table {
             width: 100%;
-            display: table;
-            border: solid 15px black;
+            border: solid 9px red;
             border-radius: 50px;
             border-collapse: separate;
-            border-spacing: 10px;
+            /*border-spacing: 10px;*/
             position: relative;
             z-index: 1;
-            height: 160px;
+            height: 132px;
         }
 
         .table:before {
             content: "";
             display: block;
             position: absolute;
-            top: 136px;
-            border: solid 10px red;
-            border-radius: 50px;
+            top: -5px;
+            border: solid 7px black;
+            border-radius: 47px;
             width: 100%;
-            height: 215px;
+            height: 128px;
             z-index: 10;
         }
 
@@ -62,7 +61,7 @@
 
         #detail_table td {
             border: solid 1px #ED7D31;
-            height: 25px;
+            height: 27px;
             font-size: 14px;
         }
     </style>
@@ -85,33 +84,51 @@
 </div>
 
 <div class="table">
-    <div style="display: table-row;">
-        <div style="display: table-cell;"></div>
-        <div style="border: dashed 1px black;display: table-cell;padding:5px 20px;width: 45%;border-radius: 20px;">
-            <p>To : <?php echo $customer->customer; ?></p>
-            <p>Address : <?php echo $customer->address; ?></p>
-            <p>City : <?php echo $customer->city; ?></p>
-            <p>Privince : ON</p>
-            <p>Postal Code : <?php echo $customer->postal_code; ?></p>
-            <p>Contact Person : <?php echo $customer->contact_person; ?></p>
-        </div>
-        <div style="display: table-cell;"></div>
-        <div style="border: dashed 1px black;display: table-cell;padding:5px 20px;width: 45%;border-radius: 20px;">
-            <p>Date : <?php echo date('Y-m-d'); ?></p>
-            <p>Site Address : <?php echo $quote->site_address; ?></p>
-            <p>Site City : <?php echo $quote->site_city; ?></p>
-            <p>Site Postal Code : <?php echo $quote->site_postal_code; ?></p>
-            <p>Phone : <?php echo $customer->phone1; ?></p>
-            <p>Email : <?php echo $customer->email; ?></p>
-        </div>
-        <div style="display: table-cell;"></div>
-    </div>
+    <table style="margin: 10px 50px">
+        <tr>
+            <td height="15px" width="100px">To :</td>
+            <td width="130px"><?php echo $customer->customer; ?></td>
+            <td width="100px">Date:</td>
+            <td width="130px"><?php echo date('Y-m-d'); ?></td>
+        </tr>
+        <tr>
+            <td>Address :</td>
+            <td><?php echo $customer->address; ?></td>
+            <td>Site Address :</td>
+            <td><?php echo $quote->site_address; ?></td>
+        </tr>
+        <tr>
+            <td>City :</td>
+            <td><?php echo $customer->city; ?></td>
+            <td>Site City :</td>
+            <td><?php echo $quote->site_city; ?></td>
+        </tr>
+        <tr>
+            <td>Privince : </td>
+            <td>ON</td>
+            <td>Site Postal Code :</td>
+            <td><?php echo $quote->site_postal_code; ?></td>
+        </tr>
+        <tr>
+            <td>Postal Code : </td>
+            <td><?php echo $customer->postal_code; ?></td>
+            <td>Phone : </td>
+            <td><?php echo $customer->phone1; ?></td>
+        </tr>
+        <tr>
+            <td>Contact Person : </td>
+            <td><?php echo $customer->contact_person; ?></td>
+            <td>Email : </td>
+            <td><?php echo $customer->email; ?></td>
+        </tr>
+    </table>
+
 </div>
 <div>
     <h3>We are pleased to submit our quotation for <?php echo $quote->job_type; ?> job:</h3>
     <table width="100%" cellpadding="0" border="1" cellspacing="0" style="border: solid 2px black;text-align: center">
         <tr>
-            <td height="30px">TYPE</td>
+            <td height="40px">TYPE</td>
             <td>FABRIC</td>
             <td>TOP RAIL</td>
             <td>LINE POST</td>
@@ -127,7 +144,7 @@ $discount_amount = $sub_total1 * $quote->discount_set / 100;
 $sub_total2 = $sub_total1 - $discount_amount;
 $total = $sub_total2 + $quote->hst;
 ?>
-<div style="margin-top:10px;">
+<div style="margin-top:20px;">
     <table width="100%" id="detail_table">
         <thead>
         <tr>
@@ -185,20 +202,20 @@ $total = $sub_total2 + $quote->hst;
         </tr>
     </table>
 </div>
-<div>
-    <p>Unless otherwise stated, all quotations are subject to change without notice. Orders are subject to our
+<div style="margin-top:5px;">
+    <p style="font-size:13px;">Unless otherwise stated, all quotations are subject to change without notice. Orders are subject to our
         conditions of sale and are accepted at the seller’s price but shall not be binding upon us until accepted by our
         office.
         Title to property in and ownership of the said goods listed above shall remain
         with <?php echo $quote->company_name ?> at the purchaser risk until all amount due are fully paid.</p>
-    <ul>
+    <ul style="font-size:15px;">
         <li>This quotation expires 30 days from this date - <?php echo date('Y-m-d'); ?> </li>
         <li>No verbal agreement is accepted.</li>
         <li>Order will be scheduled when this signed authorization is received by our office.</li>
     </ul>
 </div>
 <div>
-    <p>Authorization for Above Work - _____________________</p>
+    <h3>Authorization for Above Work - _____________________</h3>
 </div>
 </body>
 </html>

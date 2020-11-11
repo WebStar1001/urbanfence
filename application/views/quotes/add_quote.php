@@ -296,7 +296,7 @@
                                 <td colspan="5"></td>
                                 <td class="table-report__action w-56">
                                     <div class="flex justify-center items-center">
-                                        <a class="flex items-center mr-3" onclick="add_material_item()"
+                                        <a class="flex items-center mr-3 add_detail_row" onclick="add_material_item()"
                                            href="javascript:;">+</a>
 
                                     </div>
@@ -371,7 +371,7 @@
                                             <td class="table-report__action w-56">
                                                 <div class="flex justify-center items-center">
                                                     <a style="background-color:unset;border:unset"
-                                                       class="flex items-center mr-3"
+                                                       class="flex items-center mr-3 delete_detail_row"
                                                        onclick="delete_material_item(<?php echo $nextRow; ?>)"
                                                        href="javascript:;"><i style="font-size: 20px;
     color: red;" class="fa fa-trash" aria-hidden="true"></i></a>
@@ -428,7 +428,7 @@
                             <tr id="labour-item-row0" row="0" class="intro-x labour-item">
                                 <td colspan="3"></td>
                                 <td class="table-report__action w-56">
-                                    <div class="flex justify-center items-center">
+                                    <div class="flex justify-center items-center add_detail_row">
                                         <a class="flex items-center mr-3" onclick="add_labour_item()"
                                            href="javascript:;">+</a>
                                     </div>
@@ -501,7 +501,7 @@
                                                 <div class="flex justify-center items-center">
 
                                                     <a style="background-color:unset;border:unset"
-                                                       class="flex items-center mr-3"
+                                                       class="flex items-center mr-3 delete_detail_row"
                                                        onclick="delete_labour_item(<?php echo $nextRow; ?>)"
                                                        href="javascript:;"><i style="font-size: 20px;
     color: red;" class="fa fa-trash" aria-hidden="true"></i></a>
@@ -562,7 +562,7 @@
                                 <td colspan="5"></td>
 
                                 <td class="table-report__action w-56">
-                                    <div class="flex justify-center items-center">
+                                    <div class="flex justify-center items-center add_detail_row">
                                         <a class="flex items-center mr-3" onclick="add_miscellaneous_item()"
                                            href="javascript:;">+</a>
                                     </div>
@@ -601,7 +601,7 @@
                                             <td class="table-report__action">
                                                 <div class="flex justify-center items-center">
                                                     <a style="background-color:unset;border:unset"
-                                                       class="flex items-center mr-3"
+                                                       class="flex items-center mr-3 delete_detail_row"
                                                        onclick="delete_miscellaneous_item(<?php echo $nextRow; ?>)"
                                                        href="javascript:;"><i style="font-size: 20px;
     color: red;" class="fa fa-trash" aria-hidden="true"></i></a>
@@ -657,7 +657,7 @@
                                 <td colspan="4"></td>
                                 <td class="table-report__action w-56">
                                     <div class="flex justify-center items-center">
-                                        <a class="flex items-center mr-3" onclick="add_adsOn_item()"
+                                        <a class="flex items-center mr-3 add_detail_row" onclick="add_adsOn_item()"
                                            href="javascript:;">+</a>
                                     </div>
                                 </td>
@@ -692,7 +692,7 @@
                                             <td class="table-report__action w-56">
                                                 <div class="flex justify-center items-center">
                                                     <a style="background-color:unset;border:unset"
-                                                       class="flex items-center mr-3"
+                                                       class="flex items-center mr-3 delete_detail_row"
                                                        onclick="delete_adsOn_item(<?php echo $nextRow; ?>)"
                                                        href="javascript:;"><i
                                                                 style="font-size: 20px;
@@ -1333,16 +1333,20 @@
             } else if (status == 'Job') {
                 $('body').find('input').attr('readonly', true);
                 $('body').find('input:checkbox').attr('disabled', true);
-                $('body').find('select').attr('readonly', true);
+                $('body').find('select').attr('disabled', true);
                 $('body').find('textarea').attr('readonly', true);
+                $('.delete_detail_row').hide();
+                $('.add_detail_row').hide();
             } else if (status == 'Approved') {
                 $('body').find('input').attr('readonly', true);
-                $('body').find('select').attr('readonly', true);
+                $('body').find('select').attr('disabled', true);
+                $('.delete_detail_row').hide();
+                $('.add_detail_row').hide();
             }
         });
         $('#quoteForm').keypress(function (e) {
             var key = e.charCode || e.keyCode || 0;
-            if (key == 13) {
+            if (key == 13 && !$(document.activeElement).is('textarea')) {
                 e.preventDefault();
             }
         });
