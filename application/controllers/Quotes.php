@@ -81,8 +81,7 @@ class Quotes extends CI_Controller
         $addon_unit_price = $this->input->post('addon_unit_price');
         $addon_quantity = $this->input->post('addon_quantity');
         $action = $this->input->post('action');
-        $quoteData = array();
-        if ($action == 'submit_new_quote' || $action == 'save_new_quote' || $action == 'save_approved_quote') {
+        if ($action == 'save_new_quote') {
             $quoteData = array(
                 'company_id' => $company_id,
                 'customer_id' => $customer_id,
@@ -90,14 +89,15 @@ class Quotes extends CI_Controller
                 'payment_term' => $payment_term,
                 'calc_mode' => $calc_mode,
             );
-            if ($action == 'submit_new_quote') {
-                $quoteData['status'] = 'Pending';
-            } elseif ($action == 'save_approved_quote') {
-                $quoteData['additional_info'] = $this->input->post('additional_info');
-                $quoteData['ia_signed'] = $this->input->post('ia_signed');
-                $quoteData['form_signed'] = $this->input->post('form_signed');
-                $quoteData['credit_passed'] = $this->input->post('credit_passed');
-            }
+        } elseif ($action == 'submit_new_quote') {
+            $quoteData = array(
+                'company_id' => $company_id,
+                'customer_id' => $customer_id,
+                'oppor_id' => $opportunity_id,
+                'payment_term' => $payment_term,
+                'calc_mode' => $calc_mode,
+                'status' => 'Pending'
+            );
         } elseif ($action == 'save_pending_quote') {
             $quoteData = array(
                 'company_id' => $company_id,
@@ -116,14 +116,44 @@ class Quotes extends CI_Controller
                 'discount_set' => $this->input->post('discount_percent'),
                 'hst' => $this->input->post('hst')
             );
-        } elseif ($action == 'create_job') {
-            $quoteData['status'] = 'Job';
+        } elseif ($action == 'approve_pending_quote') {
+            $quoteData = array(
+                'company_id' => $company_id,
+                'customer_id' => $customer_id,
+                'oppor_id' => $opportunity_id,
+                'payment_term' => $payment_term,
+                'calc_mode' => $calc_mode,
+                'status' => 'Approved',
+                'mat_net' => $this->input->post('mat_net'),
+                'labour_net' => $this->input->post('labour_net'),
+                'misc_net' => $this->input->post('misc_net'),
+                'ads_on_net' => $this->input->post('add_on_net'),
+                'mat_factor' => $this->input->post('mat_factor'),
+                'lab_factor' => $this->input->post('lab_factor'),
+                'misc_factor' => $this->input->post('misc_factor'),
+                'ads_on_factor' => $this->input->post('ads_on_factor'),
+                'discount_set' => $this->input->post('discount_percent'),
+                'hst' => $this->input->post('hst')
+            );
         } elseif ($action == 'reject_pending_quote') {
             $quoteData['status'] = 'New';
+        } elseif ($action == 'save_approved_quote') {
+            $quoteData = array(
+                'additional_info' => $this->input->post('additional_info'),
+                'ia_signed' => $this->input->post('ia_signed'),
+                'form_signed' => $this->input->post('form_signed'),
+                'credit_passed' => $this->input->post('credit_passed')
+            );
         } elseif ($action == 'reject_approved_quote') {
             $quoteData['status'] = 'Pending';
-        } elseif ($action == 'approve_pending_quote') {
-            $quoteData['status'] = 'Approved';
+        } else{
+            $quoteData = array(
+                'additional_info' => $this->input->post('additional_info'),
+                'ia_signed' => $this->input->post('ia_signed'),
+                'form_signed' => $this->input->post('form_signed'),
+                'credit_passed' => $this->input->post('credit_passed'),
+                'status'=>'Job'
+            );
         }
         if ($quote_id) {
             $this->db->where('id', $quote_id);
