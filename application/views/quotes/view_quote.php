@@ -148,12 +148,12 @@
             <tr>
                 <th>Additional Info</th>
                 <th>ID</th>
-                <th>Date</th>
-                <th>Sale Rep</th>
-                <th>Customer</th>
                 <th>Status</th>
+                <th>Customer</th>
                 <th>Job Type</th>
                 <th>Site City</th>
+                <th>Sale Rep</th>
+                <th>Date</th>
                 <th>Quote Total</th>
                 <th>Edit</th>
             </tr>
@@ -170,35 +170,35 @@
         return '<table cellpadding="5" cellspacing="0" border="1px" style="padding-left:50px; text-align:left; width: 100%;">' +
             '</tr>' +
             '<tr>' +
-            '<td>MAT Total:</td>' +
-            '<td width="100px">' + Math.round(d.mat_net * d.mat_factor) + '</td>' +
-            '<td>Discount Amount:</td>' +
-            '<td>' + (Math.round((d.ads_on_net * d.ads_on_factor + d.misc_net * d.misc_factor + d.labour_net * d.lab_factor + d.mat_net * d.mat_factor) * d.discount_set) / 100) + '</td>' +
-            '<td>Sales Rap:</td>' +
-            '<td width="100px">' + d.sale_rep + '</td>' +
+            '<td style="width:12%;font-weight: bold">MAT Total:</td>' +
+            '<td style="width:13%;">' + Math.round(d.mat_net * d.mat_factor) + '</td>' +
+            '<td style="font-weight: bold;width:14%;">Discount Amount:</td>' +
+            '<td style="width:35%;">' + (Math.round((d.ads_on_net * d.ads_on_factor + d.misc_net * d.misc_factor + d.labour_net * d.lab_factor + d.mat_net * d.mat_factor) * d.discount_set) / 100) + '</td>' +
+            '<td style="font-weight: bold;width:12%;">Sales Rap:</td>' +
+            '<td style="width:15%;">' + d.sale_rep + '</td>' +
             '</tr>' +
             '<tr>' +
-            '<td>LAB Total:</td>' +
+            '<td style="font-weight: bold">LAB Total:</td>' +
             '<td>' + Math.round(d.labour_net * d.lab_factor) + '</td>' +
-            '<td>HST:</td>' +
+            '<td style="font-weight: bold">HST:</td>' +
             '<td>' + d.hst + '</td>' +
-            '<td>Site Desc:</td>' +
+            '<td style="font-weight: bold">Site Desc:</td>' +
             '<td>' + d.site_desc + '</td>' +
             '</tr>' +
             '<tr>' +
-            '<td>MISC Total:</td>' +
+            '<td style="font-weight: bold">MISC Total:</td>' +
             '<td>' + Math.round(d.misc_net * d.misc_factor) + '</td>' +
-            '<td>Contact Person:</td>' +
+            '<td style="font-weight: bold">Contact Person:</td>' +
             '<td>' + d.contact_person + '</td>' +
-            '<td>Customer ID:</td>' +
+            '<td style="font-weight: bold">Customer ID:</td>' +
             '<td>' + d.customer_id + '</td>' +
             '</tr>' +
             '<tr>' +
-            '<td>Add-On Total:</td>' +
+            '<td style="font-weight: bold">Add-On Total:</td>' +
             '<td>' + Math.round(d.ads_on_net * d.ads_on_factor) + '</td>' +
-            '<td>Site Address:</td>' +
+            '<td style="font-weight: bold">Site Address:</td>' +
             '<td>' + d.site_address + '.</td>' +
-            '<td>Oppor. ID:</td>' +
+            '<td style="font-weight: bold">Oppor. ID:</td>' +
             '<td>' + d.oppor_id + '</td>' +
             '</tr>' +
             '</table>';
@@ -239,15 +239,14 @@
                     "defaultContent": ''
                 },
                 {"data": "id"},
-                {"data": "quote_date"},
-                {"data": "sale_rep"},
-                {"data": "customer"},
                 {"data": "status"},
+                {"data": "customer"},
                 {"data": "job_type"},
                 {"data": "site_city"},
+                {"data": "sale_rep"},
+                {"data": "quote_date"},
                 {
                     "data": null, render: function (data) {
-                        console.log(data);
                         var quote_total = data.ads_on_net * data.ads_on_factor + data.misc_net * data.misc_factor +
                             data.labour_net * data.lab_factor + data.mat_net * data.mat_factor;
                         var discount_amount = quote_total * data.discount_set / 100;
@@ -287,6 +286,8 @@
         $('#clearFilter').click(function () {
             $('#filterForm').trigger('reset');
             table.ajax.reload(null, false);
-        })
+        });
+        table.tables().header().to$().find('th:eq(0)').css('max-width', '50px');
+        $(window).trigger('resize');
     });
 </script>

@@ -84,41 +84,41 @@
 </div>
 
 <div class="table">
-    <table style="margin: 10px 50px">
+    <table style="margin-top: 10px;margin-left:40px;width: 100%">
         <tr>
-            <td height="15px" width="85px">To :</td>
-            <td width="135px"><?php echo $customer->customer; ?></td>
-            <td width="80px">Date:</td>
-            <td width="140px"><?php echo date('Y-m-d'); ?></td>
+            <td height="15px" style="width: 20%;">To :</td>
+            <td width="135px" style="width: 25%;font-weight: bold;"><?php echo $customer->customer; ?></td>
+            <td width="80px" style="width: 20%;font-weight: bold;">Date:</td>
+            <td width="140px" style="width: 33%;"><?php echo date('Y-m-d'); ?></td>
         </tr>
         <tr>
-            <td>Address :</td>
+            <td style="font-weight: bold;">Address :</td>
             <td><?php echo $customer->address; ?></td>
-            <td>Site Address :</td>
+            <td style="font-weight: bold;">Site Address :</td>
             <td><?php echo $quote->site_address; ?></td>
         </tr>
         <tr>
-            <td>City :</td>
+            <td style="font-weight: bold;">City :</td>
             <td><?php echo $customer->city; ?></td>
-            <td>Site City :</td>
+            <td style="font-weight: bold;">Site City :</td>
             <td><?php echo $quote->site_city; ?></td>
         </tr>
         <tr>
-            <td>Privince : </td>
+            <td style="font-weight: bold;">Privince :</td>
             <td>ON</td>
-            <td>Site Postal Code :</td>
+            <td style="font-weight: bold;">Site Postal Code :</td>
             <td><?php echo $quote->site_postal_code; ?></td>
         </tr>
         <tr>
-            <td>Postal Code : </td>
+            <td style="font-weight: bold;">Postal Code :</td>
             <td><?php echo $customer->postal_code; ?></td>
-            <td>Phone : </td>
+            <td style="font-weight: bold;">Phone :</td>
             <td><?php echo $customer->phone1; ?></td>
         </tr>
         <tr>
-            <td>Contact Person : </td>
+            <td style="font-weight: bold;">Contact Person :</td>
             <td><?php echo $customer->contact_person; ?></td>
-            <td>Email : </td>
+            <td style="font-weight: bold;">Email :</td>
             <td><?php echo $customer->email; ?></td>
         </tr>
     </table>
@@ -126,7 +126,8 @@
 </div>
 <div>
     <h3>We are pleased to submit our quotation for <?php echo $quote->job_type; ?> job:</h3>
-    <table width="100%" cellpadding="0" border="1" cellspacing="0" style="border: solid 2px black;text-align: center;font-size:12px;">
+    <table width="100%" cellpadding="0" border="1" cellspacing="0"
+           style="border: solid 2px black;text-align: center;font-size:12px;">
         <tr>
             <td height="40px" valign="top">TYPE</td>
             <td valign="top">FABRIC</td>
@@ -203,7 +204,8 @@ $total = $sub_total2 + $quote->hst;
     </table>
 </div>
 <div style="margin-top:5px;">
-    <p style="font-size:13px;">Unless otherwise stated, all quotations are subject to change without notice. Orders are subject to our
+    <p style="font-size:13px;">Unless otherwise stated, all quotations are subject to change without notice. Orders are
+        subject to our
         conditions of sale and are accepted at the seller’s price but shall not be binding upon us until accepted by our
         office.
         Title to property in and ownership of the said goods listed above shall remain

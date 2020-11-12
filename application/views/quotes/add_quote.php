@@ -1972,7 +1972,7 @@
 
             $("#adsOn-item-row" + rowId).remove();
             if (status == 'Pending') {
-                $('#final_quote_table').find('tr').eq(4).children().eq(1).find('a').html(total_price - original_price);
+                $('#final_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price);
                 calculate_sale_table();
             }
         }

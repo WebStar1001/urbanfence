@@ -54,7 +54,8 @@
             </div>
             <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
                 <div class=""><label>Customer ID</label>
-                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full" id="customer_id">
+                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full"
+                                             id="customer_id">
                     </div>
                 </div>
             </div>
@@ -71,13 +72,15 @@
             </div>
             <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
                 <div class=""><label>Contact Person</label>
-                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full" id="contact_person">
+                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full"
+                                             id="contact_person">
                     </div>
                 </div>
             </div>
             <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
                 <div class=""><label>City</label>
-                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full" id="city">
+                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full"
+                                             id="city">
                     </div>
                 </div>
             </div>
@@ -127,7 +130,8 @@
             <div class="col-span-12 sm:col-span-6 md:col-span-4 flex items-end">
                 <div>
                     <button class="button w-24 mr-1  bg-theme-1 text-white" id="clearFilter">Clear filter</button>
-                    <button class="button w-24 mr-1  bg-theme-6 text-white width_filter" id="applyFilter">filter</button>
+                    <button class="button w-24 mr-1  bg-theme-6 text-white width_filter" id="applyFilter">filter
+                    </button>
                 </div>
             </div>
         </div>
@@ -164,37 +168,27 @@
     function format(d) {
         /*console.log(d.JobCity);*/
         // `d` is the original data object for the row
-        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-alight:center">' +
+        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-align:left;width: 100%;">' +
             '<tr>' +
-            '<td>Recent Job Type</td>' +
-            '<td>' + d.recent_job_type + '</td>' +
+            '<td style="width:14%;font-weight: bold;">Address:</td>' +
+            '<td style="width:25%;">' + d.address + '</td>' +
+            '<td style="width:8%;font-weight: bold;">Phone2:</td>' +
+            '<td style="width:20%;">' + d.phone2 + '</td>' +
+            '<td style="width:13%;font-weight: bold;">Last Oppor.ID:</td>' +
+            '<td style="width:18%;">' + d.last_oppor_id + '</td>' +
             '</tr>' +
             '<tr>' +
-            '<td>Phone2:</td>' +
-            '<td>' + d.phone2 + '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td>Address:</td>' +
-            '<td>' + d.address + '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td>Postal Code:</td>' +
+            '<td style="font-weight: bold;">Postal Code:</td>' +
             '<td>' + d.postal_code + '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td>Fax:</td>' +
+            '<td style="font-weight: bold;">Fax:</td>' +
             '<td>' + d.fax + '</td>' +
-            '</tr>' +
-
-            '<tr>' +
-            '<td>Last Oppor.ID:</td>' +
-            '<td>' + d.last_oppor_id + '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td>Last Quote ID:</td>' +
+            '<td style="font-weight: bold;">Last Quote ID:</td>' +
             '<td>' + d.last_quote_id + '</td>' +
             '</tr>' +
             '<tr>' +
+            '<td style="font-weight: bold;">Recent Job Type:</td>' +
+            '<td>' + d.recent_job_type + '</td>' +
+            '</tr>' +
             '</table>';
     }
 
@@ -234,19 +228,16 @@
                 {"data": "phone1"},
                 {"data": "email"},
                 {"data": "city"},
-                // {"data": "recent_sale_rep"},
-
-                // { "data": "recent_job_type" },
 
                 {
                     "data": null, render: function (data) {
-                        return "<a href='<?php echo base_url('Opportunity/add_customer?customer_id=');?>"+ data.id +"'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
+                        return "<a href='<?php echo base_url('Opportunity/add_customer?customer_id=');?>" + data.id + "'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
                     }
                 },
 
                 {
                     "data": null, render: function (data) {
-                        return "<a href='<?php echo base_url('Opportunity/add_opportunity?customer_id=');?>"+ data.id +"'><i class='fa fa-external-link' aria-hidden='true'></i></a>"
+                        return "<a href='<?php echo base_url('Opportunity/add_opportunity?customer_id=');?>" + data.id + "'><i class='fa fa-external-link' aria-hidden='true'></i></a>"
                     }
                 }
             ],

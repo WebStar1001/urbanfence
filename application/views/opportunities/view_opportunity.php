@@ -231,33 +231,33 @@ tr.shown td.details-control {
     function format(d) {
         /*console.log(d.JobCity);*/
         // `d` is the original data object for the row
-        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;text-align: left;width: 100%;">' +
+        return '<table cellpadding="0" cellspacing="0" border="0" style="padding-left:50px;text-align: left;width: 100%;">' +
 
             '<tr>' +
-            '<td style="width:15%;">Contact Person:</td>' +
-            '<td style="width:20%;">' + d.contact_person + '</td>' +
-            '<td  style="width:15%;">Site Address:</td>' +
-            '<td style="width:20%;">' + d.site_address + '</td>' +
-            '<td style="width:13%;">Contact onsite:</td>' +
-            '<td style="width:17%;">' + d.contact_onsite + '</td>' +
+            '<td style="width:13%;font-weight: bold">Contact Person:</td>' +
+            '<td style="width:23%;">' + d.contact_person + '</td>' +
+            '<td  style="width:14%;font-weight: bold">Site Address:</td>' +
+            '<td style="width:23%;">' + d.site_address + '</td>' +
+            '<td style="width:13%;font-weight: bold">Contact onsite:</td>' +
+            '<td style="width:20%;">' + d.contact_onsite + '</td>' +
             '<tr>' +
-            '<td>Site City:</td>' +
+            '<td style="font-weight: bold">Site City:</td>' +
             '<td>' + d.site_city + '</td>' +
-            '<td>Site Postal Code:</td>' +
+            '<td style="font-weight: bold">Site Postal Code:</td>' +
             '<td>' + d.site_postal_code + '</td>' +
-            '<td>Time:</td>' +
+            '<td style="font-weight: bold">Time:</td>' +
             '<td>' + d.time + '..</td>' +
             '</tr>' +
             '<tr>' +
-            '<td>Urgency:</td>' +
+            '<td style="font-weight: bold">Urgency:</td>' +
             '<td>' + d.urgency + '</td>' +
-            '<td>Site Desc:</td>' +
+            '<td style="font-weight: bold">Site Desc:</td>' +
             '<td>' + d.site_desc + '.</td>' +
-            '<td>Customer ID:</td>' +
+            '<td style="font-weight: bold">Customer ID:</td>' +
             '<td>' + d.customer_id + '</td>' +
             '</tr>' +
             '<tr>' +
-            '<td>Details:</td>' +
+            '<td style="font-weight: bold">Details:</td>' +
             '<td>' + d.details + '</td>' +
             '</tr>' +
             '</table>';
@@ -296,7 +296,7 @@ tr.shown td.details-control {
                     "className": 'details-control',
                     "orderable": false,
                     "data": null,
-                    "defaultContent": '', "width": "5%"
+                    "defaultContent": '', "width": "50px"
                 },
                 {"data": "id"},
                 {"data": "sale_source", "width": "5%"},
@@ -375,7 +375,8 @@ tr.shown td.details-control {
         $('#clearFilter').click(function () {
             $('#filterForm').trigger('reset');
             table.ajax.reload(null, false);
-        })
+        });
+
     });
 
     function set_sale_rep(oppor_id) {

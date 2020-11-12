@@ -64,7 +64,7 @@
                     <a href="<?php echo base_url("Customer/customers_list"); ?>"
                        class="side-menu <?= ($this->uri->segment(2) == 'customers_list') ? 'side-menu--active' : '' ?>">
                         <div class="side-menu__icon"><i class="fa fa-users" aria-hidden="true"></i></div>
-                        <div class="side-menu__title"> View Customer</div>
+                        <div class="side-menu__title"> View Customers</div>
                     </a>
                 </li>
             </ul>
