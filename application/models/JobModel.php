@@ -12,6 +12,13 @@ class JobModel extends CI_Model
         parent::__construct();
 
     }
+
+    public function getJobByJobID($job_id)
+    {
+        $query = $this->db->get_where('jobs', array('id' => $job_id));
+        return $query->row();
+    }
+
     public function getJobs()
     {
         $job_id = $this->input->get('job_id');
@@ -30,19 +37,19 @@ class JobModel extends CI_Model
         opportunities.job_type AS job_type,opportunities.site_address AS site_address,opportunities.contact_onsite AS contact_onsite,
         opportunities.site_city AS site_city, opportunities.site_desc AS site_desc');
         $this->db->from('jobs');
-        if($job_id){
+        if ($job_id) {
             $this->db->where('jobs.id', $job_id);
         }
         if ($status) {
             $this->db->where('jobs.status', $status);
         }
-        if($quote_id){
+        if ($quote_id) {
             $this->db->where('jobs.quote_id', $quote_id);
         }
-        if($installer){
+        if ($installer) {
             $this->db->where('jobs.installer', $installer);
         }
-        if($job_balance){
+        if ($job_balance) {
             $this->db->where('job_balance', $job_balance);
         }
         if ($customer) {

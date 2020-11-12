@@ -152,7 +152,7 @@ class Quotes extends CI_Controller
                 'ia_signed' => $this->input->post('ia_signed'),
                 'form_signed' => $this->input->post('form_signed'),
                 'credit_passed' => $this->input->post('credit_passed'),
-                'status' => 'Approved'
+                'status' => 'Job'
             );
             $quote = $this->QuoteModel->get_quote($quote_id);
             $quote_total = $quote->mat_net * $quote->mat_factor + $quote->labour_net * $quote->lab_factor+

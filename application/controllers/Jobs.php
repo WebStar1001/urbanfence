@@ -10,6 +10,9 @@ class Jobs extends CI_Controller
 
         $this->load->model('UserModel');
         $this->load->model('JobModel');
+        $this->load->model('OpportunityModel');
+        $this->load->model('CustomerModel');
+        $this->load->model('QuoteModel');
 //        $this->load->library('auth');
 //        $this->load->library('session');
 //        $this->auth->check_admin_auth();
@@ -27,11 +30,22 @@ class Jobs extends CI_Controller
     public function job_detail()
     {
         $job_id = '';
+        $customer = '';
+        $opportunity = '';
+        $job = '';
+        $quote = '';
+        $mat_info = '';
         if (isset($_GET['job_id'])) {
             $job_id = $_GET['job_id'];
+            $job = $this->JobModel->getJobByJobID($job_id);
+            $opportunity = $this->OpportunityModel->get_opportunity($job->oppor_id);
+            $customer = $this->CustomerModel->get_customer($job->customer_id);
+            $quote = $this->QuoteModel->get_quote($job->quote_id);
+            $mat_info = $this->QuoteModel->get_matinfo($job->quote_id);
         }
+        $data = array('job' => $job, 'oppor' => $opportunity, 'customer' => $customer, 'quote' => $quote, 'mat_info' => $mat_info);
         $this->load->view('inc/header');
-        $this->load->view('jobs/job_detail', array('job_id' => $job_id));
+        $this->load->view('jobs/job_detail', $data);
         $this->load->view('inc/footer');
     }
 
@@ -42,6 +56,15 @@ class Jobs extends CI_Controller
         echo json_encode($data);
     }
 
+    function search_job()
+    {
+        $job_id = $this->input->get('job_id');
+        $job = $this->JobModel->getJobByJobID($job_id);
+        $opportunity = $this->OpportunityModel->get_opportunity($job->oppor_id);
+        $customer = $this->CustomerModel->get_customer($job->customer_id);
+        $retAry = array('job' => $job, 'oppor' => $opportunity, 'customer' => $customer);
+        echo json_encode($retAry);
+    }
 
     public function credits_debits_tracking()
     {

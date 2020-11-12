@@ -72,8 +72,12 @@ class QuoteModel extends CI_Model
         $query = $this->db->get_where('quotes', array('id' => $quote_id));
         return $query->row();
     }
+
     public function get_matinfo($quote_id){
-        $query = $this->db->get_where('mat_details', array('quote_id' => $quote_id));
+        $this->db->select('*, product_catalogs.mat_description AS mat_description');
+        $this->db->from('mat_details');
+        $this->db->join('product_catalogs', 'mat_details.code=product_catalogs.mat_code', 'left');
+        $query = $this->db()->get();
         return $query->result();
     }
 

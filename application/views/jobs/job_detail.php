@@ -1,6 +1,6 @@
 <style type="text/css">
 
-    div#examples_wrapper {
+    div#jobDetailTable_wrapper {
         overflow: auto;
     }
 
@@ -70,14 +70,14 @@
     </div>
     <!-- BEGIN: Filters -->
     <fieldset class="p-2 mb-3 w-full fieldset_bd_color">
-        <legend class="legend_spacing">Job #01</legend>
+        <legend class="legend_spacing">Job #<?php echo ($job) ? $job->id : ''; ?></legend>
         <div class="intro-y grid grid-cols-12 p-5 gap-2 ">
             <!-- <h2 class="col-span-12 font-medium text-base  border-b border-gray-200">Filters</h2> -->
             <div class="col-span-12 m-auto">
                 <div class="w-full">
                     <input type="text" placeholder="Search Job" class="input pl-12 border"
-                           id="job_id">
-                    <button class="button w-24 mr-1  bg-theme-1 text-white" id="clearFilter">Search</button>
+                           id="search_job" value="<?php echo ($job) ? $job->id : ''; ?>">
+                    <button class="button w-24 mr-1  bg-theme-1 text-white" id="searchBtn">Search</button>
                     </button>
                 </div>
             </div>
@@ -85,19 +85,22 @@
                  style="position: relative;right: 12px;background-color:#1C3FAA !important;">
                 <div class="w-full md:w-4/5 lg:w-1/2 border_color p-1 fieldset_bd_color mr-1 sm:mr-2 md:mr-5 mb-2 sm:mb-0"
                      style="background-color: white">
-                    <p><b class="info_spacing">Customer Name:</b> BSD IT Services</p>
-                    <p><b class="info_spacing">Contact Person:</b> Aviad Krief</p>
-                    <p><b class="info_spacing">Phone:</b> 647-389-1300</p>
-                    <p><b class="info_spacing">Email:</b> ak@bsditservices.com</p>
+                    <p><b class="info_spacing">Customer Name:</b> <?php echo ($customer) ? $customer->customer : ''; ?>
+                    </p>
+                    <p><b class="info_spacing">Contact
+                            Person:</b> <?php echo ($customer) ? $customer->contact_person : ''; ?></p>
+                    <p><b class="info_spacing">Phone:</b> <?php echo ($customer) ? $customer->phone1 : ''; ?></p>
+                    <p><b class="info_spacing">Email:</b> <?php echo ($customer) ? $customer->email : ''; ?></p>
                 </div>
 
 
                 <div class="w-full md:w-4/5 lg:w-1/2 border_color p-1 fieldset_bd_color"
                      style="background-color: white">
-                    <p><b class="info_spacing">Job Type:</b> New Fence</p>
-                    <p><b class="info_spacing">Job Address:</b> 207 Edgeley Blvd</p>
-                    <p><b class="info_spacing">Job City:</b> Concord</p>
-                    <p><b class="info_spacing">Payment Terms are:</b> Net 30 Days</p>
+                    <p><b class="info_spacing">Job Type:</b> <?php echo ($oppor) ? $oppor->job_type : ''; ?></p>
+                    <p><b class="info_spacing">Site Address:</b><?php echo ($oppor) ? $oppor->site_address : ''; ?></p>
+                    <p><b class="info_spacing">Site City:</b> <?php echo ($oppor) ? $oppor->site_city : ''; ?></p>
+                    <p><b class="info_spacing">Payment Terms
+                            are:</b> <?php echo ($quote) ? $quote->payment_term : ''; ?></p>
                 </div>
             </div>
         </div>
@@ -328,7 +331,7 @@
             </div>
             <!-- BEGIN: Datatable -->
             <div class="intro-y box p-5 mt-5" id="table_main_div">
-                <table id="examples" class="display" style="width:100%;text-align: center; margin-bottom: 5px;">
+                <table id="jobDetailTable" class="display" style="width:100%;text-align: center; margin-bottom: 5px;">
                     <thead>
                     <tr>
                         <th></th>
@@ -373,15 +376,22 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td class="border-b">Fabric</td>
-                    <td class="border-b">2" x 9g x 36" Galvanized</td>
-                    <td class="border-b">50</td>
-                    <td class="border-b">30</td>
-                    <td class="border-b">btn</td>
-                    <td style="color: red" class="border-b">20</td>
-                    <td style="color: red" class="border-b">--</td>
-                </tr>
+                <?php
+                if ($mat_info):
+                    foreach ($mat_info as $mat):
+                        echo '<tr>
+                                <td class="border-b">'.$mat->mat_category.'</td>
+                                <td class="border-b">'.$mat->mat_description.'</td>
+                                <td class="border-b">'.$mat->quantity.'</td>
+                                <td class="border-b">30</td>
+                                <td class="border-b">btn</td>
+                                <td style="color: red" class="border-b">20</td>
+                                <td style="color: red" class="border-b">--</td>
+                            </tr>';
+                    endforeach;
+                endif;
+                ?>
+
                 <tr>
                     <td class="border-b">Top Rail</td>
                     <td class="border-b">Top Rail type 1</td>
@@ -482,7 +492,19 @@
     }
 
     $(document).ready(function () {
-        var table = $('#examples').DataTable({
+
+        // if($('#search_job').val() != ''){
+        //     search_job();
+        // }
+
+        $('#searchBtn').click(function () {
+            if ($('#search_job').val() != '') {
+                alert('You need to input Job ID');
+                return;
+            }
+            search_job()
+        })
+        var table = $('#jobDetailTable').DataTable({
             "pageLength": 50,
 
             "ajax": {
@@ -515,7 +537,7 @@
         });
 
         // Add event listener for opening and closing details
-        $('#examples tbody').on('click', 'td.details-control', function () {
+        $('#jobDetailTable tbody').on('click', 'td.details-control', function () {
             var tr = $(this).closest('tr');
             var row = table.row(tr);
 
@@ -530,5 +552,20 @@
             }
         });
     });
+
+    function search_job() {
+
+        $.ajax('search_job', {
+            type: 'GET',  // http method
+            dataType: 'json',
+            data: {job_id: $('#search_job').val()},  // data to submit
+            success: function (data, status, xhr) {
+                console.log(data);
+            },
+            error: function (jqXhr, textStatus, errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    }
 </script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>

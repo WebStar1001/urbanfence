@@ -35,8 +35,6 @@
     </div>
     <!-- BEGIN: Filters -->
     <form id="filterForm">
-
-
         <div class="intro-y grid grid-cols-12 p-5 mt-5 gap-2 box">
             <h2 class="col-span-12 font-medium text-base  border-b border-gray-200">Filters</h2>
             <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
