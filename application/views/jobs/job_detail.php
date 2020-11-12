@@ -75,9 +75,11 @@
             <!-- <h2 class="col-span-12 font-medium text-base  border-b border-gray-200">Filters</h2> -->
             <div class="col-span-12 m-auto">
                 <div class="w-full">
-                    <input type="text" placeholder="Search Job" class="input pl-12 border"
-                           id="search_job" value="<?php echo ($job) ? $job->id : ''; ?>">
-                    <button class="button w-24 mr-1  bg-theme-1 text-white" id="searchBtn">Search</button>
+                    <form method="get" action="job_detail">
+                        <input type="text" placeholder="Search Job" class="input pl-12 border"
+                               id="search_job" name="job_id" value="<?php echo ($job) ? $job->id : ''; ?>">
+                        <button class="button w-24 mr-1  bg-theme-1 text-white" id="searchBtn">Search</button>
+                    </form>
                     </button>
                 </div>
             </div>
@@ -141,19 +143,33 @@
                     <legend class="legend_spacing text-left">Job Settings</legend>
                     <div class="mt-1 mb-2">
                         <label class="mr-1">Assign Installer </label>
-                        <select class="input border mr-0 w-1/3 lg:w-2/3">
-                            <option>Choose</option>
-                            <option>Liam Neeson</option>
-                            <option>Daniel Craig</option>
+                        <select class="input border mr-0 w-1/3 lg:w-2/3" id="installer">
+                            <option value="0">Choose</option>
+                            <?php
+                            foreach ($installers as $installer) {
+                                $selected = '';
+                                if ($job) {
+                                    if ($installer->id == $job->installer) {
+                                        $selected = 'selected';
+                                    }
+                                }
+                                echo '<option value="' . $installer->id . '" ' . $selected . '>' . $installer->name . '</option>';
+                            }
+                            ?>
                         </select>
                     </div>
                     <div class="mt-1 mb-2">
                         <label class="mr-1">Start Date</label>
-                        <input type="date" class="input w-1/3 lg:w-2/3 border col-span-4">
+                        <input type="date" class="input w-1/3 lg:w-2/3 border col-span-4" id="start_date"
+                               value="<?php echo ($job) ? $job->start_date : ''; ?>">
                     </div>
                     <div class="mt-1 mb-2">
                         <label class="mr-1">Completion Date</label>
-                        <input type="date" class="input w-1/3 lg:w-2/3 border col-span-4">
+                        <input type="date" class="input w-1/3 lg:w-2/3 border col-span-4" id="end_date"
+                               value="<?php echo ($job) ? $job->end_date : ''; ?>">
+                    </div>
+                    <div class="mt-1 mb-2">
+                        <button class="button bg-theme-1 text-white" id="job_setting_btn">Save</button>
                     </div>
                 </fieldset>
             </div>
@@ -168,7 +184,7 @@
             <div class="col-span-12">
                 <fieldset class="p-2 mb-3 w-2/4 sm:w-2/5 lg:w-1/4 m-auto fieldset_bd_color box">
                     <legend class="legend_spacing">Status</legend>
-                    <p class="w-full p-2"> Material Delivered</p>
+                    <p class="w-full p-2"><?php echo ($job) ? $job->status : ''; ?></p>
                 </fieldset>
             </div>
         </div>
@@ -279,33 +295,32 @@
                     <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left ">
                         <div class="sm:w-full">
                             <label class="w-full sm:w-1/3 text-left">Invoice #</label>
-                            <input type="text" class="input w-full border flex-1 md:text-center">
+                            <input type="text" class="input w-full border flex-1 md:text-center" id="invoice_number">
                         </div>
                     </div>
 
                     <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left">
                         <div class="sm:w-full">
                             <label class="w-full text-left">Payment amount</label>
-                            <input type="text" class="input w-full border flex-1 md:text-center">
+                            <input type="text" class="input w-full border flex-1 md:text-center" id="payment_amount">
                         </div>
                     </div>
 
                     <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left">
                         <div class="sm:w-full">
                             <label class="w-full text-left">Payment Method</label>
-                            <select class="input w-full border flex-1">
-                                <option>choose</option>
+                            <select class="input w-full border flex-1" id="payment_method">
+                                <option value="0">Choose</option>
                                 <option>Visa</option>
-                                <option>Cash</option>
+                                <option>Mater-Card</option>
+                                <option>Amex</option>
+                                <option>Cash and Cheque</option>
                             </select>
                         </div>
                     </div>
 
                     <div class="w-full sm:w-1/2 lg:w-1/6 float-left ml-5 sm:mt-2 p-2 lg:p-0  pt-5 lg:mt-5">
-                        <input type="checkbox" class="input border mr-2" id="vertical-remember-me"
-                               style="border-color:grey;width: 50px;height: 50px; ">
-                        <div style="position: relative;right: 25px;">Create Payment</div>
-
+                        <button class="button bg-theme-1 text-white" id="create_payment">Create Payment</button>
                     </div>
                 </div>
 
@@ -318,14 +333,17 @@
                     <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left ">
                         <div class="sm:w-full">
                             <label class="w-full sm:w-1/3 text-left">Invoice Amount</label>
-                            <input type="text" class="input w-full border flex-1 md:text-center">
+                            <input type="text" class="input w-full border flex-1 md:text-center" id="invoice_amount">
                         </div>
                     </div>
                     <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left">
                         <div class="sm:w-full">
                             <label class="w-full text-left">Invoice Due-Date</label>
-                            <input type="text" class="input w-full border flex-1 md:text-center">
+                            <input type="text" class="input w-full border flex-1 md:text-center" id="invoice_due_date">
                         </div>
+                    </div>
+                    <div class="w-full sm:w-1/2 lg:w-1/6 float-left ml-5 sm:mt-2 p-2 lg:p-0  pt-5 lg:mt-5">
+                        <button class="button bg-theme-1 text-white" id="generate_invoice">Generate Invoice</button>
                     </div>
                 </div>
             </div>
@@ -377,76 +395,45 @@
                 </thead>
                 <tbody>
                 <?php
+                $quantity_total = 0;
+                $items_collected_total = 0;
+                $missing_stack_total = 0;
                 if ($mat_info):
                     foreach ($mat_info as $mat):
-                        echo '<tr>
-                                <td class="border-b">'.$mat->mat_category.'</td>
-                                <td class="border-b">'.$mat->mat_description.'</td>
-                                <td class="border-b">'.$mat->quantity.'</td>
-                                <td class="border-b">30</td>
-                                <td class="border-b">btn</td>
-                                <td style="color: red" class="border-b">20</td>
-                                <td style="color: red" class="border-b">--</td>
-                            </tr>';
+                        $quantity_total += $mat->quantity;
+                        $items_collected_total += $mat->items_collected_for_job;
+                        echo '<tr id="items_collected' . $mat->id . '">
+                                <td class="border-b">' . $mat->mat_category . '</td>
+                                <td class="border-b">' . $mat->mat_description . '</td>
+                                <td class="border-b">' . $mat->quantity . '</td>
+                                <td class="border-b">
+                                <input type="number" id="collected_quantity" name="collected_quantity[]" onfocus="this.oldvalue = this.value;" max="' . $mat->quantity . '"
+                                value="' . $mat->items_collected_for_job . '" class="w-full" style="height:30px;" onchange="change_item_collect(' . $mat->id . ');this.oldvalue = this.value;">
+                                </td>
+                                <td class="border-b"><button class="button bg-theme-1 text-white w-full" onclick="set_item_collect(' . $mat->id . ')">Set</button></td>';
+                        if ($mat->quantity == $mat->items_collected_for_job) {
+                            echo '
+                                <td class="border-b"><i class="fa fa-minus" style="color:green;"/></td>
+                                <td class="border-b"><i class="fa fa-check" style="color:green;"/></td>';
+                        } else {
+                            echo '
+                                <td style="color: red" class="border-b">' . ($mat->quantity - $mat->items_collected_for_job) . '</td>
+                                <td style="color: red" class="border-b"><i class="fa fa-minus"/></td>';
+                            $missing_stack_total += $mat->quantity - $mat->items_collected_for_job;
+                        }
+                        echo '</tr>';
                     endforeach;
                 endif;
                 ?>
-
-                <tr>
-                    <td class="border-b">Top Rail</td>
-                    <td class="border-b">Top Rail type 1</td>
-                    <td class="border-b">50</td>
-                    <td class="border-b">30</td>
-                    <td class="border-b">btn</td>
-                    <td style="color: red" class="border-b">20</td>
-                    <td style="color: red" class="border-b">--</td>
-                </tr>
-                <tr>
-                    <td class="border-b">Gates</td>
-                    <td class="border-b">Gate type 1</td>
-                    <td class="border-b">1</td>
-                    <td class="border-b">1</td>
-                    <td class="border-b">btn</td>
-                    <td style="color: red" class="border-b"></td>
-                    <td style="color: green" class="border-b">+</td>
-                </tr>
-                <tr>
-                    <td class="border-b">Gates</td>
-                    <td class="border-b">Gate Fit</td>
-                    <td class="border-b">1</td>
-                    <td class="border-b">1</td>
-                    <td class="border-b">btn</td>
-                    <td style="color: red" class="border-b"></td>
-                    <td style="color: green" class="border-b">+</td>
-                </tr>
-                <tr>
-                    <td class="border-b">Posts</td>
-                    <td class="border-b">Line Post</td>
-                    <td class="border-b">10</td>
-                    <td class="border-b">10</td>
-                    <td class="border-b">btn</td>
-                    <td style="color: red" class="border-b"></td>
-                    <td style="color: green" class="border-b">+</td>
-                </tr>
-                <tr>
-                    <td class="border-b">Other</td>
-                    <td class="border-b">Barb Wire</td>
-                    <td class="border-b">50</td>
-                    <td class="border-b">50</td>
-                    <td class="border-b">btn</td>
-                    <td style="color: red" class="border-b"></td>
-                    <td style="color: green" class="border-b">+</td>
-                </tr>
-                <tr>
+                <tr id="items_collected_total">
                     <td class="border-b">Total</td>
                     <td class="border-b"></td>
-                    <td class="border-b">162</td>
-                    <td class="border-b">122</td>
-                    <td class="border-b">btn</td>
-                    <td style="color: red" class="border-b">40</td>
-                    <td style="color: red" class="border-b">--</td>
+                    <td class="border-b"><?php echo $quantity_total; ?></td>
+                    <td class="border-b"><?php echo $items_collected_total; ?></td>
+                    <td class="border-b"></td>
+                    <td class="border-b"><?php echo $missing_stack_total; ?></td>
+                    <td class="border-b">--</td>
                 </tr>
-
                 </tbody>
             </table>
         </div>
@@ -464,52 +451,79 @@
             <label class="cursor-pointer select-none" for="vertical-remember-me_r2">Materials Collected</label>
         </div>
         <div class=" py-3 text-right border-t border-gray-200">
-            <button data-dismiss="modal" type="button" class="button w-20 bg-theme-6 text-white">Cancel</button>
+            <button data-dismiss="modal" type="button" class="button w-20 bg-theme-1 text-white">Save</button>
+            <button data-dismiss="modal" type="button" class="button w-20 bg-theme-6 text-white">Close</button>
         </div>
     </div>
 
 </div>
 
 <script type="text/javascript">
+    var job_id = '<?php echo ($job) ? $job->id : ""?>';
+    var customer_id = '<?php echo ($job) ? $job->customer_id : ""?>';
+    var company_id = '<?php echo ($job) ? $job->company_id : ""?>';
+
     function format(d) {
-        console.log(d);
         /*console.log(d.JobCity);*/
         // `d` is the original data object for the row
-        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-alight:center">' +
-            '<tr style="background-color:yellow;text-align:left">' +
-            '<td>Trans. Date:</td>' +
-            '<td>' + d.trans_date + '</td>' +
-            '</tr>' +
-            '<tr style="background-color:yellow;text-align:left">' +
-            '<td>Paymen Method:</td>' +
-            '<td>' + d.payment_method + '</td>' +
-            '</tr>' +
-            '<tr style="background-color:yellow;text-align:left">' +
-            '<td>Action</td>' +
-            '<td><button class="button  bg-theme-6 text-white">Cancel Payment</button></td>' +
-            '</tr>' +
-            '</table>';
+        if (d.invoice_id == "") {
+            return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-align:left;width: 100%;">' +
+                '<tr style="background-color:yellow;text-align:left">' +
+                '<td>Trans. Date:</td>' +
+                '<td>' + d.payment_date + '</td>' +
+                '<td>Paymen Method:</td>' +
+                '<td>' + d.payment_method + '</td>' +
+                '<td><button class="button  bg-theme-6 text-white">Cancel Payment</button></td>' +
+                '</tr></table>';
+        } else {
+            return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-align:left;width: 100%;">' +
+                '<tr style="background-color:yellow;text-align:left">' +
+                '<td width="150px">Trans. Date:</td>' +
+                '<td>' + d.due_date + '</td>' +
+                '<td> </td>' +
+                '<td> </td>' +
+                '<td> </td>' +
+                '</tr></table>';
+        }
+    }
+
+    function change_item_collect(rowId) {
+        var quantity = $('#items_collected' + rowId).children().eq(2).html() * 1
+        var total_missing_stack = $('#items_collected_total').children().eq(5).html() * 1
+        var total_items_collected = $('#items_collected_total').children().eq(3).html() * 1
+        var oldValue = event.target.oldvalue * 1;
+        var nValue = event.target.value * 1;
+        $('#items_collected_total').children().eq(3).html(total_items_collected - oldValue + nValue);
+        $('#items_collected_total').children().eq(5).html(total_missing_stack + oldValue - nValue);
+        if (quantity == nValue) {
+            $('#items_collected' + rowId).children().eq(5).html('<i class="fa fa-check" style="color:green;"/>')
+            $('#items_collected' + rowId).children().eq(6).html('<i class="fa fa-minus" style="color:green;"/>')
+            $('#items_collected' + rowId).children().eq(4).find('button').attr('disabled', false);
+            $('#items_collected' + rowId).children().eq(4).find('button').css('background-color', 'blue');
+        } else if (quantity > nValue) {
+            $('#items_collected' + rowId).children().eq(5).html(quantity - nValue);
+            $('#items_collected' + rowId).children().eq(6).html('<i class="fa fa-minus" style="color:red;"/>')
+            $('#items_collected' + rowId).children().eq(4).find('button').attr('disabled', false);
+            $('#items_collected' + rowId).children().eq(4).find('button').css('background-color', 'blue');
+        } else {
+            $('#items_collected' + rowId).children().eq(4).find('button').attr('disabled', true);
+            $('#items_collected' + rowId).children().eq(4).find('button').css('background-color', 'gray');
+            $('#items_collected' + rowId).children().eq(5).html(quantity - nValue);
+            $('#items_collected' + rowId).children().eq(6).html('<i class="fa fa-minus" style="color:red;"/>')
+        }
     }
 
     $(document).ready(function () {
 
-        // if($('#search_job').val() != ''){
-        //     search_job();
-        // }
-
-        $('#searchBtn').click(function () {
-            if ($('#search_job').val() != '') {
-                alert('You need to input Job ID');
-                return;
-            }
-            search_job()
-        })
         var table = $('#jobDetailTable').DataTable({
             "pageLength": 50,
 
             "ajax": {
                 url: '<?php echo base_url("Jobs/credits_debits_tracking");?>',
                 type: 'GET',
+                data: function (data) {
+                    data.job_id = job_id;
+                },
                 // type:'JSON'
             },
             "columns": [
@@ -521,21 +535,20 @@
                 },
                 {"data": "invoice_id"},
                 {"data": "payment_id"},
-                {"data": "debits"},
+                {"data": "debit"},
                 {"data": "credit"},
                 {"data": "due_date"},
                 {"data": "account_balance"},
                 {"data": "job_balance"},
-                {
-                    "data": "note", render: function (data) {
-                        return (data == "Invoice is past Due") ? '<span style="color:red">' + data + '</span>' : '<span style="color:green">' + data + '</span>'
-                    }
-                },
-
+                {"data": "notes"},
             ],
             "order": [[0, 'asc']]
         });
-
+        $('#invoice_due_date').daterangepicker({
+            "showDropdowns": true,
+            "minYear": 2010,
+            "singleDatePicker": true,
+        });
         // Add event listener for opening and closing details
         $('#jobDetailTable tbody').on('click', 'td.details-control', function () {
             var tr = $(this).closest('tr');
@@ -551,14 +564,81 @@
                 tr.addClass('shown');
             }
         });
+        $('#create_payment').click(function () {
+            if ($('#invoice_number').val() == '' || $('#payment_amount').val() == '' || $('#payment_method').val() == '') {
+                alert('You need to input all information for creating payment');
+                return;
+            }
+            $.ajax('create_payment', {
+                type: 'POST',  // http method
+                data: {
+                    invoice_id: $('#invoice_number').val(),
+                    payment_amount: $('#payment_amount').val(),
+                    payment_method: $('#payment_method').val(),
+                    job_id: job_id,
+                    customer_id: customer_id
+                },  // data to submit
+                success: function (data, status, xhr) {
+                    table.ajax.reload(null, false);
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log(errorMessage);
+                }
+            });
+        });
+        $('#generate_invoice').click(function () {
+
+            if ($('#invoice_amount').val() == '' || $('#invoice_due_date').val() == '') {
+                alert('You need to input all information for generating invoice');
+                return;
+            }
+            $.ajax('generate_invoice', {
+                type: 'POST',  // http method
+                data: {
+                    invoice_number: $('#invoice_amount').val(),
+                    invoice_amount: $('#invoice_amount').val(),
+                    invoice_due_date: $('#invoice_due_date').val(),
+                    job_id: job_id,
+                    customer_id: customer_id,
+                    company_id: company_id
+                },
+                success: function (data, status, xhr) {
+                    table.ajax.reload(null, false);
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log(errorMessage);
+                }
+            });
+        });
+    });
+    $('#job_setting_btn').click(function () {
+
+        if ($('#installer').val() == '' || $('#start_date').val() == '') {
+            alert('You need to input all information for saving job settings.');
+            return;
+        }
+        $.ajax('set_job_settings', {
+            type: 'POST',  // http method
+            data: {
+                installer: $('#installer').val(),
+                start_date: $('#start_date').val(),
+                end_date: $('#end_date').val(),
+                job_id: job_id,
+            },
+            success: function (data, status, xhr) {
+                console.log(data);
+            },
+            error: function (jqXhr, textStatus, errorMessage) {
+                console.log(errorMessage);
+            }
+        });
     });
 
-    function search_job() {
-
-        $.ajax('search_job', {
-            type: 'GET',  // http method
-            dataType: 'json',
-            data: {job_id: $('#search_job').val()},  // data to submit
+    function set_item_collect(mat_id) {
+        var item_collect = $('#items_collected' + mat_id).children().eq(3).find('input').val();
+        $.ajax('set_mat_collect', {
+            type: 'POST',  // http method
+            data: {mat_id: mat_id, item_collect: item_collect},  // data to submit
             success: function (data, status, xhr) {
                 console.log(data);
             },

@@ -13,6 +13,8 @@ class Jobs extends CI_Controller
         $this->load->model('OpportunityModel');
         $this->load->model('CustomerModel');
         $this->load->model('QuoteModel');
+        $this->load->model('InvoiceModel');
+        $this->load->model('PaymentModel');
 //        $this->load->library('auth');
 //        $this->load->library('session');
 //        $this->auth->check_admin_auth();
@@ -21,7 +23,7 @@ class Jobs extends CI_Controller
     public function jobs_list()
     {
         $data['sales'] = $this->UserModel->getSaleUsers();
-        $data['installers'] = $this->UserModel->getUserByAccessLevel('user');
+        $data['installers'] = $this->UserModel->getUserByAccessLevel('Customer');
         $this->load->view('inc/header');
         $this->load->view('jobs/view_job', $data);
         $this->load->view('inc/footer');
@@ -38,12 +40,15 @@ class Jobs extends CI_Controller
         if (isset($_GET['job_id'])) {
             $job_id = $_GET['job_id'];
             $job = $this->JobModel->getJobByJobID($job_id);
-            $opportunity = $this->OpportunityModel->get_opportunity($job->oppor_id);
-            $customer = $this->CustomerModel->get_customer($job->customer_id);
-            $quote = $this->QuoteModel->get_quote($job->quote_id);
-            $mat_info = $this->QuoteModel->get_matinfo($job->quote_id);
+            if (is_object($job)) {
+                $opportunity = $this->OpportunityModel->get_opportunity($job->oppor_id);
+                $customer = $this->CustomerModel->get_customer($job->customer_id);
+                $quote = $this->QuoteModel->get_quote($job->quote_id);
+                $mat_info = $this->QuoteModel->get_matinfo($job->quote_id);
+            }
         }
         $data = array('job' => $job, 'oppor' => $opportunity, 'customer' => $customer, 'quote' => $quote, 'mat_info' => $mat_info);
+        $data['installers'] = $this->UserModel->getUserByAccessLevel('Customer');
         $this->load->view('inc/header');
         $this->load->view('jobs/job_detail', $data);
         $this->load->view('inc/footer');
@@ -66,51 +71,110 @@ class Jobs extends CI_Controller
         echo json_encode($retAry);
     }
 
+    public function set_mat_collect()
+    {
+        $mat_id = $this->input->post('mat_id');
+        $item_collect = $this->input->post('item_collect');
+        $this->db->where('id', $mat_id);
+        $this->db->update('mat_details', array('items_collected_for_job' => $item_collect));
+        echo $mat_id;
+    }
+
+    public function set_job_settings()
+    {
+        $job_id = $this->input->post('job_id');
+        $start_date = $this->input->post('start_date');
+        $installer = $this->input->post('installer');
+        $end_date = $this->input->post('end_date');
+        $this->db->where('id', $job_id);
+        $this->db->update('jobs', array('start_date' => $start_date, 'end_date' => $end_date, 'installer' => $installer));
+        echo $job_id;
+    }
+
+    public function create_payment()
+    {
+        $job_id = $this->input->post('job_id');
+        $customer_id = $this->input->post('customer_id');
+        $invoice_number = $this->input->post('invoice_id');
+        $payment_amount = $this->input->post('payment_amount');
+        $payment_method = $this->input->post('payment_method');
+        $date = date('Y-m-d');
+        $this->db->insert('payments', array(
+            'job_id' => $job_id,
+            'invoice_id' => $invoice_number,
+            'customer_id' => $customer_id,
+            'payment_amount' => $payment_amount,
+            'payment_date' => $date,
+            'payment_method' => $payment_method
+        ));
+        echo $this->db->insert_id();
+    }
+
+    public function generate_invoice()
+    {
+        $job_id = $this->input->post('job_id');
+        $customer_id = $this->input->post('customer_id');
+        $company_id = $this->input->post('company_id');
+        $invoice_amount = $this->input->post('invoice_amount');
+        $invoice_due_date = $this->input->post('invoice_due_date');
+//        $date = date('Y-m-d');
+        $this->db->insert('invoices', array(
+            'job_id' => $job_id,
+            'company_id' => $company_id,
+            'customer_id' => $customer_id,
+            'invoice_amount' => $invoice_amount,
+            'due_date' => date('Y-m-d', strtotime($invoice_due_date))
+        ));
+        echo $this->db->insert_id();
+    }
+
     public function credits_debits_tracking()
     {
-        $abc =
-            '{ "data":[
-	   	
-	   		{
-		      "invoice_id": "10125",
-		      "payment_id": "",
-		      "debits": "6780",
-		      "credit": "",
-		      "due_date": "20-09-2020",
-		      "account_balance": "6780",
-		      "job_balance": "13560",
-		      "note": "",
-		      "trans_date":"09-09-2020",
-		      "payment_method":"Visa"
-		    },
-		    {
-			      "invoice_id": "",
-			      "payment_id": "003",
-			      "debits": "",
-			      "credit": "6780",
-			      "due_date": "",
-			      "account_balance": "0",
-			      "job_balance": "6780",
-			      "note": "",
-			      "trans_date":"19-09-2020",
-			      "payment_method":"Cash"
-			},
-			{
-			      "invoice_id": "10132",
-			      "payment_id": "",
-			      "debits": "6790",
-			      "credit": "",
-			      "due_date": "13-10-2020",
-			      "account_balance": "6780",
-			      "job_balance": "6780",
-			      "note": "Invoice is past Due",
-			      "trans_date":"13-10-2020",
-			      "payment_method":""
-			}
-		   
-		    
-		]}';
-        echo $abc;
+        $job_id = $this->input->get('job_id');
+        $job = $this->JobModel->getJobByJobID($job_id);
+        $invoices = $this->InvoiceModel->getInvoicesByJobID($job_id);
+        $retAry = array();
+        $i = 0;
+        $job_balance = $job->job_balance;
+        foreach ($invoices as $inv) {
+            $total_pay_amount = 0;
+            $invoice_total = $inv->invoice_amount;
+            $j = $i + 1;
+            $retAry[$i]['invoice_id'] = $inv->id;
+            $retAry[$i]['payment_id'] = '';
+            $retAry[$i]['debit'] = $inv->invoice_amount;
+            $retAry[$i]['credit'] = '';
+            $retAry[$i]['job_balance'] = $job_balance;
+            $retAry[$i]['account_balance'] = $invoice_total;
+            $retAry[$i]['due_date'] = $inv->due_date;
+            $payments = $this->PaymentModel->getPaymentByInvoiceID($inv->id);
+            foreach ($payments as $pay) {
+                $retAry[$j]['invoice_id'] = '';
+                $retAry[$j]['payment_id'] = $pay->id;
+                $retAry[$j]['debit'] = '';
+                $retAry[$j]['credit'] = $pay->payment_amount;
+                $retAry[$j]['due_date'] = date('Y-m-d', strtotime($pay->payment_date));
+                $retAry[$j]['job_balance'] = $job_balance - $pay->payment_amount;
+                $retAry[$j]['account_balance'] = $invoice_total - $pay->payment_amount;
+                $retAry[$j]['payment_method'] = $pay->payment_method;
+                $retAry[$j]['payment_date'] = date('Y-m-d', strtotime($pay->payment_date));
+                $retAry[$j]['notes'] = '';
+                $total_pay_amount += $pay->payment_amount;
+                $job_balance -= $pay->payment_amount;
+                $invoice_total -= $pay->payment_amount;
+                if ($invoice_total <= 0) {
+                    $retAry[$j]['notes'] = '<span style="color:green;">Job Paid Fully</span>';
+                }
+                $j++;
+            }
+            $retAry[$i]['notes'] = '';
+            if ($inv->due_date < date('Y-m-d')) {
+                $retAry[$i]['notes'] = '<span style="color:red;">Invoice Past Due</span>';
+            }
+            $i = $j;
+        }
+        $data['data'] = $retAry;
+        echo json_encode($data);
     }
 
 

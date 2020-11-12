@@ -35,7 +35,7 @@ class JobModel extends CI_Model
 
         $this->db->select('jobs.*, customers.customer AS customer, customers.contact_person AS contact_person,
         opportunities.job_type AS job_type,opportunities.site_address AS site_address,opportunities.contact_onsite AS contact_onsite,
-        opportunities.site_city AS site_city, opportunities.site_desc AS site_desc');
+        opportunities.site_city AS site_city, opportunities.site_desc AS site_desc, users.name AS installer');
         $this->db->from('jobs');
         if ($job_id) {
             $this->db->where('jobs.id', $job_id);
@@ -68,6 +68,7 @@ class JobModel extends CI_Model
             $this->db->where('site_city', $site_city);
         }
         $this->db->join('customers', 'customers.id=jobs.customer_id', 'inner');
+        $this->db->join('users', 'users.id=jobs.installer', 'left');
         $this->db->join('opportunities', 'opportunities.id=jobs.oppor_id', 'inner');
         $query = $this->db->get();
         return $query->result_array();

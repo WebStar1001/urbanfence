@@ -73,27 +73,36 @@ class QuoteModel extends CI_Model
         return $query->row();
     }
 
-    public function get_matinfo($quote_id){
-        $this->db->select('*, product_catalogs.mat_description AS mat_description');
+    public function get_matinfo($quote_id)
+    {
+        $this->db->select('mat_details.*, product_catalogs.mat_description AS mat_description');
         $this->db->from('mat_details');
         $this->db->join('product_catalogs', 'mat_details.code=product_catalogs.mat_code', 'left');
+        $this->db->where('quote_id', $quote_id);
         $query = $this->db->get();
         return $query->result();
     }
 
-    public function get_labinfo($quote_id){
+    public function get_labinfo($quote_id)
+    {
         $query = $this->db->get_where('lab_details', array('quote_id' => $quote_id));
         return $query->result();
     }
-    public function get_miscinfo($quote_id){
+
+    public function get_miscinfo($quote_id)
+    {
         $query = $this->db->get_where('misc_details', array('quote_id' => $quote_id));
         return $query->result();
     }
-    public function get_add_oninfo($quote_id){
+
+    public function get_add_oninfo($quote_id)
+    {
         $query = $this->db->get_where('add_on_details', array('quote_id' => $quote_id));
         return $query->result();
     }
-    public function getQuoteDatas($quote_id){
+
+    public function getQuoteDatas($quote_id)
+    {
         $this->db->select('quotes.*,companies.name AS company_name,customers.customer AS customer_name
         ,opportunities.site_address AS site_address, opportunities.site_city AS site_city,opportunities.job_type AS job_type
         , opportunities.site_postal_code AS site_postal_code');
