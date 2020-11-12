@@ -77,7 +77,7 @@ class QuoteModel extends CI_Model
         $this->db->select('*, product_catalogs.mat_description AS mat_description');
         $this->db->from('mat_details');
         $this->db->join('product_catalogs', 'mat_details.code=product_catalogs.mat_code', 'left');
-        $query = $this->db()->get();
+        $query = $this->db->get();
         return $query->result();
     }
 
