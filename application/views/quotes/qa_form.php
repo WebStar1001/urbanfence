@@ -155,7 +155,7 @@ $total = $sub_total2 + $quote->hst;
         </tr>
         </thead>
         <tr>
-            <td rowspan="9"><?php echo nl2br($quote->additional_info); ?></td>
+            <td rowspan="<?php echo ($quote->discount_set != 0) ? 9 : 7; ?>>"><?php echo nl2br($quote->additional_info); ?></td>
             <td>Materials</td>
             <td><?php echo $quote->mat_net * $quote->mat_factor; ?></td>
         </tr>
