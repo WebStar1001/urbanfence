@@ -74,8 +74,12 @@
                 <div><label>Installer</label>
                     <div class="mt-1">
                         <select class="select2 w-full" id="installer">
-                            <option>Benjamin</option>
-                            <option>Kevin Vaas</option>
+                            <option value="0">All</option>
+                            <?php
+                            foreach ($installers as $installer) {
+                                echo '<option value="' . $installer->id . '">' . $installer->name . '</option>';
+                            }
+                            ?>
                         </select>
                     </div>
                 </div>
@@ -83,10 +87,8 @@
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Job Balance</label>
                     <div class="mt-1">
-                        <select class="select2 w-full" id="job_balance">
-                            <option>All</option>
-                            <option>Fully paid</option>
-                        </select>
+                        <input type="number" placeholder="Search" class="input pl-12 border w-full"
+                               id="job_balance">
                     </div>
                 </div>
             </div>
@@ -106,7 +108,8 @@
             </div>
             <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
                 <div class=""><label>Sale Rep</label>
-                    <div class="mt-1"><select class="input border w-full" id="sale_rep">
+                    <div class="mt-1">
+                        <select class="input border w-full" id="sale_rep">
                             <option value="0">All</option>
                             <?php
                             foreach ($sales as $user) {
@@ -181,32 +184,28 @@
     function format(d) {
         /*console.log(d.JobCity);*/
         // `d` is the original data object for the row
-        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-alight:center">' +
+        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-aligh:left;width: 100%;">' +
             '<tr>' +
             '<td>Contact Person:</td>' +
             '<td>' + d.contact_person + '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td>Job Address:</td>' +
-            '<td>' + d.job_address + '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td>Job City:</td>' +
-            '<td>' + d.job_city + '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td>Job Site:</td>' +
-            '<td>' + d.job_site + '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<tr>' +
+            '<td>Site Address:</td>' +
+            '<td>' + d.site_address + '</td>' +
             '<td>Customer ID:</td>' +
             '<td>' + d.customer_id + '</td>' +
             '</tr>' +
             '<tr>' +
+            '<td>Contact onsite:</td>' +
+            '<td>' + d.contact_onsite + '</td>' +
+            '<td>Site City:</td>' +
+            '<td>' + d.site_city + '</td>' +
             '<td>Oppor ID:</td>' +
             '<td>' + d.oppor_id + '</td>' +
             '</tr>' +
+            '<tr>' +
+            '<td>Job Type:</td>' +
+            '<td>' + d.job_type + '</td>' +
+            '<td>Site Desc:</td>' +
+            '<td>' + d.site_desc + '</td>' +
             '<td>Quote ID:</td>' +
             '<td>' + d.quote_id + '</td>' +
             '</tr>' +
@@ -260,11 +259,11 @@
                 {"data": "end_date"},
                 {"data": "customer"},
                 {"data": "job_type"},
-                {"data": "total"},
+                {"data": "job_balance"},
                 {"data": "job_balance"},
                 {
                     "data": null, render: function (data) {
-                        return "<a href='<?php echo base_url('Opportunity/add_opportunity?opportunity_id=');?>" + data.id + "'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
+                        return "<a href='<?php echo base_url('Jobs/job_detail?job_id=');?>" + data.id + "'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
                     }
                 }
 
@@ -288,6 +287,16 @@
                 tr.addClass('shown');
             }
         });
+        $('#filterForm').on('submit', function () {
+            event.preventDefault();
+        });
+        $('#applyFilter').click(function () {
+            table.ajax.reload(null, false);
+        });
+        $('#clearFilter').click(function () {
+            $('#filterForm').trigger('reset');
+            table.ajax.reload(null, false);
+        })
     })
     ;
 </script>

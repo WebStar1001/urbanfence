@@ -8,12 +8,8 @@ class Jobs extends CI_Controller
 
         parent::__construct();
 
-//        $this->load->model('CustomerModel');
-//        $this->load->model('CompanyModel');
-//        $this->load->model('CatalogModel');
-//        $this->load->model('OpportunityModel');
         $this->load->model('UserModel');
-//        $this->load->model('QuoteModel');
+        $this->load->model('JobModel');
 //        $this->load->library('auth');
 //        $this->load->library('session');
 //        $this->auth->check_admin_auth();
@@ -22,6 +18,7 @@ class Jobs extends CI_Controller
     public function jobs_list()
     {
         $data['sales'] = $this->UserModel->getSaleUsers();
+        $data['installers'] = $this->UserModel->getUserByAccessLevel('user');
         $this->load->view('inc/header');
         $this->load->view('jobs/view_job', $data);
         $this->load->view('inc/footer');
@@ -29,8 +26,12 @@ class Jobs extends CI_Controller
 
     public function job_detail()
     {
+        $job_id = '';
+        if (isset($_GET['job_id'])) {
+            $job_id = $_GET['job_id'];
+        }
         $this->load->view('inc/header');
-        $this->load->view('jobs/job_detail');
+        $this->load->view('jobs/job_detail', array('job_id' => $job_id));
         $this->load->view('inc/footer');
     }
 

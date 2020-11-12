@@ -26,45 +26,42 @@ class JobModel extends CI_Model
         $end_date = $this->input->get('start_date');
         $site_city = $this->input->get('site_city');
 
-        $this->db->select('jobs.*, customers.customer AS customer, customers.contact_person AS contact_person, quotes.id AS quote_id');
+        $this->db->select('jobs.*, customers.customer AS customer, customers.contact_person AS contact_person,
+        opportunities.job_type AS job_type,opportunities.site_address AS site_address,opportunities.contact_onsite AS contact_onsite,
+        opportunities.site_city AS site_city, opportunities.site_desc AS site_desc');
         $this->db->from('jobs');
         if($job_id){
-            $this->db->where('jobs.id', $id);
-        }
-        if ($job_type) {
-            $this->db->where('job_type', $job_type);
-        }
-        if ($sale_source) {
-            $this->db->where('sale_source', $sale_source);
+            $this->db->where('jobs.id', $job_id);
         }
         if ($status) {
-            $this->db->where('opportunities.status', $status);
+            $this->db->where('jobs.status', $status);
         }
-        if ($sale_rep) {
-            $this->db->where('sale_rep', $sale_rep);
+        if($quote_id){
+            $this->db->where('jobs.quote_id', $quote_id);
+        }
+        if($installer){
+            $this->db->where('jobs.installer', $installer);
+        }
+        if($job_balance){
+            $this->db->where('job_balance', $job_balance);
         }
         if ($customer) {
-            $this->db->like('customer', $customer);
+            $this->db->like('customers.customer', $customer);
         }
         if ($customer_id) {
-            $this->db->where('customer_id', $customer_id);
+            $this->db->where('jobs.customer_id', $customer_id);
         }
-        if ($oppor_per_month) {
-            $this->db->where("date BETWEEN '" . date('Y-' . $oppor_per_month . '-01') . "' AND '" . date('Y-' . $oppor_per_month . '-31') . "'", "", FALSE);
-        } else {
-            if ($date) {
-                list($start_date, $end_date) = explode('-', $date);
-                $this->db->where("date BETWEEN '" . date('Y-m-d', strtotime($start_date)) . "' AND '" . date('Y-m-d', strtotime($end_date)) . "'", "", FALSE);
-            }
+        if ($sale_rep) {
+            $this->db->where('opportunities.sale_rep', $sale_rep);
+        }
+        if ($start_date) {
+            $this->db->where('start_date', $start_date);
         }
         if ($site_city) {
             $this->db->where('site_city', $site_city);
         }
-        if ($urgency) {
-            $this->db->where('urgency', $urgency);
-        }
-        $this->db->join('customers', 'customers.id=opportunities.customer_id', 'inner');
-        $this->db->join('quotes', 'quotes.oppor_id=opportunities.id', 'left');
+        $this->db->join('customers', 'customers.id=jobs.customer_id', 'inner');
+        $this->db->join('opportunities', 'opportunities.id=jobs.oppor_id', 'inner');
         $query = $this->db->get();
         return $query->result_array();
     }
