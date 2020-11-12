@@ -514,6 +514,7 @@
     }
 
     $(document).ready(function () {
+        $.fn.dataTable.ext.errMode = 'throw';
 
         var table = $('#jobDetailTable').DataTable({
             "pageLength": 50,
