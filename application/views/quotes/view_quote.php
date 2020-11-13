@@ -209,7 +209,7 @@
             "showDropdowns": true,
             "minYear": 2010,
             "startDate": '<?php echo date("1/1/Y");?>',
-            "endDate": '<?php echo date("12/21/Y");?>',
+            "endDate": '<?php echo date("12/21/Y", strtotime("+1 years"));?>',
             "linkedCalendars": false
         });
         var table = $('#quoteTable').DataTable({

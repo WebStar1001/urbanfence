@@ -50,10 +50,10 @@
                         <select class="select2 w-full" id="status">
                             <option value="0">All</option>
                             <option>New</option>
+                            <option>MAT Missing in Stack</option>
                             <option>MAT Collected</option>
                             <option>In progress</option>
                             <option>Completed</option>
-                            <option>MAT Missing in Stack</option>
                             <option>Completed and Paid</option>
                         </select>
                     </div>
@@ -103,15 +103,17 @@
                 </div>
             </div>
             <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
-                <div class=""><label>Sale Rep</label>
+                <div class=""><label>Job Type</label>
                     <div class="mt-1">
-                        <select class="input border w-full" id="sale_rep">
+                        <select class="input border w-full" id="job_type">
                             <option value="0">All</option>
-                            <?php
-                            foreach ($sales as $user) {
-                                echo '<option value="' . $user->id . '">' . $user->name . '</option>';
-                            }
-                            ?>
+                            <option value="Fence Repair">Fence Repair</option>
+                            <option value="Gate Repair">Gate Repair</option>
+                            <option value="Fence and Gate Repair">Fence and Gate Repair</option>
+                            <option value="New Fence">New Fence</option>
+                            <option value="New Gate">New Gate</option>
+                            <option value="New Fence and Gate c/w Operator">New Fence and Gate c/w Operator</option>
+                            <option value="Gate Operator Service">Gate Operator Service</option>
                         </select>
                     </div>
                 </div>
@@ -235,7 +237,7 @@
                     data.job_balance = $('#job_balance').val();
                     data.customer_id = $('#customer_id').val();
                     data.customer = $('#customer').val();
-                    data.sale_rep = $('#sale_rep').val();
+                    data.job_type = $('#job_type').val();
                     data.start_date = $('#start_date').val();
                     data.end_date = $('#end_date').val();
                     data.site_city = $('#site_city').val();

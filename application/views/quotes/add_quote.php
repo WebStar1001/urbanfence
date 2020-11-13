@@ -995,10 +995,10 @@
                                 </div>
                                 <div class="mt-5">
                                     <div style="width: 40%;display: inline-block;">
-                                        <a class="button bg-gray-200 text-gray-600" style="float: inherit;"
-                                           href="generate_qa_form?quote_id=<?php echo $quote->id; ?>" target="_blank">
+                                        <button class="button bg-gray-200 text-gray-600" style="float: inherit;"
+                                           id="generate_qa_form_button" target="_blank">
                                             Generate Quote Form
-                                        </a>
+                                        </button>
                                     </div>
                                     <div style="width: 50%;display: inline;">
                                         <input type="checkbox" class="input border mr-2" id="form_signed"
@@ -1039,12 +1039,13 @@
                     </div>
                     <!-- END: Input -->
                 </div>
+
                 <div class="col-span-12 md:pl-3 md:pr-3" id="address_div_mg">
                     <div class="preview">
                         <div class="intro-y flex flex-col sm:flex-row">
                             <label class="sm:text-left md:mr-5 width6 pt-1 sm:pt-3"> Additional Notes for
                                 Quote</label>
-                            <textarea class="input w-full border mt-2" name="additional_info"
+                            <textarea class="input w-full border mt-2" name="additional_info"  id="additional_info"
                                       placeholder=""><?php echo $quote->additional_info; ?></textarea>
                         </div>
                     </div>
@@ -1075,6 +1076,11 @@
                 <input type="hidden" name="ads_on_factor" id="ads_on_factor"/>
                 <input type="hidden" name="hst" id="hst_amount"/>
             </div>
+        </form>
+        <form id="generateForm" action="generate_qa_form" method="get" target="_blank">
+            <input type="hidden" name="quote_id"
+                   value="<?php echo (is_object($quote)) ? $quote->id : ''; ?>">
+            <textarea name="additional_info" hidden></textarea>
         </form>
 
         <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end mt-5">
@@ -1210,6 +1216,13 @@
                 e.preventDefault();
             }
         });
+        $('#generate_qa_form_button').click(function () {
+            $('#generateForm').find('textarea').val($('#additional_info').val());
+            event.preventDefault();
+            // console.log($('#additional_info').val());
+            // return;
+            $('#generateForm').submit();
+        })
         $('#calc_mode').change(function () {
             var calc_mode = $('#calc_mode').val();
             var material_total = 0;
@@ -1339,8 +1352,8 @@
                 $('input[name="discount_amount"]').val(discount_amount);
             } else {
                 discount_amount = $(this).val() * 1;
-                discount_percent = (discount_amount / sub_total1).toFixed(4) * 100;
-                $('input[name="discount_percent"]').val(discount_percent);
+                discount_percent = (discount_amount / sub_total1) * 100;
+                $('input[name="discount_percent"]').val(Math.round(discount_percent * 100) / 100);
             }
             calculate_sale_table();
         });
@@ -1375,8 +1388,8 @@
                 $('#material_markup_amount').val(Math.round(mat_amount * 100) / 100);
             } else if ($(this).attr('id') == 'material_markup_amount') {
                 mat_amount = $(this).val() * 1;
-                mat_percent = (mat_amount / mat_cost).toFixed(4) * 100;
-                $('#material_markup_percent').val(Math.round(mat_percent * 10) / 10);
+                mat_percent = Math.round(mat_amount / mat_cost) * 100;
+                $('#material_markup_percent').val(Math.round(mat_percent * 100) / 100);
             }
             var labour_cost = $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html() * 1;
             if ($(this).attr('id') == 'labor_markup_percent') {
@@ -1386,7 +1399,7 @@
             } else if ($(this).attr('id') == 'labor_markup_amount') {
                 labour_amount = $(this).val() * 1;
                 labour_percent = (labour_amount / labour_cost).toFixed(4) * 100;
-                $('#labor_markup_percent').val(Math.round(labour_percent * 10) / 10);
+                $('#labor_markup_percent').val(Math.round(labour_percent * 100) / 100);
             }
 
             var mis_cost = $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html() * 1;
@@ -1397,8 +1410,8 @@
                 $('#misc_markup_amount').val(Math.round(mis_amount * 100) / 100);
             } else if ($(this).attr('id') == 'misc_markup_amount') {
                 mis_amount = $(this).val() * 1;
-                mis_percent = (mis_amount / mis_cost).toFixed(4) * 100;
-                $('#misc_markup_percent').val(Math.round(mis_percent * 10) / 10);
+                mis_percent = (mis_amount / mis_cost) * 100;
+                $('#misc_markup_percent').val(Math.round(mis_percent * 100) / 100);
             }
 
 
@@ -1410,8 +1423,8 @@
                 $('#adson_markup_amount').val(Math.round(adson_amount * 100) / 100);
             } else if ($(this).attr('id') == 'adson_markup_amount') {
                 adson_amount = $(this).val() * 1;
-                adson_percent = (adson_amount / adson_cost).toFixed(4) * 100;
-                $('#adson_markup_percent').val(Math.round(adson_percent * 10) / 10);
+                adson_percent = (adson_amount / adson_cost) * 100;
+                $('#adson_markup_percent').val(Math.round(adson_percent * 100) / 100);
             }
 
             calculate_sale_table();

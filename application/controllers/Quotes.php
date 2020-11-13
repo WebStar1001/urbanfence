@@ -136,7 +136,20 @@ class Quotes extends CI_Controller
                 'hst' => $this->input->post('hst')
             );
         } elseif ($action == 'reject_pending_quote') {
-            $quoteData['status'] = 'New';
+            $quoteData = array('status' => 'New',
+                'mat_factor' => 0,
+                'lab_factor' => 0,
+                'misc_factor' => 0,
+                'ads_on_factor' => 0,
+                'discount_set' => 0,
+                'mat_net' => 0,
+                'labour_net' => 0,
+                'misc_net' => 0,
+                'ads_on_net' => 0,
+                'hst' => 0
+            );
+
+
         } elseif ($action == 'save_approved_quote') {
             $quoteData = array(
                 'additional_info' => $this->input->post('additional_info'),
@@ -155,8 +168,8 @@ class Quotes extends CI_Controller
                 'status' => 'Job'
             );
             $quote = $this->QuoteModel->get_quote($quote_id);
-            $quote_total = $quote->mat_net * $quote->mat_factor + $quote->labour_net * $quote->lab_factor+
-                + $quote->misc_net * $quote->misc_factor + $quote->ads_on_net * $quote->ads_on_factor;
+            $quote_total = $quote->mat_net * $quote->mat_factor + $quote->labour_net * $quote->lab_factor +
+                +$quote->misc_net * $quote->misc_factor + $quote->ads_on_net * $quote->ads_on_factor;
             $discount_amount = $quote_total * $quote->discount_set / 100;
             $hst = $quote->hst;
             $jobData = array(
@@ -276,6 +289,8 @@ class Quotes extends CI_Controller
     {
         $quote_id = $_GET['quote_id'];
 //        $quote_id = 2;
+        $this->db->where('id', $quote_id);
+        $this->db->update('quotes', array('additional_info' => $_GET['additional_info']));
         $quote = $this->QuoteModel->getQuoteDatas($quote_id);
         $customer = $this->CustomerModel->get_customer($quote->customer_id);
 

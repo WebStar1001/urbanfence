@@ -87,7 +87,7 @@
                  style="position: relative;right: 12px;background-color:#1C3FAA !important;">
                 <div class="w-full md:w-4/5 lg:w-1/2 border_color p-1 fieldset_bd_color mr-1 sm:mr-2 md:mr-5 mb-2 sm:mb-0"
                      style="background-color: white">
-                    <table style="width: 100%;margin-top:5px;">
+                    <table style="margin-top:5px;margin-left: auto;margin-right:auto;" cellpadding="5">
                         <tr>
                             <td>
                                 <b class="info_spacing">Customer Name:</b>
@@ -127,7 +127,7 @@
 
                 <div class="w-full md:w-4/5 lg:w-1/2 border_color p-1 fieldset_bd_color"
                      style="background-color: white">
-                    <table style="width: 100%">
+                    <table style="margin-top:5px;margin-left: auto;margin-right:auto;" cellpadding="5">
                         <tr>
                             <td><b class="info_spacing">Job Type:</b></td>
                             <td><?php echo ($oppor) ? $oppor->site_address : ''; ?></td>
@@ -156,7 +156,7 @@
                     <legend class="legend_spacing">Materials Settings</legend>
 
                     <div class="mt-1 mb-5 float-left w-1/2">
-                        <input type="checkbox" class="input border mr-2" id="vertical-remember-me">
+                        <input type="checkbox" class="input border mr-2" id="vertical-remember-me" disabled checked>
                         <label class="cursor-pointer select-none" for="vertical-remember-me" style="width: auto;">Need
                             to order Material</label>
                     </div>
@@ -164,7 +164,7 @@
                         <div class="mt-1 mb-2">
                             <input type="checkbox" class="input border mr-2" id="vertical-remember-me_r1">
                             <label class="cursor-pointer select-none" for="vertical-remember-me_r1"
-                                   style="width: auto;">Materials in stack</label>
+                                   style="width: auto;">Materials in stock</label>
                         </div>
                         <div class="mt-1 mb-2">
                             <input type="checkbox" class="input border mr-2" id="vertical-remember-me_r2">
@@ -363,7 +363,6 @@
 
                     <div class="w-full sm:w-1/2 lg:w-1/6 float-left ml-5 sm:mt-2 p-2 lg:p-0  pt-5 lg:mt-5">
                         <button class="button bg-theme-1 text-white" id="create_payment">Create Payment</button>
-                        <button class="button bg-theme-1 text-white mt-3" id="generate_invoice">Generate Invoice</button>
                     </div>
                 </div>
 
@@ -385,7 +384,15 @@
                             <input type="text" class="input w-full border flex-1 md:text-center" id="invoice_due_date">
                         </div>
                     </div>
-                    <div class="w-full sm:w-1/2 lg:w-1/6 float-left ml-5 sm:mt-2 p-2 lg:p-0  pt-5 lg:mt-5">
+                    <div class="lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left" style="visibility: hidden;">
+                        <div class="sm:w-full">
+                            <label class="w-full text-left">Invoice Due-Date</label>
+                            <input type="text" class="input w-full border flex-1 md:text-center" id="invoice_due_date">
+                        </div>
+                    </div>
+                    <div class="w-full sm:w-1/2 lg:w-1/6 float-left ml-5 sm:mt-2 p-2 lg:p-0  pt-5 lg:mt-2">
+                        <button class="button bg-theme-1 text-white mt-3" id="generate_invoice">Generate Invoice
+                        </button>
                     </div>
                 </div>
             </div>
@@ -430,16 +437,16 @@
                     <th class="whitespace-no-wrap">MAT Description</th>
                     <th class="whitespace-no-wrap">Quantity</th>
                     <th class="whitespace-no-wrap">Items Collected for job</th>
-                    <th class="whitespace-no-wrap">Lable print</th>
-                    <th class="whitespace-no-wrap">Missing in Stack</th>
-                    <th class="whitespace-no-wrap">In Stack</th>
+                    <th class="whitespace-no-wrap">Set print</th>
+                    <th class="whitespace-no-wrap">Missing in stock</th>
+                    <th class="whitespace-no-wrap">In stock</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php
                 $quantity_total = 0;
                 $items_collected_total = 0;
-                $missing_stack_total = 0;
+                $missing_stock_total = 0;
                 if ($mat_info):
                     foreach ($mat_info as $mat):
                         $quantity_total += $mat->quantity;
@@ -461,7 +468,7 @@
                             echo '
                                 <td style="color: red" class="border-b">' . ($mat->quantity - $mat->items_collected_for_job) . '</td>
                                 <td style="color: red" class="border-b"><i class="fa fa-minus"/></td>';
-                            $missing_stack_total += $mat->quantity - $mat->items_collected_for_job;
+                            $missing_stock_total += $mat->quantity - $mat->items_collected_for_job;
                         }
                         echo '</tr>';
                     endforeach;
@@ -473,7 +480,7 @@
                     <td class="border-b"><?php echo $quantity_total; ?></td>
                     <td class="border-b"><?php echo $items_collected_total; ?></td>
                     <td class="border-b"></td>
-                    <td class="border-b"><?php echo $missing_stack_total; ?></td>
+                    <td class="border-b"><?php echo ($missing_stock_total == 0) ? '<i class="fa fa-minus" style="color:green;"/>' : $missing_stock_total; ?></td>
                     <td class="border-b">--</td>
                 </tr>
                 </tbody>
@@ -486,7 +493,7 @@
         </div>
         <div class="mt-1 mb-2" style="text-align: right;position: relative;right: 10px;">
             <input type="checkbox" class="input border mr-2" id="vertical-remember-me_r1">
-            <label class="cursor-pointer select-none" for="vertical-remember-me_r1">Materials in stack</label>
+            <label class="cursor-pointer select-none" for="vertical-remember-me_r1">Materials in stock</label>
         </div>
         <div class="mt-1 mb-2" style="text-align: right;">
             <input type="checkbox" class="input border mr-2" id="vertical-remember-me_r2">
@@ -531,12 +538,15 @@
 
     function change_item_collect(rowId) {
         var quantity = $('#items_collected' + rowId).children().eq(2).html() * 1
-        var total_missing_stack = $('#items_collected_total').children().eq(5).html() * 1
+        var total_missing_stock = $('#items_collected_total').children().eq(5).html() * 1
         var total_items_collected = $('#items_collected_total').children().eq(3).html() * 1
         var oldValue = event.target.oldvalue * 1;
         var nValue = event.target.value * 1;
         $('#items_collected_total').children().eq(3).html(total_items_collected - oldValue + nValue);
-        $('#items_collected_total').children().eq(5).html(total_missing_stack + oldValue - nValue);
+        $('#items_collected_total').children().eq(5).html(total_missing_stock + oldValue - nValue);
+        if(total_missing_stock + oldValue - nValue == 0){
+            $('#items_collected_total').children().eq(5).html('<i class="fa fa-check" style="color:green;"/>');
+        }
         if (quantity == nValue) {
             $('#items_collected' + rowId).children().eq(5).html('<i class="fa fa-check" style="color:green;"/>')
             $('#items_collected' + rowId).children().eq(6).html('<i class="fa fa-minus" style="color:green;"/>')

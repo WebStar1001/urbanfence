@@ -28,7 +28,7 @@ class JobModel extends CI_Model
         $job_balance = $this->input->get('job_balance');
         $customer_id = $this->input->get('customer_id');
         $customer = $this->input->get('customer');
-        $sale_rep = $this->input->get('sale_rep');
+        $job_type = $this->input->get('job_type');
         $start_date = $this->input->get('start_date');
         $end_date = $this->input->get('end_date');
         $site_city = $this->input->get('site_city');
@@ -58,8 +58,8 @@ class JobModel extends CI_Model
         if ($customer_id) {
             $this->db->where('jobs.customer_id', $customer_id);
         }
-        if ($sale_rep) {
-            $this->db->where('opportunities.sale_rep', $sale_rep);
+        if ($job_type) {
+            $this->db->where('opportunities.job_type', $job_type);
         }
         if ($start_date) {
             $this->db->where('start_date >= "' . date('Y-m-d', strtotime($start_date)) . '"', null, false);
