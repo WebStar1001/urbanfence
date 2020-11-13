@@ -30,7 +30,7 @@ class JobModel extends CI_Model
         $customer = $this->input->get('customer');
         $sale_rep = $this->input->get('sale_rep');
         $start_date = $this->input->get('start_date');
-        $end_date = $this->input->get('start_date');
+        $end_date = $this->input->get('end_date');
         $site_city = $this->input->get('site_city');
 
         $this->db->select('jobs.*, customers.customer AS customer, customers.contact_person AS contact_person,
@@ -50,7 +50,7 @@ class JobModel extends CI_Model
             $this->db->where('jobs.installer', $installer);
         }
         if ($job_balance) {
-            $this->db->where('job_balance', $job_balance);
+            $this->db->where('job_balance >= ' . $job_balance, null, false);
         }
         if ($customer) {
             $this->db->like('customers.customer', $customer);
@@ -62,7 +62,10 @@ class JobModel extends CI_Model
             $this->db->where('opportunities.sale_rep', $sale_rep);
         }
         if ($start_date) {
-            $this->db->where('start_date', $start_date);
+            $this->db->where('start_date >= "' . date('Y-m-d', strtotime($start_date)) . '"', null, false);
+        }
+        if ($end_date) {
+            $this->db->where('end_date <= "' . date('Y-m-d', strtotime($end_date)) . '"', null, false);
         }
         if ($site_city) {
             $this->db->where('site_city', $site_city);

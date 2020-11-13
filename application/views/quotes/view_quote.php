@@ -173,7 +173,7 @@
             '<td style="width:12%;font-weight: bold">MAT Total:</td>' +
             '<td style="width:13%;">' + Math.round(d.mat_net * d.mat_factor) + '</td>' +
             '<td style="font-weight: bold;width:14%;">Discount Amount:</td>' +
-            '<td style="width:35%;">' + (Math.round((d.ads_on_net * d.ads_on_factor + d.misc_net * d.misc_factor + d.labour_net * d.lab_factor + d.mat_net * d.mat_factor) * d.discount_set) / 100) + '</td>' +
+            '<td style="width:20%;">' + (Math.round((d.ads_on_net * d.ads_on_factor + d.misc_net * d.misc_factor + d.labour_net * d.lab_factor + d.mat_net * d.mat_factor) * d.discount_set) / 100) + '</td>' +
             '<td style="font-weight: bold;width:12%;">Sales Rap:</td>' +
             '<td style="width:15%;">' + d.sale_rep + '</td>' +
             '</tr>' +

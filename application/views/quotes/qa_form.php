@@ -86,8 +86,8 @@
 <div class="table">
     <table style="margin-top: 10px;margin-left:40px;width: 100%">
         <tr>
-            <td height="15px" style="width: 20%;">To :</td>
-            <td width="135px" style="width: 25%;font-weight: bold;"><?php echo $customer->customer; ?></td>
+            <td height="15px" style="width: 20%;font-weight: bold;">To :</td>
+            <td width="135px" style="width: 25%;"><?php echo $customer->customer; ?></td>
             <td width="80px" style="width: 20%;font-weight: bold;">Date:</td>
             <td width="140px" style="width: 33%;"><?php echo date('Y-m-d'); ?></td>
         </tr>
@@ -149,9 +149,9 @@ $total = $sub_total2 + $quote->hst;
     <table width="100%" id="detail_table">
         <thead>
         <tr style="font-weight:bolder;">
-            <td>Notes</td>
-            <td>Item</td>
-            <td>Cost</td>
+            <td style="width: 65%;">Notes</td>
+            <td style="width: 20%">Item</td>
+            <td style="width: 20%">Cost</td>
         </tr>
         </thead>
         <tr>

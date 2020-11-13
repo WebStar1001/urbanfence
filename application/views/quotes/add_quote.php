@@ -753,30 +753,21 @@
                                                 <tbody>
                                                 <tr>
                                                     <td class="border-b">Material</td>
-                                                    <td class="border-b"><a href="#material-detailed"
-                                                                            data-target="#material-detailed"
-                                                                            data-toggle="modal"
-                                                                            style="text-decoration: underline;"></a>
+                                                    <td class="border-b"><a></a>
                                                     </td>
                                                     <td class="border-b"></td>
                                                     <td class="border-b"></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="border-b">Labour</td>
-                                                    <td class="border-b"><a href="javascript:;"
-                                                                            data-target="#labour-detailed"
-                                                                            data-toggle="modal"
-                                                                            style="text-decoration: underline;"></a>
+                                                    <td class="border-b"><a></a>
                                                     </td>
                                                     <td class="border-b"></td>
                                                     <td class="border-b"></td>
                                                 </tr>
                                                 <tr>
                                                     <td class="border-b">Misc</td>
-                                                    <td class="border-b"><a href="javascript:;"
-                                                                            data-target="#misc-detailed"
-                                                                            data-toggle="modal"
-                                                                            style="text-decoration: underline;"></a>
+                                                    <td class="border-b"><a></a>
                                                     <td class="border-b"></td>
                                                     <td class="border-b"></td>
                                                 </tr>
@@ -1151,85 +1142,6 @@
             ?>
         </div>
     </div>
-    <!-- Start Modal -->
-    <div class="modal" id="material-detailed">
-        <div class="modal__content modal__content--lg p-5 text-center">
-            <div class="flex items-center py-5 sm:py-3 border-b border-gray-200">
-                <h2 class="font-medium text-base mr-auto">Material-Detailed</h2>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="table">
-                    <thead>
-                    <tr class="bg-gray-200 text-gray-700">
-                        <th class="whitespace-no-wrap">Mat Category</th>
-                        <th class="whitespace-no-wrap">Code</th>
-                        <th class="whitespace-no-wrap">Price per unit</th>
-                        <th class="whitespace-no-wrap">Quantity</th>
-                        <th class="whitespace-no-wrap">Total Price</th>
-                    </tr>
-                    </thead>
-                    <tbody id="mat_modal_tbody">
-                    </tbody>
-                </table>
-            </div>
-            <div class=" py-3 text-right border-t border-gray-200">
-                <button data-dismiss="modal" type="button" class="button w-20 bg-theme-6 text-white">Cancel</button>
-            </div>
-        </div>
-
-    </div>
-    <div class="modal" id="labour-detailed">
-        <div class="modal__content modal__content--lg p-5 text-center">
-            <div class="flex items-center py-5 sm:py-3 border-b border-gray-200">
-                <h2 class="font-medium text-base mr-auto">Labour-Detailed</h2>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="table">
-                    <thead>
-                    <tr class="bg-gray-200 text-gray-700">
-                        <th class="whitespace-no-wrap">Labour desc</th>
-                        <th class="whitespace-no-wrap"># of Man Day</th>
-                        <th class="whitespace-no-wrap">total price</th>
-
-                    </tr>
-                    </thead>
-                    <tbody id="labor_modal_tbody">
-                    </tbody>
-                </table>
-            </div>
-            <div class=" py-3 text-right border-t border-gray-200">
-                <button data-dismiss="modal" type="button" class="button w-20 bg-theme-6 text-white">Cancel</button>
-            </div>
-        </div>
-
-    </div>
-    <div class="modal" id="misc-detailed">
-        <div class="modal__content modal__content--lg p-5 text-center">
-            <div class="flex items-center py-5 sm:py-3 border-b border-gray-200">
-                <h2 class="font-medium text-base mr-auto">Misc-Detailed</h2>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="table" id="miscellaneous">
-                    <thead>
-                    <tr class="bg-gray-200 text-gray-700">
-                        <th class="whitespace-no-wrap">Misc #</th>
-                        <th class="whitespace-no-wrap">Misc desc</th>
-                        <th class="whitespace-no-wrap">Price per unit</th>
-                        <th class="whitespace-no-wrap">Quantity</th>
-                        <th class="whitespace-no-wrap">Total Price</th>
-                    </tr>
-                    </thead>
-                    <tbody id="mis_modal_tbody">
-                    </tbody>
-                </table>
-
-            </div>
-            <div class=" py-3 text-right border-t border-gray-200">
-                <button data-dismiss="modal" type="button" class="button w-20 bg-theme-6 text-white">Cancel</button>
-            </div>
-        </div>
-
-    </div>
     <div class="modal" id="alert-modal">
         <div class="modal__content modal__content--lg p-5 text-center">
             <div class="flex items-center py-5 sm:py-3 border-b border-gray-200">
@@ -1263,72 +1175,19 @@
             }
             if (status == 'Pending') {
 
-                $('#materials').find('tr').each(function () {
-                    var mat_rowId = $(this).attr('id');
-                    if (mat_rowId != 'material_thead' && mat_rowId != 'material-item-row0' && mat_rowId != 'material-item-total') {
-                        $('#mat_modal_tbody').append('<tr>' +
-                            '<td>' + $(this).find('td').eq(0).find('select').val() + '</td>' +
-                            '<td>' + $(this).find('td').eq(1).find('select').val() + '</td>' +
-                            '<td>' + $(this).find('td').eq(2).html() + '</td>' +
-                            '<td>' + $(this).find('td').eq(3).find('input').val() + '</td>' +
-                            '<td>' + $(this).find('td').eq(4).html() + '</td>' +
-                            '')
-                    }
-                });
                 var mat_total = $('#material-item-total').find('td').eq(2).html() * 1;
                 $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(mat_total);
                 if (mat_total == 0) {
                     $('#material_markup_percent').attr('readonly', true);
                     $('#material_markup_amount').attr('readonly', true);
                 }
-                $('#labour').find('tr').each(function () {
-                    var lab_rowId = $(this).attr('id');
-                    if (lab_rowId != 'labour_thead' && lab_rowId != 'labour-item-row0' && lab_rowId != 'labour-item-total') {
-                        $('#labor_modal_tbody').append('<tr>' +
-                            '<td>' + $(this).find('td').eq(0).find('select').val() + '</td>' +
-                            '<td>' + $(this).find('td').eq(1).find('input').val() + '</td>' +
-                            '<td>' + $(this).find('td').eq(2).html() + '</td>' +
-                            '')
-                    }
-                });
                 var labour_total = $('#labour-item-total').find('td').eq(2).html() * 1;
                 $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(labour_total);
-                // if (labour_total == 0) {
-                //     $('#labor_markup_percent').attr('readonly', true);
-                //     $('#labor_markup_amount').attr('readonly', true);
-                // }
-                $('#miscellaneous').find('tr').each(function (index) {
-                    var mis_rowId = $(this).attr('id');
-                    if (mis_rowId != 'miscellaneous_thead' && mis_rowId != 'miscellaneous-item-row0' && mis_rowId != 'miscellaneous-item-total') {
-                        $('#mis_modal_tbody').append('<tr>' +
-                            '<td>' + (index + 1) + '</td>' +
-                            '<td>' + $(this).find('td').eq(1).find('input').val() + '</td>' +
-                            '<td>' + $(this).find('td').eq(2).find('input').val() + '</td>' +
-                            '<td>' + $(this).find('td').eq(3).find('input').val() + '</td>' +
-                            '<td>' + $(this).find('td').eq(4).html() + '</td>' +
-                            '')
-                    }
-                });
-
                 var mis_total = $('#miscellaneous-item-total').find('td').eq(2).html() * 1;
                 $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(mis_total);
 
-                // if (mis_total == 0) {
-                //     $('#misc_markup_percent').attr('readonly', true);
-                //     $('#misc_markup_amount').attr('readonly', true);
-                // }
-
                 var addon_total = $('#adsOn-item-total').find('td').eq(2).html() * 1;
                 $('#final_quote_table').find('tr').eq(4).children().eq(1).html(addon_total);
-
-                // if (addon_total == 0) {
-                //     $('#adson_markup_percent').attr('readonly', true);
-                //     $('#adson_markup_amount').attr('readonly', true);
-                // }
-
-                // var sub_total1 = mat_total + mis_total + labour_total + addon_total;
-                // $('#total_markup_percent').val(10);
-                // $('#total_markup_amount').val(sub_total1 * 0.1);
 
                 calculate_sale_table();
             } else if (status == 'Job') {
@@ -1457,19 +1316,6 @@
 
             $('#final_quote_table').find('tr').eq(8).children().eq(2).html(Math.round(HST * 100) / 100);
             $('#final_quote_table').find('tr').eq(9).children().eq(2).html(Math.round(total_selling * 100) / 100);
-
-
-            // $('#last_quote_table').find('tr').eq(1).children().eq(1).find('a').html(Math.round(mat_cost + mat_profit));
-            // $('#last_quote_table').find('tr').eq(2).children().eq(1).find('a').html(Math.round(labour_cost + labour_profit));
-            // $('#last_quote_table').find('tr').eq(3).children().eq(1).find('a').html(Math.round(misc_cost + misc_profit));
-            // $('#last_quote_table').find('tr').eq(4).children().eq(1).html(Math.round((adson_cost + adson_profit)));
-            // $('#last_quote_table').find('tr').eq(5).children().eq(1).html(Math.round(subtotal_cost1));
-            // $('#last_quote_table').find('tr').eq(6).children().eq(0).html('Discount ' + discount_percent + '%');
-            // $('#last_quote_table').find('tr').eq(6).children().eq(1).html(Math.round(discount_selling));
-            // $('#last_quote_table').find('tr').eq(7).children().eq(1).html(Math.round(subtotal_selling2));
-            // $('#last_quote_table').find('tr').eq(8).children().eq(1).html(Math.round(HST * 100) / 100);
-            // $('#last_quote_table').find('tr').eq(9).children().eq(1).html(Math.round(total_selling));
-
 
             $('#mat_net').val(mat_cost);
             $('#labour_net').val(labour_cost);
@@ -1938,7 +1784,7 @@
                 $('#adsOn-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
             if (status == 'Pending') {
-                $('#final_quote_table').find('tr').eq(34).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
+                $('#final_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
                 calculate_sale_table();
             }
         }

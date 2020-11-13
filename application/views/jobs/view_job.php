@@ -51,10 +51,8 @@
                             <option value="0">All</option>
                             <option>New</option>
                             <option>MAT Collected</option>
-                            <option>MAT delivered</option>
                             <option>In progress</option>
                             <option>Completed</option>
-                            <option>MAT Missing in Stack</option>
                             <option>MAT Missing in Stack</option>
                             <option>Completed and Paid</option>
                         </select>
@@ -83,7 +81,7 @@
                 </div>
             </div>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                <div><label>Job Balance</label>
+                <div><label>Job Balance > </label>
                     <div class="mt-1">
                         <input type="number" placeholder="Search" class="input pl-12 border w-full"
                                id="job_balance">
@@ -182,29 +180,29 @@
     function format(d) {
         /*console.log(d.JobCity);*/
         // `d` is the original data object for the row
-        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-aligh:left;width: 100%;">' +
+        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-align:left;width: 100%;">' +
             '<tr>' +
-            '<td>Contact Person:</td>' +
-            '<td>' + d.contact_person + '</td>' +
-            '<td>Site Address:</td>' +
-            '<td>' + d.site_address + '</td>' +
-            '<td>Customer ID:</td>' +
-            '<td>' + d.customer_id + '</td>' +
+            '<td style="font-weight: bold;width: 11%">Contact Person:</td>' +
+            '<td style="width: 19%">' + d.contact_person + '</td>' +
+            '<td style="font-weight: bold;width: 11%">Site Address:</td>' +
+            '<td style="width: 25%">' + d.site_address + '</td>' +
+            '<td style="font-weight: bold;width: 11%">Customer ID:</td>' +
+            '<td style="width: 10%">' + d.customer_id + '</td>' +
             '</tr>' +
             '<tr>' +
-            '<td>Contact onsite:</td>' +
+            '<td style="font-weight: bold;">Contact onsite:</td>' +
             '<td>' + d.contact_onsite + '</td>' +
-            '<td>Site City:</td>' +
+            '<td style="font-weight: bold;">Site City:</td>' +
             '<td>' + d.site_city + '</td>' +
-            '<td>Oppor ID:</td>' +
+            '<td style="font-weight: bold;">Oppor ID:</td>' +
             '<td>' + d.oppor_id + '</td>' +
             '</tr>' +
             '<tr>' +
-            '<td>Job Type:</td>' +
+            '<td style="font-weight: bold;">Job Type:</td>' +
             '<td>' + d.job_type + '</td>' +
-            '<td>Site Desc:</td>' +
+            '<td style="font-weight: bold;">Site Desc:</td>' +
             '<td>' + d.site_desc + '</td>' +
-            '<td>Quote ID:</td>' +
+            '<td style="font-weight: bold;">Quote ID:</td>' +
             '<td>' + d.quote_id + '</td>' +
             '</tr>' +
             '</table>';

@@ -87,22 +87,64 @@
                  style="position: relative;right: 12px;background-color:#1C3FAA !important;">
                 <div class="w-full md:w-4/5 lg:w-1/2 border_color p-1 fieldset_bd_color mr-1 sm:mr-2 md:mr-5 mb-2 sm:mb-0"
                      style="background-color: white">
-                    <p><b class="info_spacing">Customer Name:</b> <?php echo ($customer) ? $customer->customer : ''; ?>
-                    </p>
-                    <p><b class="info_spacing">Contact
-                            Person:</b> <?php echo ($customer) ? $customer->contact_person : ''; ?></p>
-                    <p><b class="info_spacing">Phone:</b> <?php echo ($customer) ? $customer->phone1 : ''; ?></p>
-                    <p><b class="info_spacing">Email:</b> <?php echo ($customer) ? $customer->email : ''; ?></p>
+                    <table style="width: 100%;margin-top:5px;">
+                        <tr>
+                            <td>
+                                <b class="info_spacing">Customer Name:</b>
+                            </td>
+                            <td>
+                                <?php echo ($customer) ? $customer->customer : ''; ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b class="info_spacing">Contact
+                                    Person:</b>
+                            </td>
+                            <td>
+                                <?php echo ($customer) ? $customer->contact_person : ''; ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b class="info_spacing">Phone:</b>
+                            </td>
+                            <td>
+                                <?php echo ($customer) ? $customer->phone1 : ''; ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <b class="info_spacing">Email:</b>
+                            </td>
+                            <td>
+                                <?php echo ($customer) ? $customer->email : ''; ?>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
 
 
                 <div class="w-full md:w-4/5 lg:w-1/2 border_color p-1 fieldset_bd_color"
                      style="background-color: white">
-                    <p><b class="info_spacing">Job Type:</b> <?php echo ($oppor) ? $oppor->job_type : ''; ?></p>
-                    <p><b class="info_spacing">Site Address:</b><?php echo ($oppor) ? $oppor->site_address : ''; ?></p>
-                    <p><b class="info_spacing">Site City:</b> <?php echo ($oppor) ? $oppor->site_city : ''; ?></p>
-                    <p><b class="info_spacing">Payment Terms
-                            are:</b> <?php echo ($quote) ? $quote->payment_term : ''; ?></p>
+                    <table style="width: 100%">
+                        <tr>
+                            <td><b class="info_spacing">Job Type:</b></td>
+                            <td><?php echo ($oppor) ? $oppor->site_address : ''; ?></td>
+                        </tr>
+                        <tr>
+                            <td><b class="info_spacing">Site Address:</b></td>
+                            <td><?php echo ($oppor) ? $oppor->job_type : ''; ?></td>
+                        </tr>
+                        <tr>
+                            <td><b class="info_spacing">Site City:</b></td>
+                            <td><?php echo ($oppor) ? $oppor->site_city : ''; ?></td>
+                        </tr>
+                        <tr>
+                            <td><b class="info_spacing">Payment Terms are:</b></td>
+                            <td><?php echo ($quote) ? $quote->payment_term : ''; ?></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
@@ -321,6 +363,7 @@
 
                     <div class="w-full sm:w-1/2 lg:w-1/6 float-left ml-5 sm:mt-2 p-2 lg:p-0  pt-5 lg:mt-5">
                         <button class="button bg-theme-1 text-white" id="create_payment">Create Payment</button>
+                        <button class="button bg-theme-1 text-white mt-3" id="generate_invoice">Generate Invoice</button>
                     </div>
                 </div>
 
@@ -343,7 +386,6 @@
                         </div>
                     </div>
                     <div class="w-full sm:w-1/2 lg:w-1/6 float-left ml-5 sm:mt-2 p-2 lg:p-0  pt-5 lg:mt-5">
-                        <button class="button bg-theme-1 text-white" id="generate_invoice">Generate Invoice</button>
                     </div>
                 </div>
             </div>
