@@ -73,11 +73,22 @@ class Jobs extends CI_Controller
 
     public function set_mat_collect()
     {
-        $mat_id = $this->input->post('mat_id');
-        $item_collect = $this->input->post('item_collect');
-        $this->db->where('id', $mat_id);
-        $this->db->update('mat_details', array('items_collected_for_job' => $item_collect));
-        echo $mat_id;
+        $mat_ids = $this->input->post('mat_id');
+        $item_collects = $this->input->post('collected_quantity');
+        $job_id = $this->input->post('job_id');
+        $mat_item_status = 'MAT Collected';
+        for ($i = 0; $i < count($mat_ids); $i++) {
+            $matRow = $this->db->get_where('mat_details', array('id' => $mat_ids[$i]))->row();
+            $this->db->where('id', $mat_ids[$i]);
+            $this->db->update('mat_details', array('items_collected_for_job' => $item_collects[$i]));
+            if ($matRow->quantity > $item_collects[$i]) {
+                $mat_item_status = 'MAT Missing in Stock';
+            }
+        }
+        $this->db->where('id', $job_id);
+        $this->db->update('jobs', array('status' => $mat_item_status));
+
+        redirect('Jobs/job_detail?job_id=' . $job_id);
     }
 
     public function set_job_settings()
@@ -86,16 +97,22 @@ class Jobs extends CI_Controller
         $start_date = $this->input->post('start_date');
         $installer = $this->input->post('installer');
         $end_date = $this->input->post('end_date');
+        $status = 'New';
+        if ($start_date) {
+            $status = 'In progress';
+        } elseif ($end_date) {
+            $status = 'Completed';
+        }
         $this->db->where('id', $job_id);
-        $this->db->update('jobs', array('start_date' => $start_date, 'end_date' => $end_date, 'installer' => $installer));
-        echo $job_id;
+        $this->db->update('jobs', array('start_date' => $start_date, 'end_date' => $end_date, 'installer' => $installer, 'status' => $status));
+        echo $status;
     }
 
     public function create_payment()
     {
         $job_id = $this->input->post('job_id');
         $customer_id = $this->input->post('customer_id');
-        $invoice_number = $this->input->post('invoice_id');
+        $invoice_number = $this->input->post('invoice_number');
         $payment_amount = $this->input->post('payment_amount');
         $payment_method = $this->input->post('payment_method');
         $date = date('Y-m-d');
@@ -113,12 +130,14 @@ class Jobs extends CI_Controller
     public function generate_invoice()
     {
         $job_id = $this->input->post('job_id');
+        $invoice_id = $this->input->post('invoice_id');
         $customer_id = $this->input->post('customer_id');
         $company_id = $this->input->post('company_id');
         $invoice_amount = $this->input->post('invoice_amount');
         $invoice_due_date = $this->input->post('invoice_due_date');
 //        $date = date('Y-m-d');
         $this->db->insert('invoices', array(
+            'id' => $invoice_id,
             'job_id' => $job_id,
             'company_id' => $company_id,
             'customer_id' => $customer_id,

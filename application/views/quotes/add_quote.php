@@ -229,8 +229,8 @@
                         <select class="input border mr-2" name="payment_term" required>
                             <?php
                             $payment_terms = array('C.O.D', 'Net 30 Days', 'Net 45 Days', 'Net 60 Days', 'Master-Card', 'Amex'
-                            , '30% Deposit - 70% Due 30 Days F', '50% Deposit - 50% Due 30 Days',
-                                '50% Deposit - 50% Due On Job C');
+                            , '30% Deposit - 70% Due 30 Days from job Completion', '50% Deposit - 50% Due 30 days from job Completion',
+                                '50% Deposit - 50% Due at job Completion');
                             foreach ($payment_terms as $val) {
                                 if (is_object($quote)) {
                                     if ($quote->payment_term == $val) {
@@ -996,7 +996,7 @@
                                 <div class="mt-5">
                                     <div style="width: 40%;display: inline-block;">
                                         <button class="button bg-gray-200 text-gray-600" style="float: inherit;"
-                                           id="generate_qa_form_button" target="_blank">
+                                                id="generate_qa_form_button" target="_blank">
                                             Generate Quote Form
                                         </button>
                                     </div>
@@ -1045,7 +1045,7 @@
                         <div class="intro-y flex flex-col sm:flex-row">
                             <label class="sm:text-left md:mr-5 width6 pt-1 sm:pt-3"> Additional Notes for
                                 Quote</label>
-                            <textarea class="input w-full border mt-2" name="additional_info"  id="additional_info"
+                            <textarea class="input w-full border mt-2" name="additional_info" id="additional_info"
                                       placeholder=""><?php echo $quote->additional_info; ?></textarea>
                         </div>
                     </div>
@@ -1349,7 +1349,7 @@
             if ($(this).attr('name') == 'discount_percent') {
                 discount_percent = $(this).val() * 1;
                 discount_amount = sub_total1 * discount_percent / 100;
-                $('input[name="discount_amount"]').val(discount_amount);
+                $('input[name="discount_amount"]').val(Math.round(discount_amount * 100) / 100);
             } else {
                 discount_amount = $(this).val() * 1;
                 discount_percent = (discount_amount / sub_total1) * 100;
@@ -1388,7 +1388,7 @@
                 $('#material_markup_amount').val(Math.round(mat_amount * 100) / 100);
             } else if ($(this).attr('id') == 'material_markup_amount') {
                 mat_amount = $(this).val() * 1;
-                mat_percent = Math.round(mat_amount / mat_cost) * 100;
+                mat_percent = mat_amount / mat_cost * 100;
                 $('#material_markup_percent').val(Math.round(mat_percent * 100) / 100);
             }
             var labour_cost = $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html() * 1;
@@ -1398,7 +1398,7 @@
                 $('#labor_markup_amount').val(Math.round(labour_amount * 100) / 100);
             } else if ($(this).attr('id') == 'labor_markup_amount') {
                 labour_amount = $(this).val() * 1;
-                labour_percent = (labour_amount / labour_cost).toFixed(4) * 100;
+                labour_percent = (labour_amount / labour_cost) * 100;
                 $('#labor_markup_percent').val(Math.round(labour_percent * 100) / 100);
             }
 

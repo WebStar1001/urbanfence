@@ -61,11 +61,13 @@ class JobModel extends CI_Model
         if ($job_type) {
             $this->db->where('opportunities.job_type', $job_type);
         }
-        if ($start_date) {
+        if ($start_date && !$end_date) {
             $this->db->where('start_date >= "' . date('Y-m-d', strtotime($start_date)) . '"', null, false);
-        }
-        if ($end_date) {
+        } elseif ($end_date && !$start_date) {
             $this->db->where('end_date <= "' . date('Y-m-d', strtotime($end_date)) . '"', null, false);
+        } elseif ($start_date && $end_date) {
+            $this->db->where('start_date >= "' . date('Y-m-d', strtotime($start_date)) . '" AND
+            start_date <= "' . date('Y-m-d', strtotime($end_date)) . '" ', null, false);
         }
         if ($site_city) {
             $this->db->where('site_city', $site_city);

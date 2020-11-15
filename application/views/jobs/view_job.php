@@ -50,7 +50,7 @@
                         <select class="select2 w-full" id="status">
                             <option value="0">All</option>
                             <option>New</option>
-                            <option>MAT Missing in Stack</option>
+                            <option>MAT Missing in Stock</option>
                             <option>MAT Collected</option>
                             <option>In progress</option>
                             <option>Completed</option>
