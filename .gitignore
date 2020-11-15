@@ -1,6 +1,7 @@
 user_guide/*
 system/*
 application/config/*
+application/config/config.php
 document/*
 .gitignore
 cgi-bin/*
