@@ -181,7 +181,7 @@ class Jobs extends CI_Controller
                 $total_pay_amount += $pay->payment_amount;
                 $job_balance -= $pay->payment_amount;
                 $invoice_total -= $pay->payment_amount;
-                if ($invoice_total <= 0) {
+                if ($job_balance <= 0) {
                     $retAry[$j]['notes'] = '<span style="color:green;">Job Paid Fully</span>';
                 }
                 $j++;
