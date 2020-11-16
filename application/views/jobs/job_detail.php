@@ -207,7 +207,7 @@
                         <label class="mr-1">Start Date</label>
                         <input type="date" class="input w-1/3 lg:w-2/3 border col-span-4" id="start_date"
                                value="<?php echo ($job) ? $job->start_date : ''; ?>"
-                            <?php echo ($job && ($job->status == 'New' || $job->status == 'MAT Missing In Stock')) ? 'readonly' : ''; ?> />
+                            <?php echo ($job && ($job->status == 'New' || $job->status == 'MAT Missing in Stock')) ? 'readonly' : ''; ?> />
                     </div>
                     <div class="mt-1 mb-2">
                         <label class="mr-1">Completion Date</label>
