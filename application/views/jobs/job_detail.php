@@ -164,18 +164,18 @@
                     <div class="float-right w-1/2 mb-5">
                         <div class="mt-1 mb-2">
                             <input type="checkbox" class="input border mr-2" id="vertical-remember-me_r1"
-                                <?php echo ($job && $job->status == 'MAT Collected') ? 'checked' : '' ?>>
+                                <?php echo ($job && $job->status == 'MAT Collected') ? 'checked' : '' ?> disabled/>
                             <label class="cursor-pointer select-none" for="vertical-remember-me_r1"
                                    style="width: auto;">Materials in stock</label>
                         </div>
                         <div class="mt-1 mb-2">
                             <input type="checkbox" class="input border mr-2" id="vertical-remember-me_r2"
-                                <?php echo ($job && $job->status == 'MAT Collected') ? 'checked' : '' ?>>
+                                <?php echo ($job && $job->status == 'MAT Collected') ? 'checked' : '' ?> disabled/>
                             <label class="cursor-pointer select-none" for="vertical-remember-me_r2"
                                    style="width: auto;">Materials Collected</label>
                         </div>
                         <div class="mt-1 mb-4">
-                            <input type="checkbox" class="input border mr-2" id="vertical-remember-me_r3">
+                            <input type="checkbox" class="input border mr-2" id="vertical-remember-me_r3" disabled>
                             <label class="cursor-pointer select-none" for="vertical-remember-me_r3"
                                    style="width: auto;">Materials Delivered</label>
                         </div>
@@ -207,12 +207,12 @@
                         <label class="mr-1">Start Date</label>
                         <input type="date" class="input w-1/3 lg:w-2/3 border col-span-4" id="start_date"
                                value="<?php echo ($job) ? $job->start_date : ''; ?>"
-                            <?php echo ($job && ($job->status == 'New' || $job->status == 'MAT Missing in Stock')) ? 'readonly' : ''; ?> />
+                            <?php echo ($job && ($job->status == 'New' || $job->status == 'MAT Missing in Stock')) ? 'readonly disabled' : ''; ?> />
                     </div>
                     <div class="mt-1 mb-2">
                         <label class="mr-1">Completion Date</label>
                         <input type="date" class="input w-1/3 lg:w-2/3 border col-span-4" id="end_date"
-                               value="<?php echo ($job) ? $job->end_date : ''; ?>" <?php echo ($job && $job->status != 'In progress') ? 'readonly' : ''; ?>/>
+                               value="<?php echo ($job) ? $job->end_date : ''; ?>" <?php echo ($job && $job->status != 'In progress') ? 'readonly disabled' : ''; ?>/>
                     </div>
                     <div class="mt-1 mb-2">
                         <button class="button bg-theme-1 text-white" id="job_setting_btn">Save</button>
@@ -391,7 +391,7 @@
                         <td class="border-b">Total</td>
                         <td class="border-b"></td>
                         <td class="border-b"><?php echo $quantity_total; ?></td>
-                        <td class="border-b"><?php echo $items_collected_total; ?></td>
+                        <td class="border-b"><?php echo ($items_collected_total == 0) ? '' : $items_collected_total; ?></td>
                         <td class="border-b"></td>
                         <td class="border-b"><?php echo ($missing_stock_total == 0) ? '<i class="fa fa-minus" style="color:green;"/>' : $missing_stock_total; ?></td>
                         <td class="border-b">--</td>
@@ -558,6 +558,9 @@
                 },  // data to submit
                 success: function (data, status, xhr) {
                     table.ajax.reload(null, false);
+                    $('#invoice_number').val('');
+                    $('#payment_amount').val('');
+                    $('#payment_method').val('');
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
                     console.log(errorMessage);
@@ -582,6 +585,9 @@
                 },
                 success: function (data, status, xhr) {
                     table.ajax.reload(null, false);
+                    $('#invoice_id').val('');
+                    $('#invoice_amount').val('');
+                    $('#invoice_due_date').val('');
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
                     console.log(errorMessage);
@@ -590,11 +596,6 @@
         });
     });
     $('#job_setting_btn').click(function () {
-
-        if ($('#installer').val() == '' || $('#start_date').val() == '') {
-            alert('You need to input all information for saving job settings.');
-            return;
-        }
         $.ajax('set_job_settings', {
             type: 'POST',  // http method
             data: {
@@ -607,6 +608,7 @@
                 status = data;
                 if (status == 'In progress') {
                     $('#end_date').attr('readonly', false);
+                    $('#end_date').attr('disabled', false);
                 }
                 $('#status_filed').html(status);
             },
@@ -624,6 +626,7 @@
             data: {mat_id: mat_id, item_collect: item_collect, mat_item_status: status, job_id: job_id},  // data to submit
             success: function (data) {
                 if (status == 'MAT Collected') {
+                    $('#start_date').attr('readonly', false);
                     $('#start_date').attr('disabled', false);
                 }
                 $('#status_filed').html(status);
@@ -634,12 +637,12 @@
         });
     }
 
-    function cancel_payment(payment_id){
-        if(!confirm('Do you want to cancel this payment'))
+    function cancel_payment(payment_id) {
+        if (!confirm('Do you want to cancel this payment'))
             return;
         $.ajax('cancel_payment', {
             type: 'POST',  // http method
-            data: {payment_id : payment_id, job_id : job_id},  // data to submit
+            data: {payment_id: payment_id, job_id: job_id},  // data to submit
             success: function (data) {
                 table.ajax.reload(null, false);
             },

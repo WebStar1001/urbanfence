@@ -69,7 +69,7 @@
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Installer</label>
                     <div class="mt-1">
-                        <select class="select2 w-full" id="installer">
+                        <select class="input border w-full" id="installer">
                             <option value="0">All</option>
                             <?php
                             foreach ($installers as $installer) {
@@ -214,18 +214,20 @@
         $('#start_date').daterangepicker({
             "showDropdowns": true,
             "minYear": 2010,
-            "singleDatePicker": true,
+            // "singleDatePicker": true,
+            "linkedCalendars" : false
         });
         $('#start_date').val('');
         $('#end_date').daterangepicker({
             "showDropdowns": true,
             "minYear": 2010,
-            "singleDatePicker": true,
+            // "singleDatePicker": true,
+            "linkedCalendars" : false
         });
         $('#end_date').val('');
         var table = $('#jobTable').DataTable({
             "pageLength": 50,
-
+            "searching": false,
             "ajax": {
                 url: '<?php echo base_url("Jobs/get_jobs");?>',
                 type: 'GET',

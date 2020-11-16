@@ -85,8 +85,11 @@
                             <fieldset class="p-2 mb-3 sm:mb-0 sm:p-3 status_width fieldset_bd_color"
                                       style="width: 300px!important;">
                                 <legend class="legend_spacing">Customer</legend>
-                                <p>Customer Name : <?php echo (is_object($customer)) ? $customer->customer : ''; ?>
-                                    <br>Address: <?php echo (is_object($customer)) ? $customer->address : ''; ?></p>
+                                <p>Customer Name : <span
+                                            id="customer_name_span"><?php echo (is_object($customer)) ? $customer->customer : ''; ?></span>
+                                    <br>Address: <span
+                                            id="customer_address_span"><?php echo (is_object($customer)) ? $customer->address : ''; ?></span>
+                                </p>
                             </fieldset>
                         </div>
                         <div class="col-span-4 w-full">
@@ -464,6 +467,22 @@
                 cache: true
             }
         });
+        $('#search_customer').on('change', function () {
+            $.ajax('get_customer', {
+                type: 'GET',  // http method
+                data: {
+                    customer_id: this.value,
+                },
+                dataType: 'json',
+                success: function (data, status, xhr) {
+                    $('#customer_name_span').html(data.customer);
+                    $('#customer_address_span').html(data.address);
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log(errorMessage);
+                }
+            });
+        })
         $('#add_customer_form').on('submit', function () {
             event.preventDefault();
             $.ajax('create_customer', {
@@ -483,6 +502,8 @@
                     var customer_id = data;
                     $('#search_customer').append('<option value="' + customer_id + '">' + $('#add_customer_modal').find('#customer').val() + '</option>');
                     $('#add_customer_modal').modal('hide');
+                    $('#customer_name_span').html($('#add_customer_modal').find('#customer').val());
+                    $('#customer_address_span').html($('#add_customer_modal').find('#address').val());
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
                     console.log(errorMessage);

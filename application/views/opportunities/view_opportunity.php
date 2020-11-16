@@ -121,9 +121,9 @@ tr.shown td.details-control {
             </div>
             <?php echo $this->uri->segment(3); ?>
             <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
-                <div class=""><label>Sale Rep</label>
+                <div class=""><label>Sales Rep</label>
                     <div class="mt-1">
-                        <select class="select2 w-full" id="sale_rep">
+                        <select class="input border w-full" id="sale_rep">
                             <option value="0">All</option>
                             <?php
                             foreach ($sales as $user) {
@@ -273,7 +273,7 @@ tr.shown td.details-control {
         });
         var table = $('#opporTable').DataTable({
             "pageLength": 50,
-            //"ajax": '<?php echo base_url("Opportunity/get_opportunities");?>',
+            "searching": false,
             "ajax": {
                 url: '<?php echo base_url("Opportunity/get_opportunities");?>',
                 data: function (data) {

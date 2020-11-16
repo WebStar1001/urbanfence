@@ -96,9 +96,9 @@
                 </div>
             </div>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                <div class=""><label>Sales Rap.</label>
+                <div class=""><label>Sales Rep</label>
                     <div class="mt-1">
-                        <select class="select2 w-full" id="sales_rap">
+                        <select class="input border w-full" id="sales_rap">
                             <option value="0">All</option>
                             <?php
                             foreach ($sales as $user) {
@@ -214,7 +214,7 @@
         });
         var table = $('#quoteTable').DataTable({
             "pageLength": 50,
-
+            "searching": false,
             "ajax": {
                 url: '<?php echo base_url("Quotes/get_quotes");?>',
                 type: 'GET',

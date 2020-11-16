@@ -56,8 +56,8 @@
                     <div class="font-medium text-center text-base mt-3">Jobs</div>
                     <div class="text-gray-600 mt-2 w-3/4 text-center mx-auto">
                     <ul class="shortcut-box">
-                        <li><a href="<?php echo base_url("Jobs/create_job");?>">Create Jobs</a></li>
-                        <li><a href="<?php echo base_url("Jobs/jobs_list");?>">View Jobs</a></li>
+                        <li><a href="<?php echo base_url("Jobs/job_detail");?>">Job Details</a></li>
+                        <li><a href="<?php echo base_url("Jobs/jobs_list");?>">Jobs View</a></li>
                     </ul>
                 </div>
                 </div>

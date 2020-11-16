@@ -61,13 +61,13 @@ class JobModel extends CI_Model
         if ($job_type) {
             $this->db->where('opportunities.job_type', $job_type);
         }
-        if ($start_date && !$end_date) {
-            $this->db->where('start_date >= "' . date('Y-m-d', strtotime($start_date)) . '"', null, false);
-        } elseif ($end_date && !$start_date) {
-            $this->db->where('end_date <= "' . date('Y-m-d', strtotime($end_date)) . '"', null, false);
-        } elseif ($start_date && $end_date) {
-            $this->db->where('start_date >= "' . date('Y-m-d', strtotime($start_date)) . '" AND
-            start_date <= "' . date('Y-m-d', strtotime($end_date)) . '" ', null, false);
+        if ($start_date) {
+            list($from_date, $to_date) = explode('-', $start_date);
+            $this->db->where('start_date BETWEEN "' . date('Y-m-d', strtotime($from_date)) . '" AND "' . date('Y-m-d', strtotime($to_date)) . '"', "", FALSE);
+        }
+        if ($end_date) {
+            list($from_date, $to_date) = explode('-', $end_date);
+            $this->db->where('end_date BETWEEN "' . date('Y-m-d', strtotime($from_date)) . '" AND "' . date('Y-m-d', strtotime($to_date)) . '"', "", FALSE);
         }
         if ($site_city) {
             $this->db->where('site_city', $site_city);
