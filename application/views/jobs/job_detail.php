@@ -265,7 +265,8 @@
                                 <option>Visa</option>
                                 <option>Mater-Card</option>
                                 <option>Amex</option>
-                                <option>Cash and Cheque</option>
+                                <option>Cash</option>
+                                <option>Cheque</option>
                             </select>
                         </div>
                     </div>
