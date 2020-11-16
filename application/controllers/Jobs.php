@@ -124,6 +124,15 @@ class Jobs extends CI_Controller
             'payment_date' => $date,
             'payment_method' => $payment_method
         ));
+        $job = $this->JobModel->getJobByJobID($job_id);
+
+        $pay_amounts = $this->JobModel->getPayamountByJobID($job_id);
+
+        if($job->job_balance == $pay_amounts){
+            $this->db->where('id', $job_id);
+            $this->db->update('jobs', array('status'=>'Completed and Paid'));
+        }
+
         echo $this->db->insert_id();
     }
 
@@ -173,7 +182,7 @@ class Jobs extends CI_Controller
                 $retAry[$j]['debit'] = '';
                 $retAry[$j]['credit'] = $pay->payment_amount;
                 $retAry[$j]['due_date'] = date('Y-m-d', strtotime($pay->payment_date));
-                $retAry[$j]['job_balance'] = $job_balance - $pay->payment_amount;
+                $retAry[$j]['job_balance'] = round($job_balance - $pay->payment_amount, 2);
                 $retAry[$j]['account_balance'] = $invoice_total - $pay->payment_amount;
                 $retAry[$j]['payment_method'] = $pay->payment_method;
                 $retAry[$j]['payment_date'] = date('Y-m-d', strtotime($pay->payment_date));
@@ -196,6 +205,25 @@ class Jobs extends CI_Controller
         echo json_encode($data);
     }
 
+    public function cancel_payment(){
+        $payment_id = $this->input->post('payment_id');
+        $job_id = $this->input->post('job_id');
+        $this->db->where('id', $payment_id);
+        $this->db->update('payments', array('payment_amount'=> 0));
+
+        $job = $this->JobModel->getJobByJobID($job_id);
+
+        $pay_amounts = $this->JobModel->getPayamountByJobID($job_id);
+
+        if($job->job_balance <= $pay_amounts){
+            $this->db->where('id', $job_id);
+            $this->db->update('jobs', array('status'=>'Completed and Paid'));
+        }else{
+            $this->db->where('id', $job_id);
+            $this->db->update('jobs', array('status'=>'Completed'));
+        }
+        echo $payment_id;
+    }
 
 }
 

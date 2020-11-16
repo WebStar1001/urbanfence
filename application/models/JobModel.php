@@ -78,5 +78,13 @@ class JobModel extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
+    public function getPayamountByJobID($job_id){
+        $payments = $this->db->get_where('payments', array('job_id'=>$job_id))->result();
+        $pay_amounts = 0;
+        foreach ($payments as $payment){
+            $pay_amounts += $payment->payment_amount;
+        }
+        return $pay_amounts;
+    }
 
 }

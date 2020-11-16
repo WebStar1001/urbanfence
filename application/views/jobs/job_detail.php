@@ -430,6 +430,7 @@
     var customer_id = '<?php echo ($job) ? $job->customer_id : ""?>';
     var company_id = '<?php echo ($job) ? $job->company_id : ""?>';
     var status = '<?php echo ($job) ? $job->status : ""?>';
+    var table;
 
     function format(d) {
         /*console.log(d.JobCity);*/
@@ -441,7 +442,7 @@
                 '<td>' + d.payment_date + '</td>' +
                 '<td>Paymen Method:</td>' +
                 '<td>' + d.payment_method + '</td>' +
-                '<td><button class="button  bg-theme-6 text-white">Cancel Payment</button></td>' +
+                '<td><button class="button  bg-theme-6 text-white" onclick="cancel_payment(' + d.payment_id + ')">Cancel Payment</button></td>' +
                 '</tr></table>';
         } else {
             return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-align:left;width: 100%;">' +
@@ -490,7 +491,7 @@
     $(document).ready(function () {
         $.fn.dataTable.ext.errMode = 'throw';
 
-        var table = $('#jobDetailTable').DataTable({
+        table = $('#jobDetailTable').DataTable({
             "pageLength": 50,
             "searching": false,
 
@@ -626,6 +627,21 @@
                     $('#start_date').attr('disabled', false);
                 }
                 $('#status_filed').html(status);
+            },
+            error: function (jqXhr, textStatus, errorMessage) {
+                console.log(errorMessage);
+            }
+        });
+    }
+
+    function cancel_payment(payment_id){
+        if(!confirm('Do you want to cancel this payment'))
+            return;
+        $.ajax('cancel_payment', {
+            type: 'POST',  // http method
+            data: {payment_id : payment_id, job_id : job_id},  // data to submit
+            success: function (data) {
+                table.ajax.reload(null, false);
             },
             error: function (jqXhr, textStatus, errorMessage) {
                 console.log(errorMessage);
