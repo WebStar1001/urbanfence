@@ -26,21 +26,21 @@
 
 
     <style type="text/css">
-        ::-webkit-scrollbar {
-            width: 10px !important;
-        }
+        /*::-webkit-scrollbar {*/
+        /*    width: 10px !important;*/
+        /*}*/
 
         /* Track */
-        ::-webkit-scrollbar-track {
-            box-shadow: inset 0 0 5px grey;
-            border-radius: 10px;
-        }
+        /*::-webkit-scrollbar-track {*/
+        /*    box-shadow: inset 0 0 5px grey;*/
+        /*    border-radius: 10px;*/
+        /*}*/
 
-        /* Handle */
-        ::-webkit-scrollbar-thumb {
-            background: #dee7ef;
-            border-radius: 10px;
-        }
+        /*!* Handle *!*/
+        /*::-webkit-scrollbar-thumb {*/
+        /*    background: #dee7ef;*/
+        /*    border-radius: 10px;*/
+        /*}*/
 
         /*scroll close*/
 

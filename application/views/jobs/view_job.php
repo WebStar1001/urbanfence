@@ -47,7 +47,7 @@
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Status</label>
                     <div class="mt-1">
-                        <select class="select2 w-full" id="status">
+                        <select class="input border w-full" id="status">
                             <option value="0">All</option>
                             <option>New</option>
                             <option>MAT Missing in Stock</option>
@@ -69,7 +69,7 @@
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Installer</label>
                     <div class="mt-1">
-                        <select class="input border w-full" id="installer">
+                        <select class="select2 w-full" id="installer">
                             <option value="0">All</option>
                             <?php
                             foreach ($installers as $installer) {

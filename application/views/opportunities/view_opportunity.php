@@ -1,29 +1,3 @@
-<!-- <style type="text/css">
-::-webkit-scrollbar {
-  width: 10px!important;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey; 
-  border-radius: 10px;
-}
- 
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: lightblue; 
-  border-radius: 10px;
-}
-
-
-td.details-control {
-    background: url('<?php echo base_url("/assets/images/plus.png") ?>') no-repeat center center;
-    cursor: pointer;
-}
-tr.shown td.details-control {
-    background: url('<?php echo base_url("/assets/images/minus.png") ?>') no-repeat center center;
-}
-</style> -->
 <style type="text/css">
 
 
@@ -73,7 +47,7 @@ tr.shown td.details-control {
                             <option value="Fence and Gate Repair">Fence and Gate Repair</option>
                             <option value="New Fence">New Fence</option>
                             <option value="New Gate">New Gate</option>
-                            <option value="New Fence and Gate c/w">New Fence and Gate c/w</option>
+                            <option value="New Fence and Gate c/w Operator">New Fence and Gate c/w Operator</option>
                             <option value="Gate Operator Service">Gate Operator Service</option>
                         </select>
                     </div>
@@ -82,7 +56,7 @@ tr.shown td.details-control {
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Oppor. Per Month</label>
                     <div class="mt-1">
-                        <select class="input border w-full" id="oppor_per_month">
+                        <select class="select2 w-full" id="oppor_per_month">
                             <option value="0">All</option>
                             <?php
                             $months = array(1 => 'Jan.', 2 => 'Feb.', 3 => 'Mar.', 4 => 'Apr.', 5 => 'May', 6 => 'Jun.', 7 => 'Jul.',
@@ -123,7 +97,7 @@ tr.shown td.details-control {
             <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
                 <div class=""><label>Sales Rep</label>
                     <div class="mt-1">
-                        <select class="input border w-full" id="sale_rep">
+                        <select class="select2 w-full" id="sale_rep">
                             <option value="0">All</option>
                             <?php
                             foreach ($sales as $user) {

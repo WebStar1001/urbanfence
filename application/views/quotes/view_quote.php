@@ -98,7 +98,7 @@
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div class=""><label>Sales Rep</label>
                     <div class="mt-1">
-                        <select class="input border w-full" id="sales_rap">
+                        <select class="select2 w-full" id="sales_rap">
                             <option value="0">All</option>
                             <?php
                             foreach ($sales as $user) {
@@ -152,7 +152,7 @@
                 <th>Customer</th>
                 <th>Job Type</th>
                 <th>Site City</th>
-                <th>Sale Rep</th>
+                <th>Sales Rep</th>
                 <th>Date</th>
                 <th>Quote Total</th>
                 <th>Edit</th>

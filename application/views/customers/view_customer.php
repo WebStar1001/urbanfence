@@ -103,7 +103,7 @@
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Last Sales Rep</label>
                     <div class="mt-1">
-                        <select class="input border w-full">
+                        <select class="select2 w-full">
                             <option value="0">All</option>
                             <?php
                             foreach ($users as $user) {

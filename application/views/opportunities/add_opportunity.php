@@ -69,7 +69,7 @@
     </div>
     <?php
     $job_type = array('',
-        'Fence Repair', 'Gate Repair', 'Fence and Gate Repair', 'New Fence', 'New Gate', 'New Fence and Gate c/w',
+        'Fence Repair', 'Gate Repair', 'Fence and Gate Repair', 'New Fence', 'New Gate', 'New Fence and Gate c/w Operator',
         'Gate Operator Service');
     $sale_source = array('', 'Returned Customer', 'Yellow Pages', 'Facebook', 'Google Ad', "Friend's Referral");
     $status = array('New', 'Assigned');
@@ -388,6 +388,8 @@
                             <div class="intro-y flex flex-col sm:flex-row mt-2">
                                 <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Contact Person*</label>
                                 <input type="text" id="contact_person" class="input w-full border mt-2 flex-1" value="">
+                                <input type="button" value="Use Same Name" style="float: right;" id="use_same_name"
+                                       class="button bg-theme-1 text-white mt-5 p-2 ml-2"/>
                             </div>
                             <div class="intro-y flex flex-col sm:flex-row mt-3">
                                 <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Phone 2</label>
@@ -423,6 +425,9 @@
 </div>
 <script type="text/javascript">
     var customer_address = '<?php echo (is_object($customer)) ? $customer->address : '';?>';
+    $('#use_same_name').click(function () {
+        $('#contact_person').val($('#customer').val());
+    })
     $(document).ready(function () {
         $('#copy_from_customer').click(function () {
             var customer_id = $('#search_customer').val();
