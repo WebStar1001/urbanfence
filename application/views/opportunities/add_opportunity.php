@@ -379,8 +379,10 @@
                                 <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Billing Address*</label>
                                 <input type="text" id="address" class="input w-full border mt-2 flex-1" value="">
                             </div>
-
-
+                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                                <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Postal Code</label>
+                                <input type="text" id="postal_code" class="input w-full border mt-2 flex-1"/>
+                            </div>
                         </div>
                     </div>
                     <div class="col-span-12 sm:col-span-6 sm:mr-4 md:col-span-6 set_extra_mg">
@@ -499,6 +501,7 @@
                     phone1: $('#add_customer_modal').find('#phone1').val(),
                     phone2: $('#add_customer_modal').find('#phone2').val(),
                     address: $('#add_customer_modal').find('#address').val(),
+                    postal_code: $('#add_customer_modal').find('#postal_code').val(),
                     email: $('#add_customer_modal').find('#email').val(),
                     fax: $('#add_customer_modal').find('#fax').val(),
                     city: $('#add_customer_modal').find('#city').val()
