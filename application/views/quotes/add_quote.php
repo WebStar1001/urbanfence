@@ -224,9 +224,31 @@
 
                         </select>
                     </div>
+
+                    <div class="w-full sm:w-full m-auto" style="display:flex;">
+                        <p classs="">Set Calc Mode</p>
+                        <select class="input border mr-2" name="calc_mode" id="calc_mode">
+                            <?php
+                            $calc_mode = array('Contractor', 'Tender');
+                            foreach ($calc_mode as $key => $val) {
+                                if (is_object($quote)) {
+                                    if ($quote->calc_mode == $val) {
+                                        echo '<option value="' . $val . '" selected>' . $val . '</option>';
+                                    } else {
+                                        echo '<option value="' . $val . '">' . $val . '</option>';
+                                    }
+                                } else {
+                                    echo '<option value="' . $val . '">' . $val . '</option>';
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
                     <div class="w-full sm:w-full m-auto mb-2" style="display:flex;">
-                        <p> Set Payment Terms * </p>
-                        <select class="input border mr-2" name="payment_term" required>
+                        <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Set Payment Terms * </label>
+                    </div>
+                    <div class="w-full sm:w-full m-auto mb-2" style="display:flex;">
+                        <select class="input border mr-2 w-full" name="payment_term" required>
                             <?php
                             $payment_terms = array('C.O.D', 'Net 30 Days', 'Net 45 Days', 'Net 60 Days', 'Master-Card', 'Amex'
                             , '30% Deposit - 70% Due 30 Days from job Completion', '50% Deposit - 50% Due 30 days from job Completion',
@@ -244,26 +266,6 @@
                             }
                             ?>
                         </select>
-                    </div>
-                    <div class="w-full sm:w-full m-auto" style="display:flex;">
-                        <p classs="">Set Calc Mode
-                        <p>
-                            <select class="input border mr-2" name="calc_mode" id="calc_mode">
-                                <?php
-                                $calc_mode = array('Contractor', 'Tender');
-                                foreach ($calc_mode as $key => $val) {
-                                    if (is_object($quote)) {
-                                        if ($quote->calc_mode == $val) {
-                                            echo '<option value="' . $val . '" selected>' . $val . '</option>';
-                                        } else {
-                                            echo '<option value="' . $val . '">' . $val . '</option>';
-                                        }
-                                    } else {
-                                        echo '<option value="' . $val . '">' . $val . '</option>';
-                                    }
-                                }
-                                ?>
-                            </select>
                     </div>
                 </div>
             </div>
