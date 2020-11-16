@@ -191,7 +191,6 @@
                         <select class="input border mr-0 w-1/3 lg:w-2/3" id="installer">
                             <option value="0">Choose</option>
                             <?php
-                            print_r($job);exit;
                             foreach ($installers as $installer) {
                                 $selected = '';
                                 if ($job) {
