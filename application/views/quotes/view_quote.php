@@ -248,7 +248,7 @@
                 {"data": "job_type"},
                 {"data": "site_city"},
                 {"data": "sale_rep"},
-                {"data": "quote_date", "width": "10%"},
+                {"data": "quote_date", "width": "14%"},
                 {
                     "data": null, render: function (data) {
                         var quote_total = data.ads_on_net * data.ads_on_factor + data.misc_net * data.misc_factor +
