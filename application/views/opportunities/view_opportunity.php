@@ -19,6 +19,10 @@
             width: 6rem;
         }
     }
+
+    table.dataTable thead th, table.dataTable thead td {
+        padding: 0 0 !important;
+    }
 </style>
 <!-- BEGIN: Content -->
 <div class="content">
@@ -176,7 +180,7 @@
         <table id="opporTable" class="display" style="width:100%;text-align: center; margin-bottom: 5px;">
             <thead>
             <tr>
-                <th></th>
+                <th>Additional Info</th>
                 <th>ID</th>
                 <th>Sale Source</th>
                 <th>Date</th>
@@ -274,9 +278,9 @@
                 },
                 {"data": "id"},
                 {"data": "sale_source", "width": "15%"},
-                {"data": "date", "width": "13%"},
+                {"data": "date", "width": "17%"},
                 {"data": "customer", "width": "15%"},
-                {"data": "job_type", "width": "15%"},
+                {"data": "job_type", "width": "18%"},
                 {"data": "status"},
                 {
                     "data": null, render: function (data) {
@@ -323,6 +327,8 @@
             ],
             "order": [[0, 'asc']]
         });
+        table.tables().header().to$().find('th:eq(0)').css('max-width', '60px');
+        $(window).trigger('resize');
 
         // Add event listener for opening and closing details
         $('#opporTable tbody').on('click', 'td.details-control', function () {

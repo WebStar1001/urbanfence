@@ -20,6 +20,9 @@
             width: 6rem;
         }
     }
+    table.dataTable thead th, table.dataTable thead td {
+        padding: 0 0 !important;
+    }
 </style>
 <!-- BEGIN: Content -->
 <div class="content">
@@ -146,7 +149,7 @@
         <table id="quoteTable" class="display" style="width:100%;text-align: center;">
             <thead>
             <tr>
-                <th></th>
+                <th>Additional Info</th>
                 <th>ID</th>
                 <th>Status</th>
                 <th>Customer</th>
@@ -236,7 +239,8 @@
                     "className": 'details-control',
                     "orderable": false,
                     "data": null,
-                    "defaultContent": ''
+                    "defaultContent": '',
+                    "width": "5%"
                 },
                 {"data": "id"},
                 {"data": "status"},
@@ -244,7 +248,7 @@
                 {"data": "job_type"},
                 {"data": "site_city"},
                 {"data": "sale_rep"},
-                {"data": "quote_date", "width":"10%"},
+                {"data": "quote_date", "width": "10%"},
                 {
                     "data": null, render: function (data) {
                         var quote_total = data.ads_on_net * data.ads_on_factor + data.misc_net * data.misc_factor +
@@ -287,7 +291,7 @@
             $('#filterForm').trigger('reset');
             table.ajax.reload(null, false);
         });
-        table.tables().header().to$().find('th:eq(0)').css('max-width', '50px');
+        table.tables().header().to$().find('th:eq(0)').css('max-width', '60px');
         $(window).trigger('resize');
     });
 </script>
