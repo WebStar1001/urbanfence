@@ -61,7 +61,7 @@
 
         #detail_table td {
             border: solid 1px #ED7D31;
-            height: 27px;
+            height: 22px;
             font-size: 14px;
         }
     </style>

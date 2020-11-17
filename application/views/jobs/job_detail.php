@@ -222,8 +222,8 @@
         </div>
 
         <div class="p-5">
-            <a data-target="#material-detailed" data-toggle="modal" class="button  bg-theme-1 text-white">Material
-                Tracking</a>
+            <a data-target="#material-detailed" data-toggle="modal" class="button  bg-theme-1 text-white"
+               data-backdrop="static" data-keyboard="false">Material Tracking</a>
         </div>
 
         <div class="intro-y grid grid-cols-12 p-5 mt-5 gap-2">
@@ -335,7 +335,7 @@
 </div>
 <!-- END: Content -->
 
-<div class="modal" id="material-detailed" role="dialog">
+<div class="modal" id="material-detailed">
     <div class="modal__content modal__content--lg p-5 text-center" style="width: 75%;">
         <div class="flex items-center py-5 sm:py-3 border-b border-gray-200">
             <h2 class="font-medium text-base mr-auto">Materials Tracking</h2>
@@ -369,7 +369,7 @@
                                 <td class="border-b">' . $mat->quantity . '</td>
                                 <td class="border-b">
                                 <input type="hidden" name="mat_id[]" value="' . $mat->id . '"/>
-                                <input type="number" id="collected_quantity" name="collected_quantity[]" onfocus="this.oldvalue = this.value;" max="' . $mat->quantity . '"
+                                <input type="number" name="collected_quantity[]" onfocus="this.oldvalue = this.value;" max="' . $mat->quantity . '"
                                 value="' . $mat->items_collected_for_job . '" class="w-full" style="height:30px;" onchange="change_item_collect(' . $mat->id . ');this.oldvalue = this.value;">
                                 </td>
                                 <td class="border-b"><button class="button bg-theme-1 text-white w-full" onclick="set_item_collect(' . $mat->id . ')">Label</button></td>';
@@ -491,6 +491,11 @@
     }
 
     $(document).ready(function () {
+        $('#material-detailed').modal({
+            backdrop: 'static',
+            keyboard: false
+        })
+
         $.fn.dataTable.ext.errMode = 'throw';
 
         table = $('#jobDetailTable').DataTable({
