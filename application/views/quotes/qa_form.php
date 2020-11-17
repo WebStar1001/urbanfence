@@ -59,9 +59,14 @@
             border: solid 1px #ED7D31;
         }
 
-        #detail_table td {
+        #detail_table tbody td {
             border: solid 1px #ED7D31;
-            height: 15px;
+            height: 30px;
+            font-size: 14px;
+        }
+        #detail_table thead td {
+            border: solid 1px #ED7D31;
+            height: 32px;
             font-size: 14px;
         }
     </style>
@@ -154,13 +159,15 @@ $total = round($sub_total2 + $quote->hst, 2);
             <td style="width: 20%">Cost</td>
         </tr>
         </thead>
+        <tbody>
         <tr>
-            <td rowspan="<?php echo ($quote->discount_set != 0) ? 9 : 7; ?>>" style="text-align: left;padding:1em;"><?php echo nl2br($quote->additional_info); ?></td>
+            <td rowspan="<?php echo ($quote->discount_set != 0) ? 9 : 7; ?>>"
+                style="text-align: left;padding-left:20px;"><?php echo nl2br($quote->additional_info); ?></td>
             <td>Materials</td>
             <td><?php echo $quote->mat_net * $quote->mat_factor; ?></td>
         </tr>
         <tr>
-            <td>Labor</td>
+            <td style="height:20px;">Labor</td>
             <td><?php echo $quote->labour_net * $quote->lab_factor; ?></td>
         </tr>
         <tr>
@@ -201,6 +208,7 @@ $total = round($sub_total2 + $quote->hst, 2);
             <td>G.S.T # 848724076RT0001</td>
             <td colspan="2">Payment Terms are <?php echo $quote->payment_term; ?></td>
         </tr>
+        </tbody>
     </table>
 </div>
 <div>
