@@ -129,9 +129,9 @@ class Jobs extends CI_Controller
 
         $pay_amounts = $this->JobModel->getPayamountByJobID($job_id);
 
-        if($job->job_balance == $pay_amounts){
+        if ($job->job_balance == $pay_amounts) {
             $this->db->where('id', $job_id);
-            $this->db->update('jobs', array('status'=>'Completed and Paid'));
+            $this->db->update('jobs', array('status' => 'Completed and Paid'));
         }
 
         echo $this->db->insert_id();
@@ -191,7 +191,7 @@ class Jobs extends CI_Controller
                 $total_pay_amount += $pay->payment_amount;
                 $job_balance -= $pay->payment_amount;
                 $invoice_total -= $pay->payment_amount;
-                if ($job_balance <= 0) {
+                if (round($job_balance, 2) <= 0) {
                     $retAry[$j]['notes'] = '<span style="color:green;">Job Paid Fully</span>';
                 }
                 $j++;
@@ -206,22 +206,23 @@ class Jobs extends CI_Controller
         echo json_encode($data);
     }
 
-    public function cancel_payment(){
+    public function cancel_payment()
+    {
         $payment_id = $this->input->post('payment_id');
         $job_id = $this->input->post('job_id');
         $this->db->where('id', $payment_id);
-        $this->db->update('payments', array('payment_amount'=> 0));
+        $this->db->update('payments', array('payment_amount' => 0));
 
         $job = $this->JobModel->getJobByJobID($job_id);
 
         $pay_amounts = $this->JobModel->getPayamountByJobID($job_id);
 
-        if($job->job_balance <= $pay_amounts){
+        if ($job->job_balance <= $pay_amounts) {
             $this->db->where('id', $job_id);
-            $this->db->update('jobs', array('status'=>'Completed and Paid'));
-        }else{
+            $this->db->update('jobs', array('status' => 'Completed and Paid'));
+        } else {
             $this->db->where('id', $job_id);
-            $this->db->update('jobs', array('status'=>'Completed'));
+            $this->db->update('jobs', array('status' => 'Completed'));
         }
         echo $payment_id;
     }
