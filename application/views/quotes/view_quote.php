@@ -244,10 +244,10 @@
                 },
                 {"data": "id"},
                 {"data": "status"},
-                {"data": "customer"},
+                {"data": "customer", "width": "14%"},
                 {"data": "job_type"},
                 {"data": "site_city"},
-                {"data": "sale_rep"},
+                {"data": "sale_rep", "width": "14%"},
                 {"data": "quote_date", "width": "14%"},
                 {
                     "data": null, render: function (data) {
