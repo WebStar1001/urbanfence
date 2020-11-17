@@ -61,7 +61,7 @@
 
         #detail_table tbody td {
             border: solid 1px #ED7D31;
-            height: 30px;
+            height: 25px;
             font-size: 14px;
         }
         #detail_table thead td {
