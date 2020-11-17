@@ -372,7 +372,7 @@
                                 <input type="number" id="collected_quantity" name="collected_quantity[]" onfocus="this.oldvalue = this.value;" max="' . $mat->quantity . '"
                                 value="' . $mat->items_collected_for_job . '" class="w-full" style="height:30px;" onchange="change_item_collect(' . $mat->id . ');this.oldvalue = this.value;">
                                 </td>
-                                <td class="border-b"><button class="button bg-theme-1 text-white w-full" onclick="set_item_collect(' . $mat->id . ')">Set</button></td>';
+                                <td class="border-b"><button class="button bg-theme-1 text-white w-full" onclick="set_item_collect(' . $mat->id . ')">Label</button></td>';
                             if ($mat->quantity == $mat->items_collected_for_job) {
                                 echo '
                                 <td class="border-b"><i class="fa fa-minus" style="color:green;"/></td>
@@ -387,14 +387,14 @@
                         endforeach;
                     endif;
                     ?>
-                    <tr id="items_collected_total">
+                    <tr id="items_collected_total" style="font-weight:bold;">
                         <td class="border-b">Total</td>
                         <td class="border-b"></td>
                         <td class="border-b"><?php echo $quantity_total; ?></td>
                         <td class="border-b"><?php echo ($items_collected_total == 0) ? '' : $items_collected_total; ?></td>
                         <td class="border-b"></td>
-                        <td class="border-b"><?php echo ($missing_stock_total == 0) ? '<i class="fa fa-minus" style="color:green;"/>' : $missing_stock_total; ?></td>
-                        <td class="border-b">--</td>
+                        <td class="border-b"><?php echo ($missing_stock_total == 0) ? '<i class="fa fa-check" style="color:green;"/>' : $missing_stock_total; ?></td>
+                        <td class="border-b"><?php echo ($missing_stock_total == 0) ? '<i class="fa fa-minus" style="color:green;"/>' : ''; ?></td>
                     </tr>
                     </tbody>
                 </table>
@@ -416,7 +416,9 @@
                 <label class="cursor-pointer select-none" for="vertical-remember-me_r2">Materials Collected</label>
             </div>
             <div class=" py-3 text-right border-t border-gray-200">
-                <button data-dismiss="modal" class="button w-30 bg-theme-1 text-white">Save & Close
+                <button data-dismiss="modal" class="button w-30 bg-theme-1 text-white">Save
+                </button>
+                <button data-dismiss="modal" class="button w-30 bg-theme-1 text-white">Close
                 </button>
             </div>
             <input type="hidden" name="job_id" value="<?php echo ($job) ? $job->id : ''; ?>"/>
@@ -619,6 +621,7 @@
     });
 
     function set_item_collect(mat_id) {
+        event.preventDefault();
         return;
         var item_collect = $('#items_collected' + mat_id).children().eq(3).find('input').val();
         $.ajax('set_mat_collect', {

@@ -138,14 +138,14 @@
     </table>
 </div>
 <?php
-$sub_total1 = $quote->mat_net * $quote->mat_factor + $quote->labour_net * $quote->lab_factor +
-    $quote->ads_on_net * $quote->ads_on_factor + $quote->misc_net * $quote->misc_factor;
-$discount_amount = $sub_total1 * $quote->discount_set / 100;
+$sub_total1 = round($quote->mat_net * $quote->mat_factor + $quote->labour_net * $quote->lab_factor +
+    $quote->ads_on_net * $quote->ads_on_factor + $quote->misc_net * $quote->misc_factor, 2);
+$discount_amount = round($sub_total1 * $quote->discount_set / 100, 2);
 
-$sub_total2 = $sub_total1 - $discount_amount;
-$total = $sub_total2 + $quote->hst;
+$sub_total2 = round($sub_total1 - $discount_amount, 2);
+$total = round($sub_total2 + $quote->hst, 2);
 ?>
-<div style="margin-top:20px;">
+<div style="margin-top:10px;">
     <table width="100%" id="detail_table">
         <thead>
         <tr style="font-weight:bolder;">
@@ -203,7 +203,7 @@ $total = $sub_total2 + $quote->hst;
         </tr>
     </table>
 </div>
-<div style="margin-top:5px;">
+<div>
     <p style="font-size:13px;">Unless otherwise stated, all quotations are subject to change without notice. Orders are
         subject to our
         conditions of sale and are accepted at the seller’s price but shall not be binding upon us until accepted by our
