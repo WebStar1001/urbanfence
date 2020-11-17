@@ -86,5 +86,13 @@ class JobModel extends CI_Model
         }
         return $pay_amounts;
     }
+    public function getInvoiceamountByJobID($job_id){
+        $invoices = $this->db->get_where('invoices', array('job_id'=>$job_id))->result();
+        $inv_amount = 0;
+        foreach ($invoices as $invoice){
+            $inv_amount += $invoice->invoice_amount;
+        }
+        return $inv_amount;
+    }
 
 }

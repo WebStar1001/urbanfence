@@ -146,7 +146,7 @@
         <table id="quoteTable" class="display" style="width:100%;text-align: center;">
             <thead>
             <tr>
-                <th>Additional Info</th>
+                <th></th>
                 <th>ID</th>
                 <th>Status</th>
                 <th>Customer</th>
@@ -244,7 +244,7 @@
                 {"data": "job_type"},
                 {"data": "site_city"},
                 {"data": "sale_rep"},
-                {"data": "quote_date"},
+                {"data": "quote_date", "width":"10%"},
                 {
                     "data": null, render: function (data) {
                         var quote_total = data.ads_on_net * data.ads_on_factor + data.misc_net * data.misc_factor +

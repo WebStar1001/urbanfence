@@ -176,7 +176,7 @@
         <table id="opporTable" class="display" style="width:100%;text-align: center; margin-bottom: 5px;">
             <thead>
             <tr>
-                <th>Additional Info</th>
+                <th></th>
                 <th>ID</th>
                 <th>Sale Source</th>
                 <th>Date</th>
@@ -243,7 +243,7 @@
             "minYear": 2010,
             "startDate": '<?php echo date("1/1/Y");?>',
             "endDate": '<?php echo date("12/21/Y", strtotime("+1 years"));?>',
-            "linkedCalendars" : false
+            "linkedCalendars": false
         });
         var table = $('#opporTable').DataTable({
             "pageLength": 50,
@@ -270,13 +270,13 @@
                     "className": 'details-control',
                     "orderable": false,
                     "data": null,
-                    "defaultContent": '', "width": "50px"
+                    "defaultContent": ''
                 },
                 {"data": "id"},
-                {"data": "sale_source", "width": "5%"},
+                {"data": "sale_source", "width": "15%"},
                 {"data": "date", "width": "13%"},
-                {"data": "customer"},
-                {"data": "job_type"},
+                {"data": "customer", "width": "15%"},
+                {"data": "job_type", "width": "15%"},
                 {"data": "status"},
                 {
                     "data": null, render: function (data) {
@@ -297,7 +297,6 @@
                     "data": null, render: function (data) {
                         return "<button class='button border' onclick='set_sale_rep(" + data.id + ");'>Set</button>"
                     }
-                    , "width": "2%"
                 },
                 {
                     "data": null, render: function (data) {
@@ -306,7 +305,7 @@
                         } else {
                             return "<a href='javascript:alert(\"Can not edit Opportunity which is already assigned to a Sales Rap.\")'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
                         }
-                    }, "width": "2%"
+                    }
                 },
                 {
                     "data": null, render: function (data) {
@@ -319,7 +318,7 @@
                         } else {
                             return "<a href='javascript:alert(\"Opportunity needs to get assigned to Sales Rap prior Quote creation.\")'><i class='fa fa-external-link' aria-hidden='true'></i></a>"
                         }
-                    }, "width": "2%"
+                    }
                 }
             ],
             "order": [[0, 'asc']]

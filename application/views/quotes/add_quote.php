@@ -873,12 +873,12 @@
                                                        style="width:15%" name="material_markup_percent"
                                                        id="material_markup_percent"
                                                        value="<?php $material_markup_percent = ($quote->mat_factor != 0) ? ($quote->mat_factor - 1) * 100 : 0;
-                                                       echo $material_markup_percent; ?>">
+                                                       echo ($material_markup_percent == 0) ? '' : $material_markup_percent; ?>">
                                                 <input placeholder="Amount" type="number"
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:20%" name="material_markup_amount"
                                                        id="material_markup_amount"
-                                                       value="<?php echo $material_markup_percent * $quote->mat_net / 100; ?>">
+                                                       value="<?php echo ($material_markup_percent == 0) ? '' : round($material_markup_percent * $quote->mat_net / 100, 2); ?>">
                                             </div>
 
                                             <div class="mt-1 mb-5 " style="text-align-last: end;">
@@ -889,12 +889,12 @@
                                                        style="width:15%" name="labor_markup_percent"
                                                        id="labor_markup_percent"
                                                        value="<?php $labor_markup_percent = ($quote->lab_factor != 0) ? ($quote->lab_factor - 1) * 100 : 0;
-                                                       echo $labor_markup_percent; ?>">
+                                                       echo ($labor_markup_percent == 0) ? '' : $labor_markup_percent; ?>">
                                                 <input placeholder="Amount" type="number"
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:20%" name="labor_markup_amount"
                                                        id="labor_markup_amount"
-                                                       value="<?php echo $quote->labour_net * $labor_markup_percent / 100; ?>">
+                                                       value="<?php echo ($labor_markup_percent == 0) ?  '' : round($quote->labour_net * $labor_markup_percent / 100, 2); ?>">
                                             </div>
 
 
@@ -905,12 +905,12 @@
                                                        style="width:15%" name="misc_markup_percent"
                                                        id="misc_markup_percent"
                                                        value="<?php $misc_markup_percent = ($quote->misc_factor != 0) ? ($quote->misc_factor - 1) * 100 : 0;
-                                                       echo $misc_markup_percent; ?>">
+                                                       echo ($misc_markup_percent == 0) ? '' : $misc_markup_percent; ?>">
                                                 <input placeholder="Amount" type="number"
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:20%" name="misc_markup_amount"
                                                        id="misc_markup_amount"
-                                                       value="<?php echo $misc_markup_percent * $quote->misc_net / 100; ?>">
+                                                       value="<?php echo ($misc_markup_percent == 0) ? '' : round($misc_markup_percent * $quote->misc_net / 100, 2); ?>">
                                             </div>
 
 
@@ -921,12 +921,12 @@
                                                        style="width:15%" name="adson_markup_percent"
                                                        id="adson_markup_percent"
                                                        value="<?php $adson_markup_percent = ($quote->ads_on_factor != 0) ? ($quote->ads_on_factor - 1) * 100 : 0;
-                                                       echo $adson_markup_percent; ?>">
+                                                       echo ($adson_markup_percent == 0) ? '' : $adson_markup_percent; ?>">
                                                 <input placeholder="Amount" type="number"
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:20%" name="adson_markup_amount"
                                                        id="adson_markup_amount"
-                                                       value="<?php echo $adson_markup_percent * $quote->ads_on_net / 100; ?>">
+                                                       value="<?php echo ($adson_markup_percent == 0) ? '' : round($adson_markup_percent * $quote->ads_on_net / 100, 2); ?>">
                                             </div>
                                             <div class="mt-10">
                                                 <?php
@@ -938,11 +938,11 @@
                                                 <input type="number"
                                                        class="add-discount input w-25 border col-span-4"
                                                        placeholder="%" style="width:15%" name="discount_percent"
-                                                       value="<?php echo $quote->discount_set; ?>">
+                                                       value="<?php echo ($quote->discount_set == 0) ? '' : $quote->discount_set; ?>">
                                                 <input placeholder="Amount" type="number"
                                                        class="add-discount input w-25 border col-span-4"
                                                        style="width:20%"
-                                                       name="discount_amount" value="<?php echo $discount_amount; ?>">
+                                                       name="discount_amount" value="<?php echo ($quote->discount_set == 0) ? '' : round($discount_amount, 2); ?>">
 
                                             </div>
 
@@ -1370,7 +1370,7 @@
             } else {
                 total_amount = $(this).val() * 1;
                 total_percent = (total_amount / sub_total1) * 100;
-                $('#total_markup_percent').val(Math.round(total_percent * 100) / 100);
+                $('#total_markup_percent').val(Math.round(total_percent * 10000) / 10000);
             }
             calculate_sale_table();
         });
@@ -1391,7 +1391,7 @@
             } else if ($(this).attr('id') == 'material_markup_amount') {
                 mat_amount = $(this).val() * 1;
                 mat_percent = mat_amount / mat_cost * 100;
-                $('#material_markup_percent').val(Math.round(mat_percent * 100) / 100);
+                $('#material_markup_percent').val(Math.round(mat_percent * 10000) / 10000);
             }
             var labour_cost = $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html() * 1;
             if ($(this).attr('id') == 'labor_markup_percent') {
@@ -1401,7 +1401,7 @@
             } else if ($(this).attr('id') == 'labor_markup_amount') {
                 labour_amount = $(this).val() * 1;
                 labour_percent = (labour_amount / labour_cost) * 100;
-                $('#labor_markup_percent').val(Math.round(labour_percent * 100) / 100);
+                $('#labor_markup_percent').val(Math.round(labour_percent * 10000) / 10000);
             }
 
             var mis_cost = $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html() * 1;
@@ -1413,7 +1413,7 @@
             } else if ($(this).attr('id') == 'misc_markup_amount') {
                 mis_amount = $(this).val() * 1;
                 mis_percent = (mis_amount / mis_cost) * 100;
-                $('#misc_markup_percent').val(Math.round(mis_percent * 100) / 100);
+                $('#misc_markup_percent').val(Math.round(mis_percent * 10000) / 10000);
             }
 
 
@@ -1426,7 +1426,7 @@
             } else if ($(this).attr('id') == 'adson_markup_amount') {
                 adson_amount = $(this).val() * 1;
                 adson_percent = (adson_amount / adson_cost) * 100;
-                $('#adson_markup_percent').val(Math.round(adson_percent * 100) / 100);
+                $('#adson_markup_percent').val(Math.round(adson_percent * 10000) / 10000);
             }
 
             calculate_sale_table();

@@ -37,6 +37,8 @@ class Jobs extends CI_Controller
         $job = '';
         $quote = '';
         $mat_info = '';
+        $pay_amount = 0;
+        $invoice_amount = 0;
         if (isset($_GET['job_id'])) {
             $job_id = $_GET['job_id'];
             $job = $this->JobModel->getJobByJobID($job_id);
@@ -45,9 +47,12 @@ class Jobs extends CI_Controller
                 $customer = $this->CustomerModel->get_customer($job->customer_id);
                 $quote = $this->QuoteModel->get_quote($job->quote_id);
                 $mat_info = $this->QuoteModel->get_matinfo($job->quote_id);
+                $pay_amount = $pay_amounts = $this->JobModel->getPayamountByJobID($job_id);
+                $invoice_amount = $pay_amounts = $this->JobModel->getInvoiceamountByJobID($job_id);
             }
         }
-        $data = array('job' => $job, 'oppor' => $opportunity, 'customer' => $customer, 'quote' => $quote, 'mat_info' => $mat_info);
+        $data = array('job' => $job, 'oppor' => $opportunity, 'customer' => $customer, 'quote' => $quote,
+            'mat_info' => $mat_info, 'pay_amount' => $pay_amount, 'invoice_amount' => $invoice_amount);
         $data['installers'] = $this->UserModel->getUserByAccessLevel('Customer');
         $this->load->view('inc/header');
         $this->load->view('jobs/job_detail', $data);
@@ -129,12 +134,14 @@ class Jobs extends CI_Controller
 
         $pay_amounts = $this->JobModel->getPayamountByJobID($job_id);
 
-        if ($job->job_balance == $pay_amounts) {
+        if ($job->job_balance <= $pay_amounts) {
             $this->db->where('id', $job_id);
             $this->db->update('jobs', array('status' => 'Completed and Paid'));
+            echo 'Completed and Paid';
+        } else {
+            echo 'Completed';
         }
 
-        echo $this->db->insert_id();
     }
 
     public function generate_invoice()
@@ -165,6 +172,7 @@ class Jobs extends CI_Controller
         $retAry = array();
         $i = 0;
         $job_balance = $job->job_balance;
+
         foreach ($invoices as $inv) {
             $total_pay_amount = 0;
             $invoice_total = $inv->invoice_amount;
@@ -220,11 +228,22 @@ class Jobs extends CI_Controller
         if ($job->job_balance <= $pay_amounts) {
             $this->db->where('id', $job_id);
             $this->db->update('jobs', array('status' => 'Completed and Paid'));
+            echo 'Completed and Paid';
         } else {
             $this->db->where('id', $job_id);
             $this->db->update('jobs', array('status' => 'Completed'));
+            echo 'Completed';
         }
-        echo $payment_id;
+    }
+    public function check_available_invoice(){
+        $invoice_id = $this->input->post('invoice_number');
+        $job_id = $this->input->post('job_id');
+        $invoice = $this->db->get_where('invoices', array('job_id'=>$job_id, 'id'=>$invoice_id))->row();
+        if(is_object($invoice)){
+            echo 'exist';
+        }else{
+            echo 'not_exist';
+        }
     }
 
 }

@@ -94,7 +94,7 @@ class Opportunity extends CI_Controller
             $this->db->insert('customers', $data);
             $customer_id = $this->db->insert_id();
         }
-        redirect('Opportunity/add_opportunity?customer_id=' . $customer_id);
+        redirect('Customer/customers_list');
     }
 
     public function save_opportunity()
