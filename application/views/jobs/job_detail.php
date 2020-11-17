@@ -157,25 +157,27 @@
 
                     <div class="mt-1 mb-5 float-left w-1/2">
                         <input type="checkbox" class="input border mr-2" id="vertical-remember-me" disabled
-                            <?php echo ($job && $job->status == 'New') ? 'checked' : '' ?>/>
+                            <?php echo ($job && $job->status == 'MAT Missing in Stock') ? 'checked' : '' ?>/>
                         <label class="cursor-pointer select-none" for="vertical-remember-me" style="width: auto;">Need
                             to order Material</label>
                     </div>
                     <div class="float-right w-1/2 mb-5">
                         <div class="mt-1 mb-2">
                             <input type="checkbox" class="input border mr-2" id="vertical-remember-me_r1"
-                                <?php echo ($job && $job->status == 'MAT Collected') ? 'checked' : '' ?> disabled/>
+                                <?php echo ($job && $job->status != 'MAT Missing in Stock'&&$job->status != 'New') ? 'checked' : '' ?> disabled/>
                             <label class="cursor-pointer select-none" for="vertical-remember-me_r1"
                                    style="width: auto;">Materials in stock</label>
                         </div>
                         <div class="mt-1 mb-2">
                             <input type="checkbox" class="input border mr-2" id="vertical-remember-me_r2"
-                                <?php echo ($job && $job->status == 'MAT Collected') ? 'checked' : '' ?> disabled/>
+                                <?php echo ($job && $job->status != 'MAT Missing in Stock'&&$job->status != 'New') ? 'checked' : '' ?> disabled/>
                             <label class="cursor-pointer select-none" for="vertical-remember-me_r2"
                                    style="width: auto;">Materials Collected</label>
                         </div>
                         <div class="mt-1 mb-4">
-                            <input type="checkbox" class="input border mr-2" id="vertical-remember-me_r3" disabled>
+                            <input type="checkbox" class="input border mr-2" id="vertical-remember-me_r3"
+                                <?php echo ($job && ($job->status == 'In progress' || $job->status == 'Completed' || $job->status == 'Completed and Paid')) ? 'checked' : '' ?>
+                                   disabled>
                             <label class="cursor-pointer select-none" for="vertical-remember-me_r3"
                                    style="width: auto;">Materials Delivered</label>
                         </div>
@@ -393,8 +395,8 @@
                         <td class="border-b"><?php echo $quantity_total; ?></td>
                         <td class="border-b"><?php echo ($items_collected_total == 0) ? '' : $items_collected_total; ?></td>
                         <td class="border-b"></td>
-                        <td class="border-b"><?php echo ($missing_stock_total == 0) ? '<i class="fa fa-check" style="color:green;"/>' : $missing_stock_total; ?></td>
-                        <td class="border-b"><?php echo ($missing_stock_total == 0) ? '<i class="fa fa-minus" style="color:green;"/>' : ''; ?></td>
+                        <td class="border-b"><?php echo ($missing_stock_total == 0) ? '' : $missing_stock_total; ?></td>
+                        <td class="border-b"><?php echo ($missing_stock_total == 0) ? '<i class="fa fa-check" style="color:green;"/>' : '<i class="fa fa-minus" style="color:red;"/>'; ?></td>
                     </tr>
                     </tbody>
                 </table>
@@ -418,7 +420,8 @@
             <div class=" py-3 text-right border-t border-gray-200">
                 <button data-dismiss="modal" class="button w-30 bg-theme-1 text-white">Save
                 </button>
-                <button data-dismiss="modal" class="button w-30 bg-theme-1 text-white">Close
+                <button data-dismiss="modal" class="button w-30 bg-theme-6 text-white"
+                        onclick="javascript:event.preventDefault();">Close
                 </button>
             </div>
             <input type="hidden" name="job_id" value="<?php echo ($job) ? $job->id : ''; ?>"/>
@@ -467,10 +470,11 @@
         $('#items_collected_total').children().eq(3).html(total_items_collected - oldValue + nValue);
         $('#items_collected_total').children().eq(5).html(total_missing_stock + oldValue - nValue);
         if (total_missing_stock + oldValue - nValue == 0) {
-            $('#items_collected_total').children().eq(5).html('<i class="fa fa-check" style="color:green;"/>');
+            $('#items_collected_total').children().eq(6).html('<i class="fa fa-check" style="color:green;"/>');
             status = 'MAT Collected';
         } else {
             status = 'MAT Missing in Stock';
+            $('#items_collected_total').children().eq(6).html('<i class="fa fa-minus" style="color:red;"/>');
         }
         if (quantity == nValue) {
             $('#items_collected' + rowId).children().eq(5).html('<i class="fa fa-check" style="color:green;"/>')
@@ -616,6 +620,7 @@
                 if (status == 'In progress') {
                     $('#end_date').attr('readonly', false);
                     $('#end_date').attr('disabled', false);
+                    $('#vertical-remember-me_r3').attr('checked', true);
                 }
                 $('#status_filed').html(status);
             },

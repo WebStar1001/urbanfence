@@ -100,7 +100,8 @@ class Jobs extends CI_Controller
         $status = 'New';
         if ($start_date) {
             $status = 'In progress';
-        } elseif ($end_date) {
+        }
+        if ($end_date) {
             $status = 'Completed';
         }
         $this->db->where('id', $job_id);
@@ -172,7 +173,7 @@ class Jobs extends CI_Controller
             $retAry[$i]['payment_id'] = '';
             $retAry[$i]['debit'] = $inv->invoice_amount;
             $retAry[$i]['credit'] = '';
-            $retAry[$i]['job_balance'] = $job_balance;
+            $retAry[$i]['job_balance'] = round($job_balance, 2);
             $retAry[$i]['account_balance'] = $invoice_total;
             $retAry[$i]['due_date'] = $inv->due_date;
             $payments = $this->PaymentModel->getPaymentByInvoiceID($inv->id);
