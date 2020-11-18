@@ -30,7 +30,7 @@ class Users extends CI_Controller
             $user = $this->UserModel->get_user($_GET['user_id']);
         }
         $this->load->view('inc/header');
-        $this->load->view('Users/add_user', array('user' => $user));
+        $this->load->view('users/add_user', array('user' => $user));
         $this->load->view('inc/footer');
     }
 
