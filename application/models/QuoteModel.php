@@ -46,7 +46,7 @@ class QuoteModel extends CI_Model
         }
         if ($quote_date) {
             list($start_date, $end_date) = explode('-', $quote_date);
-            $this->db->where('date(opportunities.created_at) BETWEEN "' . date('Y-m-d', strtotime($start_date)) . '" AND "' . date('Y-m-d', strtotime($end_date)) . '"', "", FALSE);
+            $this->db->where('date(quotes.created_at) BETWEEN "' . date('Y-m-d', strtotime($start_date)) . '" AND "' . date('Y-m-d', strtotime($end_date)) . '"', "", FALSE);
         }
         if ($sales_rep) {
             $this->db->where('opportunities.sale_rep', $sales_rep);
@@ -63,6 +63,7 @@ class QuoteModel extends CI_Model
         if ($quote_selling_total) {
 
         }
+        $this->db->order_by('quotes.created_at', 'ASC');
         $query = $this->db->get();
         return $query->result_array();
     }

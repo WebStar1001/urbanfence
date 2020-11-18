@@ -45,6 +45,7 @@ class CustomerModel extends CI_Model {
         if($last_quote_id){
             $this->db->where('last_quote_id', $last_quote_id);
         }
+        $this->db->order_by('customer');
         $query = $this->db->get();
         return $query->result();
     }

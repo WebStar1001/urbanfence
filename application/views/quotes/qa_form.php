@@ -162,21 +162,21 @@ $total = round($sub_total2 + $quote->hst, 2);
         <tbody>
         <tr>
             <td rowspan="<?php echo ($quote->discount_set != 0) ? 9 : 7; ?>>"
-                style="text-align: left;padding-left:20px;"><?php echo nl2br($quote->additional_info); ?></td>
+                style="text-align: left;padding-left:20px;vertical-align: top;"><?php echo nl2br($quote->additional_info); ?></td>
             <td>Materials</td>
-            <td><?php echo $quote->mat_net * $quote->mat_factor; ?></td>
+            <td><?php echo round($quote->mat_net * $quote->mat_factor, 2); ?></td>
         </tr>
         <tr>
             <td style="height:20px;">Labor</td>
-            <td><?php echo $quote->labour_net * $quote->lab_factor; ?></td>
+            <td><?php echo round($quote->labour_net * $quote->lab_factor, 2); ?></td>
         </tr>
         <tr>
             <td>Miscellaneous</td>
-            <td><?php echo $quote->misc_net * $quote->misc_factor; ?></td>
+            <td><?php echo round($quote->misc_net * $quote->misc_factor, 2); ?></td>
         </tr>
         <tr>
             <td>Add-On</td>
-            <td><?php echo $quote->ads_on_net * $quote->ads_on_factor; ?></td>
+            <td><?php echo round($quote->ads_on_net * $quote->ads_on_factor, 2); ?></td>
         </tr>
         <tr>
             <td>Sub Total1</td>

@@ -894,7 +894,7 @@
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:20%" name="labor_markup_amount"
                                                        id="labor_markup_amount"
-                                                       value="<?php echo ($labor_markup_percent == 0) ?  '' : round($quote->labour_net * $labor_markup_percent / 100, 2); ?>">
+                                                       value="<?php echo ($labor_markup_percent == 0) ? '' : round($quote->labour_net * $labor_markup_percent / 100, 2); ?>">
                                             </div>
 
 
@@ -942,7 +942,8 @@
                                                 <input placeholder="Amount" type="number"
                                                        class="add-discount input w-25 border col-span-4"
                                                        style="width:20%"
-                                                       name="discount_amount" value="<?php echo ($quote->discount_set == 0) ? '' : round($discount_amount, 2); ?>">
+                                                       name="discount_amount"
+                                                       value="<?php echo ($quote->discount_set == 0) ? '' : round($discount_amount, 2); ?>">
 
                                             </div>
 

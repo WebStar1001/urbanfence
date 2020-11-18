@@ -173,7 +173,9 @@
                                value="<?php echo (is_object($customer)) ? $customer->city : ''; ?>" tabindex="8"/>
                     </div>
                     <div class="preview">
-                        <input type="submit" value="Save" style="float: right;" type="button"
+                        <input type="submit" value="Save" style="float: right;"  name="save"
+                               class="button bg-theme-1 text-white mt-5 p-2 ml-5"  tabindex="10"/>
+                        <input type="submit" value="Continue to Opportunity" style="float: right;" name="save"
                                class="button bg-theme-1 text-white mt-5 p-2"  tabindex="10"/>
                     </div>
 

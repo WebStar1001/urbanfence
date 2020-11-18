@@ -196,6 +196,8 @@ class Quotes extends CI_Controller
             if ($mat_category) {
                 if (sizeof($mat_category) > 0) {
                     foreach ($mat_category as $key => $category) {
+                        if($category == '')
+                            continue;
                         $mat_data = array(
                             'quote_id' => $quote_id,
                             'mat_category' => $category,
@@ -210,6 +212,8 @@ class Quotes extends CI_Controller
             if ($labor_type) {
                 if (sizeof($labor_type) > 0) {
                     foreach ($labor_type as $key => $type) {
+                        if($type == '')
+                            continue;
                         $lab_data = array(
                             'quote_id' => $quote_id,
                             'labour_type' => $type,
@@ -223,6 +227,8 @@ class Quotes extends CI_Controller
             if ($misc_desc) {
                 if (sizeof($misc_desc) > 0) {
                     foreach ($misc_desc as $key => $desc) {
+                        if($desc == '')
+                            continue;
                         $misc_data = array(
                             'quote_id' => $quote_id,
                             'misc_description' => $desc,
@@ -237,6 +243,8 @@ class Quotes extends CI_Controller
             if ($addon_desc) {
                 if (sizeof($addon_desc) > 0) {
                     foreach ($addon_desc as $key => $add_desc) {
+                        if($add_desc == '')
+                            continue;
                         $addon_data = array(
                             'quote_id' => $quote_id,
                             'add_on_description' => $add_desc,

@@ -34,7 +34,7 @@ class Opportunity extends CI_Controller
     public function opportunity_list()
     {
         $data['status'] = 'All';
-        if(isset($_GET['status'])){
+        if (isset($_GET['status'])) {
             $data['status'] = 'New';
         }
         $data['sales'] = $this->UserModel->getSaleUsers();
@@ -75,7 +75,8 @@ class Opportunity extends CI_Controller
         $this->load->view('inc/footer');
     }
 
-    public function create_customer(){
+    public function create_customer()
+    {
         $data = $_POST;
         $this->db->insert('customers', $data);
         $customer_id = $this->db->insert_id();
@@ -86,7 +87,9 @@ class Opportunity extends CI_Controller
     {
         $data = $_POST;
         $customer_id = $this->input->post('customer_id');
+        $save = $this->input->post('save');
         unset($data['customer_id']);
+        unset($data['save']);
         if ($customer_id != "") {
             $this->db->where('id', $customer_id);
             $this->db->update('customers', $data);
@@ -94,7 +97,11 @@ class Opportunity extends CI_Controller
             $this->db->insert('customers', $data);
             $customer_id = $this->db->insert_id();
         }
-        redirect('Customer/customers_list');
+        if ($save == 'Save') {
+            redirect('Customer/customers_list');
+        } else {
+            redirect('Opportunity/add_opportunity?customer_id=' . $customer_id);
+        }
     }
 
     public function save_opportunity()
@@ -126,7 +133,7 @@ class Opportunity extends CI_Controller
         $oppor_id = $this->input->post('oppor_id');
         $sale_id = $this->input->post('user_id');
         $this->db->where('id', $oppor_id);
-        $this->db->update('opportunities', array('sale_rep' => $sale_id, 'status'=>'Assigned'));
+        $this->db->update('opportunities', array('sale_rep' => $sale_id, 'status' => 'Assigned'));
         echo 'Success';
     }
 
@@ -139,7 +146,9 @@ class Opportunity extends CI_Controller
         $query = $this->db->get();
         echo json_encode($query->result());
     }
-    public function get_customer(){
+
+    public function get_customer()
+    {
         $customer_id = $this->input->get('customer_id');
         $data = $this->CustomerModel->get_customer($customer_id);
         echo json_encode($data);
