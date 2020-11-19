@@ -250,8 +250,8 @@
                     <div class="w-full sm:w-full m-auto mb-2" style="display:flex;">
                         <select class="input border mr-2 w-full" name="payment_term" required>
                             <?php
-                            $payment_terms = array('C.O.D', 'Net 30 Days', 'Net 45 Days', 'Net 60 Days', 'Master-Card', 'Amex'
-                            , '30% Deposit - 70% Due 30 Days from job Completion', '50% Deposit - 50% Due 30 days from job Completion',
+                            $payment_terms = array('C.O.D', 'Net 30 Days', 'Net 45 Days', 'Net 60 Days', 'Master-Card', 'AMEX'
+                            , '30% Deposit - 70% Due 30 days from job Completion', '50% Deposit - 50% Due 30 days from job Completion',
                                 '50% Deposit - 50% Due at job Completion');
                             foreach ($payment_terms as $val) {
                                 if (is_object($quote)) {
