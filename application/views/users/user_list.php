@@ -91,6 +91,5 @@
 <!-- END: Content -->
 <script type="text/javascript">
     $(document).ready(function(){
-        alert();
     })
 </script>
