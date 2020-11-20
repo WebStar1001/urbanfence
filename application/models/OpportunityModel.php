@@ -61,7 +61,7 @@ class OpportunityModel extends CI_Model
         $this->db->join('customers', 'customers.id=opportunities.customer_id', 'inner');
         $this->db->join('quotes', 'quotes.oppor_id=opportunities.id', 'left');
         $this->db->join('companies', 'companies.id=opportunities.company_id', 'inner');
-        $this->db->order_by('date', 'ASC');
+        $this->db->order_by('date', 'DESC');
         $query = $this->db->get();
         return $query->result_array();
     }

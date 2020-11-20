@@ -68,7 +68,7 @@ class QuoteModel extends CI_Model
         if ($quote_selling_total) {
 
         }
-        $this->db->order_by('quotes.created_at', 'ASC');
+        $this->db->order_by('quotes.created_at', 'DESC');
         $query = $this->db->get();
         return $query->result_array();
     }

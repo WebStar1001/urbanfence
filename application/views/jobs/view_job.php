@@ -267,7 +267,7 @@
                 {"data": "start_date"},
                 {"data": "end_date"},
                 {"data": "customer"},
-                {"data": "job_balance"},
+                {"data": "job_total"},
                 {"data": "job_balance"},
                 {
                     "data": null, render: function (data) {

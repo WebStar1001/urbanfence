@@ -64,7 +64,16 @@ class Jobs extends CI_Controller
 
     public function get_jobs()
     {
-        $data['data'] = $this->JobModel->getJobs();
+        $jobs = $this->JobModel->getJobs();
+        $retAry = array();
+        for ($i = 0; $i < count($jobs); $i++) {
+
+            $total_pay_amount = $this->JobModel->getPayamountByJobID($jobs[$i]['id']);
+            $retAry[$i] = $jobs[$i];
+            $retAry[$i]['job_total'] = $jobs[$i]['job_balance'];
+            $retAry[$i]['job_balance'] = round($jobs[$i]['job_balance'] * 1 - $total_pay_amount * 1, 2);
+        }
+        $data['data'] = $retAry;
         echo json_encode($data);
     }
 
