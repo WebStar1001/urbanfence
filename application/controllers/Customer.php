@@ -10,6 +10,7 @@ class Customer extends CI_Controller
 
         $this->load->model('CustomerModel');
         $this->load->model('UserModel');
+        $this->load->model('CompanyModel');
 //        $this->load->library('auth');
 //        $this->load->library('session');
 //        $this->auth->check_admin_auth();
@@ -19,6 +20,7 @@ class Customer extends CI_Controller
     {
 
         $data['users'] = $this->UserModel->getUsers();
+        $data['companies'] = $this->CompanyModel->getCompanies();
         $this->load->view('inc/header');
         $this->load->view('customers/view_customer', $data);
         $this->load->view('inc/footer');

@@ -53,6 +53,7 @@ class Quotes extends CI_Controller
     public function quotes_list()
     {
         $data['sales'] = $this->UserModel->getSaleUsers();
+        $data['companies'] = $this->CompanyModel->getCompanies();
         $this->load->view('inc/header');
         $this->load->view('quotes/view_quote', $data);
         $this->load->view('inc/footer');

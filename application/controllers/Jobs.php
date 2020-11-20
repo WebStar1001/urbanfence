@@ -15,6 +15,7 @@ class Jobs extends CI_Controller
         $this->load->model('QuoteModel');
         $this->load->model('InvoiceModel');
         $this->load->model('PaymentModel');
+        $this->load->model('CompanyModel');
 //        $this->load->library('auth');
 //        $this->load->library('session');
 //        $this->auth->check_admin_auth();
@@ -24,6 +25,7 @@ class Jobs extends CI_Controller
     {
         $data['sales'] = $this->UserModel->getSaleUsers();
         $data['installers'] = $this->UserModel->getUserByAccessLevel('Customer');
+        $data['companies'] = $this->CompanyModel->getCompanies();
         $this->load->view('inc/header');
         $this->load->view('jobs/view_job', $data);
         $this->load->view('inc/footer');

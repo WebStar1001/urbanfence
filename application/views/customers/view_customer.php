@@ -121,8 +121,16 @@
                 </div>
             </div>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                <div><label>Last Job ID</label>
-                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full">
+                <div><label>Quoting Company</label>
+                    <div class="mt-1">
+                        <select class="input border w-full" id="company_id">
+                            <option value="0">All</option>
+                            <?php
+                            foreach ($companies as $company) {
+                                echo '<option value="' . $company->id . '">' . $company->name . '</option>';
+                            }
+                            ?>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -170,22 +178,24 @@
         // `d` is the original data object for the row
         return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-align:left;width: 100%;">' +
             '<tr>' +
+            '<td style="width:15%;font-weight: bold;">Quoting Company:</td>' +
+            '<td style="width:20%;">' + d.company + '</td>' +
             '<td style="width:14%;font-weight: bold;">Address:</td>' +
             '<td style="width:25%;">' + d.address + '</td>' +
             '<td style="width:8%;font-weight: bold;">Phone2:</td>' +
             '<td style="width:20%;">' + d.phone2 + '</td>' +
-            '<td style="width:13%;font-weight: bold;">Last Oppor.ID:</td>' +
-            '<td style="width:18%;">' + d.last_oppor_id + '</td>' +
             '</tr>' +
             '<tr>' +
+            '<td style="width:13%;font-weight: bold;">Last Oppor.ID:</td>' +
+            '<td style="width:18%;">' + d.last_oppor_id + '</td>' +
             '<td style="font-weight: bold;">Postal Code:</td>' +
             '<td>' + d.postal_code + '</td>' +
             '<td style="font-weight: bold;">Fax:</td>' +
             '<td>' + d.fax + '</td>' +
-            '<td style="font-weight: bold;">Last Quote ID:</td>' +
-            '<td>' + d.last_quote_id + '</td>' +
             '</tr>' +
             '<tr>' +
+            '<td style="font-weight: bold;">Last Quote ID:</td>' +
+            '<td>' + d.last_quote_id + '</td>' +
             '<td style="font-weight: bold;">Recent Job Type:</td>' +
             '<td>' + d.recent_job_type + '</td>' +
             '</tr>' +
@@ -201,6 +211,7 @@
                 type: 'GET',
                 data: function (data) {
                     data.customer = $('#customer').val();
+                    data.company_id = $('#company_id').val();
                     data.customer_id = $('#customer_id').val();
                     data.status = $('#status').val();
                     data.contact_person = $('#contact_person').val();
@@ -208,7 +219,6 @@
                     data.last_job_type = $('#last_job_type').val();
                     data.last_sale_rep = $('#last_sale_rep').val();
                     data.last_quote_id = $('#last_quote_id').val();
-                    data.last_job_id = $('#last_job_id').val();
                 },
                 // type:'JSON'
             },

@@ -49,6 +49,20 @@
                 </div>
             </div>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
+                <div><label>Quoting Company</label>
+                    <div class="mt-1">
+                        <select class="input border w-full" id="company_id">
+                            <option value="0">All</option>
+                            <?php
+                            foreach ($companies as $company) {
+                                echo '<option value="' . $company->id . '">' . $company->name . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Status</label>
                     <div class="mt-1">
                         <select class="input border w-full" id="status">
@@ -177,7 +191,7 @@
             '<td style="width:13%;">' + Math.round(d.mat_net * d.mat_factor) + '</td>' +
             '<td style="font-weight: bold;width:14%;">Discount Amount:</td>' +
             '<td style="width:20%;">' + (Math.round((d.ads_on_net * d.ads_on_factor + d.misc_net * d.misc_factor + d.labour_net * d.lab_factor + d.mat_net * d.mat_factor) * d.discount_set) / 100) + '</td>' +
-            '<td style="font-weight: bold;width:12%;">Sales Rap:</td>' +
+            '<td style="font-weight: bold;width:15%;">Sales Rap:</td>' +
             '<td style="width:15%;">' + d.sale_rep + '</td>' +
             '</tr>' +
             '<tr>' +
@@ -193,8 +207,8 @@
             '<td>' + Math.round(d.misc_net * d.misc_factor) + '</td>' +
             '<td style="font-weight: bold">Contact Person:</td>' +
             '<td>' + d.contact_person + '</td>' +
-            '<td style="font-weight: bold">Customer ID:</td>' +
-            '<td>' + d.customer_id + '</td>' +
+            '<td style="font-weight: bold">Quoting Company:</td>' +
+            '<td>' + d.company + '</td>' +
             '</tr>' +
             '<tr>' +
             '<td style="font-weight: bold">Add-On Total:</td>' +
@@ -232,6 +246,7 @@
                     data.customer = $('#customer').val();
                     data.oppor_id = $('#oppor_id').val();
                     data.site_city = $('#site_city').val();
+                    data.company_id = $('#company_id').val();
                 }
             },
             "columns": [

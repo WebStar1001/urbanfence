@@ -25,13 +25,15 @@ class QuoteModel extends CI_Model
         $customer = $this->input->get('customer');
         $oppor_id = $this->input->get('oppor_id');
         $site_city = $this->input->get('site_city');
+        $company_id = $this->input->get('company_id');
         $this->db->select('quotes.*,date(quotes.created_at) AS quote_date, customers.customer AS customer, users.name AS sale_rep, 
         opportunities.job_type AS job_type, opportunities.site_city AS site_city, opportunities.site_address AS site_address,
-        customers.contact_person AS contact_person, opportunities.site_desc AS site_desc');
+        customers.contact_person AS contact_person, opportunities.site_desc AS site_desc, companies.name AS company');
         $this->db->from('quotes');
         $this->db->join('customers', 'quotes.customer_id = customers.id', 'inner');
         $this->db->join('opportunities', 'quotes.oppor_id = opportunities.id', 'inner');
         $this->db->join('users', 'opportunities.sale_rep = users.id', 'left');
+        $this->db->join('companies', 'companies.id = quotes.company_id', 'left');
         if ($quote_id) {
             $this->db->where('quotes.id', $quote_id);
         }
@@ -59,6 +61,9 @@ class QuoteModel extends CI_Model
         }
         if ($site_city) {
             $this->db->like('opportunities.site_city', $site_city);
+        }
+        if ($company_id) {
+            $this->db->where('quotes.company_id', $company_id);
         }
         if ($quote_selling_total) {
 
@@ -114,5 +119,19 @@ class QuoteModel extends CI_Model
         $this->db->join('opportunities', 'quotes.oppor_id=opportunities.id', 'left');
         $query = $this->db->get();
         return $query->row();
+    }
+
+    public function getProfitByQuoteID($quote_id)
+    {
+        $quote = $this->db->get_where('quotes', array('id' => $quote_id))->row();
+        $mat_net = $quote->mat_net * 1;
+        $mat_factor = $quote->mat_factor * 1 - 1;
+        $lab_net = $quote->labour_net * 1;
+        $lab_factor = $quote->lab_factor * 1 - 1;
+        $misc_net = $quote->misc_net * 1;
+        $misc_factor = $quote->misc_factor * 1 - 1;
+        $add_on_net = $quote->ads_on_net * 1;
+        $add_on_factor = $quote->ads_on_factor * 1 - 1;
+        return round($mat_net * $mat_factor + $lab_net * $lab_factor + $misc_net * $misc_factor + $add_on_net * $add_on_factor, 2);
     }
 }

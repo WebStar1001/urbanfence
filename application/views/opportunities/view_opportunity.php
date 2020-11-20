@@ -58,15 +58,13 @@
                 </div>
             </div>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                <div><label>Oppor. Per Month</label>
+                <div><label>Quoting Company</label>
                     <div class="mt-1">
-                        <select class="select2 w-full" id="oppor_per_month">
+                        <select class="input border w-full" id="company_id">
                             <option value="0">All</option>
                             <?php
-                            $months = array(1 => 'Jan.', 2 => 'Feb.', 3 => 'Mar.', 4 => 'Apr.', 5 => 'May', 6 => 'Jun.', 7 => 'Jul.',
-                                8 => 'Aug.', 9 => 'Sep.', 10 => 'Oct.', 11 => 'Nov.', 12 => 'Dec');
-                            foreach ($months as $key => $value) {
-                                echo '<option value="' . $key . '">' . $value . '</option>';
+                            foreach ($companies as $company) {
+                                echo '<option value="' . $company->id . '">' . $company->name . '</option>';
                             }
                             ?>
                         </select>
@@ -97,7 +95,6 @@
                     </div>
                 </div>
             </div>
-            <?php echo $this->uri->segment(3); ?>
             <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
                 <div class=""><label>Sales Rep</label>
                     <div class="mt-1">
@@ -212,7 +209,7 @@
         return '<table cellpadding="0" cellspacing="0" border="0" style="padding-left:50px;text-align: left;width: 100%;">' +
 
             '<tr>' +
-            '<td style="width:13%;font-weight: bold">Contact Person:</td>' +
+            '<td style="width:15%;font-weight: bold">Contact Person:</td>' +
             '<td style="width:23%;">' + d.contact_person + '</td>' +
             '<td  style="width:14%;font-weight: bold">Site Address:</td>' +
             '<td style="width:23%;">' + d.site_address + '</td>' +
@@ -235,6 +232,8 @@
             '<td>' + d.customer_id + '</td>' +
             '</tr>' +
             '<tr>' +
+            '<td style="font-weight: bold">Quoting Company:</td>' +
+            '<td>' + d.company + '</td>' +
             '<td style="font-weight: bold">Details:</td>' +
             '<td>' + d.details + '</td>' +
             '</tr>' +
@@ -261,7 +260,7 @@
                     data.sale_rep = $('#sale_rep').val();
                     data.customer = $('#customer').val();
                     data.customer_id = $('#customer_id').val();
-                    data.oppor_per_month = $('#oppor_per_month').val();
+                    data.company_id = $('#company_id').val();
                     data.id = $('#id').val();
                     data.date = $('#date').val();
                     data.site_city = $('#site_city').val();

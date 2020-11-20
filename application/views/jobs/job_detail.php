@@ -352,7 +352,7 @@
         </div>
         <form id="item_collect_form" method="post" action="set_mat_collect">
             <div class="overflow-x-auto">
-                <table class="table">
+                <table class="table" id="material-setting-table">
                     <thead>
                     <tr class="bg-gray-200 text-gray-700">
                         <th class="whitespace-no-wrap">Category</th>
@@ -379,7 +379,7 @@
                                 <td class="border-b">' . $mat->quantity . '</td>
                                 <td class="border-b">
                                 <input type="hidden" name="mat_id[]" value="' . $mat->id . '"/>
-                                <input type="number" name="collected_quantity[]" onfocus="this.oldvalue = this.value;" max="' . $mat->quantity . '"
+                                <input type="number" name="collected_quantity[]" onfocus="this.oldvalue = this.value;" originalValue="' . $mat->items_collected_for_job . '" max="' . $mat->quantity . '"
                                 value="' . $mat->items_collected_for_job . '" class="w-full" style="height:30px;" onchange="change_item_collect(' . $mat->id . ');this.oldvalue = this.value;">
                                 </td>
                                 <td class="border-b"><button class="button bg-theme-1 text-white w-full" onclick="set_item_collect(' . $mat->id . ')">Label</button></td>';
@@ -428,7 +428,7 @@
             <div class=" py-3 text-right border-t border-gray-200">
                 <button data-dismiss="modal" class="button w-30 bg-theme-1 text-white">Save & Close
                 </button>
-                <button data-dismiss="modal" class="button w-30 bg-theme-6 text-white"
+                <button data-dismiss="modal" class="button w-30 bg-theme-6 text-white" id="closeModalBtn"
                         onclick="javascript:event.preventDefault();">Close
                 </button>
             </div>
@@ -458,7 +458,7 @@
                 '<td>' + d.payment_date + '</td>' +
                 '<td>Paymen Method:</td>' +
                 '<td>' + d.payment_method + '</td>' +
-                '<td><button class="button  bg-theme-6 text-white" onclick="cancel_payment(' + d.payment_id + ')">Cancel Payment</button></td>' +
+                '<td><button class="button  bg-theme-6 text-white" onclick="cancel_payment(' + d.payment_id + ',' + d.credit * 1 + ')">Cancel Payment</button></td>' +
                 '</tr></table>';
         } else {
             return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-align:left;width: 100%;">' +
@@ -471,6 +471,7 @@
                 '</tr></table>';
         }
     }
+
 
     function change_item_collect(rowId) {
         var quantity = $('#items_collected' + rowId).children().eq(2).html() * 1
@@ -509,6 +510,11 @@
         $('#material-detailed').modal({
             backdrop: 'static',
             keyboard: false
+        });
+        var materialSettingTable = $('#material-setting-table').html();
+
+        $('#closeModalBtn').click(function () {
+            $('#material-setting-table').html(materialSettingTable);
         })
 
         $.fn.dataTable.ext.errMode = 'throw';
@@ -538,7 +544,7 @@
                 {"data": "due_date"},
                 {"data": "account_balance"},
                 {"data": "job_balance"},
-                {"data": "notes"},
+                {"data": "notes", "width": "15%"},
             ],
             "order": [[0, 'asc']]
         });
@@ -566,14 +572,14 @@
         $('#create_payment').click(function () {
             var available_payment_amount = job_balance - pay_amount;
             if ($('#invoice_number').val() == '' || $('#payment_amount').val() == '' || $('#payment_method').val() == '') {
-                alert('You need to input all information for creating payment');
+                showNotification('You need to input all information for creating payment');
                 return;
             } else if ($('#payment_amount').val() * 1 < 0) {
-                alert('Payment amount must be bigger than 0');
+                showNotification('Payment amount must be bigger than 0');
                 $('#payment_amount').select();
                 return;
             } else if ($('#payment_amount').val() * 1 > available_payment_amount) {
-                alert('Pyament amount cannot exceed job #' + job_id + ' balance');
+                showNotification('Payment amount cannot exceed job #' + job_id + ' balance');
                 $('#payment_amount').select();
                 return;
             } else if ($('#invoice_number').val()) {
@@ -586,7 +592,7 @@
                     },  // data to submit
                     success: function (data, status, xhr) {
                         if (data == 'not_exist') {
-                            alert('The set Invoice #' + $('#invoice_number').val() + ' is not found for Job ID ');
+                            showNotification('The set Invoice #' + $('#invoice_number').val() + ' is not found for Job ID ' + job_id);
                             $('#invoice_number').select();
                             return;
                         } else {
@@ -623,38 +629,56 @@
         $('#generate_invoice').click(function () {
             var available_invoice_amount = job_balance - invoice_amount;
             if ($('#invoice_id').val() == '' || $('#invoice_amount').val() == '' || $('#invoice_due_date').val() == '') {
-                alert('You need to input all information for generating invoice');
+                showNotification('You need to input all information for generating invoice');
                 return;
             } else if ($('#invoice_amount').val() * 1 < 0) {
-                alert('Invoice amount must be bigger than 0.');
+                showNotification('Invoice amount must be bigger than 0.');
                 $('#invoice_amount').select();
                 return;
             } else if ($('#invoice_amount').val() * 1 > job_balance) {
-                alert('Invoice amount can not be bigger than the Job Balance.');
+                showNotification('Invoice amount can not be bigger than the Job Balance.');
                 $('#invoice_amount').select();
                 return;
+            } else {
+                $.ajax('check_available_invoice', {
+                    type: 'POST',  // http method
+                    data: {
+                        invoice_number: $('#invoice_id').val(),
+                        job_id: job_id
+                    },
+                    success: function (data, status, xhr) {
+                        var invoice_number = $('#invoice_id').val();
+                        if (data == 'exist') {
+                            showNotification('Invoice ID # ' + invoice_number + ' already exists in the system.');
+                            return;
+                        }
+                        $.ajax('generate_invoice', {
+                            type: 'POST',  // http method
+                            data: {
+                                invoice_id: $('#invoice_id').val(),
+                                invoice_amount: $('#invoice_amount').val(),
+                                invoice_due_date: $('#invoice_due_date').val(),
+                                job_id: job_id,
+                                customer_id: customer_id,
+                                company_id: company_id
+                            },
+                            success: function (data, status, xhr) {
+                                table.ajax.reload(null, false);
+                                invoice_amount += $('#invoice_amount').val() * 1;
+                                $('#invoice_id').val('');
+                                $('#invoice_amount').val('');
+                                $('#invoice_due_date').val('');
+                            },
+                            error: function (jqXhr, textStatus, errorMessage) {
+                                console.log(errorMessage);
+                            }
+                        });
+                    },
+                    error: function (jqXhr, textStatus, errorMessage) {
+                        console.log(errorMessage);
+                    }
+                });
             }
-            $.ajax('generate_invoice', {
-                type: 'POST',  // http method
-                data: {
-                    invoice_id: $('#invoice_id').val(),
-                    invoice_amount: $('#invoice_amount').val(),
-                    invoice_due_date: $('#invoice_due_date').val(),
-                    job_id: job_id,
-                    customer_id: customer_id,
-                    company_id: company_id
-                },
-                success: function (data, status, xhr) {
-                    table.ajax.reload(null, false);
-                    invoice_amount += $('#invoice_amount').val() * 1;
-                    $('#invoice_id').val('');
-                    $('#invoice_amount').val('');
-                    $('#invoice_due_date').val('');
-                },
-                error: function (jqXhr, textStatus, errorMessage) {
-                    console.log(errorMessage);
-                }
-            });
         });
     })
     ;
@@ -702,13 +726,14 @@
         });
     }
 
-    function cancel_payment(payment_id) {
-        if (!confirm('Do you want to cancel this payment'))
+    function cancel_payment(payment_id, payment_amount) {
+        if (!showConfirm('Do you want to cancel this payment'))
             return;
         $.ajax('cancel_payment', {
             type: 'POST',  // http method
             data: {payment_id: payment_id, job_id: job_id},  // data to submit
             success: function (data) {
+                pay_amount -= payment_amount;
                 table.ajax.reload(null, false);
                 $('#status_filed').html(data);
             },

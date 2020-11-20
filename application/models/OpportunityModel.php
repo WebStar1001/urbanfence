@@ -15,7 +15,7 @@ class OpportunityModel extends CI_Model
     public function getOpportunities()
     {
         $job_type = $this->input->get('job_type');
-        $oppor_per_month = $this->input->get('oppor_per_month');
+        $company_id = $this->input->get('company_id');
         $sale_source = $this->input->get('sale_source');
         $status = $this->input->get('status');
         $sale_rep = $this->input->get('sale_rep');
@@ -25,7 +25,8 @@ class OpportunityModel extends CI_Model
         $date = $this->input->get('date');
         $site_city = $this->input->get('site_city');
         $urgency = $this->input->get('urgency');
-        $this->db->select('opportunities.*, customers.customer AS customer, customers.contact_person AS contact_person, quotes.id AS quote_id');
+        $this->db->select('opportunities.*, customers.customer AS customer, customers.contact_person AS contact_person, 
+                        quotes.id AS quote_id,companies.name AS company');
         $this->db->from('opportunities');
         if($id){
             $this->db->where('opportunities.id', $id);
@@ -48,13 +49,8 @@ class OpportunityModel extends CI_Model
         if ($customer_id) {
             $this->db->where('customer_id', $customer_id);
         }
-        if ($oppor_per_month) {
-            $this->db->where("date BETWEEN '" . date('Y-' . $oppor_per_month . '-01') . "' AND '" . date('Y-' . $oppor_per_month . '-31') . "'", "", FALSE);
-        } else {
-            if ($date) {
-                list($start_date, $end_date) = explode('-', $date);
-                $this->db->where("date BETWEEN '" . date('Y-m-d', strtotime($start_date)) . "' AND '" . date('Y-m-d', strtotime($end_date)) . "'", "", FALSE);
-            }
+        if ($company_id) {
+            $this->db->where('opportunities.company_id', $company_id);
         }
         if ($site_city) {
             $this->db->where('site_city', $site_city);
@@ -64,6 +60,7 @@ class OpportunityModel extends CI_Model
         }
         $this->db->join('customers', 'customers.id=opportunities.customer_id', 'inner');
         $this->db->join('quotes', 'quotes.oppor_id=opportunities.id', 'left');
+        $this->db->join('companies', 'companies.id=opportunities.company_id', 'inner');
         $this->db->order_by('date', 'ASC');
         $query = $this->db->get();
         return $query->result_array();

@@ -37,6 +37,7 @@ class Opportunity extends CI_Controller
         if (isset($_GET['status'])) {
             $data['status'] = 'New';
         }
+        $data['companies'] = $this->CompanyModel->getCompanies();
         $data['sales'] = $this->UserModel->getSaleUsers();
         $this->load->view('inc/header');
         $this->load->view('opportunities/view_opportunity', $data);

@@ -40,32 +40,90 @@
     <form id="filterForm">
         <div class="intro-y grid grid-cols-12 p-5 mt-5 gap-2 box">
             <h2 class="col-span-12 font-medium text-base  border-b border-gray-200">Filters</h2>
-            <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
-                <div class=""><label>Job ID</label>
-                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full"
-                                             id="job_id">
+            <div class="col-span-12 sm:col-span-6 md:col-span-4">
+                <div><label>Quoting Company</label>
+                    <div class="mt-1">
+                        <select class="input border w-full" id="company_id">
+                            <option value="0">All</option>
+                            <?php
+                            foreach ($companies as $company) {
+                                echo '<option value="' . $company->id . '">' . $company->name . '</option>';
+                            }
+                            ?>
+                        </select>
                     </div>
                 </div>
             </div>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                <div><label>Status</label>
+                <div><label>Sale Source</label>
                     <div class="mt-1">
-                        <select class="input border w-full" id="status">
+                        <select class="input border w-full" id="sale_source">
                             <option value="0">All</option>
-                            <option>New</option>
-                            <option>MAT Missing in Stock</option>
-                            <option>MAT Collected</option>
-                            <option>In progress</option>
-                            <option>Completed</option>
-                            <option>Completed and Paid</option>
+                            <option value="Returned Customer">Returned Customer</option>
+                            <option value="Yellow Pages">Yellow Pages</option>
+                            <option value="Facebook">Facebook</option>
+                            <option value="Facebook">Google Ad</option>
                         </select>
                     </div>
                 </div>
             </div>
             <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
-                <div class=""><label>Quote ID</label>
+                <div class=""><label>Customer</label>
                     <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full"
-                                             id="quote_id">
+                                             id="customer">
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-12 sm:col-span-6 md:col-span-4">
+                <div><label>Oppor. Per Month</label>
+                    <div class="mt-1">
+                        <select class="select2 w-full" id="job_per_month">
+                            <option value="0">All</option>
+                            <?php
+                            $months = array(1 => 'Jan.', 2 => 'Feb.', 3 => 'Mar.', 4 => 'Apr.', 5 => 'May', 6 => 'Jun.', 7 => 'Jul.',
+                                8 => 'Aug.', 9 => 'Sep.', 10 => 'Oct.', 11 => 'Nov.', 12 => 'Dec');
+                            foreach ($months as $key => $value) {
+                                echo '<option value="' . $key . '">' . $value . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-12 sm:col-span-6 md:col-span-4">
+                <div><label>Job Total > </label>
+                    <div class="mt-1">
+                        <input type="number" placeholder="Search" class="input pl-12 border w-full"
+                               id="job_balance">
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-12 sm:col-span-6 md:col-span-4">
+                <div><label>Profit > </label>
+                    <div class="mt-1">
+                        <input type="number" placeholder="Search" class="input pl-12 border w-full"
+                               id="profit">
+                    </div>
+                </div>
+            </div>
+            <div class="col-span-12 sm:col-span-6 md:col-span-4">
+                <div><label>Jobs per Date</label>
+                    <div class="mt-1">
+                        <input data-daterange="true" class="input pl-12 border w-full" id="start_date">
+                    </div>
+                </div>
+            </div>
+            <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
+                <div class=""><label>Sales Rep</label>
+                    <div class="mt-1">
+                        <select class="select2 w-full" id="sale_rep">
+                            <option value="0">All</option>
+                            <?php
+                            foreach ($sales as $user) {
+                                echo '<option value="' . $user->id . '">' . $user->name . '</option>';
+                            }
+                            ?>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -84,31 +142,10 @@
                 </div>
             </div>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                <div><label>Job Balance > </label>
+                <div><label>Site City</label>
                     <div class="mt-1">
-                        <input type="number" placeholder="Search" class="input pl-12 border w-full"
-                               id="job_balance">
-                    </div>
-                </div>
-            </div>
-            <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                <div><label>Quoting Company</label>
-                    <div class="mt-1">
-                        <select class="input border w-full" id="company_id">
-                            <option value="0">All</option>
-                            <?php
-                            foreach ($companies as $company) {
-                                echo '<option value="' . $company->id . '">' . $company->name . '</option>';
-                            }
-                            ?>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
-                <div class=""><label>Customer</label>
-                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full"
-                                             id="customer">
+                        <input type="text" placeholder="Search" class="input pl-12 border w-full"
+                               id="site_city">
                     </div>
                 </div>
             </div>
@@ -128,29 +165,6 @@
                     </div>
                 </div>
             </div>
-            <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                <div><label>Start Date</label>
-                    <div class="mt-1">
-                        <input data-daterange="true" class="input pl-12 border w-full" id="start_date">
-                    </div>
-                </div>
-            </div>
-            <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                <div><label>End Date</label>
-                    <div class="mt-1">
-                        <input data-daterange="true" class="datepicker input pl-12 border w-full" id="end_date">
-                    </div>
-                </div>
-            </div>
-            <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                <div><label>Site City</label>
-                    <div class="mt-1">
-                        <input type="text" placeholder="Search" class="input pl-12 border w-full"
-                               id="site_city">
-                    </div>
-                </div>
-
-            </div>
             <div class="col-span-12 sm:col-span-6 md:col-span-4 flex items-end">
                 <div>
                     <button class="button w-24 mr-1  bg-theme-1 text-white" id="clearFilter">Clear filter</button>
@@ -168,15 +182,14 @@
             <thead>
             <tr>
                 <th>Additional Info</th>
+                <th>Company</th>
                 <th>Job Id</th>
-                <th>Status</th>
-                <th>Installer</th>
-                <th>Start Date</th>
-                <th>End Date</th>
+                <th>Date</th>
                 <th>Customer</th>
-                <th>Total</th>
+                <th>Sales Source</th>
                 <th>Job Balance</th>
-                <th>Edit</th>
+                <th>Job Total</th>
+                <th>Profit</th>
             </tr>
             </thead>
         </table>
@@ -193,28 +206,20 @@
         // `d` is the original data object for the row
         return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-align:left;width: 100%;">' +
             '<tr>' +
-            '<td style="font-weight: bold;width: 13%">Contact Person:</td>' +
-            '<td style="width: 19%">' + d.contact_person + '</td>' +
-            '<td style="font-weight: bold;width: 11%">Site Address:</td>' +
-            '<td style="width: 20%">' + d.site_address + '</td>' +
-            '<td style="font-weight: bold;width: 14%">Customer ID:</td>' +
-            '<td style="width: 15%">' + d.customer_id + '</td>' +
+            '<td style="font-weight: bold;width: 11%">Status:</td>' +
+            '<td style="width: 19%">' + d.status + '</td>' +
+            '<td style="font-weight: bold;width: 11%">Site City:</td>' +
+            '<td style="width: 25%">' + d.site_city + '</td>' +
+            '<td style="font-weight: bold;width: 11%">Job Type:</td>' +
+            '<td style="width: 10%">' + d.job_type + '</td>' +
             '</tr>' +
             '<tr>' +
-            '<td style="font-weight: bold;">Contact onsite:</td>' +
-            '<td>' + d.contact_onsite + '</td>' +
-            '<td style="font-weight: bold;">Site City:</td>' +
-            '<td>' + d.site_city + '</td>' +
+            '<td style="font-weight: bold;">Sales Rep:</td>' +
+            '<td>' + d.sale_rep + '</td>' +
+            '<td style="font-weight: bold;">Installer:</td>' +
+            '<td>' + d.installer + '</td>' +
             '<td style="font-weight: bold;">Oppor ID:</td>' +
-            '<td>' + d.oppor_id + '</td>' +
-            '</tr>' +
-            '<tr>' +
-            '<td style="font-weight: bold;">Job Type:</td>' +
-            '<td>' + d.job_type + '</td>' +
-            '<td style="font-weight: bold;">Site Desc:</td>' +
-            '<td>' + d.site_desc + '</td>' +
-            '<td style="font-weight: bold;">Quoting Company:</td>' +
-            '<td>' + d.company + '</td>' +
+            '<td>' + d.quote_id + '</td>' +
             '</tr>' +
             '</table>';
     }
@@ -223,35 +228,28 @@
         $('#start_date').daterangepicker({
             "showDropdowns": true,
             "minYear": 2010,
-            // "singleDatePicker": true,
-            "linkedCalendars" : false
+            "singleDatePicker": true,
+            // "linkedCalendars": false
         });
         $('#start_date').val('');
-        $('#end_date').daterangepicker({
-            "showDropdowns": true,
-            "minYear": 2010,
-            // "singleDatePicker": true,
-            "linkedCalendars" : false
-        });
-        $('#end_date').val('');
         var table = $('#jobTable').DataTable({
             "pageLength": 50,
             "searching": false,
             "ajax": {
-                url: '<?php echo base_url("Jobs/get_jobs");?>',
+                url: '<?php echo base_url("Sales/get_sales");?>',
                 type: 'GET',
                 data: function (data) {
-                    data.job_id = $('#job_id').val();
-                    data.status = $('#status').val();
-                    data.quote_id = $('#quote_id').val();
+                    data.company_id = $('#company_id').val();
+                    data.sale_source = $('#sale_source').val();
+                    data.customer = $('#customer').val();
+                    data.job_per_month = $('#job_per_month').val();
                     data.installer = $('#installer').val();
                     data.job_balance = $('#job_balance').val();
-                    data.company_id = $('#company_id').val();
-                    data.customer = $('#customer').val();
-                    data.job_type = $('#job_type').val();
+                    data.profit = $('#profit').val();
                     data.start_date = $('#start_date').val();
-                    data.end_date = $('#end_date').val();
+                    data.sale_rep = $('#sale_rep').val();
                     data.site_city = $('#site_city').val();
+                    data.job_type = $('#job_type').val();
                 }
             },
             "columns": [
@@ -261,26 +259,18 @@
                     "data": null,
                     "defaultContent": ''
                 },
+                {"data": "company"},
                 {"data": "id"},
-                {"data": "status"},
-                {"data": "installer"},
                 {"data": "start_date"},
-                {"data": "end_date"},
                 {"data": "customer"},
+                {"data": "sale_source"},
                 {"data": "job_balance"},
-                {"data": "job_balance"},
-                {
-                    "data": null, render: function (data) {
-                        return "<a href='<?php echo base_url('Jobs/job_detail?job_id=');?>" + data.id + "'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
-                    }
-                }
-
+                {"data": "job_total"},
+                {"data": "profit"},
             ],
             "order":
                 [[0, 'asc']]
         });
-        table.tables().header().to$().find('th:eq(0)').css('max-width', '60px');
-        $(window).trigger('resize');
 
         // Add event listener for opening and closing details
         $('#jobTable tbody').on('click', 'td.details-control', function () {

@@ -1151,20 +1151,7 @@
             ?>
         </div>
     </div>
-    <div class="modal" id="alert-modal">
-        <div class="modal__content modal__content--lg p-5 text-center">
-            <div class="flex items-center py-5 sm:py-3 border-b border-gray-200">
-                <h2 class="font-medium text-base mr-auto">Notification</h2>
-            </div>
-            <div class="overflow-x-auto">
-                <p>Customer must pass credit check in order to get a quote.</p>
-            </div>
-            <div class=" py-3 text-right border-t border-gray-200">
-                <button data-dismiss="modal" type="button" class="button w-20 bg-theme-6 text-white">OK</button>
-            </div>
-        </div>
 
-    </div>
     <!-- End Modal -->
     <!--    <script type="text/javascript" src="--><?php //echo base_url();
     ?><!--assets/js/add_quote.js"/>-->
@@ -1349,6 +1336,12 @@
             var discount_percent = 0;
             var discount_amount = 0;
             var sub_total1 = $('#final_quote_table').find('tr').eq(5).children().eq(2).html() * 1;
+            if($(this).val() <= 0){
+                $(this).val('');
+                alert('Markups input can’t be negative values.');
+                $(this).focus();
+                return;
+            }
             if ($(this).attr('name') == 'discount_percent') {
                 discount_percent = $(this).val() * 1;
                 discount_amount = sub_total1 * discount_percent / 100;
@@ -1363,6 +1356,12 @@
         $('#total_markup_percent, #total_markup_amount').keyup(function () {
             var total_percent = 0;
             var total_amount = 0;
+            if($(this).val() <= 0){
+                $(this).val('');
+                alert('Markups input can’t be negative values.');
+                $(this).focus();
+                return;
+            }
             var sub_total1 = $('#final_quote_table').find('tr').eq(5).children().eq(1).html() * 1;
             if ($(this).attr('id') == 'total_markup_percent') {
                 total_percent = $(this).val() * 1;
@@ -1385,49 +1384,86 @@
             var adson_percent = 0;
             var adson_amount = 0;
             var mat_cost = $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html() * 1;
+            if($(this).val() <= 0){
+                $(this).val('');
+                alert('Markups input can’t be negative values.');
+                $(this).focus();
+                return;
+            }
             if ($(this).attr('id') == 'material_markup_percent') {
-                mat_percent = $(this).val() * 1;
-                mat_amount = mat_cost * mat_percent / 100;
-                $('#material_markup_amount').val(Math.round(mat_amount * 100) / 100);
+                if($(this).val() == ''){
+                    $('#material_markup_amount').val('');
+                }else{
+                    mat_percent = $(this).val() * 1;
+                    mat_amount = mat_cost * mat_percent / 100;
+                    $('#material_markup_amount').val(Math.round(mat_amount * 100) / 100);
+                }
             } else if ($(this).attr('id') == 'material_markup_amount') {
-                mat_amount = $(this).val() * 1;
-                mat_percent = mat_amount / mat_cost * 100;
-                $('#material_markup_percent').val(Math.round(mat_percent * 10000) / 10000);
+                if($(this).val() == ''){
+                    $('#material_markup_percent').val('');
+                }else{
+                    mat_amount = $(this).val() * 1;
+                    mat_percent = mat_amount / mat_cost * 100;
+                    $('#material_markup_percent').val(Math.round(mat_percent * 10000) / 10000);
+                }
             }
             var labour_cost = $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html() * 1;
             if ($(this).attr('id') == 'labor_markup_percent') {
-                labour_percent = $(this).val() * 1;
-                labour_amount = labour_cost * labour_percent / 100;
-                $('#labor_markup_amount').val(Math.round(labour_amount * 100) / 100);
+                if($(this).val() == ''){
+                    $('#labor_markup_amount').val('');
+                }else{
+                    labour_percent = $(this).val() * 1;
+                    labour_amount = labour_cost * labour_percent / 100;
+                    $('#labor_markup_amount').val(Math.round(labour_amount * 100) / 100);
+                }
             } else if ($(this).attr('id') == 'labor_markup_amount') {
-                labour_amount = $(this).val() * 1;
-                labour_percent = (labour_amount / labour_cost) * 100;
-                $('#labor_markup_percent').val(Math.round(labour_percent * 10000) / 10000);
+                if($(this).val() == ''){
+                    $('#labor_markup_percent').val('');
+                }else{
+                    labour_amount = $(this).val() * 1;
+                    labour_percent = (labour_amount / labour_cost) * 100;
+                    $('#labor_markup_percent').val(Math.round(labour_percent * 10000) / 10000);
+                }
             }
 
             var mis_cost = $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html() * 1;
 
             if ($(this).attr('id') == 'misc_markup_percent') {
-                mis_percent = $(this).val() * 1;
-                mis_amount = mis_cost * mis_percent / 100;
-                $('#misc_markup_amount').val(Math.round(mis_amount * 100) / 100);
+                if($(this).val() == ''){
+                    $('#misc_markup_amount').val('');
+                }else{
+                    mis_percent = $(this).val() * 1;
+                    mis_amount = mis_cost * mis_percent / 100;
+                    $('#misc_markup_amount').val(Math.round(mis_amount * 100) / 100);
+                }
             } else if ($(this).attr('id') == 'misc_markup_amount') {
-                mis_amount = $(this).val() * 1;
-                mis_percent = (mis_amount / mis_cost) * 100;
-                $('#misc_markup_percent').val(Math.round(mis_percent * 10000) / 10000);
+                if($(this).val() == ''){
+                    $('#misc_markup_percent').val('')
+                }else{
+                    mis_amount = $(this).val() * 1;
+                    mis_percent = (mis_amount / mis_cost) * 100;
+                    $('#misc_markup_percent').val(Math.round(mis_percent * 10000) / 10000);
+                }
             }
-
 
             var adson_cost = $('#final_quote_table').find('tr').eq(4).children().eq(1).html() * 1;
 
             if ($(this).attr('id') == 'adson_markup_percent') {
-                adson_percent = $(this).val() * 1;
-                adson_amount = adson_cost * adson_percent / 100;
-                $('#adson_markup_amount').val(Math.round(adson_amount * 100) / 100);
+                if($(this).val() == ''){
+                    $('#adson_markup_amount').val('')
+                }else{
+                    adson_percent = $(this).val() * 1;
+                    adson_amount = adson_cost * adson_percent / 100;
+                    $('#adson_markup_amount').val(Math.round(adson_amount * 100) / 100);
+                }
             } else if ($(this).attr('id') == 'adson_markup_amount') {
-                adson_amount = $(this).val() * 1;
-                adson_percent = (adson_amount / adson_cost) * 100;
-                $('#adson_markup_percent').val(Math.round(adson_percent * 10000) / 10000);
+                if($(this).val() == ''){
+                    $('#adson_markup_percent').val('');
+                }else{
+                    adson_amount = $(this).val() * 1;
+                    adson_percent = (adson_amount / adson_cost) * 100;
+                    $('#adson_markup_percent').val(Math.round(adson_percent * 10000) / 10000);
+                }
             }
 
             calculate_sale_table();
@@ -1545,13 +1581,19 @@
         }
 
         function change_mat_quantity(rowId) {
+
             var price_per_unit = $('#material-item-row' + rowId).children().eq(2).html();
             var quantity = $('#material-item-row' + rowId).children().eq(3).find('input').val();
+            if(quantity <= 0){
+                $('#material-item-row' + rowId).children().eq(3).find('input').val('');
+                $('#material-item-row' + rowId).children().eq(3).find('input').focus();
+                alert('Quantity must be bigger than 0');
+                return;
+            }
             var total_price = $('#material-item-total').children().eq(2).html() * 1;
             var original_price = $('#material-item-row' + rowId).children().eq(4).html() * 1;
             var total_quantity = $('#material-item-total').children().eq(1).html() * 1;
             var original_quantity = event.target.oldvalue * 1;
-            console.log(original_quantity);
             if (quantity != '' && price_per_unit != '') {
                 $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
                 $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
@@ -1638,6 +1680,12 @@
             var total_price = $('#labour-item-total').children().eq(2).html() * 1;
             var original_price = $('#labour-item-row' + rowId).children().eq(2).html() * 1;
             var quantity = $('#labour-item-row' + rowId).children().eq(1).find('input').val();
+            if(quantity <= 0){
+                $('#labour-item-row' + rowId).children().eq(1).find('input').val('');
+                $('#labour-item-row' + rowId).children().eq(1).find('input').focus();
+                alert('# of Man Day must be bigger than 0');
+                return;
+            }
             var total_quantity = $('#labour-item-total').children().eq(1).html() * 1;
             var original_quantity = event.target.oldvalue * 1;
             if (quantity != '') {
@@ -1710,6 +1758,12 @@
             var original_price = $('#miscellaneous-item-row' + rowId).children().eq(4).html() * 1;
             var price_per_unit = $('#miscellaneous-item-row' + rowId).children().eq(2).find('input').val();
             var quantity = $('#miscellaneous-item-row' + rowId).children().eq(3).find('input').val();
+            if(price_per_unit <= 0){
+                $('#miscellaneous-item-row' + rowId).children().eq(2).find('input').val('');
+                $('#miscellaneous-item-row' + rowId).children().eq(2).find('input').focus();
+                alert('Price per unit must be bigger than 0');
+                return;
+            }
             if (quantity != '' && price_per_unit != '') {
                 $('#miscellaneous-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
                 $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
@@ -1727,6 +1781,12 @@
             var quantity = $('#miscellaneous-item-row' + rowId).children().eq(3).find('input').val();
             var total_quantity = $('#miscellaneous-item-total').children().eq(1).html() * 1;
             var original_quantity = event.target.oldvalue * 1;
+            if(quantity <= 0){
+                $('#miscellaneous-item-row' + rowId).children().eq(3).find('input').val('');
+                $('#miscellaneous-item-row' + rowId).children().eq(3).find('input').focus();
+                alert('Quantity must be bigger than 0');
+                return;
+            }
             if (quantity != '' && price_per_unit != '') {
                 $('#miscellaneous-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
                 $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
@@ -1795,6 +1855,12 @@
             var original_price = $('#adsOn-item-row' + rowId).children().eq(3).html() * 1;
             var price_per_unit = $('#adsOn-item-row' + rowId).children().eq(1).find('input').val();
             var quantity = $('#adsOn-item-row' + rowId).children().eq(2).find('input').val();
+            if(price_per_unit <= 0){
+                $('#adsOn-item-row' + rowId).children().eq(1).find('input').val('');
+                $('#adsOn-item-row' + rowId).children().eq(1).find('input').focus();
+                alert('Price per unit must be bigger than 0');
+                return;
+            }
             if (quantity != '' && price_per_unit != '') {
                 $('#adsOn-item-row' + rowId).children().eq(3).html(quantity * price_per_unit);
                 $('#adsOn-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
@@ -1812,6 +1878,12 @@
             var quantity = $('#adsOn-item-row' + rowId).children().eq(2).find('input').val();
             var total_quantity = $('#adsOn-item-total').children().eq(1).html() * 1;
             var original_quantity = event.target.oldvalue * 1;
+            if(quantity <= 0){
+                $('#adsOn-item-row' + rowId).children().eq(2).find('input').val('');
+                $('#adsOn-item-row' + rowId).children().eq(2).find('input').focus();
+                alert('Quantity must be bigger than 0');
+                return;
+            }
             if (quantity != '' && price_per_unit != '') {
                 $('#adsOn-item-row' + rowId).children().eq(3).html(quantity * price_per_unit);
                 $('#adsOn-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
