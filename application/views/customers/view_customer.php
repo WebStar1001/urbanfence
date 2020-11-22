@@ -120,6 +120,7 @@
                     </div>
                 </div>
             </div>
+            <?php if(is_admin()):?>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Quoting Company</label>
                     <div class="mt-1">
@@ -134,6 +135,7 @@
                     </div>
                 </div>
             </div>
+            <?php endif;?>
 
             <div class="col-span-12 sm:col-span-6 md:col-span-4 flex items-end">
                 <div>

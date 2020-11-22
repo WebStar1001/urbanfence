@@ -20,6 +20,7 @@
             width: 6rem;
         }
     }
+
     table.dataTable thead th, table.dataTable thead td {
         padding: 0 0 !important;
     }
@@ -48,20 +49,22 @@
                     </div>
                 </div>
             </div>
-            <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                <div><label>Quoting Company</label>
-                    <div class="mt-1">
-                        <select class="input border w-full" id="company_id">
-                            <option value="0">All</option>
-                            <?php
-                            foreach ($companies as $company) {
-                                echo '<option value="' . $company->id . '">' . $company->name . '</option>';
-                            }
-                            ?>
-                        </select>
+            <?php if (is_admin()): ?>
+                <div class="col-span-12 sm:col-span-6 md:col-span-4">
+                    <div><label>Quoting Company</label>
+                        <div class="mt-1">
+                            <select class="input border w-full" id="company_id">
+                                <option value="0">All</option>
+                                <?php
+                                foreach ($companies as $company) {
+                                    echo '<option value="' . $company->id . '">' . $company->name . '</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php endif; ?>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Status</label>
                     <div class="mt-1">
@@ -274,7 +277,11 @@
                 },
                 {
                     "data": null, render: function (data) {
-                        return "<a href='<?php echo base_url('Quotes/add_quote?quote_id=');?>" + data.id + "'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
+                        if (is_sale&&data.status == 'Pending') {
+                            return "";
+                        } else {
+                            return "<a href='<?php echo base_url('Quotes/add_quote?quote_id=');?>" + data.id + "'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
+                        }
                     }
                 }
             ],

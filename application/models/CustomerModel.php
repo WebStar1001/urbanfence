@@ -31,8 +31,13 @@ class CustomerModel extends CI_Model {
         if($customer_id){
             $this->db->where('customers.id', $customer_id);
         }
-        if($company_id){
-            $this->db->where('customers.company_id', $company_id);
+        if(is_manager()){
+            $user_company = user_company();
+            $this->db->where('customers.company_id', $user_company);
+        }else{
+            if($company_id){
+                $this->db->where('customers.company_id', $company_id);
+            }
         }
         if($status){
             $this->db->where('status', $status);

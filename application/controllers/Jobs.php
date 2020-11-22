@@ -8,6 +8,10 @@ class Jobs extends CI_Controller
 
         parent::__construct();
 
+        $this->load->library('auth');
+        $this->load->library('session');
+        $this->auth->check_permission();
+
         $this->load->model('UserModel');
         $this->load->model('JobModel');
         $this->load->model('OpportunityModel');
@@ -16,15 +20,12 @@ class Jobs extends CI_Controller
         $this->load->model('InvoiceModel');
         $this->load->model('PaymentModel');
         $this->load->model('CompanyModel');
-//        $this->load->library('auth');
-//        $this->load->library('session');
-//        $this->auth->check_admin_auth();
     }
 
     public function jobs_list()
     {
-        $data['sales'] = $this->UserModel->getSaleUsers();
-        $data['installers'] = $this->UserModel->getUserByAccessLevel('Customer');
+        $data['sales'] = $this->UserModel->getUserByAccessLevel('Sales');
+        $data['installers'] = $this->UserModel->getUserByAccessLevel('User');
         $data['companies'] = $this->CompanyModel->getCompanies();
         $this->load->view('inc/header');
         $this->load->view('jobs/view_job', $data);
@@ -55,7 +56,7 @@ class Jobs extends CI_Controller
         }
         $data = array('job' => $job, 'oppor' => $opportunity, 'customer' => $customer, 'quote' => $quote,
             'mat_info' => $mat_info, 'pay_amount' => $pay_amount, 'invoice_amount' => $invoice_amount);
-        $data['installers'] = $this->UserModel->getUserByAccessLevel('Customer');
+        $data['installers'] = $this->UserModel->getUserByAccessLevel('User');
         $this->load->view('inc/header');
         $this->load->view('jobs/job_detail', $data);
         $this->load->view('inc/footer');
@@ -150,7 +151,7 @@ class Jobs extends CI_Controller
             $this->db->update('jobs', array('status' => 'Completed and Paid'));
             echo 'Completed and Paid';
         } else {
-            echo 'Completed';
+            echo 'not_completed_paid';
         }
 
     }
@@ -240,16 +241,12 @@ class Jobs extends CI_Controller
             $this->db->where('id', $job_id);
             $this->db->update('jobs', array('status' => 'Completed and Paid'));
             echo 'Completed and Paid';
-        } else {
-            $this->db->where('id', $job_id);
-            $this->db->update('jobs', array('status' => 'Completed'));
-            echo 'Completed';
         }
     }
     public function check_available_invoice(){
         $invoice_id = $this->input->post('invoice_number');
         $job_id = $this->input->post('job_id');
-        $invoice = $this->db->get_where('invoices', array('job_id'=>$job_id, 'id'=>$invoice_id))->row();
+        $invoice = $this->db->get_where('invoices', array('id'=>$invoice_id))->row();
         if(is_object($invoice)){
             echo 'exist';
         }else{

@@ -19,6 +19,7 @@
             width: 6rem;
         }
     }
+
     table.dataTable thead th, table.dataTable thead td {
         padding: 0 0 !important;
     }
@@ -91,20 +92,22 @@
                     </div>
                 </div>
             </div>
-            <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                <div><label>Quoting Company</label>
-                    <div class="mt-1">
-                        <select class="input border w-full" id="company_id">
-                            <option value="0">All</option>
-                            <?php
-                            foreach ($companies as $company) {
-                                echo '<option value="' . $company->id . '">' . $company->name . '</option>';
-                            }
-                            ?>
-                        </select>
+            <?php if (is_admin()): ?>
+                <div class="col-span-12 sm:col-span-6 md:col-span-4">
+                    <div><label>Quoting Company</label>
+                        <div class="mt-1">
+                            <select class="input border w-full" id="company_id">
+                                <option value="0">All</option>
+                                <?php
+                                foreach ($companies as $company) {
+                                    echo '<option value="' . $company->id . '">' . $company->name . '</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php endif; ?>
             <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
                 <div class=""><label>Customer</label>
                     <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full"
@@ -224,14 +227,14 @@
             "showDropdowns": true,
             "minYear": 2010,
             // "singleDatePicker": true,
-            "linkedCalendars" : false
+            "linkedCalendars": false
         });
         $('#start_date').val('');
         $('#end_date').daterangepicker({
             "showDropdowns": true,
             "minYear": 2010,
             // "singleDatePicker": true,
-            "linkedCalendars" : false
+            "linkedCalendars": false
         });
         $('#end_date').val('');
         var table = $('#jobTable').DataTable({
@@ -271,7 +274,11 @@
                 {"data": "job_balance"},
                 {
                     "data": null, render: function (data) {
-                        return "<a href='<?php echo base_url('Jobs/job_detail?job_id=');?>" + data.id + "'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
+                        if (is_sale) {
+                            return '';
+                        } else {
+                            return "<a href='<?php echo base_url('Jobs/job_detail?job_id=');?>" + data.id + "'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
+                        }
                     }
                 }
 

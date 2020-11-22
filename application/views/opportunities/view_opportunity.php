@@ -57,20 +57,22 @@
                     </div>
                 </div>
             </div>
-            <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                <div><label>Quoting Company</label>
-                    <div class="mt-1">
-                        <select class="input border w-full" id="company_id">
-                            <option value="0">All</option>
-                            <?php
-                            foreach ($companies as $company) {
-                                echo '<option value="' . $company->id . '">' . $company->name . '</option>';
-                            }
-                            ?>
-                        </select>
+            <?php if (is_admin()): ?>
+                <div class="col-span-12 sm:col-span-6 md:col-span-4">
+                    <div><label>Quoting Company</label>
+                        <div class="mt-1">
+                            <select class="input border w-full" id="company_id">
+                                <option value="0">All</option>
+                                <?php
+                                foreach ($companies as $company) {
+                                    echo '<option value="' . $company->id . '">' . $company->name . '</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
+            <?php endif; ?>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Sale Source</label>
                     <div class="mt-1">
@@ -299,29 +301,29 @@
                 {
                     "data": null, render: function (data) {
                         return "<button class='button border' onclick='set_sale_rep(" + data.id + ");'>Set</button>"
-                    }
+                    }, "visible": !is_sale && !is_user
                 },
                 {
                     "data": null, render: function (data) {
                         if (data.status == 'New') {
                             return "<a href='<?php echo base_url('Opportunity/add_opportunity?opportunity_id=');?>" + data.id + "'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
                         } else {
-                            return "<a href='javascript:alert(\"Can not edit Opportunity which is already assigned to a Sales Rap.\")'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
+                            return "<a href='javascript:showNotification(\"Can not edit Opportunity which is already assigned to a Sales Rap.\")'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
                         }
-                    }
+                    }, "visible": !is_user
                 },
                 {
                     "data": null, render: function (data) {
                         if (data.status == 'Assigned') {
                             if (data.quote_id != null) {
-                                return "<a href='javascript:alert(\"Opportunity is already linked with created quote.\")'><i class='fa fa-external-link' aria-hidden='true'></i></a>"
+                                return "<a href='javascript:showNotification(\"Opportunity is already linked with created quote.\")'><i class='fa fa-external-link' aria-hidden='true'></i></a>"
                             } else {
                                 return "<a href='<?php echo base_url('Quotes/add_quote?opportunity_id=');?>" + data.id + "'><i class='fa fa-external-link' aria-hidden='true'></i></a>"
                             }
                         } else {
-                            return "<a href='javascript:alert(\"Opportunity needs to get assigned to Sales Rap prior Quote creation.\")'><i class='fa fa-external-link' aria-hidden='true'></i></a>"
+                            return "<a href='javascript:showNotification(\"Opportunity needs to get assigned to Sales Rap prior Quote creation.\")'><i class='fa fa-external-link' aria-hidden='true'></i></a>"
                         }
-                    }
+                    }, "visible" : !is_user
                 }
             ],
             "order": [[0, 'asc']]
@@ -361,7 +363,7 @@
         var selected_sale_rep = $('#sale_rep_' + oppor_id).val();
         var obj = event.target;
         if (selected_sale_rep == 0) {
-            alert('Please select Sales Rep');
+            showNotification('Please select Sales Rep');
             return;
         }
         $.ajax('change_sale_rep', {

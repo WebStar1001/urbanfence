@@ -12,6 +12,7 @@
         </div>
     </div>
 </div>
+
 <!-- BEGIN: JS Assets-->
 <script src="<?php echo base_url(); ?>assets/js/app.js"></script>
 
@@ -26,5 +27,9 @@
     function showNotification(message){
         $('#alert-modal').find('p').html(message);
         $('#alert-modal').modal('show');
+    }
+    function showConfirm(message){
+        $('#confirm-modal').find('p').html(message);
+        $('#confirm-modal').modal('show');
     }
 </script>

@@ -49,8 +49,12 @@ class OpportunityModel extends CI_Model
         if ($customer_id) {
             $this->db->where('customer_id', $customer_id);
         }
-        if ($company_id) {
-            $this->db->where('opportunities.company_id', $company_id);
+        if(is_admin()){
+            if ($company_id) {
+                $this->db->where('opportunities.company_id', $company_id);
+            }
+        }else{
+            $this->db->where('opportunities.company_id', user_company());
         }
         if ($site_city) {
             $this->db->where('site_city', $site_city);

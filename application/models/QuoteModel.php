@@ -62,8 +62,12 @@ class QuoteModel extends CI_Model
         if ($site_city) {
             $this->db->like('opportunities.site_city', $site_city);
         }
-        if ($company_id) {
-            $this->db->where('quotes.company_id', $company_id);
+        if(is_admin()){
+            if ($company_id) {
+                $this->db->where('quotes.company_id', $company_id);
+            }
+        }else{
+            $this->db->where('quotes.company_id', user_company());
         }
         if ($quote_selling_total) {
 

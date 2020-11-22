@@ -8,12 +8,12 @@ class Customer extends CI_Controller
 
         parent::__construct();
 
+        $this->load->library('auth');
+        $this->load->library('session');
+        $this->auth->check_permission();
         $this->load->model('CustomerModel');
         $this->load->model('UserModel');
         $this->load->model('CompanyModel');
-//        $this->load->library('auth');
-//        $this->load->library('session');
-//        $this->auth->check_admin_auth();
     }
 
     public function customers_list()

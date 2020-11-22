@@ -8,10 +8,10 @@ class Users extends CI_Controller
     {
         parent::__construct();
 
+        $this->load->library('auth');
+        $this->load->library('session');
+        $this->auth->check_permission();
         $this->load->model('UserModel');
-//        $this->load->library('auth');
-//        $this->load->library('session');
-//        $this->auth->check_admin_auth();
     }
 
     public function users_list()
@@ -41,7 +41,7 @@ class Users extends CI_Controller
         $name = $this->input->post('name');
         $access_level = $this->input->post('access_level');
         $user_id = $this->input->post('user_id');
-        if($user_id){
+        if ($user_id) {
             $this->db->where('id', $user_id);
             $this->db->update('users', array(
                 'username' => $username,
@@ -49,7 +49,7 @@ class Users extends CI_Controller
                 'name' => $name,
                 'access_level' => $access_level
             ));
-        }else{
+        } else {
             $user = $this->UserModel->get_user_by_email($username);
             $data = array();
             if ($user) {

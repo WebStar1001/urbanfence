@@ -22,13 +22,14 @@ class Opportunity extends CI_Controller
     function __construct()
     {
         parent::__construct();
+        $this->load->library('auth');
+        $this->load->library('session');
+        $this->auth->check_permission();
+
         $this->load->model('CustomerModel');
         $this->load->model('CompanyModel');
         $this->load->model('UserModel');
         $this->load->model('OpportunityModel');
-//        $this->load->library('auth');
-//        $this->load->library('session');
-//        $this->auth->check_admin_auth();
     }
 
     public function opportunity_list()
@@ -38,7 +39,7 @@ class Opportunity extends CI_Controller
             $data['status'] = 'New';
         }
         $data['companies'] = $this->CompanyModel->getCompanies();
-        $data['sales'] = $this->UserModel->getSaleUsers();
+        $data['sales'] = $this->UserModel->getUserByAccessLevel('Sales');
         $this->load->view('inc/header');
         $this->load->view('opportunities/view_opportunity', $data);
         $this->load->view('inc/footer');
@@ -79,6 +80,9 @@ class Opportunity extends CI_Controller
     public function create_customer()
     {
         $data = $_POST;
+        if(!is_admin()){
+            $data['company_id'] = user_company();
+        }
         $this->db->insert('customers', $data);
         $customer_id = $this->db->insert_id();
         echo $customer_id;
@@ -91,6 +95,10 @@ class Opportunity extends CI_Controller
         $save = $this->input->post('save');
         unset($data['customer_id']);
         unset($data['save']);
+
+        if(!is_admin()){
+            $data['company_id'] = user_company();
+        }
         if ($customer_id != "") {
             $this->db->where('id', $customer_id);
             $this->db->update('customers', $data);
@@ -112,6 +120,9 @@ class Opportunity extends CI_Controller
         unset($data['opportunity_id']);
         if ($data['customer_id'] == '') {
             $data['customer_id'] = $data['created_customer_id'];
+        }
+        if(!is_admin()){
+            $data['company_id'] = user_company();
         }
         if ($opportunity_id != "") {
             $this->db->where('id', $opportunity_id);

@@ -437,7 +437,24 @@
     </div>
 
 </div>
-
+<div class="modal" id="confirm-modal">
+    <div class="modal__content modal__content--lg p-5 text-center">
+        <div class="flex items-center py-5 sm:py-3 border-b border-gray-200">
+            <h2 class="font-medium text-base mr-auto">Notification</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <p>Do you want to cancel this payment</p>
+        </div>
+        <input type="hidden" id="cancel_payment_id"/>
+        <input type="hidden" id="cancel_payment_amount"/>
+        <div class=" py-3 text-right border-t border-gray-200">
+            <button type="button" class="button w-20 bg-theme-6 text-white" id="OkayBtn">OK
+            </button>
+            <button data-dismiss="modal" type="button" class="button w-20 bg-theme-6 text-white" id="CancelBtn">Cancel
+            </button>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
     var job_id = '<?php echo ($job) ? $job->id : ""?>';
     var customer_id = '<?php echo ($job) ? $job->customer_id : ""?>';
@@ -479,6 +496,16 @@
         var total_items_collected = $('#items_collected_total').children().eq(3).html() * 1
         var oldValue = event.target.oldvalue * 1;
         var nValue = event.target.value * 1;
+        if (nValue < 0) {
+            $('#items_collected' + rowId).children().eq(3).find('input').val('');
+            showNotification('Number of collected items cannot be smaller than 0');
+            nValue = 0;
+        } else if (quantity < nValue) {
+            $('#items_collected' + rowId).children().eq(3).find('input').val('');
+            showNotification('Number of collected items cannot be greater than required quantity amount');
+            nValue = 0;
+        }
+
         $('#items_collected_total').children().eq(3).html(total_items_collected - oldValue + nValue);
         $('#items_collected_total').children().eq(5).html(total_missing_stock + oldValue - nValue);
         if (total_missing_stock + oldValue - nValue == 0) {
@@ -488,6 +515,8 @@
             status = 'MAT Missing in Stock';
             $('#items_collected_total').children().eq(6).html('<i class="fa fa-minus" style="color:red;"/>');
         }
+
+
         if (quantity == nValue) {
             $('#items_collected' + rowId).children().eq(5).html('<i class="fa fa-check" style="color:green;"/>')
             $('#items_collected' + rowId).children().eq(6).html('<i class="fa fa-minus" style="color:green;"/>')
@@ -498,11 +527,6 @@
             $('#items_collected' + rowId).children().eq(6).html('<i class="fa fa-minus" style="color:red;"/>')
             $('#items_collected' + rowId).children().eq(4).find('button').attr('disabled', false);
             $('#items_collected' + rowId).children().eq(4).find('button').css('background-color', 'blue');
-        } else {
-            $('#items_collected' + rowId).children().eq(4).find('button').attr('disabled', true);
-            $('#items_collected' + rowId).children().eq(4).find('button').css('background-color', 'gray');
-            $('#items_collected' + rowId).children().eq(5).html(quantity - nValue);
-            $('#items_collected' + rowId).children().eq(6).html('<i class="fa fa-minus" style="color:red;"/>')
         }
     }
 
@@ -611,7 +635,9 @@
                                     $('#invoice_number').val('');
                                     $('#payment_amount').val('');
                                     $('#payment_method').val('');
-                                    $('#status_filed').html(data);
+                                    if (data != 'not_completed_paid') {
+                                        $('#status_filed').html(data);
+                                    }
                                 },
                                 error: function (jqXhr, textStatus, errorMessage) {
                                     console.log(errorMessage);
@@ -643,8 +669,7 @@
                 $.ajax('check_available_invoice', {
                     type: 'POST',  // http method
                     data: {
-                        invoice_number: $('#invoice_id').val(),
-                        job_id: job_id
+                        invoice_number: $('#invoice_id').val()
                     },
                     success: function (data, status, xhr) {
                         var invoice_number = $('#invoice_id').val();
@@ -680,6 +705,23 @@
                 });
             }
         });
+        $('#confirm-modal').on('click', '#OkayBtn', function () {
+            var payment_id = $('#cancel_payment_id').val();
+            var payment_amount = $('#cancel_payment_amount').val() * 1;
+            $.ajax('cancel_payment', {
+                type: 'POST',  // http method
+                data: {payment_id: payment_id, job_id: job_id},  // data to submit
+                success: function (data) {
+                    pay_amount -= payment_amount;
+                    table.ajax.reload(null, false);
+                    $('#status_filed').html(data);
+                    $('#confirm-modal').modal('hide');
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log(errorMessage);
+                }
+            });
+        });
     })
     ;
     $('#job_setting_btn').click(function () {
@@ -709,38 +751,14 @@
     function set_item_collect(mat_id) {
         event.preventDefault();
         return;
-        var item_collect = $('#items_collected' + mat_id).children().eq(3).find('input').val();
-        $.ajax('set_mat_collect', {
-            type: 'POST',  // http method
-            data: {mat_id: mat_id, item_collect: item_collect, mat_item_status: status, job_id: job_id},  // data to submit
-            success: function (data) {
-                if (status == 'MAT Collected') {
-                    $('#start_date').attr('readonly', false);
-                    $('#start_date').attr('disabled', false);
-                }
-                $('#status_filed').html(status);
-            },
-            error: function (jqXhr, textStatus, errorMessage) {
-                console.log(errorMessage);
-            }
-        });
     }
 
     function cancel_payment(payment_id, payment_amount) {
-        if (!showConfirm('Do you want to cancel this payment'))
-            return;
-        $.ajax('cancel_payment', {
-            type: 'POST',  // http method
-            data: {payment_id: payment_id, job_id: job_id},  // data to submit
-            success: function (data) {
-                pay_amount -= payment_amount;
-                table.ajax.reload(null, false);
-                $('#status_filed').html(data);
-            },
-            error: function (jqXhr, textStatus, errorMessage) {
-                console.log(errorMessage);
-            }
-        });
+        $("#confirm-modal").modal('show');
+        $('#cancel_payment_id').val(payment_id);
+        $('#cancel_payment_amount').val(payment_amount);
+
+
     }
 </script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>

@@ -52,7 +52,7 @@
                                 <option <?php echo ($user->access_level == 'Manager') ? "selected" : "" ?>>Manager
                                 </option>
                                 <option <?php echo ($user->access_level == 'Sales') ? "selected" : "" ?>>Sales</option>
-                                <option <?php echo ($user->access_level == 'Customer') ? "selected" : "" ?>>Customer
+                                <option <?php echo ($user->access_level == 'User') ? "selected" : "" ?>>Customer
                                 </option>
                             <?php
                             else:
@@ -62,7 +62,7 @@
                                 <option>Admin</option>
                                 <option>Manager</option>
                                 <option>Sales</option>
-                                <option>Customer</option>
+                                <option>User</option>
                             <?php
                             endif;
                             ?>

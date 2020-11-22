@@ -84,7 +84,12 @@
             padding: 1% !important;
         }
     </style>
-
+    <script type="text/javascript">
+        var is_admin = <?php echo is_admin() ? 1 : 0?>;
+        var is_manager = <?php echo is_manager() ? 1 : 0?>;
+        var is_sale = <?php echo is_sale() ? 1 : 0?>;
+        var is_user = <?php echo is_user() ? 1 : 0?>;
+    </script>
 </head>
 
 

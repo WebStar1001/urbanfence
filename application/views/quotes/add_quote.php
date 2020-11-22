@@ -162,10 +162,17 @@
       display: none;
     }*/
 </style>
+<?php
+$hide_price = false;
+if (is_sale()) {
+    $hide_price = true;
+}
+?>
 <script>
     var catalogs =<?php echo json_encode($catalogs); ?>;
     var categories =<?php echo json_encode($categories); ?>;
-    var status = '<?php echo (is_object($quote)) ? $quote->status : 'New';?>'
+    var status = '<?php echo (is_object($quote)) ? $quote->status : 'New';?>';
+    var hide_price = <?php echo ($hide_price) ? 1 : 0;?>;
 </script>
 <div class="content">
     <!-- BEGIN: Top Bar -->
@@ -203,27 +210,28 @@
                             </b></p>
                     </fieldset>
                 </div>
-
                 <div class="col-span-12 sm:col-span-6 md:col-span-4 sm:pl-3 ml-5 lg:m-auto" id="right_info_part">
-                    <div class="w-full sm:w-full m-auto mb-2" style="display:flex;">
-                        <p> Set Quoting Company </p>
-                        <select class="input border mr-2">
-                            <?php
-                            foreach ($companies as $com) {
-                                if (is_object($quote)) {
-                                    if ($quote->company_id == $com->id) {
-                                        echo '<option value="' . $com->id . '" selected>' . $com->name . '</option>';
+                    <?php if (is_admin()): ?>
+                        <div class="w-full sm:w-full m-auto mb-2" style="display:flex;">
+                            <p> Set Quoting Company </p>
+                            <select class="input border mr-2">
+                                <?php
+                                foreach ($companies as $com) {
+                                    if (is_object($quote)) {
+                                        if ($quote->company_id == $com->id) {
+                                            echo '<option value="' . $com->id . '" selected>' . $com->name . '</option>';
+                                        } else {
+                                            echo '<option value="' . $com->id . '">' . $com->name . '</option>';
+                                        }
                                     } else {
                                         echo '<option value="' . $com->id . '">' . $com->name . '</option>';
                                     }
-                                } else {
-                                    echo '<option value="' . $com->id . '">' . $com->name . '</option>';
                                 }
-                            }
-                            ?>
+                                ?>
 
-                        </select>
-                    </div>
+                            </select>
+                        </div>
+                    <?php endif; ?>
 
                     <div class="w-full sm:w-full m-auto" style="display:flex;">
                         <p classs="">Set Calc Mode</p>
@@ -285,9 +293,13 @@
                             <tr id="material_thead">
                                 <th class="whitespace-no-wrap">Category</th>
                                 <th class="whitespace-no-wrap">Code</th>
-                                <th class="text-center whitespace-no-wrap">Price per unit</th>
+                                <th class="text-center whitespace-no-wrap" <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>>
+                                    Price per unit
+                                </th>
                                 <th class="text-center whitespace-no-wrap">Quantity</th>
-                                <th class="text-center whitespace-no-wrap">Total price</th>
+                                <th class="text-center whitespace-no-wrap" <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>>
+                                    Total price
+                                </th>
 
                                 <th class="text-center whitespace-no-wrap">ACTIONS</th>
                             </tr>
@@ -295,7 +307,7 @@
                             <tbody>
 
                             <tr id="material-item-row0" row="0" class="intro-x material-item">
-                                <td colspan="5"></td>
+                                <td <?php echo ($hide_price) ? 'colspan="3"' : 'colspan="5"' ?>></td>
                                 <td class="table-report__action w-56">
                                     <div class="flex justify-center items-center">
                                         <a class="flex items-center mr-3 add_detail_row" onclick="add_material_item()"
@@ -359,13 +371,14 @@
                                                     </select>
                                                 </div>
                                             </td>
-                                            <td class="text-center"><?php echo $price_per_unit; ?></td>
+                                            <td class="text-center" <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>>
+                                                <?php echo $price_per_unit; ?></td>
                                             <td class="text-center"><input type="number" name="mat_quantity[]"
                                                                            onfocus="this.oldvalue = this.value;"
                                                                            value="<?php echo $mat_info[$i]->quantity; ?>"
                                                                            onchange="change_mat_quantity(<?php echo $nextRow; ?>);this.oldvalue = this.value;">
                                             </td>
-                                            <td class="text-center">
+                                            <td class="text-center" <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>>
                                                 <?php
                                                 $mat_total_price += $mat_info[$i]->quantity * $price_per_unit;
                                                 echo $price_per_unit * $mat_info[$i]->quantity;
@@ -387,10 +400,12 @@
                             endif;
                             ?>
                             <tr id="material-item-total" class="intro-x">
-                                <td colspan="3" class="w-40 text-center">Total</td>
+                                <td <?php echo ($hide_price) ? 'colspan="2"' : 'colspan="3"' ?>
+                                        class="w-40 text-center">Total
+                                </td>
 
                                 <td><?php echo $mat_total_quantity; ?></td>
-                                <td><?php echo $mat_total_price; ?></td>
+                                <td <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>><?php echo $mat_total_price; ?></td>
                                 <td class="table-report__action w-56">
                                     <div class="flex justify-center items-center">
 
@@ -422,14 +437,16 @@
                             <tr id="labour_thead">
                                 <th class="whitespace-no-wrap">Labor desc</th>
                                 <th class="whitespace-no-wrap"># of Man Day</th>
-                                <th class="text-center whitespace-no-wrap">Total price</th>
+                                <th class="text-center whitespace-no-wrap" <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>>
+                                    Total price
+                                </th>
                                 <th class="text-center whitespace-no-wrap">ACTIONS</th>
                             </tr>
                             </thead>
                             <tbody>
 
                             <tr id="labour-item-row0" row="0" class="intro-x labour-item">
-                                <td colspan="3"></td>
+                                <td <?php echo ($hide_price) ? 'colspan="2"' : 'colspan="3"' ?> ></td>
                                 <td class="table-report__action w-56">
                                     <div class="flex justify-center items-center add_detail_row">
                                         <a class="flex items-center mr-3" onclick="add_labour_item()"
@@ -499,7 +516,7 @@
                                                        value="<?php echo $lab_info[$i]->total_days; ?>"
                                                        onchange="set_labour_price(<?php echo $nextRow; ?>);this.oldvalue = this.value;">
                                             </td>
-                                            <td><?php echo $lab_info[$i]->total_days * 250; ?></td>
+                                            <td <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>><?php echo $lab_info[$i]->total_days * 250; ?></td>
                                             <td class="table-report__action w-56">
                                                 <div class="flex justify-center items-center">
 
@@ -522,7 +539,7 @@
                                 </td>
 
                                 <td><?php echo $lab_total_days; ?></td>
-                                <td><?php echo $lab_total_days * 250; ?></td>
+                                <td <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>><?php echo $lab_total_days * 250; ?></td>
                                 <td class="table-report__action w-56">
                                     <div class="flex justify-center items-center">
 
@@ -1132,11 +1149,13 @@
             endif;
             if (is_object($quote)):
                 if ($quote->status == 'Approved'):
-
-                    ?>
-                    <button class="button w-24 justify-center block bg-theme-1 text-white" id="reject_approved_quote"
-                            onclick="reject_approved_quote();">Reject
-                    </button>
+                    if (!is_sale()):
+                        ?>
+                        <button class="button w-24 justify-center block bg-theme-1 text-white"
+                                id="reject_approved_quote"
+                                onclick="reject_approved_quote();">Reject
+                        </button>
+                    <?php endif; ?>
                     <button class="button w-24 justify-center block bg-theme-1 text-white ml-2 mr-3"
                             id="save_approved_quote"
                             onclick="save_approved_quote();">Save
@@ -1185,17 +1204,54 @@
                 var addon_total = $('#adsOn-item-total').find('td').eq(2).html() * 1;
                 $('#final_quote_table').find('tr').eq(4).children().eq(1).html(addon_total);
 
+                if ($('#material_markup_percent').val() == '10' && $('#material_markup_amount').val() == '0') {
+                    var mat_profit = mat_total * 0.1
+                    if (mat_total == 0) {
+                        $('#material_markup_amount').val('');
+                        $('#material_markup_percent').val('');
+                    } else {
+                        $('#material_markup_amount').val(Math.round(mat_profit * 100) / 100);
+                    }
+                }
+                if ($('#labor_markup_percent').val() == '10' && $('#labor_markup_amount').val() == '0') {
+                    var labour_profit = labour_total * 0.1
+                    if (labour_total == 0) {
+                        $('labor_markup_percent').val('');
+                        $('labor_markup_amount').val('');
+                    } else {
+                        $('#labor_markup_amount').val(Math.round(labour_profit * 100) / 100)
+                    }
+                }
+                if ($('#misc_markup_percent').val() == '10' && $('#misc_markup_amount').val() == '0') {
+                    var misc_profit = mis_total * 0.1
+                    if (mis_total == 0) {
+                        $('misc_markup_percent').val('');
+                        $('misc_markup_amount').val('');
+                    } else {
+                        $('#misc_markup_amount').val(Math.round(misc_profit * 100) / 100)
+                    }
+                }
+                if ($('#adson_markup_percent').val() == '10' && $('#adson_markup_amount').val() == '0') {
+                    var adson_profit = addon_total * 0.1
+                    if (mis_total == 0) {
+                        $('adson_markup_percent').val('');
+                        $('adson_markup_amount').val('');
+                    } else {
+                        $('#adson_markup_amount').val(Math.round(adson_profit * 100) / 100)
+                    }
+                }
+
                 calculate_sale_table();
+            } else if (status == 'Approved') {
+                $('body').find('input').attr('readonly', true);
+                $('body').find('select').attr('disabled', true);
+                $('.delete_detail_row').hide();
+                $('.add_detail_row').hide();
             } else if (status == 'Job') {
                 $('body').find('input').attr('readonly', true);
                 $('body').find('input:checkbox').attr('disabled', true);
                 $('body').find('select').attr('disabled', true);
                 $('body').find('textarea').attr('readonly', true);
-                $('.delete_detail_row').hide();
-                $('.add_detail_row').hide();
-            } else if (status == 'Approved') {
-                $('body').find('input').attr('readonly', true);
-                $('body').find('select').attr('disabled', true);
                 $('.delete_detail_row').hide();
                 $('.add_detail_row').hide();
             }
@@ -1336,9 +1392,9 @@
             var discount_percent = 0;
             var discount_amount = 0;
             var sub_total1 = $('#final_quote_table').find('tr').eq(5).children().eq(2).html() * 1;
-            if($(this).val() <= 0){
+            if ($(this).val() < 0) {
                 $(this).val('');
-                alert('Markups input can’t be negative values.');
+                showNotification('Markups input can’t be negative values.');
                 $(this).focus();
                 return;
             }
@@ -1356,9 +1412,9 @@
         $('#total_markup_percent, #total_markup_amount').keyup(function () {
             var total_percent = 0;
             var total_amount = 0;
-            if($(this).val() <= 0){
+            if ($(this).val() * 1 < 0) {
                 $(this).val('');
-                alert('Markups input can’t be negative values.');
+                showNotification('Markups input can’t be negative values.');
                 $(this).focus();
                 return;
             }
@@ -1384,24 +1440,24 @@
             var adson_percent = 0;
             var adson_amount = 0;
             var mat_cost = $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html() * 1;
-            if($(this).val() <= 0){
+            if ($(this).val() * 1 < 0) {
                 $(this).val('');
-                alert('Markups input can’t be negative values.');
+                showNotification('Markups input can’t be negative values.');
                 $(this).focus();
                 return;
             }
             if ($(this).attr('id') == 'material_markup_percent') {
-                if($(this).val() == ''){
+                if ($(this).val() == '') {
                     $('#material_markup_amount').val('');
-                }else{
+                } else {
                     mat_percent = $(this).val() * 1;
                     mat_amount = mat_cost * mat_percent / 100;
                     $('#material_markup_amount').val(Math.round(mat_amount * 100) / 100);
                 }
             } else if ($(this).attr('id') == 'material_markup_amount') {
-                if($(this).val() == ''){
+                if ($(this).val() == '') {
                     $('#material_markup_percent').val('');
-                }else{
+                } else {
                     mat_amount = $(this).val() * 1;
                     mat_percent = mat_amount / mat_cost * 100;
                     $('#material_markup_percent').val(Math.round(mat_percent * 10000) / 10000);
@@ -1409,17 +1465,17 @@
             }
             var labour_cost = $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html() * 1;
             if ($(this).attr('id') == 'labor_markup_percent') {
-                if($(this).val() == ''){
+                if ($(this).val() == '') {
                     $('#labor_markup_amount').val('');
-                }else{
+                } else {
                     labour_percent = $(this).val() * 1;
                     labour_amount = labour_cost * labour_percent / 100;
                     $('#labor_markup_amount').val(Math.round(labour_amount * 100) / 100);
                 }
             } else if ($(this).attr('id') == 'labor_markup_amount') {
-                if($(this).val() == ''){
+                if ($(this).val() == '') {
                     $('#labor_markup_percent').val('');
-                }else{
+                } else {
                     labour_amount = $(this).val() * 1;
                     labour_percent = (labour_amount / labour_cost) * 100;
                     $('#labor_markup_percent').val(Math.round(labour_percent * 10000) / 10000);
@@ -1429,17 +1485,17 @@
             var mis_cost = $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html() * 1;
 
             if ($(this).attr('id') == 'misc_markup_percent') {
-                if($(this).val() == ''){
+                if ($(this).val() == '') {
                     $('#misc_markup_amount').val('');
-                }else{
+                } else {
                     mis_percent = $(this).val() * 1;
                     mis_amount = mis_cost * mis_percent / 100;
                     $('#misc_markup_amount').val(Math.round(mis_amount * 100) / 100);
                 }
             } else if ($(this).attr('id') == 'misc_markup_amount') {
-                if($(this).val() == ''){
+                if ($(this).val() == '') {
                     $('#misc_markup_percent').val('')
-                }else{
+                } else {
                     mis_amount = $(this).val() * 1;
                     mis_percent = (mis_amount / mis_cost) * 100;
                     $('#misc_markup_percent').val(Math.round(mis_percent * 10000) / 10000);
@@ -1449,17 +1505,17 @@
             var adson_cost = $('#final_quote_table').find('tr').eq(4).children().eq(1).html() * 1;
 
             if ($(this).attr('id') == 'adson_markup_percent') {
-                if($(this).val() == ''){
+                if ($(this).val() == '') {
                     $('#adson_markup_amount').val('')
-                }else{
+                } else {
                     adson_percent = $(this).val() * 1;
                     adson_amount = adson_cost * adson_percent / 100;
                     $('#adson_markup_amount').val(Math.round(adson_amount * 100) / 100);
                 }
             } else if ($(this).attr('id') == 'adson_markup_amount') {
-                if($(this).val() == ''){
+                if ($(this).val() == '') {
                     $('#adson_markup_percent').val('');
-                }else{
+                } else {
                     adson_amount = $(this).val() * 1;
                     adson_percent = (adson_amount / adson_cost) * 100;
                     $('#adson_markup_percent').val(Math.round(adson_percent * 10000) / 10000);
@@ -1482,6 +1538,8 @@
             for (var i in categories) {
                 catalogOptions += '<option value="' + categories[i].product_category + '">' + categories[i].product_category + '</option>'
             }
+            var none_price = (hide_price) ? 'style="display:none"' : '';
+
             html += `<tr id="material-item-row` + nextRow + `" row="` + nextRow + `" class="intro-x material-item">
                                         <td class="w-40">
                                             <div class="flex">
@@ -1499,9 +1557,9 @@
                                                 </select>
                                             </div>
                                         </td>
-                                        <td class="text-center">` + price_per_unit + `</td>
+                                        <td class="text-center" ` + none_price + `>` + price_per_unit + `</td>
                                         <td class="text-center"><input type="number" name="mat_quantity[]" onfocus="this.oldvalue = this.value;" onchange="change_mat_quantity(` + nextRow + `);this.oldvalue = this.value;"></td>
-                                        <td class="text-center"></td>
+                                        <td class="text-center" ` + none_price + `></td>
                                         <td class="table-report__action w-56">
                                             <div class="flex justify-center items-center">
 
@@ -1584,10 +1642,10 @@
 
             var price_per_unit = $('#material-item-row' + rowId).children().eq(2).html();
             var quantity = $('#material-item-row' + rowId).children().eq(3).find('input').val();
-            if(quantity <= 0){
+            if (quantity < 0) {
                 $('#material-item-row' + rowId).children().eq(3).find('input').val('');
                 $('#material-item-row' + rowId).children().eq(3).find('input').focus();
-                alert('Quantity must be bigger than 0');
+                showNotification('Quantity must be bigger than 0');
                 return;
             }
             var total_price = $('#material-item-total').children().eq(2).html() * 1;
@@ -1641,6 +1699,7 @@
             let html = '';
             let rowId = parseInt($(".labour-item").last().attr("row"));
             let nextRow = rowId + 1;
+            var none_price = (hide_price) ? 'style="display:none"' : '';
             html += `<tr id="labour-item-row` + nextRow + `" row="` + nextRow + `" class="intro-x labour-item">
                                        <td class="w-40">
                                            <div class="flex">
@@ -1663,7 +1722,7 @@
                                        </td>
 
                                        <td class="text-center"><input type="number" name="labor_total_days[]"  onfocus="this.oldvalue = this.value;" onchange="set_labour_price(` + nextRow + `);this.oldvalue = this.value;"></td>
-                                       <td></td>
+                                       <td ` + none_price + `></td>
                                        <td class="table-report__action w-56">
                                            <div class="flex justify-center items-center">
 
@@ -1680,10 +1739,10 @@
             var total_price = $('#labour-item-total').children().eq(2).html() * 1;
             var original_price = $('#labour-item-row' + rowId).children().eq(2).html() * 1;
             var quantity = $('#labour-item-row' + rowId).children().eq(1).find('input').val();
-            if(quantity <= 0){
+            if (quantity < 0) {
                 $('#labour-item-row' + rowId).children().eq(1).find('input').val('');
                 $('#labour-item-row' + rowId).children().eq(1).find('input').focus();
-                alert('# of Man Day must be bigger than 0');
+                showNotification('# of Man Day must be bigger than 0');
                 return;
             }
             var total_quantity = $('#labour-item-total').children().eq(1).html() * 1;
@@ -1758,10 +1817,10 @@
             var original_price = $('#miscellaneous-item-row' + rowId).children().eq(4).html() * 1;
             var price_per_unit = $('#miscellaneous-item-row' + rowId).children().eq(2).find('input').val();
             var quantity = $('#miscellaneous-item-row' + rowId).children().eq(3).find('input').val();
-            if(price_per_unit <= 0){
+            if (price_per_unit < 0) {
                 $('#miscellaneous-item-row' + rowId).children().eq(2).find('input').val('');
                 $('#miscellaneous-item-row' + rowId).children().eq(2).find('input').focus();
-                alert('Price per unit must be bigger than 0');
+                showNotification('Price per unit must be bigger than 0');
                 return;
             }
             if (quantity != '' && price_per_unit != '') {
@@ -1781,10 +1840,10 @@
             var quantity = $('#miscellaneous-item-row' + rowId).children().eq(3).find('input').val();
             var total_quantity = $('#miscellaneous-item-total').children().eq(1).html() * 1;
             var original_quantity = event.target.oldvalue * 1;
-            if(quantity <= 0){
+            if (quantity < 0) {
                 $('#miscellaneous-item-row' + rowId).children().eq(3).find('input').val('');
                 $('#miscellaneous-item-row' + rowId).children().eq(3).find('input').focus();
-                alert('Quantity must be bigger than 0');
+                showNotification('Quantity must be bigger than 0');
                 return;
             }
             if (quantity != '' && price_per_unit != '') {
@@ -1855,10 +1914,10 @@
             var original_price = $('#adsOn-item-row' + rowId).children().eq(3).html() * 1;
             var price_per_unit = $('#adsOn-item-row' + rowId).children().eq(1).find('input').val();
             var quantity = $('#adsOn-item-row' + rowId).children().eq(2).find('input').val();
-            if(price_per_unit <= 0){
+            if (price_per_unit < 0) {
                 $('#adsOn-item-row' + rowId).children().eq(1).find('input').val('');
                 $('#adsOn-item-row' + rowId).children().eq(1).find('input').focus();
-                alert('Price per unit must be bigger than 0');
+                showNotification('Price per unit must be bigger than 0');
                 return;
             }
             if (quantity != '' && price_per_unit != '') {
@@ -1878,10 +1937,10 @@
             var quantity = $('#adsOn-item-row' + rowId).children().eq(2).find('input').val();
             var total_quantity = $('#adsOn-item-total').children().eq(1).html() * 1;
             var original_quantity = event.target.oldvalue * 1;
-            if(quantity <= 0){
+            if (quantity < 0) {
                 $('#adsOn-item-row' + rowId).children().eq(2).find('input').val('');
                 $('#adsOn-item-row' + rowId).children().eq(2).find('input').focus();
-                alert('Quantity must be bigger than 0');
+                showNotification('Quantity must be bigger than 0');
                 return;
             }
             if (quantity != '' && price_per_unit != '') {
@@ -1963,8 +2022,7 @@
         function create_job() {
             $('#action').val('create_job');
             if (!$("#ia_signed").is(':checked') || !$("#form_signed").is(':checked') || !$('#credit_passed').is(':checked')) {
-                $('#alert-modal').find('p').html('Customer must pass credit check and sign both IA and Quote form in order to proceed to the job');
-                $('#alert-modal').modal('show');
+                showNotification('Customer must pass credit check and sign both IA and Quote form in order to proceed to the job');
                 $('#ia_signed').focus();
                 return;
             } else {
@@ -1974,8 +2032,7 @@
 
         function save_quote() {
             if (!$("#ia_signed").is(':checked') || !$("#form_signed").is(':checked')) {
-                $('#alert-modal').find('p').html('Customer must sign both IA and Quote form in order to proceed to the job');
-                $('#alert-modal').modal('show');
+                showNotification('Customer must sign both IA and Quote form in order to proceed to the job');
                 $('#ia_signed').focus();
                 return;
             } else {

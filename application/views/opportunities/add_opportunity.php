@@ -79,7 +79,6 @@
         <div class="grid grid-cols-12 gap-6 box mt-5 md:p-10 sm:p-5 p-5">
             <div class="col-span-12">
                 <div class="preview">
-
                     <div class="intro-y flex flex-col sm:flex-row">
                         <div class="col-span- w-full">
                             <fieldset class="p-2 mb-3 sm:mb-0 sm:p-3 status_width fieldset_bd_color"
@@ -118,31 +117,31 @@
                         <?php } ?>
 
                     </div>
+                    <?php if (is_admin()): ?>
+                        <div class="intro-y flex flex-col sm:flex-row mt-3">
 
-                    <div class="intro-y flex flex-col sm:flex-row mt-3">
-
-                        <div class="col-span-3">
-                            <div class="sm:w-ful col-span-3 sm:m-auto sm:pl-4 sm:pr-4 mt-3 sm:mt-0 mb-3 sm:mb-0">
-                                <label class="w-full text-left sm:pt-3">Choose Quoting Company</label>
-                                <select name="company_id" class="input w-full border flex-1" tabindex="3">
-                                    <?php
-                                    foreach ($companies as $com) {
-                                        if (is_object($opportunity)) {
-                                            if ($opportunity->company_id == $com->id) {
-                                                echo '<option value="' . $com->id . '" selected>' . $com->name . '</option>';
+                            <div class="col-span-3">
+                                <div class="sm:w-ful col-span-3 sm:m-auto sm:pl-4 sm:pr-4 mt-3 sm:mt-0 mb-3 sm:mb-0">
+                                    <label class="w-full text-left sm:pt-3">Choose Quoting Company</label>
+                                    <select name="company_id" class="input w-full border flex-1" tabindex="3">
+                                        <?php
+                                        foreach ($companies as $com) {
+                                            if (is_object($opportunity)) {
+                                                if ($opportunity->company_id == $com->id) {
+                                                    echo '<option value="' . $com->id . '" selected>' . $com->name . '</option>';
+                                                } else {
+                                                    echo '<option value="' . $com->id . '">' . $com->name . '</option>';
+                                                }
                                             } else {
                                                 echo '<option value="' . $com->id . '">' . $com->name . '</option>';
                                             }
-                                        } else {
-                                            echo '<option value="' . $com->id . '">' . $com->name . '</option>';
                                         }
-                                    }
-                                    ?>
-                                </select>
+                                        ?>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -220,7 +219,7 @@
 
                         <?php
                         if (is_object($customer)) {
-                            if ($customer->status == 'Customer') {
+                            if ($customer->status == 'User') {
                                 echo '<select class="input w-full border mt-2 flex-1" name="sale_source" disabled  tabindex="9">
                                         <option value="Returned Customer">Returned Customer</option></select>';
                             } else {
@@ -292,7 +291,7 @@
                                        value="<?php echo (is_object($opportunity)) ? $opportunity->site_address : '' ?>">
                             </div>
                             <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
-                                <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site Postal Code</label>
+                                <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site Postal Code *</label>
                                 <input type="text" name="site_postal_code" class="input border mt-2 flex-1" required
                                        tabindex="15"
                                        value="<?php echo (is_object($opportunity)) ? $opportunity->site_postal_code : '' ?>">
@@ -333,30 +332,32 @@
         <div class="overflow-x-auto">
             <form id="add_customer_form">
                 <div class="grid grid-cols-12 gap-6 box mt-5 p-5 md:p-10">
-                    <div class="col-span-12">
-                        <div class="preview">
-                            <div class="intro-y flex flex-col sm:flex-row mt-2">
-                                <label class="mb-2 sm:mb-0 md:mr-2 mt-2"> Choose Quoting
-                                    Company</label>
-                                <select id="company_id" class="select2 w-full sm:w-2/6">
-                                    <?php
-                                    foreach ($companies as $com) {
-                                        if (is_object($customer)) {
-                                            if ($customer->company_id == $com->id) {
-                                                echo '<option value="' . $com->id . '" selected>' . $com->name . '</option>';
+                    <?php if (is_admin()): ?>
+                        <div class="col-span-12">
+                            <div class="preview">
+                                <div class="intro-y flex flex-col sm:flex-row mt-2">
+                                    <label class="mb-2 sm:mb-0 md:mr-2 mt-2"> Choose Quoting
+                                        Company</label>
+                                    <select id="company_id" class="select2 w-full sm:w-2/6">
+                                        <?php
+                                        foreach ($companies as $com) {
+                                            if (is_object($customer)) {
+                                                if ($customer->company_id == $com->id) {
+                                                    echo '<option value="' . $com->id . '" selected>' . $com->name . '</option>';
+                                                } else {
+                                                    echo '<option value="' . $com->id . '">' . $com->name . '</option>';
+                                                }
                                             } else {
                                                 echo '<option value="' . $com->id . '">' . $com->name . '</option>';
                                             }
-                                        } else {
-                                            echo '<option value="' . $com->id . '">' . $com->name . '</option>';
                                         }
-                                    }
-                                    ?>
-                                </select>
+                                        ?>
+                                    </select>
 
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    <?php endif; ?>
                     <div class="col-span-12 sm:col-span-6 md:col-span-6 set_extra_mg">
                         <div class="preview">
 

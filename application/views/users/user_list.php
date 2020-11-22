@@ -55,7 +55,7 @@
                         <td class="text-center border-b">********</td>
                         <td class="text-center border-b">' . $user->name . '</td>
                         <td class="text-center border-b">' . $user->access_level . '</td>
-                        <td class="text-center border-b">' . (($user->status == 0) ? "Active" : "") . '</td>
+                        <td class="text-center border-b">' . $user->status . '</td>
                         <td class="text-center border-b"><a href="add_user?user_id=' . $user->id . '"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                              stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"
                              class="feather feather-edit mx-auto">

@@ -66,26 +66,28 @@
         <div class="grid grid-cols-12 gap-6 box mt-5 p-5 md:p-10">
             <div class="col-span-12">
                 <div class="preview">
-                    <div class="intro-y flex flex-col sm:flex-row mt-2">
-                        <label class="w-full w-full sm:w-1/3 md:w-1/4 lg:w-1/6 mb-2 sm:mb-0 md:mr-2"> Choose Quoting
-                            Company</label>
-                        <select name="company_id" class="select2 w-full sm:w-2/6" tabindex="0">
-                            <?php
-                            foreach ($company as $com) {
-                                if (is_object($customer)) {
-                                    if ($customer->company_id == $com->id) {
-                                        echo '<option value="' . $com->id . '" selected>' . $com->name . '</option>';
+                    <?php if (is_admin()): ?>
+                        <div class="intro-y flex flex-col sm:flex-row mt-2">
+                            <label class="w-full w-full sm:w-1/3 md:w-1/4 lg:w-1/6 mb-2 sm:mb-0 md:mr-2"> Choose Quoting
+                                Company</label>
+                            <select name="company_id" class="select2 w-full sm:w-2/6" tabindex="0">
+                                <?php
+                                foreach ($company as $com) {
+                                    if (is_object($customer)) {
+                                        if ($customer->company_id == $com->id) {
+                                            echo '<option value="' . $com->id . '" selected>' . $com->name . '</option>';
+                                        } else {
+                                            echo '<option value="' . $com->id . '">' . $com->name . '</option>';
+                                        }
                                     } else {
                                         echo '<option value="' . $com->id . '">' . $com->name . '</option>';
                                     }
-                                } else {
-                                    echo '<option value="' . $com->id . '">' . $com->name . '</option>';
                                 }
-                            }
-                            ?>
-                        </select>
+                                ?>
+                            </select>
 
-                    </div>
+                        </div>
+                    <?php endif; ?>
                     <div class="intro-y flex flex-col sm:flex-row mt-2">
                         <label class="w-full w-full sm:w-1/3 md:w-1/4 lg:w-1/6 mb-2 sm:mb-0 md:mr-2" id="label_status">
                             Choose Quoting Company</label>
@@ -137,9 +139,10 @@
                                value="<?php echo (is_object($customer)) ? $customer->address : ''; ?>" tabindex="7">
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
-                        <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Postal Code</label>
+                        <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Postal Code*</label>
                         <input type="text" name="postal_code" class="input w-full border mt-2 flex-1"
-                               value="<?php echo (is_object($customer)) ? $customer->postal_code : ''; ?>" tabindex="9"/>
+                               value="<?php echo (is_object($customer)) ? $customer->postal_code : ''; ?>"
+                               tabindex="9" required/>
                     </div>
 
                 </div>
@@ -153,7 +156,8 @@
                     <div class="intro-y flex flex-col sm:flex-row mt-2">
                         <label class="w-full width6 md:mr-5 pt-1 sm:pt-3">Contact Person*</label>
                         <input type="text" name="contact_person" class="input w-full border mt-2 flex-1" required
-                               value="<?php echo (is_object($customer)) ? $customer->contact_person : ''; ?>" tabindex="2">
+                               value="<?php echo (is_object($customer)) ? $customer->contact_person : ''; ?>"
+                               tabindex="2">
                         <input type="button" value="Use Same Name" style="float: right;" id="copy_from_customer"
                                class="button bg-theme-1 text-white mt-5 p-2 ml-2"/>
                     </div>
@@ -173,10 +177,10 @@
                                value="<?php echo (is_object($customer)) ? $customer->city : ''; ?>" tabindex="8"/>
                     </div>
                     <div class="preview">
-                        <input type="submit" value="Save" style="float: right;"  name="save"
-                               class="button bg-theme-1 text-white mt-5 p-2 ml-5"  tabindex="10"/>
+                        <input type="submit" value="Save" style="float: right;" name="save"
+                               class="button bg-theme-1 text-white mt-5 p-2 ml-5" tabindex="10"/>
                         <input type="submit" value="Continue to Opportunity" style="float: right;" name="save"
-                               class="button bg-theme-1 text-white mt-5 p-2"  tabindex="10"/>
+                               class="button bg-theme-1 text-white mt-5 p-2" tabindex="10"/>
                     </div>
 
                 </div>

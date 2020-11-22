@@ -10,15 +10,15 @@ class Quotes extends CI_Controller
 
         parent::__construct();
 
+        $this->load->library('auth');
+        $this->load->library('session');
+        $this->auth->check_permission();
         $this->load->model('CustomerModel');
         $this->load->model('CompanyModel');
         $this->load->model('CatalogModel');
         $this->load->model('OpportunityModel');
         $this->load->model('UserModel');
         $this->load->model('QuoteModel');
-//        $this->load->library('auth');
-//        $this->load->library('session');
-//        $this->auth->check_admin_auth();
     }
 
     public function add_quote()
@@ -52,7 +52,7 @@ class Quotes extends CI_Controller
 
     public function quotes_list()
     {
-        $data['sales'] = $this->UserModel->getSaleUsers();
+        $data['sales'] = $this->UserModel->getUserByAccessLevel('Sales');
         $data['companies'] = $this->CompanyModel->getCompanies();
         $this->load->view('inc/header');
         $this->load->view('quotes/view_quote', $data);
@@ -82,6 +82,10 @@ class Quotes extends CI_Controller
         $addon_unit_price = $this->input->post('addon_unit_price');
         $addon_quantity = $this->input->post('addon_quantity');
         $action = $this->input->post('action');
+
+        if(!is_admin()){
+            $company_id = user_company();
+        }
         if ($action == 'save_new_quote') {
             $quoteData = array(
                 'company_id' => $company_id,

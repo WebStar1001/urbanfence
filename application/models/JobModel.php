@@ -55,8 +55,12 @@ class JobModel extends CI_Model
         if ($customer) {
             $this->db->like('customers.customer', $customer);
         }
-        if ($company_id) {
-            $this->db->where('jobs.company_id', $company_id);
+        if (is_admin()) {
+            if ($company_id) {
+                $this->db->where('jobs.company_id', $company_id);
+            }
+        }else{
+            $this->db->where('jobs.company_id', user_company());
         }
         if ($job_type) {
             $this->db->where('opportunities.job_type', $job_type);

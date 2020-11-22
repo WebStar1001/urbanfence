@@ -12,16 +12,16 @@ class Sales extends CI_Controller
         $this->load->model('CompanyModel');
         $this->load->model('JobModel');
         $this->load->model('QuoteModel');
-//        $this->load->library('auth');
-//        $this->load->library('session');
-//        $this->auth->check_admin_auth();
+        $this->load->library('auth');
+        $this->load->library('session');
+        $this->auth->check_permission();
     }
 
     public function sales_list()
     {
         $data['companies'] = $this->CompanyModel->getCompanies();
-        $data['sales'] = $this->UserModel->getSaleUsers();
-        $data['installers'] = $this->UserModel->getUserByAccessLevel('Customer');
+        $data['sales'] = $this->UserModel->getUserByAccessLevel('Sales');
+        $data['installers'] = $this->UserModel->getUserByAccessLevel('User');
         $this->load->view('inc/header');
         $this->load->view('sales/view_sales', $data);
         $this->load->view('inc/footer');

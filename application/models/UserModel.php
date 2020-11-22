@@ -31,16 +31,34 @@ class UserModel extends CI_Model
         return $query->row();
     }
 
-    public function getSaleUsers()
-    {
-
-        $query = $this->db->get_where('users', array('access_level' => 'Sales'));
-        return $query->result();
-    }
 
     public function getUserByAccessLevel($access_level)
     {
-        $query = $this->db->get_where('users', array('access_level' => $access_level));
+        $this->db->select('*')
+            ->from('users')
+            ->where('status != "Disabled"', null, false)
+            ->where('access_level', $access_level);
+
+        if(!is_admin()){
+            $this->db->where('company_id', user_company());
+        }
+        $query = $this->db->get();
+
         return $query->result();
+    }
+
+    function check_valid_user($username, $password)
+    {
+
+        $password = md5("gil" . $password);
+        $this->db->where(array('username' => $username, 'password' => $password, 'status' => 1));
+
+        $query = $this->db->get('users');
+        $user = $query->row();
+
+        if (is_object($user)) {
+            return $user;
+        }
+        return false;
     }
 }
