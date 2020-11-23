@@ -238,106 +238,113 @@
                 </fieldset>
             </div>
         </div>
-        <fieldset class="p-1 status_width fieldset_bd_color" style="margin-top: 3%;">
-            <legend class="legend_spacing">Credits-Debits Tracking</legend>
-            <div class="intro-y grid grid-cols-12 box">
-                <div class="col-span-12 p-5 box">
+        <?php if (!is_user()): ?>
+            <fieldset class="p-1 status_width fieldset_bd_color" style="margin-top: 3%;">
+                <legend class="legend_spacing">Credits-Debits Tracking</legend>
+                <div class="intro-y grid grid-cols-12 box">
+                    <div class="col-span-12 p-5 box">
 
-                    <div class="w-full lg:w-1/6 float-left text-left m-auto">
-                        <p><b>Take Payment</b></p>
-                    </div>
+                        <div class="w-full lg:w-1/6 float-left text-left m-auto">
+                            <p><b>Take Payment</b></p>
+                        </div>
 
-                    <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left ">
-                        <div class="sm:w-full">
-                            <label class="w-full sm:w-1/3 text-left">Invoice #</label>
-                            <input type="text" class="input w-full border flex-1 md:text-center" id="invoice_number">
+                        <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left ">
+                            <div class="sm:w-full">
+                                <label class="w-full sm:w-1/3 text-left">Invoice #</label>
+                                <input type="text" class="input w-full border flex-1 md:text-center"
+                                       id="invoice_number">
+                            </div>
+                        </div>
+
+                        <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left">
+                            <div class="sm:w-full">
+                                <label class="w-full text-left">Payment amount</label>
+                                <input type="text" class="input w-full border flex-1 md:text-center"
+                                       id="payment_amount">
+                            </div>
+                        </div>
+
+                        <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left">
+                            <div class="sm:w-full">
+                                <label class="w-full text-left">Payment Method</label>
+                                <select class="input w-full border flex-1" id="payment_method">
+                                    <option value="0">Choose</option>
+                                    <option>Visa</option>
+                                    <option>Mater-Card</option>
+                                    <option>Amex</option>
+                                    <option>Cash</option>
+                                    <option>Cheque</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="w-full sm:w-1/2 lg:w-1/6 float-left ml-5 sm:mt-2 p-2 lg:p-0  pt-5 lg:mt-5">
+                            <button class="button bg-theme-1 text-white" id="create_payment">Create Payment</button>
                         </div>
                     </div>
 
-                    <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left">
-                        <div class="sm:w-full">
-                            <label class="w-full text-left">Payment amount</label>
-                            <input type="text" class="input w-full border flex-1 md:text-center" id="payment_amount">
+                </div>
+                <div class="intro-y grid grid-cols-12 box" style="margin-top: 2%;">
+                    <div class="col-span-12 p-5">
+                        <div class="w-full lg:w-1/6 float-left text-left m-auto">
+                            <p><b>Generate Invoice</b></p>
                         </div>
-                    </div>
-
-                    <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left">
-                        <div class="sm:w-full">
-                            <label class="w-full text-left">Payment Method</label>
-                            <select class="input w-full border flex-1" id="payment_method">
-                                <option value="0">Choose</option>
-                                <option>Visa</option>
-                                <option>Mater-Card</option>
-                                <option>Amex</option>
-                                <option>Cash</option>
-                                <option>Cheque</option>
-                            </select>
+                        <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left">
+                            <div class="sm:w-full">
+                                <label class="w-full text-left">Invoice#</label>
+                                <input type="text" class="input w-full border flex-1 md:text-center"
+                                       id="invoice_id">
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="w-full sm:w-1/2 lg:w-1/6 float-left ml-5 sm:mt-2 p-2 lg:p-0  pt-5 lg:mt-5">
-                        <button class="button bg-theme-1 text-white" id="create_payment">Create Payment</button>
+                        <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left ">
+                            <div class="sm:w-full">
+                                <label class="w-full sm:w-1/3 text-left">Invoice Amount</label>
+                                <input type="text" class="input w-full border flex-1 md:text-center"
+                                       id="invoice_amount">
+                            </div>
+                        </div>
+                        <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left">
+                            <div class="sm:w-full">
+                                <label class="w-full text-left">Invoice Due-Date</label>
+                                <input type="text" class="input w-full border flex-1 md:text-center"
+                                       id="invoice_due_date">
+                            </div>
+                        </div>
+                        <div class="w-full sm:w-1/2 lg:w-1/6 float-left ml-5 sm:mt-2 p-2 lg:p-0  pt-5 lg:mt-2">
+                            <button class="button bg-theme-1 text-white mt-3" id="generate_invoice">Generate Invoice
+                            </button>
+                        </div>
                     </div>
                 </div>
+                <!-- BEGIN: Datatable -->
+                <div class="intro-y box p-5 mt-5" id="table_main_div">
+                    <table id="jobDetailTable" class="display"
+                           style="width:100%;text-align: center; margin-bottom: 5px;">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>Invoice ID</th>
+                            <th>Payment ID</th>
+                            <th>Debits</th>
+                            <th>Credit</th>
+                            <th>Due Date</th>
+                            <th>Account Balance</th>
+                            <th>Job Balance</th>
+                            <th>Note</th>
+                        </tr>
+                        <tr style="background-color:">
+                            <td colspan="6"></td>
+                            <td>0</td>
+                            <td><?php echo ($job) ? $job->job_balance : ''; ?></td>
+                            <td></td>
+                        </tr>
+                        </thead>
+                    </table>
 
-            </div>
-            <div class="intro-y grid grid-cols-12 box" style="margin-top: 2%;">
-                <div class="col-span-12 p-5">
-                    <div class="w-full lg:w-1/6 float-left text-left m-auto">
-                        <p><b>Generate Invoice</b></p>
-                    </div>
-                    <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left">
-                        <div class="sm:w-full">
-                            <label class="w-full text-left">Invoice#</label>
-                            <input type="text" class="input w-full border flex-1 md:text-center"
-                                   id="invoice_id">
-                        </div>
-                    </div>
-                    <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left ">
-                        <div class="sm:w-full">
-                            <label class="w-full sm:w-1/3 text-left">Invoice Amount</label>
-                            <input type="text" class="input w-full border flex-1 md:text-center" id="invoice_amount">
-                        </div>
-                    </div>
-                    <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left">
-                        <div class="sm:w-full">
-                            <label class="w-full text-left">Invoice Due-Date</label>
-                            <input type="text" class="input w-full border flex-1 md:text-center" id="invoice_due_date">
-                        </div>
-                    </div>
-                    <div class="w-full sm:w-1/2 lg:w-1/6 float-left ml-5 sm:mt-2 p-2 lg:p-0  pt-5 lg:mt-2">
-                        <button class="button bg-theme-1 text-white mt-3" id="generate_invoice">Generate Invoice
-                        </button>
-                    </div>
                 </div>
-            </div>
-            <!-- BEGIN: Datatable -->
-            <div class="intro-y box p-5 mt-5" id="table_main_div">
-                <table id="jobDetailTable" class="display" style="width:100%;text-align: center; margin-bottom: 5px;">
-                    <thead>
-                    <tr>
-                        <th></th>
-                        <th>Invoice ID</th>
-                        <th>Payment ID</th>
-                        <th>Debits</th>
-                        <th>Credit</th>
-                        <th>Due Date</th>
-                        <th>Account Balance</th>
-                        <th>Job Balance</th>
-                        <th>Note</th>
-                    </tr>
-                    <tr style="background-color:">
-                        <td colspan="6"></td>
-                        <td>0</td>
-                        <td><?php echo ($job) ? $job->job_balance : ''; ?></td>
-                        <td></td>
-                    </tr>
-                    </thead>
-                </table>
-
-            </div>
-            <!-- END: Datatable -->
-        </fieldset>
+                <!-- END: Datatable -->
+            </fieldset>
+        <?php endif; ?>
 
 
     </fieldset>

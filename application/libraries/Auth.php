@@ -91,6 +91,7 @@ class Auth
 
     function check_permission($url = '')
     {
+        $permission_array = array();
         if ($url == '') {
             $url = base_url() . 'Login';
         }
@@ -107,6 +108,8 @@ class Auth
             redirect($url, 'refresh');
 
             exit;
+        }else{
+//            print_r($CI->)
         }
     }
 
