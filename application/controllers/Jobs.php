@@ -96,6 +96,8 @@ class Jobs extends CI_Controller
         $mat_item_status = 'MAT Collected';
         for ($i = 0; $i < count($mat_ids); $i++) {
             $matRow = $this->db->get_where('mat_details', array('id' => $mat_ids[$i]))->row();
+            if(!is_object($matRow))
+                continue;
             $this->db->where('id', $mat_ids[$i]);
             $this->db->update('mat_details', array('items_collected_for_job' => $item_collects[$i]));
             if ($matRow->quantity > $item_collects[$i]) {

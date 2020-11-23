@@ -56,4 +56,9 @@ class Login extends CI_Controller
             $this->output->set_header("Location: " . base_url() . 'Login', TRUE, 302);
         }
     }
+    public function go_to_error_page(){
+        $this->load->view('inc/header');
+        $this->load->view('inc/error');
+        $this->load->view('inc/footer');
+    }
 }

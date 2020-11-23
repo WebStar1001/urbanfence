@@ -109,7 +109,34 @@ class Auth
 
             exit;
         }else{
-//            print_r($CI->)
+            if(is_manager()){
+                if($CI->uri->segment(1) == 'Users'){
+                    redirect('Login/go_to_error_page');
+                }
+            }elseif(is_sale()){
+                if($CI->uri->segment(1) == 'Users'){
+                    redirect('Login/go_to_error_page');
+                }
+                if($CI->uri->segment(1) == 'Opportunity'&&$this->uri->segment(2) == 'opportunity_list' && isset($_GET['status'])){
+                    redirect('Login/go_to_error_page');
+                }
+                if($CI->uri->segment(1) == 'Quote'&&$this->uri->segment(2) == 'quotes_list' && isset($_GET['status'])){
+                    redirect('Login/go_to_error_page');
+                }
+                if($CI->uri->segment(1) == 'Jobs'&&$this->uri->segment(2) == 'job_detail'){
+                    redirect('Login/go_to_error_page');
+                }
+            }elseif (is_user()){
+                if($CI->uri->segment(1) == 'Users'){
+                    redirect('Login/go_to_error_page');
+                }
+                if($CI->uri->segment(1) == 'Opportunity'&&$this->uri->segment(2) == 'opportunity_list' && isset($_GET['status'])){
+                    redirect('Login/go_to_error_page');
+                }
+                if($CI->uri->segment(1) == 'Quote'){
+                    redirect('Login/go_to_error_page');
+                }
+            }
         }
     }
 
