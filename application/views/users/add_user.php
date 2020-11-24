@@ -77,7 +77,7 @@
                 </div>
             </div>
             <div class="col-span-12 text-right">
-                <button class="button bg-theme-1 text-white mt-5">Add User</button>
+                <button class="button bg-theme-1 text-white mt-5">Save</button>
             </div>
         </div>
         <input type="hidden" name="user_id" value="<?php echo ($user) ? $user->id : ''; ?>"/>

@@ -197,6 +197,7 @@
     </div>
     <!-- END: Datatable -->
 </div>
+
 <!-- END: Content -->
 <?php
 
@@ -206,6 +207,7 @@
     var status = '<?php echo $status;?>';
 
     function format(d) {
+        var hide_filed = (is_admin) ? '' : 'display:none';
         /*console.log(d.JobCity);*/
         // `d` is the original data object for the row
         return '<table cellpadding="0" cellspacing="0" border="0" style="padding-left:50px;text-align: left;width: 100%;">' +
@@ -234,10 +236,12 @@
             '<td>' + d.customer_id + '</td>' +
             '</tr>' +
             '<tr>' +
-            '<td style="font-weight: bold">Quoting Company:</td>' +
-            '<td>' + d.company + '</td>' +
             '<td style="font-weight: bold">Details:</td>' +
             '<td>' + d.details + '</td>' +
+            '<td style="width:15%;font-weight: bold;">Created By:</td>' +
+            '<td style="width:20%;">' + d.created_by + '</td>' +
+            '<td style="font-weight: bold;' + hide_filed + '">Quoting Company:</td>' +
+            '<td style="' + hide_filed + '">' + d.company + '</td>' +
             '</tr>' +
             '</table>';
     }
@@ -323,7 +327,7 @@
                         } else {
                             return "<a href='javascript:showNotification(\"Opportunity needs to get assigned to Sales Rap prior Quote creation.\")'><i class='fa fa-external-link' aria-hidden='true'></i></a>"
                         }
-                    }, "visible" : !is_user
+                    }, "visible": !is_user
                 }
             ],
             "order": [[0, 'asc']]

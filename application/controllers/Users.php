@@ -16,9 +16,8 @@ class Users extends CI_Controller
 
     public function users_list()
     {
-        $data['users'] = $this->UserModel->getUsers();
         $this->load->view('inc/header');
-        $this->load->view('users/user_list', $data);
+        $this->load->view('users/user_list');
         $this->load->view('inc/footer');
 
     }
@@ -45,7 +44,7 @@ class Users extends CI_Controller
             $this->db->where('id', $user_id);
             $this->db->update('users', array(
                 'username' => $username,
-                'password' => $password,
+                'password' => md5('gil' . $password),
                 'name' => $name,
                 'access_level' => $access_level
             ));
@@ -57,7 +56,7 @@ class Users extends CI_Controller
             } else {
                 $this->db->insert('users', array(
                     'username' => $username,
-                    'password' => $password,
+                    'password' => md5('gil' . $password),
                     'name' => $name,
                     'access_level' => $access_level
                 ));
@@ -65,5 +64,37 @@ class Users extends CI_Controller
             }
         }
         redirect('Users/users_list');
+    }
+
+    public function get_userlist()
+    {
+        $users = $this->UserModel->getUsersNotAdmin();
+        $data['data'] = $users;
+        echo json_encode($data);
+    }
+
+    public function reset_password()
+    {
+        $user_id = $this->input->post('user_id');
+        $new_password = $this->input->post('new_password');
+        $this->db->where('id', $user_id);
+        $this->db->update('users', array('password' => md5('gil' . $new_password), 'status' => 'Active'));
+        echo $user_id;
+    }
+
+    public function disable_user()
+    {
+        $user_id = $this->input->post('user_id');
+        $this->db->where('id', $user_id);
+        $this->db->update('users', array('status' => 'Disabled'));
+        echo $user_id;
+    }
+
+    public function delete_user()
+    {
+        $user_id = $this->input->post('user_id');
+        $this->db->where('id', $user_id);
+        $this->db->delete('users');
+        echo $user_id;
     }
 }

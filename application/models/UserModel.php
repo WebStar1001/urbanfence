@@ -18,6 +18,13 @@ class UserModel extends CI_Model
         $query = $this->db->get('users');
         return $query->result();
     }
+    public function getUsersNotAdmin()
+    {
+        $query = $this->db->select('*')
+                ->from('users')
+                ->where('access_level <> "Admin"', null, false)->get();
+        return $query->result();
+    }
 
     public function get_user($user_id)
     {

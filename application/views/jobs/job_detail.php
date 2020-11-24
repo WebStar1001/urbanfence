@@ -601,7 +601,7 @@
             }
         });
         $('#create_payment').click(function () {
-            var available_payment_amount = job_balance - pay_amount;
+            var available_payment_amount = Math.round((job_balance - pay_amount) * 100) / 100;
             if ($('#invoice_number').val() == '' || $('#payment_amount').val() == '' || $('#payment_method').val() == '') {
                 showNotification('You need to input all information for creating payment');
                 return;
@@ -660,7 +660,8 @@
 
         });
         $('#generate_invoice').click(function () {
-            var available_invoice_amount = job_balance - invoice_amount;
+            var available_invoice_amount = Math.round((job_balance - invoice_amount) * 100) / 100;
+            alert(available_invoice_amount);
             if ($('#invoice_id').val() == '' || $('#invoice_amount').val() == '' || $('#invoice_due_date').val() == '') {
                 showNotification('You need to input all information for generating invoice');
                 return;
@@ -668,7 +669,7 @@
                 showNotification('Invoice amount must be bigger than 0.');
                 $('#invoice_amount').select();
                 return;
-            } else if ($('#invoice_amount').val() * 1 > job_balance) {
+            } else if ($('#invoice_amount').val() * 1 > available_invoice_amount) {
                 showNotification('Invoice amount can not be bigger than the Job Balance.');
                 $('#invoice_amount').select();
                 return;

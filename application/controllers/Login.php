@@ -42,6 +42,7 @@ class Login extends CI_Controller
         $username = $this->input->post('username');
         $password = $this->input->post('password');
         if ($username == '' || $password == '' || $this->auth->login($username, $password) === FALSE) {
+//            $this->
             $error = 'Wrong Username Or Password';
         }
         if ($error != '') {

@@ -615,7 +615,7 @@ if (is_sale()) {
                                                                            onfocus="this.oldvalue = this.value;"
                                                                            placeholder=""
                                                                            value="<?php echo $misc_info[$i]->quantity; ?>"
-                                                                           onchange="change_mis_quantity(<?php echo $misc_info[$i]->price_per_unit; ?>);;this.oldvalue = this.value;">
+                                                                           onchange="change_mis_quantity(<?php echo $nextRow; ?>);this.oldvalue = this.value;">
                                             </td>
                                             <td class="text-center"><?php echo $misc_info[$i]->quantity * $misc_info[$i]->price_per_unit; ?></td>
                                             <td class="table-report__action">
@@ -853,21 +853,35 @@ if (is_sale()) {
                                             <div class="mt-1 mb-5" style="text-align-last: end">
                                                 <label class="float-left" style="margin-right: 8px;">Set Markup
                                                     rate</label>
+                                                <?php
+                                                $material_markup_percent = ($quote->mat_factor != 0) ? ($quote->mat_factor - 1) * 100 : '';
+                                                $labor_markup_percent = ($quote->lab_factor != 0) ? ($quote->lab_factor - 1) * 100 : '';
+                                                $misc_markup_percent = ($quote->misc_factor != 0) ? ($quote->misc_factor - 1) * 100 : '';
+                                                $adson_markup_percent = ($quote->ads_on_factor != 0) ? ($quote->ads_on_factor - 1) * 100 : '';
+
+                                                $total_amount = $quote->mat_net * $quote->mat_factor + $quote->labour_net * $quote->lab_factor
+                                                    + $quote->misc_net * $quote->misc_factor + $quote->ads_on_net * $quote->ads_on_factor;
+
+                                                $total_markup_amount = $total_amount - $quote->mat_net - $quote->labour_net - $quote->misc_net - $quote->ads_on_net;
+
+                                                $is_total_markup = ($quote->mat_factor == $quote->lab_factor && $quote->mat_factor == $quote->misc_factor
+                                                    && $quote->mat_factor == $quote->ads_on_factor); ?>
                                                 <input type="radio" class="input border mr-2 float-left set_markup"
-                                                       id="horizontal-radio-chris-evans" name="horizontal_radio_button">
+                                                       id="horizontal-radio-chris-evans"
+                                                       name="horizontal_radio_button" <?php echo ($is_total_markup) ? 'checked' : ''; ?>>
                                                 <label class="cursor-pointer select-none float-left"
                                                        for="horizontal-radio-chris-evans">Total Markup</label>
 
                                                 <input type="number"
                                                        class="input-total-markup input border bg-gray-100 cursor-not-allowed"
                                                        placeholder="%" style="width:15%" name="total_markup_percent"
-                                                       disabled
-                                                       id="total_markup_percent">
+                                                    <?php echo ($is_total_markup) ? 'value="' . $material_markup_percent . '"' : 'disabled'; ?>
+                                                       id="total_markup_percent"/>
                                                 <input type="number"
                                                        class="input-total-markup input border bg-gray-100 cursor-not-allowed"
                                                        placeholder="Amount" style="width:20%" name="total_markup_amount"
-                                                       disabled
-                                                       id="total_markup_amount">
+                                                    <?php echo ($is_total_markup) ? 'value="' . $total_markup_amount . '"' : 'disabled'; ?>
+                                                       id="total_markup_amount"/>
                                             </div>
 
 
@@ -877,7 +891,7 @@ if (is_sale()) {
                                                     Markup rate</label>
                                                 <input type="radio" class="input border mr-2 float-left set_markup"
                                                        id="horizontal-radio-chris-evans2"
-                                                       name="horizontal_radio_button" checked>
+                                                       name="horizontal_radio_button" <?php echo ($is_total_markup) ? '' : 'checked'; ?>>
                                                 <label class="cursor-pointer select-none mr-2 float-left"
                                                        for="horizontal-radio-chris-evans2">Multiple Markups</label>
                                             </div>
@@ -889,13 +903,12 @@ if (is_sale()) {
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:15%" name="material_markup_percent"
                                                        id="material_markup_percent"
-                                                       value="<?php $material_markup_percent = ($quote->mat_factor != 0) ? ($quote->mat_factor - 1) * 100 : 0;
-                                                       echo ($material_markup_percent == 0) ? '' : $material_markup_percent; ?>">
+                                                    <?php echo (!$is_total_markup) ? 'value="' . $material_markup_percent . '"' : 'disabled'; ?>/>
                                                 <input placeholder="Amount" type="number"
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:20%" name="material_markup_amount"
                                                        id="material_markup_amount"
-                                                       value="<?php echo ($material_markup_percent == 0) ? '' : round($material_markup_percent * $quote->mat_net / 100, 2); ?>">
+                                                    <?php echo (!$is_total_markup) ? 'value="' . round($material_markup_percent * $quote->mat_net / 100, 2) . '"' : 'disabled'; ?>/>
                                             </div>
 
                                             <div class="mt-1 mb-5 " style="text-align-last: end;">
@@ -905,13 +918,12 @@ if (is_sale()) {
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:15%" name="labor_markup_percent"
                                                        id="labor_markup_percent"
-                                                       value="<?php $labor_markup_percent = ($quote->lab_factor != 0) ? ($quote->lab_factor - 1) * 100 : 0;
-                                                       echo ($labor_markup_percent == 0) ? '' : $labor_markup_percent; ?>">
+                                                <?php echo (!$is_total_markup) ? 'value="' . $labor_markup_percent . '"' : 'disabled'; ?>>
                                                 <input placeholder="Amount" type="number"
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:20%" name="labor_markup_amount"
                                                        id="labor_markup_amount"
-                                                       value="<?php echo ($labor_markup_percent == 0) ? '' : round($quote->labour_net * $labor_markup_percent / 100, 2); ?>">
+                                                <?php echo (!$is_total_markup) ? 'value="' . round($labor_markup_percent * $quote->labour_net / 100, 2) . '"' : 'disabled'; ?>>
                                             </div>
 
 
@@ -921,13 +933,12 @@ if (is_sale()) {
                                                        class="input-multiple-markup input border ml-1 single_markup"
                                                        style="width:15%" name="misc_markup_percent"
                                                        id="misc_markup_percent"
-                                                       value="<?php $misc_markup_percent = ($quote->misc_factor != 0) ? ($quote->misc_factor - 1) * 100 : 0;
-                                                       echo ($misc_markup_percent == 0) ? '' : $misc_markup_percent; ?>">
+                                                <?php echo (!$is_total_markup) ? 'value="' . $misc_markup_percent . '"' : 'disabled'; ?>>
                                                 <input placeholder="Amount" type="number"
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:20%" name="misc_markup_amount"
                                                        id="misc_markup_amount"
-                                                       value="<?php echo ($misc_markup_percent == 0) ? '' : round($misc_markup_percent * $quote->misc_net / 100, 2); ?>">
+                                                <?php echo (!$is_total_markup) ? 'value="' . round($misc_markup_percent * $quote->misc_net / 100, 2) . '"' : 'disabled'; ?>>
                                             </div>
 
 
@@ -937,18 +948,16 @@ if (is_sale()) {
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:15%" name="adson_markup_percent"
                                                        id="adson_markup_percent"
-                                                       value="<?php $adson_markup_percent = ($quote->ads_on_factor != 0) ? ($quote->ads_on_factor - 1) * 100 : 0;
-                                                       echo ($adson_markup_percent == 0) ? '' : $adson_markup_percent; ?>">
+                                                <?php echo (!$is_total_markup) ? 'value="' . $adson_markup_percent . '"' : 'disabled'; ?>>
                                                 <input placeholder="Amount" type="number"
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:20%" name="adson_markup_amount"
                                                        id="adson_markup_amount"
-                                                       value="<?php echo ($adson_markup_percent == 0) ? '' : round($adson_markup_percent * $quote->ads_on_net / 100, 2); ?>">
+                                                <?php echo (!$is_total_markup) ? 'value="' . round($adson_markup_percent * $quote->ads_on_net / 100, 2) . '"' : 'disabled'; ?>
                                             </div>
                                             <div class="mt-10">
                                                 <?php
-                                                $total_amount = $quote->mat_net * $quote->mat_factor + $quote->labour_net * $quote->lab_factor
-                                                    + $quote->misc_net * $quote->misc_factor + $quote->ads_on_net * $quote->ads_on_factor;
+
                                                 $discount_amount = $total_amount * $quote->discount_set / 100;
                                                 ?>
                                                 <label class="mr-5">Add Discount</label>

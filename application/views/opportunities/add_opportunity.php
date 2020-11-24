@@ -203,9 +203,9 @@
             <div class="col-span-12 sm:col-span-6 md:col-span-6 md:mr-3" id="add_opppor_right_info">
                 <div class="preview">
                     <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
-                        <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3 ">Sales Rep</label>
+                        <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3 ">Created By</label>
                         <input type="text" class="input w-full border mt-2 flex-1" tabindex="5"
-                               value="<?php echo (is_object($opportunity)) ? $opportunity->sale_rep : ''; ?>"
+                               value="<?php echo (is_object($opportunity)) ? $opportunity->created_by : user_name(); ?>"
                                readonly>
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0 mt-3">

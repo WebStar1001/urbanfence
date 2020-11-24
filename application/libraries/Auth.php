@@ -37,6 +37,7 @@ class Auth
                 'user_name' => $user->name,
                 'user_email' => $user->username,
                 'company_id' => $user->company_id,
+                'status' => $user->status,
             );
 
             $CI->session->set_userdata($user_data);

@@ -120,22 +120,22 @@
                     </div>
                 </div>
             </div>
-            <?php if(is_admin()):?>
-            <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                <div><label>Quoting Company</label>
-                    <div class="mt-1">
-                        <select class="input border w-full" id="company_id">
-                            <option value="0">All</option>
-                            <?php
-                            foreach ($companies as $company) {
-                                echo '<option value="' . $company->id . '">' . $company->name . '</option>';
-                            }
-                            ?>
-                        </select>
+            <?php if (is_admin()): ?>
+                <div class="col-span-12 sm:col-span-6 md:col-span-4">
+                    <div><label>Quoting Company</label>
+                        <div class="mt-1">
+                            <select class="input border w-full" id="company_id">
+                                <option value="0">All</option>
+                                <?php
+                                foreach ($companies as $company) {
+                                    echo '<option value="' . $company->id . '">' . $company->name . '</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <?php endif;?>
+            <?php endif; ?>
 
             <div class="col-span-12 sm:col-span-6 md:col-span-4 flex items-end">
                 <div>
@@ -176,30 +176,34 @@
 
 <script type="text/javascript">
     function format(d) {
+        var hide_filed = (is_admin) ? '' : 'display:none';
         /*console.log(d.JobCity);*/
         // `d` is the original data object for the row
         return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-align:left;width: 100%;">' +
             '<tr>' +
-            '<td style="width:15%;font-weight: bold;">Quoting Company:</td>' +
-            '<td style="width:20%;">' + d.company + '</td>' +
+
             '<td style="width:14%;font-weight: bold;">Address:</td>' +
             '<td style="width:25%;">' + d.address + '</td>' +
             '<td style="width:8%;font-weight: bold;">Phone2:</td>' +
             '<td style="width:20%;">' + d.phone2 + '</td>' +
-            '</tr>' +
-            '<tr>' +
             '<td style="width:13%;font-weight: bold;">Last Oppor.ID:</td>' +
             '<td style="width:18%;">' + d.last_oppor_id + '</td>' +
+            '</tr>' +
+            '<tr>' +
             '<td style="font-weight: bold;">Postal Code:</td>' +
             '<td>' + d.postal_code + '</td>' +
             '<td style="font-weight: bold;">Fax:</td>' +
             '<td>' + d.fax + '</td>' +
-            '</tr>' +
-            '<tr>' +
             '<td style="font-weight: bold;">Last Quote ID:</td>' +
             '<td>' + d.last_quote_id + '</td>' +
+            '</tr>' +
+            '<tr>' +
             '<td style="font-weight: bold;">Recent Job Type:</td>' +
             '<td>' + d.recent_job_type + '</td>' +
+            '<td style="width:15%;font-weight: bold;">Created By:</td>' +
+            '<td style="width:20%;">' + d.created_by + '</td>' +
+            '<td style="width:15%;font-weight: bold;' + hide_filed + ';">Quoting Company:</td>' +
+            '<td style="width:20%;' + hide_filed + '">' + d.company + '</td>' +
             '</tr>' +
             '</table>';
     }

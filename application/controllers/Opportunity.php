@@ -83,6 +83,7 @@ class Opportunity extends CI_Controller
         if(!is_admin()){
             $data['company_id'] = user_company();
         }
+        $data['created_by'] = user_name();
         $this->db->insert('customers', $data);
         $customer_id = $this->db->insert_id();
         echo $customer_id;
@@ -103,6 +104,7 @@ class Opportunity extends CI_Controller
             $this->db->where('id', $customer_id);
             $this->db->update('customers', $data);
         } else {
+            $data['created_by'] = user_name();
             $this->db->insert('customers', $data);
             $customer_id = $this->db->insert_id();
         }
@@ -128,6 +130,7 @@ class Opportunity extends CI_Controller
             $this->db->where('id', $opportunity_id);
             $this->db->update('opportunities', $data);
         } else {
+            $data['created_by'] = user_name();
             $data['status'] = 'New';
             $this->db->insert('opportunities', $data);
         }
@@ -163,6 +166,12 @@ class Opportunity extends CI_Controller
     {
         $customer_id = $this->input->get('customer_id');
         $data = $this->CustomerModel->get_customer($customer_id);
+        echo json_encode($data);
+    }
+    public function check_customer()
+    {
+        $customer = $this->input->get('customer');
+        $data = $this->db->get_where('customers', array('customer'=>$customer))->row();
         echo json_encode($data);
     }
 }

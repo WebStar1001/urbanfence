@@ -47,3 +47,7 @@ function user_company(){
     $CI =& get_instance();
     return $CI->session->userdata('company_id');
 }
+function user_name(){
+    $CI =& get_instance();
+    return $CI->session->userdata('user_name');
+}
