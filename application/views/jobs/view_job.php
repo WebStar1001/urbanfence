@@ -194,6 +194,7 @@
     function format(d) {
         /*console.log(d.JobCity);*/
         // `d` is the original data object for the row
+        var hide_filed = (is_admin) ? '' : 'display:none';
         return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-align:left;width: 100%;">' +
             '<tr>' +
             '<td style="font-weight: bold;width: 13%">Contact Person:</td>' +
@@ -216,8 +217,8 @@
             '<td>' + d.job_type + '</td>' +
             '<td style="font-weight: bold;">Site Desc:</td>' +
             '<td>' + d.site_desc + '</td>' +
-            '<td style="font-weight: bold;">Quoting Company:</td>' +
-            '<td>' + d.company + '</td>' +
+            '<td style="font-weight: bold;' + hide_filed + '">Quoting Company:</td>' +
+            '<td style="' + hide_filed + '">' + d.company + '</td>' +
             '</tr>' +
             '</table>';
     }

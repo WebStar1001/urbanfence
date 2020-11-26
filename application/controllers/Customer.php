@@ -29,15 +29,47 @@ class Customer extends CI_Controller
     public function get_customers()
     {
         $customers = $this->CustomerModel->getCustomers();
+
+        $last_job_type_filter = $this->input->get('last_job_type');
+        $last_sale_rep_filter = $this->input->get('last_sale_rep');
+        $last_quote_id_filter = $this->input->get('last_quote_id');
         $retAry = array();
+
         foreach ($customers as $customer) {
-            $last_oppor = $this->db->select('*')->from('opportunities')->where('customer_id', $customer->id)->order_by('created_at', 'DESC')->limit(1)->get()->row();
-            $last_quote = $this->db->select('*')->from('quotes')->where('customer_id', $customer->id)->order_by('created_at', 'DESC')->limit(1)->get()->row();
-            if ($last_oppor) {
-                $customer->recent_job_type = $last_oppor->job_type;
-                $customer->last_oppor_id = $last_oppor->id;
+            $last_job = $this->CustomerModel->getLastJob($customer->id);
+            $last_quote = $this->CustomerModel->getLastQuote($customer->id);
+            if($last_job_type_filter){
+                if($last_job){
+                    if($last_job_type_filter != $last_job->job_type){
+                        continue;
+                    }
+                }else{
+                    continue;
+                }
+            }
+            if($last_sale_rep_filter){
+                if($last_job){
+                    if($last_sale_rep_filter != $last_job->sale_rep){
+                        continue;
+                    }
+                }else{
+                    continue;
+                }
+            }
+            if($last_quote_id_filter){
+                if($last_quote){
+                    if($last_quote_id_filter != $last_quote->id){
+                        continue;
+                    }
+                }else{
+                    continue;
+                }
+            }
+            if ($last_job) {
+                $customer->last_job_type = $last_job->job_type;
+                $customer->last_oppor_id = $last_job->id;
             } else {
-                $customer->recent_job_type = '';
+                $customer->last_job_type = '';
                 $customer->last_oppor_id = '';
             }
             if ($last_quote) {

@@ -28,7 +28,7 @@ class OpportunityModel extends CI_Model
         $this->db->select('opportunities.*, customers.customer AS customer, customers.contact_person AS contact_person, 
                         quotes.id AS quote_id,companies.name AS company');
         $this->db->from('opportunities');
-        if($id){
+        if ($id) {
             $this->db->where('opportunities.id', $id);
         }
         if ($job_type) {
@@ -47,17 +47,22 @@ class OpportunityModel extends CI_Model
             $this->db->like('customer', $customer);
         }
         if ($customer_id) {
-            $this->db->where('customer_id', $customer_id);
+            $this->db->where('opportunities.customer_id', $customer_id);
         }
-        if(is_admin()){
+        if (is_admin()) {
             if ($company_id) {
                 $this->db->where('opportunities.company_id', $company_id);
             }
-        }else{
+        } else {
             $this->db->where('opportunities.company_id', user_company());
         }
         if ($site_city) {
             $this->db->where('site_city', $site_city);
+        }
+        if ($date) {
+            list($start_date, $end_date) = explode('-', $date);
+            $this->db->where('date >= "' . date('Y-m-d', strtotime($start_date)) . '"', null, false);
+            $this->db->where('date <= "' . date('Y-m-d', strtotime($end_date)) . '"', null, false);
         }
         if ($urgency) {
             $this->db->where('urgency', $urgency);
@@ -69,7 +74,9 @@ class OpportunityModel extends CI_Model
         $query = $this->db->get();
         return $query->result_array();
     }
-    public function get_opportunity($opportunity_id){
+
+    public function get_opportunity($opportunity_id)
+    {
         $this->db->select('opportunities.*, users.name AS sale_rep, customers.customer AS customer_name');
         $this->db->from('opportunities');
         $this->db->where('opportunities.id', $opportunity_id);

@@ -110,15 +110,14 @@
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Quote Date</label>
                     <div class="mt-1">
-                        <input data-daterange="true" class="date_range input pl-12 border w-full" id="quote_date"
-                               value="<?php echo date('1/1/Y') . ' - ' . date('12/21/Y'); ?>"/>
+                        <input data-daterange="true" class="date_range input pl-12 border w-full" id="quote_date"/>
                     </div>
                 </div>
             </div>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div class=""><label>Sales Rep</label>
                     <div class="mt-1">
-                        <select class="select2 w-full" id="sales_rap">
+                        <select class="select2 w-full" id="sale_rep">
                             <option value="0">All</option>
                             <?php
                             foreach ($sales as $user) {
@@ -187,6 +186,7 @@
     function format(d) {
         /*console.log(d.JobCity);*/
         // `d` is the original data object for the row
+        var hide_filed = (is_admin) ? '' : 'display:none';
         return '<table cellpadding="5" cellspacing="0" border="1px" style="padding-left:50px; text-align:left; width: 100%;">' +
             '</tr>' +
             '<tr>' +
@@ -210,16 +210,16 @@
             '<td>' + Math.round(d.misc_net * d.misc_factor) + '</td>' +
             '<td style="font-weight: bold">Contact Person:</td>' +
             '<td>' + d.contact_person + '</td>' +
-            '<td style="font-weight: bold">Quoting Company:</td>' +
-            '<td>' + d.company + '</td>' +
+            '<td style="font-weight: bold">Site Address:</td>' +
+            '<td>' + d.site_address + '.</td>' +
             '</tr>' +
             '<tr>' +
             '<td style="font-weight: bold">Add-On Total:</td>' +
             '<td>' + Math.round(d.ads_on_net * d.ads_on_factor) + '</td>' +
-            '<td style="font-weight: bold">Site Address:</td>' +
-            '<td>' + d.site_address + '.</td>' +
             '<td style="font-weight: bold">Oppor. ID:</td>' +
             '<td>' + d.oppor_id + '</td>' +
+            '<td style="font-weight: bold;' + hide_filed + '">Quoting Company:</td>' +
+            '<td style="' + hide_filed + '">' + d.company + '</td>' +
             '</tr>' +
             '</table>';
     }
@@ -245,7 +245,7 @@
                     data.selling_total = $('#quote_selling_total').val();
                     data.job_type = $('#job_type').val();
                     data.quote_date = $('#quote_date').val();
-                    data.sales_rap = $('#sales_rap').val();
+                    data.sale_rep = $('#sale_rep').val();
                     data.customer = $('#customer').val();
                     data.oppor_id = $('#oppor_id').val();
                     data.site_city = $('#site_city').val();
@@ -277,7 +277,7 @@
                 },
                 {
                     "data": null, render: function (data) {
-                        if (is_sale&&data.status == 'Pending') {
+                        if (is_sale && data.status == 'Pending') {
                             return "";
                         } else {
                             return "<a href='<?php echo base_url('Quotes/add_quote?quote_id=');?>" + data.id + "'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
@@ -310,6 +310,7 @@
             table.ajax.reload(null, false);
         });
         $('#clearFilter').click(function () {
+            $('#sale_rep').val(0).trigger('change');
             $('#filterForm').trigger('reset');
             table.ajax.reload(null, false);
         });

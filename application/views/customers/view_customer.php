@@ -52,21 +52,21 @@
                     </div>
                 </div>
             </div>
+            <div class="col-span-12 sm:col-span-6 md:col-span-4">
+                <div><label>Status</label>
+                    <div class="mt-1">
+                        <select class="input border w-full" id="status">
+                            <option value="0">All</option>
+                            <option value="Lead">Lead</option>
+                            <option value="Customer">Customer</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
             <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
                 <div class=""><label>Customer ID</label>
                     <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full"
                                              id="customer_id">
-                    </div>
-                </div>
-            </div>
-            <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                <div><label>Status</label>
-                    <div class="mt-1">
-                        <select class="select2 w-full" id="status">
-                            <option value="0">All</option>
-                            <option value="1">Lead</option>
-                            <option value="2">Customer</option>
-                        </select>
                     </div>
                 </div>
             </div>
@@ -89,13 +89,13 @@
                     <div class="mt-1">
                         <select id="last_job_type" class="input w-full border flex-1">
                             <option value="0">All</option>
-                            <option value="1">Fence Repair</option>
-                            <option value="2">Gate Repair</option>
-                            <option value="3">Fence and Gate Repair</option>
-                            <option value="4">New Fence</option>
-                            <option value="5">New Gate</option>
-                            <option value="6">New Fence and Gate c/w Operator</option>
-                            <option value="7">Gate Operator Service</option>
+                            <option value="Fence Repair">Fence Repair</option>
+                            <option value="Gate Repair">Gate Repair</option>
+                            <option value="Fence and Gate Repair">Fence and Gate Repair</option>
+                            <option value="New Fence">New Fence</option>
+                            <option value="New Gate">New Gate</option>
+                            <option value="New Fence and Gate c/w Operator">New Fence and Gate c/w Operator</option>
+                            <option value="Gate Operator Service">Gate Operator Service</option>
                         </select>
                     </div>
                 </div>
@@ -103,7 +103,7 @@
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Last Sales Rep</label>
                     <div class="mt-1">
-                        <select class="select2 w-full">
+                        <select class="select2 w-full" id="last_sale_rep">
                             <option value="0">All</option>
                             <?php
                             foreach ($users as $user) {
@@ -116,7 +116,7 @@
             </div>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Last Quote ID</label>
-                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full">
+                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full" id="last_quote_id">
                     </div>
                 </div>
             </div>
@@ -183,10 +183,10 @@
             '<tr>' +
 
             '<td style="width:14%;font-weight: bold;">Address:</td>' +
-            '<td style="width:25%;">' + d.address + '</td>' +
-            '<td style="width:8%;font-weight: bold;">Phone2:</td>' +
-            '<td style="width:20%;">' + d.phone2 + '</td>' +
-            '<td style="width:13%;font-weight: bold;">Last Oppor.ID:</td>' +
+            '<td style="width:20%;">' + d.address + '</td>' +
+            '<td style="width:12%;font-weight: bold;">Phone2:</td>' +
+            '<td style="width:15%;">' + d.phone2 + '</td>' +
+            '<td style="width:15%;font-weight: bold;">Last Oppor.ID:</td>' +
             '<td style="width:18%;">' + d.last_oppor_id + '</td>' +
             '</tr>' +
             '<tr>' +
@@ -199,11 +199,11 @@
             '</tr>' +
             '<tr>' +
             '<td style="font-weight: bold;">Recent Job Type:</td>' +
-            '<td>' + d.recent_job_type + '</td>' +
-            '<td style="width:15%;font-weight: bold;">Created By:</td>' +
-            '<td style="width:20%;">' + d.created_by + '</td>' +
-            '<td style="width:15%;font-weight: bold;' + hide_filed + ';">Quoting Company:</td>' +
-            '<td style="width:20%;' + hide_filed + '">' + d.company + '</td>' +
+            '<td>' + d.last_job_type + '</td>' +
+            '<td style="font-weight: bold;">Created By:</td>' +
+            '<td style="">' + d.created_by + '</td>' +
+            '<td style="font-weight: bold;' + hide_filed + ';">Quoting Company:</td>' +
+            '<td style="' + hide_filed + '">' + d.company + '</td>' +
             '</tr>' +
             '</table>';
     }
@@ -280,10 +280,15 @@
             event.preventDefault();
         });
         $('#applyFilter').click(function () {
+            if(isNaN($('#customer_id').val())){
+                showNotification('Customer ID should be number');
+                return;
+            }
             table.ajax.reload(null, false);
         });
         $('#clearFilter').click(function () {
             $('#filterForm').trigger('reset');
+            $('#last_sale_rep').val(0).trigger('change');
             table.ajax.reload(null, false);
         })
     });

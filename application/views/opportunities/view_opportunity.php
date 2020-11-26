@@ -358,6 +358,7 @@
             table.ajax.reload(null, false);
         });
         $('#clearFilter').click(function () {
+            $('#sale_rep').val(0).trigger('change');
             $('#filterForm').trigger('reset');
             table.ajax.reload(null, false);
         });

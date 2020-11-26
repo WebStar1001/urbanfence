@@ -204,7 +204,8 @@
                 <div class="preview">
                     <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3 ">Created By</label>
-                        <input type="text" class="input w-full border mt-2 flex-1" tabindex="5"
+                        <input type="text" tabindex="5"
+                               class="bg-gray-100 cursor-not-allowed input w-full sm:w-1/2 md:w-1/2 border mt-2 flex-1"
                                value="<?php echo (is_object($opportunity)) ? $opportunity->created_by : user_name(); ?>"
                                readonly>
                     </div>
@@ -291,7 +292,8 @@
                                        value="<?php echo (is_object($opportunity)) ? $opportunity->site_address : '' ?>">
                             </div>
                             <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
-                                <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site Postal Code *</label>
+                                <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site Postal Code
+                                    *</label>
                                 <input type="text" name="site_postal_code" class="input border mt-2 flex-1" required
                                        tabindex="15"
                                        value="<?php echo (is_object($opportunity)) ? $opportunity->site_postal_code : '' ?>">
@@ -317,7 +319,7 @@
                    value="<?php echo (is_object($opportunity)) ? $opportunity->id : ''; ?>"/>
             <div class="col-span-12">
                 <div class="preview">
-                    <input type="submit" value="Create Opportunity"
+                    <input type="submit" value="Save Opportunity"
                            style="float: right;" class="button bg-theme-1 text-white mt-5 sm:p-2" tabindex="18"/>
                 </div>
             </div>

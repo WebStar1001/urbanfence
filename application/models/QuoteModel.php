@@ -21,7 +21,7 @@ class QuoteModel extends CI_Model
         $quote_selling_total = $this->input->get('selling_total');
         $job_type = $this->input->get('job_type');
         $quote_date = $this->input->get('quote_date');
-        $sales_rep = $this->input->get('sales_rap');
+        $sale_rep = $this->input->get('sale_rep');
         $customer = $this->input->get('customer');
         $oppor_id = $this->input->get('oppor_id');
         $site_city = $this->input->get('site_city');
@@ -50,8 +50,8 @@ class QuoteModel extends CI_Model
             list($start_date, $end_date) = explode('-', $quote_date);
             $this->db->where('date(quotes.created_at) BETWEEN "' . date('Y-m-d', strtotime($start_date)) . '" AND "' . date('Y-m-d', strtotime($end_date)) . '"', "", FALSE);
         }
-        if ($sales_rep) {
-            $this->db->where('opportunities.sale_rep', $sales_rep);
+        if ($sale_rep) {
+            $this->db->where('opportunities.sale_rep', $sale_rep);
         }
         if ($customer) {
             $this->db->like('customers.customer', $customer);
