@@ -62,7 +62,8 @@
                             <option value="Returned Customer">Returned Customer</option>
                             <option value="Yellow Pages">Yellow Pages</option>
                             <option value="Facebook">Facebook</option>
-                            <option value="Facebook">Google Ad</option>
+                            <option value="Google Ad">Google Ad</option>
+                            <option value="Friend's Referral">Friend's Referral</option>
                         </select>
                     </div>
                 </div>
@@ -232,6 +233,7 @@
             // "linkedCalendars": false
         });
         $('#start_date').val('');
+        $.fn.dataTable.ext.errMode = 'throw';
         var table = $('#jobTable').DataTable({
             "pageLength": 50,
             "searching": false,
@@ -294,6 +296,9 @@
             table.ajax.reload(null, false);
         });
         $('#clearFilter').click(function () {
+            $('#job_per_month').val(0).trigger('change');
+            $('#installer').val(0).trigger('change');
+            $('#sale_rep').val(0).trigger('change');
             $('#filterForm').trigger('reset');
             table.ajax.reload(null, false);
         })

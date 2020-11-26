@@ -45,7 +45,7 @@ class Sales extends CI_Controller
             }
             $retAry[$i] = $sales[$i];
             $retAry[$i]['job_total'] = $sales[$i]['job_balance'];
-            $retAry[$i]['profit'] = $this->QuoteModel->getProfitByQuoteID($sales[$i]['quote_id']);
+            $retAry[$i]['profit'] = $profit;
             $retAry[$i]['job_balance'] = round($sales[$i]['job_balance'] * 1 - $total_pay_amount * 1, 2);
         }
         $data['data'] = $retAry;

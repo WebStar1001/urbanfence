@@ -118,20 +118,20 @@ class Auth
                 if($CI->uri->segment(1) == 'Users'){
                     redirect('Login/go_to_error_page');
                 }
-                if($CI->uri->segment(1) == 'Opportunity'&&$this->uri->segment(2) == 'opportunity_list' && isset($_GET['status'])){
+                if($CI->uri->segment(1) == 'Opportunity'&&$CI->uri->segment(2) == 'opportunity_list' && isset($_GET['status'])){
                     redirect('Login/go_to_error_page');
                 }
-                if($CI->uri->segment(1) == 'Quote'&&$this->uri->segment(2) == 'quotes_list' && isset($_GET['status'])){
+                if($CI->uri->segment(1) == 'Quote'&&$CI->uri->segment(2) == 'quotes_list' && isset($_GET['status'])){
                     redirect('Login/go_to_error_page');
                 }
-                if($CI->uri->segment(1) == 'Jobs'&&$this->uri->segment(2) == 'job_detail'){
+                if($CI->uri->segment(1) == 'Jobs'&&$CI->uri->segment(2) == 'job_detail'){
                     redirect('Login/go_to_error_page');
                 }
             }elseif (is_user()){
                 if($CI->uri->segment(1) == 'Users'){
                     redirect('Login/go_to_error_page');
                 }
-                if($CI->uri->segment(1) == 'Opportunity'&&$this->uri->segment(2) == 'opportunity_list' && isset($_GET['status'])){
+                if($CI->uri->segment(1) == 'Opportunity'&&$CI->uri->segment(2) == 'opportunity_list' && isset($_GET['status'])){
                     redirect('Login/go_to_error_page');
                 }
                 if($CI->uri->segment(1) == 'Quote'){
