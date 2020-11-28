@@ -105,10 +105,8 @@ class Auth
             $error = "You are not authorized for this part";
 
             $CI->session->set_userdata(array('error_message' => $error));
-
             redirect($url, 'refresh');
 
-            exit;
         }else{
             if(is_manager()){
                 if($CI->uri->segment(1) == 'Users'){

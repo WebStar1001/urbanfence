@@ -210,8 +210,7 @@
                     <div class="mt-1 mb-2">
                         <label class="mr-1">Start Date</label>
                         <input type="date" class="input w-1/3 lg:w-2/3 border col-span-4" id="start_date"
-                               value="<?php echo ($job) ? $job->start_date : ''; ?>"
-                            <?php echo ($job && ($job->status == 'New' || $job->status == 'MAT Missing in Stock')) ? 'readonly disabled' : ''; ?> />
+                               value="<?php echo ($job) ? $job->start_date : ''; ?>" />
                     </div>
                     <div class="mt-1 mb-2">
                         <label class="mr-1">Completion Date</label>
@@ -243,12 +242,11 @@
                 <legend class="legend_spacing">Credits-Debits Tracking</legend>
                 <div class="intro-y grid grid-cols-12 box">
                     <div class="col-span-12 p-5 box">
-
-                        <div class="w-full lg:w-1/6 float-left text-left m-auto">
+                        <div class="w-100 float-left text-left m-auto mr-3">
                             <p><b>Take Payment</b></p>
                         </div>
 
-                        <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left ">
+                        <div class="w-full sm:w-1/2 lg:w-1/6 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left ">
                             <div class="sm:w-full">
                                 <label class="w-full sm:w-1/3 text-left">Invoice #</label>
                                 <input type="text" class="input w-full border flex-1 md:text-center"
@@ -256,15 +254,22 @@
                             </div>
                         </div>
 
-                        <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left">
+                        <div class="w-full sm:w-1/2 lg:w-1/6 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left">
                             <div class="sm:w-full">
                                 <label class="w-full text-left">Payment amount</label>
                                 <input type="text" class="input w-full border flex-1 md:text-center"
                                        id="payment_amount">
                             </div>
                         </div>
+                        <div class="w-full sm:w-1/2 lg:w-1/6 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left">
+                            <div class="sm:w-full">
+                                <label class="w-full text-left">Reference #</label>
+                                <input type="text" class="input w-full border flex-1 md:text-center"
+                                       id="reference">
+                            </div>
+                        </div>
 
-                        <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left">
+                        <div class="w-full sm:w-1/2 lg:w-1/6 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left">
                             <div class="sm:w-full">
                                 <label class="w-full text-left">Payment Method</label>
                                 <select class="input w-full border flex-1" id="payment_method">
@@ -278,7 +283,7 @@
                             </div>
                         </div>
 
-                        <div class="w-full sm:w-1/2 lg:w-1/6 float-left ml-5 sm:mt-2 p-2 lg:p-0  pt-5 lg:mt-5">
+                        <div class="w-full sm:w-1/2 lg:w-1/6 float-left sm:mt-2 p-2 lg:p-0  pt-5 lg:mt-5">
                             <button class="button bg-theme-1 text-white" id="create_payment">Create Payment</button>
                         </div>
                     </div>
@@ -366,7 +371,6 @@
                         <th class="whitespace-no-wrap">MAT Description</th>
                         <th class="whitespace-no-wrap">Quantity</th>
                         <th class="whitespace-no-wrap">Items Collected for job</th>
-                        <th class="whitespace-no-wrap">Set print</th>
                         <th class="whitespace-no-wrap">Missing in stock</th>
                         <th class="whitespace-no-wrap">In stock</th>
                     </tr>
@@ -388,8 +392,7 @@
                                 <input type="hidden" name="mat_id[]" value="' . $mat->id . '"/>
                                 <input type="number" name="collected_quantity[]" onfocus="this.oldvalue = this.value;" originalValue="' . $mat->items_collected_for_job . '" max="' . $mat->quantity . '"
                                 value="' . $mat->items_collected_for_job . '" class="w-full" style="height:30px;" onchange="change_item_collect(' . $mat->id . ');this.oldvalue = this.value;">
-                                </td>
-                                <td class="border-b"><button class="button bg-theme-1 text-white w-full" onclick="set_item_collect(' . $mat->id . ')">Label</button></td>';
+                                </td>';
                             if ($mat->quantity == $mat->items_collected_for_job) {
                                 echo '
                                 <td class="border-b"><i class="fa fa-minus" style="color:green;"/></td>
@@ -409,7 +412,6 @@
                         <td class="border-b"></td>
                         <td class="border-b"><?php echo $quantity_total; ?></td>
                         <td class="border-b"><?php echo ($items_collected_total == 0) ? '' : $items_collected_total; ?></td>
-                        <td class="border-b"></td>
                         <td class="border-b"><?php echo ($missing_stock_total == 0) ? '' : $missing_stock_total; ?></td>
                         <td class="border-b"><?php echo ($missing_stock_total == 0) ? '<i class="fa fa-check" style="color:green;"/>' : '<i class="fa fa-minus" style="color:red;"/>'; ?></td>
                     </tr>
@@ -499,7 +501,7 @@
 
     function change_item_collect(rowId) {
         var quantity = $('#items_collected' + rowId).children().eq(2).html() * 1
-        var total_missing_stock = $('#items_collected_total').children().eq(5).html() * 1
+        var total_missing_stock = $('#items_collected_total').children().eq(4).html() * 1
         var total_items_collected = $('#items_collected_total').children().eq(3).html() * 1
         var oldValue = event.target.oldvalue * 1;
         var nValue = event.target.value * 1;
@@ -514,26 +516,22 @@
         }
 
         $('#items_collected_total').children().eq(3).html(total_items_collected - oldValue + nValue);
-        $('#items_collected_total').children().eq(5).html(total_missing_stock + oldValue - nValue);
+        $('#items_collected_total').children().eq(4).html(total_missing_stock + oldValue - nValue);
         if (total_missing_stock + oldValue - nValue == 0) {
-            $('#items_collected_total').children().eq(6).html('<i class="fa fa-check" style="color:green;"/>');
+            $('#items_collected_total').children().eq(5).html('<i class="fa fa-check" style="color:green;"/>');
             status = 'MAT Collected';
         } else {
             status = 'MAT Missing in Stock';
-            $('#items_collected_total').children().eq(6).html('<i class="fa fa-minus" style="color:red;"/>');
+            $('#items_collected_total').children().eq(5).html('<i class="fa fa-minus" style="color:red;"/>');
         }
 
 
         if (quantity == nValue) {
-            $('#items_collected' + rowId).children().eq(5).html('<i class="fa fa-check" style="color:green;"/>')
-            $('#items_collected' + rowId).children().eq(6).html('<i class="fa fa-minus" style="color:green;"/>')
-            $('#items_collected' + rowId).children().eq(4).find('button').attr('disabled', false);
-            $('#items_collected' + rowId).children().eq(4).find('button').css('background-color', 'blue');
+            $('#items_collected' + rowId).children().eq(4).html('<i class="fa fa-check" style="color:green;"/>')
+            $('#items_collected' + rowId).children().eq(5).html('<i class="fa fa-minus" style="color:green;"/>')
         } else if (quantity > nValue) {
-            $('#items_collected' + rowId).children().eq(5).html(quantity - nValue);
-            $('#items_collected' + rowId).children().eq(6).html('<i class="fa fa-minus" style="color:red;"/>')
-            $('#items_collected' + rowId).children().eq(4).find('button').attr('disabled', false);
-            $('#items_collected' + rowId).children().eq(4).find('button').css('background-color', 'blue');
+            $('#items_collected' + rowId).children().eq(4).html(quantity - nValue);
+            $('#items_collected' + rowId).children().eq(5).html('<i class="fa fa-minus" style="color:red;"/>')
         }
     }
 
@@ -601,8 +599,9 @@
             }
         });
         $('#create_payment').click(function () {
-            var available_payment_amount = Math.round((job_balance - pay_amount) * 100) / 100;
-            if ($('#invoice_number').val() == '' || $('#payment_amount').val() == '' || $('#payment_method').val() == '') {
+            var available_payment_amount = Math.round((job_balance - pay_amount) * 100) / 110;
+            if ($('#invoice_number').val() == '' || $('#payment_amount').val() == '' || $('#payment_method').val() == ''
+                || $('#reference').val() == '') {
                 showNotification('You need to input all information for creating payment');
                 return;
             } else if ($('#payment_amount').val() * 1 < 0) {
@@ -633,6 +632,7 @@
                                     invoice_number: $('#invoice_number').val(),
                                     payment_amount: $('#payment_amount').val(),
                                     payment_method: $('#payment_method').val(),
+                                    reference: $('#reference').val(),
                                     job_id: job_id,
                                     customer_id: customer_id
                                 },  // data to submit
@@ -642,6 +642,7 @@
                                     $('#invoice_number').val('');
                                     $('#payment_amount').val('');
                                     $('#payment_method').val('');
+                                    $('#reference').val('');
                                     if (data != 'not_completed_paid') {
                                         $('#status_filed').html(data);
                                     }
@@ -660,8 +661,8 @@
 
         });
         $('#generate_invoice').click(function () {
-            var available_invoice_amount = Math.round((job_balance - invoice_amount) * 100) / 100;
-            alert(available_invoice_amount);
+            var available_invoice_amount = Math.round((job_balance - invoice_amount) * 100) / 110;
+
             if ($('#invoice_id').val() == '' || $('#invoice_amount').val() == '' || $('#invoice_due_date').val() == '') {
                 showNotification('You need to input all information for generating invoice');
                 return;

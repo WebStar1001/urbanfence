@@ -133,7 +133,7 @@ class JobModel extends CI_Model
         }
         $this->db->join('companies', 'companies.id=jobs.company_id', 'inner');
         $this->db->join('customers', 'customers.id=jobs.customer_id', 'inner');
-        $this->db->join('users AS installer', 'installer.id=jobs.installer', 'inner');
+        $this->db->join('users AS installer', 'installer.id=jobs.installer', 'left');
         $this->db->join('opportunities', 'opportunities.id=jobs.oppor_id', 'inner');
         $this->db->join('users AS sale_rep', 'sale_rep.id=opportunities.sale_rep', 'inner');
         $query = $this->db->get();

@@ -163,9 +163,9 @@
     }*/
 </style>
 <?php
+//$hide_price = false;
 $hide_price = false;
 if (is_sale()) {
-    $hide_price = true;
 }
 ?>
 <script>
@@ -211,28 +211,6 @@ if (is_sale()) {
                     </fieldset>
                 </div>
                 <div class="col-span-12 sm:col-span-6 md:col-span-4 sm:pl-3 ml-5 lg:m-auto" id="right_info_part">
-                    <?php if (is_admin()): ?>
-                        <div class="w-full sm:w-full m-auto mb-2" style="display:flex;">
-                            <p> Set Quoting Company </p>
-                            <select class="input border mr-2">
-                                <?php
-                                foreach ($companies as $com) {
-                                    if (is_object($quote)) {
-                                        if ($quote->company_id == $com->id) {
-                                            echo '<option value="' . $com->id . '" selected>' . $com->name . '</option>';
-                                        } else {
-                                            echo '<option value="' . $com->id . '">' . $com->name . '</option>';
-                                        }
-                                    } else {
-                                        echo '<option value="' . $com->id . '">' . $com->name . '</option>';
-                                    }
-                                }
-                                ?>
-
-                            </select>
-                        </div>
-                    <?php endif; ?>
-
                     <div class="w-full sm:w-full m-auto" style="display:flex;">
                         <p classs="">Set Calc Mode</p>
                         <select class="input border mr-2" name="calc_mode" id="calc_mode">
@@ -380,8 +358,8 @@ if (is_sale()) {
                                             </td>
                                             <td class="text-center" <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>>
                                                 <?php
-                                                $mat_total_price += $mat_info[$i]->quantity * $price_per_unit;
-                                                echo $price_per_unit * $mat_info[$i]->quantity;
+                                                $mat_total_price += $mat_info[$i]->quantity * $price_per_unit * 1.32;
+                                                echo $price_per_unit * $mat_info[$i]->quantity * 1.32;
                                                 ?>
                                             </td>
                                             <td class="table-report__action w-56">
@@ -746,7 +724,103 @@ if (is_sale()) {
                     <!-- END: Ads-On -->
                 </div>
             </fieldset>
+            <?php if (is_sale()): ?>
+                <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
+                    <div class="intro-y col-span-12 lg:col-span-6">
+                        <!-- BEGIN: Input -->
+                        <div class="intro-y box">
+                            <div class="p-5" id="input">
+                                <div class="preview">
+                                    <div class="overflow-x-auto">
+
+                                        <table class="table" style="" id="sale_quote_table">
+                                            <thead>
+                                            <tr class="bg-gray-200 text-gray-700">
+                                                <th class="whitespace-no-wrap">Items</th>
+                                                <th class="whitespace-no-wrap">Costs</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td class="border-b">Material</td>
+                                                <td class="border-b"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border-b">Labour</td>
+                                                <td class="border-b"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border-b">Misc</td>
+                                                <td class="border-b">
+                                            </tr>
+                                            <tr>
+                                                <td class="border-b">Add-On</td>
+                                                <td class="border-b"></td>
+                                            </tr>
+                                            <tr class="sub-total1">
+                                                <td class="border-b">Sub Total 1</td>
+                                                <td class="border-b"></td>
+                                            </tr>
+                                            <tr class="discount-row">
+                                                <td class="border-b">Discount</td>
+                                                <td class="border-b"></td>
+                                            </tr>
+                                            <tr class="sub-total2">
+                                                <td class="border-b">Sub Total 2</td>
+                                                <td class="border-b"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END: Input -->
+                    </div>
+                    <div class="intro-y col-span-12 lg:col-span-6">
+                        <!-- BEGIN: Vertical Form -->
+                        <div class="intro-y box">
+                            <div class="p-5" id="vertical-form">
+                                <div class="preview">
+                                    <div class="overflow-x-auto">
+                                        <?php
+                                        $total_amount = '';
+                                        $discount_percent = '';
+                                        $discount_amount = '';
+                                        if (is_object($quote)) {
+                                            $total_amount = $quote->mat_net * $quote->mat_factor + $quote->labour_net * $quote->lab_factor
+                                                + $quote->misc_net * $quote->misc_factor + $quote->ads_on_net * $quote->ads_on_factor;
+                                            $discount_percent = ($quote->discount_set == 0) ? '' : $quote->discount_set;
+                                            $discount_amount = $total_amount * $quote->discount_set / 100;
+                                        }
+
+                                        ?>
+                                        <div class="mt-10">
+                                            <label class="mr-5">Add Discount</label>
+                                            <input type="number"
+                                                   class="add-discount input w-25 border col-span-4"
+                                                   placeholder="%" style="width:15%" name="discount_percent"
+                                                   value="<?php echo $discount_percent; ?>">
+                                            <input placeholder="Amount" type="number"
+                                                   class="add-discount input w-25 border col-span-4"
+                                                   style="width:20%"
+                                                   name="discount_amount"
+                                                   value="<?php echo ($discount_amount == 0) ? '' : round($discount_amount, 2); ?>">
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- END: Vertical Form -->
+                    </div>
+                </div>
             <?php
+            endif;
             if (is_object($quote)):
                 if ($quote->status == 'Pending'):
                     ?>
@@ -875,7 +949,7 @@ if (is_sale()) {
                                                 <input type="number"
                                                        class="input-total-markup input border bg-gray-100 cursor-not-allowed"
                                                        placeholder="%" style="width:15%" name="total_markup_percent"
-                                                    <?php echo ($is_total_markup) ? 'value="' . $material_markup_percent . '"' : 'disabled'; ?>
+                                                    <?php echo ($is_total_markup) ? 'value="' . (($material_markup_percent != 0) ? $material_markup_percent : 10) . '"' : 'disabled'; ?>
                                                        id="total_markup_percent"/>
                                                 <input type="number"
                                                        class="input-total-markup input border bg-gray-100 cursor-not-allowed"
@@ -918,12 +992,12 @@ if (is_sale()) {
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:15%" name="labor_markup_percent"
                                                        id="labor_markup_percent"
-                                                <?php echo (!$is_total_markup) ? 'value="' . $labor_markup_percent . '"' : 'disabled'; ?>>
+                                                    <?php echo (!$is_total_markup) ? 'value="' . $labor_markup_percent . '"' : 'disabled'; ?>>
                                                 <input placeholder="Amount" type="number"
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:20%" name="labor_markup_amount"
                                                        id="labor_markup_amount"
-                                                <?php echo (!$is_total_markup) ? 'value="' . round($labor_markup_percent * $quote->labour_net / 100, 2) . '"' : 'disabled'; ?>>
+                                                    <?php echo (!$is_total_markup) ? 'value="' . round($labor_markup_percent * $quote->labour_net / 100, 2) . '"' : 'disabled'; ?>>
                                             </div>
 
 
@@ -933,12 +1007,12 @@ if (is_sale()) {
                                                        class="input-multiple-markup input border ml-1 single_markup"
                                                        style="width:15%" name="misc_markup_percent"
                                                        id="misc_markup_percent"
-                                                <?php echo (!$is_total_markup) ? 'value="' . $misc_markup_percent . '"' : 'disabled'; ?>>
+                                                    <?php echo (!$is_total_markup) ? 'value="' . $misc_markup_percent . '"' : 'disabled'; ?>>
                                                 <input placeholder="Amount" type="number"
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:20%" name="misc_markup_amount"
                                                        id="misc_markup_amount"
-                                                <?php echo (!$is_total_markup) ? 'value="' . round($misc_markup_percent * $quote->misc_net / 100, 2) . '"' : 'disabled'; ?>>
+                                                    <?php echo (!$is_total_markup) ? 'value="' . round($misc_markup_percent * $quote->misc_net / 100, 2) . '"' : 'disabled'; ?>>
                                             </div>
 
 
@@ -948,7 +1022,7 @@ if (is_sale()) {
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:15%" name="adson_markup_percent"
                                                        id="adson_markup_percent"
-                                                <?php echo (!$is_total_markup) ? 'value="' . $adson_markup_percent . '"' : 'disabled'; ?>>
+                                                    <?php echo (!$is_total_markup) ? 'value="' . $adson_markup_percent . '"' : 'disabled'; ?>>
                                                 <input placeholder="Amount" type="number"
                                                        class="input-multiple-markup input border single_markup"
                                                        style="width:20%" name="adson_markup_amount"
@@ -988,6 +1062,61 @@ if (is_sale()) {
             if ($quote->status == 'Approved' || $quote->status == 'Job'):
             ?>
             <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
+                <div class="intro-y col-span-12 lg:col-span-6 ml-2" id="additional_info_div">
+                    <fieldset class="p-1 mt-2 w-full fieldset_bd_color">
+                        <legend class="quote_legend_spacing">Fence Notes</legend>
+                        <div class="preview" style="padding: 1em;">
+                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">FENCE - Including Fabric,<br>
+                                    Top Rail, Line Posts & Fittings:</label>
+                                <input type="text" id="additional_col_1" name="additional_col_1" class="input border mt-2 flex-1" required=""
+                                       value="<?php echo $quote->additional_col_1; ?>" tabindex="3">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">END POSTS:</label>
+                                <input type="text" id="additional_col_2" name="additional_col_2" class="input border mt-2 flex-1" required=""
+                                       value="<?php echo $quote->additional_col_2; ?>" tabindex="3">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">GATE POSTS:</label>
+                                <input type="text" id="additional_col_3" name="additional_col_3" class="input border mt-2 flex-1" required=""
+                                       value="<?php echo $quote->additional_col_3; ?>" tabindex="3">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">CORNER POSTS:</label>
+                                <input type="text" id="additional_col_4" name="additional_col_4" class="input border mt-2 flex-1" required=""
+                                       value="<?php echo $quote->additional_col_4; ?>" tabindex="3">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">STRAINING POSTS: </label>
+                                <input type="text" id="additional_col_5" name="additional_col_5" class="input border mt-2 flex-1" required=""
+                                       value="<?php echo $quote->additional_col_5; ?>" tabindex="3">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">FITTINGS: </label>
+                                <input type="text" id="additional_col_6" name="additional_col_6" class="input border mt-2 flex-1" required=""
+                                       value="<?php echo $quote->additional_col_6; ?>" tabindex="3">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">GATES: </label>
+                                <input type="text" id="additional_col_7" name="additional_col_7" class="input border mt-2 flex-1" required=""
+                                       value="<?php echo $quote->additional_col_7; ?>" tabindex="3">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                                <p>* Erection of Fence & Gates: All line posts set <b>IN CONCRETE</b></p>
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                                <p>(In normal soil & on cleared line marked by customer with survey bars)</p>
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                                <p>* Terminal posts installed <b>IN CONCRETE</b></p>
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                                <p>( IN NORMAL SOIL & ON CLEARED LINE MARKED BY CUSTOMER WITH SURVEY BARS )</p>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
                 <div class="intro-y col-span-12 lg:col-span-6">
                     <!-- BEGIN: Input -->
                     <div class="intro-y box">
@@ -1056,28 +1185,9 @@ if (is_sale()) {
 
                                 </div>
                             </div>
-                            <div class="source-code hidden">
-                                <button data-target="#copy-input"
-                                        class="copy-code button button--sm border flex items-center text-gray-700">
-                                    <i
-                                            data-feather="file" class="w-4 h-4 mr-2"></i> Copy code
-                                </button>
-
-                            </div>
                         </div>
                     </div>
                     <!-- END: Input -->
-                </div>
-
-                <div class="col-span-12 md:pl-3 md:pr-3" id="address_div_mg">
-                    <div class="preview">
-                        <div class="intro-y flex flex-col sm:flex-row">
-                            <label class="sm:text-left md:mr-5 width6 pt-1 sm:pt-3"> Additional Notes for
-                                Quote</label>
-                            <textarea class="input w-full border mt-2" name="additional_info" id="additional_info"
-                                      placeholder=""><?php echo $quote->additional_info; ?></textarea>
-                        </div>
-                    </div>
                 </div>
                 <?php
                 endif;
@@ -1088,8 +1198,6 @@ if (is_sale()) {
                        value="<?php echo (is_object($opportunity)) ? $opportunity->id : ''; ?>">
                 <input type="hidden" name="customer_id"
                        value="<?php echo (is_object($opportunity)) ? $opportunity->customer_id : ''; ?>">
-                <input type="hidden" name="company_id"
-                       value="<?php echo (is_object($opportunity)) ? $opportunity->company_id : ''; ?>">
                 <input type="hidden" name="quote_id"
                        value="<?php echo (is_object($quote)) ? $quote->id : ''; ?>">
                 <input type="hidden" name="status"
@@ -1109,7 +1217,13 @@ if (is_sale()) {
         <form id="generateForm" action="generate_qa_form" method="get" target="_blank">
             <input type="hidden" name="quote_id"
                    value="<?php echo (is_object($quote)) ? $quote->id : ''; ?>">
-            <textarea name="additional_info" hidden></textarea>
+            <input type="hidden" name="additional_col_1"></input>
+            <input type="hidden" name="additional_col_2"></input>
+            <input type="hidden" name="additional_col_3"></input>
+            <input type="hidden" name="additional_col_4"></input>
+            <input type="hidden" name="additional_col_5"></input>
+            <input type="hidden" name="additional_col_6"></input>
+            <input type="hidden" name="additional_col_7"></input>
         </form>
 
         <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end mt-5">
@@ -1197,10 +1311,22 @@ if (is_sale()) {
                 $(".miscellaneous-item").slideUp();
                 $(".adsOn-item").slideUp();
             }
+            if (is_sale && status == 'New') {
+                var mat_total = $('#material-item-total').find('td').eq(2).html() * 1;
+                $('#sale_quote_table').find('tr').eq(1).children().eq(1).html(mat_total);
+                var labour_total = $('#labour-item-total').find('td').eq(2).html() * 1;
+                $('#sale_quote_table').find('tr').eq(2).children().eq(1).html(labour_total);
+                var mis_total = $('#miscellaneous-item-total').find('td').eq(2).html() * 1;
+                $('#sale_quote_table').find('tr').eq(3).children().eq(1).html(mis_total);
+
+                var addon_total = $('#adsOn-item-total').find('td').eq(2).html() * 1;
+                $('#sale_quote_table').find('tr').eq(4).children().eq(1).html(addon_total);
+                calculate_new_table();
+            }
             if (status == 'Pending') {
 
                 var mat_total = $('#material-item-total').find('td').eq(2).html() * 1;
-                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(mat_total);
+                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(mat_total / 1.32);
                 if (mat_total == 0) {
                     $('#material_markup_percent').attr('readonly', true);
                     $('#material_markup_amount').attr('readonly', true);
@@ -1213,69 +1339,49 @@ if (is_sale()) {
                 var addon_total = $('#adsOn-item-total').find('td').eq(2).html() * 1;
                 $('#final_quote_table').find('tr').eq(4).children().eq(1).html(addon_total);
 
-                if ($('#material_markup_percent').val() == '10' && $('#material_markup_amount').val() == '0') {
-                    var mat_profit = mat_total * 0.1
-                    if (mat_total == 0) {
-                        $('#material_markup_amount').val('');
-                        $('#material_markup_percent').val('');
+                if ($('#total_markup_percent').val() == '10' && $('#total_markup_amount').val() == '0') {
+                    var total_profit = (mat_total + labour_total + mis_total + addon_total) * 0.1;
+                    if (total_profit == 0) {
+                        $('#total_markup_amount').val('');
+                        $('#total_markup_percent').val('');
                     } else {
-                        $('#material_markup_amount').val(Math.round(mat_profit * 100) / 100);
-                    }
-                }
-                if ($('#labor_markup_percent').val() == '10' && $('#labor_markup_amount').val() == '0') {
-                    var labour_profit = labour_total * 0.1
-                    if (labour_total == 0) {
-                        $('labor_markup_percent').val('');
-                        $('labor_markup_amount').val('');
-                    } else {
-                        $('#labor_markup_amount').val(Math.round(labour_profit * 100) / 100)
-                    }
-                }
-                if ($('#misc_markup_percent').val() == '10' && $('#misc_markup_amount').val() == '0') {
-                    var misc_profit = mis_total * 0.1
-                    if (mis_total == 0) {
-                        $('misc_markup_percent').val('');
-                        $('misc_markup_amount').val('');
-                    } else {
-                        $('#misc_markup_amount').val(Math.round(misc_profit * 100) / 100)
-                    }
-                }
-                if ($('#adson_markup_percent').val() == '10' && $('#adson_markup_amount').val() == '0') {
-                    var adson_profit = addon_total * 0.1
-                    if (mis_total == 0) {
-                        $('adson_markup_percent').val('');
-                        $('adson_markup_amount').val('');
-                    } else {
-                        $('#adson_markup_amount').val(Math.round(adson_profit * 100) / 100)
+                        $('#total_markup_amount').val(Math.round(total_profit * 100) / 100);
                     }
                 }
 
                 calculate_sale_table();
             } else if (status == 'Approved') {
-                $('body').find('input').attr('readonly', true);
-                $('body').find('select').attr('disabled', true);
+                $('fieldset').find('input').attr('readonly', true);
+                $('fieldset').find('select').attr('disabled', true);
+                $('#additional_info_div').find('input').attr('readonly', false);
                 $('.delete_detail_row').hide();
                 $('.add_detail_row').hide();
             } else if (status == 'Job') {
                 $('body').find('input').attr('readonly', true);
                 $('body').find('input:checkbox').attr('disabled', true);
                 $('body').find('select').attr('disabled', true);
-                $('body').find('textarea').attr('readonly', true);
                 $('.delete_detail_row').hide();
                 $('.add_detail_row').hide();
             }
         });
         $('#quoteForm').keypress(function (e) {
             var key = e.charCode || e.keyCode || 0;
-            if (key == 13 && !$(document.activeElement).is('textarea')) {
+            if (key == 13) {
                 e.preventDefault();
             }
         });
         $('#generate_qa_form_button').click(function () {
-            $('#generateForm').find('textarea').val($('#additional_info').val());
+
+            $('#generateForm').find('input[name="additional_col_1"]').val($('#additional_col_1').val());
+            $('#generateForm').find('input[name="additional_col_2"]').val($('#additional_col_2').val());
+            $('#generateForm').find('input[name="additional_col_3"]').val($('#additional_col_3').val());
+            $('#generateForm').find('input[name="additional_col_4"]').val($('#additional_col_4').val());
+            $('#generateForm').find('input[name="additional_col_5"]').val($('#additional_col_5').val());
+            $('#generateForm').find('input[name="additional_col_6"]').val($('#additional_col_6').val());
+            $('#generateForm').find('input[name="additional_col_7"]').val($('#additional_col_7').val());
+
             event.preventDefault();
-            // console.log($('#additional_info').val());
-            // return;
+
             $('#generateForm').submit();
         })
         $('#calc_mode').change(function () {
@@ -1347,7 +1453,7 @@ if (is_sale()) {
             var discount_percent = $('input[name="discount_percent"]').val() * 1;
 
 
-            var mat_profit = (mat_cost * material_markup_percent / 100);
+            var mat_profit = (mat_cost * material_markup_percent / 100 + mat_cost * 0.32);
             var labour_profit = (labour_cost * labour_markup_percent / 100);
             var misc_profit = (misc_cost * misc_markup_percent / 100);
             var adson_profit = (adson_cost * adson_markup_percent / 100);
@@ -1397,26 +1503,87 @@ if (is_sale()) {
 
         }
 
+        function calculate_new_table() {
+            var mat_cost = $('#sale_quote_table').find('tr').eq(1).children().eq(1).html() * 1;
+
+            var labour_cost = $('#sale_quote_table').find('tr').eq(2).children().eq(1).html() * 1;
+
+            var misc_cost = $('#sale_quote_table').find('tr').eq(3).children().eq(1).html() * 1;
+
+            var adson_cost = $('#sale_quote_table').find('tr').eq(4).children().eq(1).html() * 1;
+
+            var subtotal_cost1 = mat_cost + labour_cost + misc_cost + adson_cost;
+
+            var discount_percent = $('input[name="discount_percent"]').val() * 1;
+
+            var discount_cost = (subtotal_cost1 * discount_percent / 100);
+
+            var subtotal_cost2 = subtotal_cost1 - discount_cost;
+
+            $('#sale_quote_table').find('tr').eq(5).children().eq(1).html(Math.round(subtotal_cost1 * 100) / 100);
+
+            $('#sale_quote_table').find('tr').eq(6).children().eq(1).html(Math.round(discount_cost * 100) / 100);
+
+            $('#sale_quote_table').find('tr').eq(7).children().eq(1).html(Math.round(subtotal_cost2 * 100) / 100);
+
+            $('#mat_net').val(mat_cost);
+            $('#labour_net').val(labour_cost);
+            $('#misc_net').val(misc_cost);
+            $('#add_on_net').val(adson_cost);
+        }
+
         $(".add-discount").keyup(function () {
             var discount_percent = 0;
             var discount_amount = 0;
-            var sub_total1 = $('#final_quote_table').find('tr').eq(5).children().eq(2).html() * 1;
-            if ($(this).val() < 0) {
-                $(this).val('');
-                showNotification('Markups input can’t be negative values.');
-                $(this).focus();
-                return;
-            }
-            if ($(this).attr('name') == 'discount_percent') {
-                discount_percent = $(this).val() * 1;
-                discount_amount = sub_total1 * discount_percent / 100;
-                $('input[name="discount_amount"]').val(Math.round(discount_amount * 100) / 100);
+            if (status == 'New' && is_sale) {
+                var sub_total1 = $('#sale_quote_table').find('tr').eq(5).children().eq(1).html() * 1;
+                if ($(this).val() < 0) {
+                    $(this).val('');
+                    showNotification('Discount input can’t be negative values.');
+                    $(this).focus();
+                    return;
+                }
+                if ($(this).attr('name') == 'discount_percent') {
+                    if ($(this).val() > 21) {
+                        $(this).val('');
+                        showNotification('Discount input can’t be bigger than 21.');
+                        $(this).focus();
+                        return;
+                    }
+                    discount_percent = $(this).val() * 1;
+                    discount_amount = sub_total1 * discount_percent / 100;
+                    $('input[name="discount_amount"]').val(Math.round(discount_amount * 100) / 100);
+                } else {
+                    discount_amount = $(this).val() * 1;
+                    discount_percent = (discount_amount / sub_total1) * 100;
+                    if (discount_percent > 21) {
+                        $(this).val('');
+                        showNotification('Discount input can’t be bigger than 21.');
+                        $(this).focus();
+                        return;
+                    }
+                    $('input[name="discount_percent"]').val(Math.round(discount_percent * 100) / 100);
+                }
+                calculate_new_table();
             } else {
-                discount_amount = $(this).val() * 1;
-                discount_percent = (discount_amount / sub_total1) * 100;
-                $('input[name="discount_percent"]').val(Math.round(discount_percent * 100) / 100);
+                var sub_total1 = $('#final_quote_table').find('tr').eq(5).children().eq(2).html() * 1;
+                if ($(this).val() < 0) {
+                    $(this).val('');
+                    showNotification('Markups input can’t be negative values.');
+                    $(this).focus();
+                    return;
+                }
+                if ($(this).attr('name') == 'discount_percent') {
+                    discount_percent = $(this).val() * 1;
+                    discount_amount = sub_total1 * discount_percent / 100;
+                    $('input[name="discount_amount"]').val(Math.round(discount_amount * 100) / 100);
+                } else {
+                    discount_amount = $(this).val() * 1;
+                    discount_percent = (discount_amount / sub_total1) * 100;
+                    $('input[name="discount_percent"]').val(Math.round(discount_percent * 100) / 100);
+                }
+                calculate_sale_table();
             }
-            calculate_sale_table();
         });
         $('#total_markup_percent, #total_markup_amount').keyup(function () {
             var total_percent = 0;
@@ -1608,13 +1775,17 @@ if (is_sale()) {
             var total_price = $('#material-item-total').children().eq(2).html() * 1;
             var original_price = $('#material-item-row' + rowId).children().eq(4).html() * 1;
             if (quantity != '') {
-                $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
-                $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit);
+                $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit * 1.32);
+                $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit * 1.32);
             }
             if (status == 'Pending') {
-                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
+                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit * 1.32);
                 calculate_sale_table();
+            } else if (status == 'New' && is_sale) {
+                $('#sale_quote_table').find('tr').eq(1).children().eq(1).html(total_price - original_price + quantity * price_per_unit * 1.32);
+                calculate_new_table();
             }
+
         }
 
         function change_mat_code(rowId) {
@@ -1638,12 +1809,15 @@ if (is_sale()) {
             var original_price = $('#material-item-row' + rowId).children().eq(4).html() * 1;
 
             if (quantity != '') {
-                $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
-                $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit);
+                $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit * 1.32);
+                $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit * 1.32);
             }
             if (status == 'Pending') {
-                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
+                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit * 1.32);
                 calculate_sale_table();
+            } else if (status == 'New' && is_sale) {
+                $('#sale_quote_table').find('tr').eq(1).children().eq(1).html(total_price - original_price + quantity * price_per_unit * 1.32);
+                calculate_new_table();
             }
         }
 
@@ -1662,13 +1836,16 @@ if (is_sale()) {
             var total_quantity = $('#material-item-total').children().eq(1).html() * 1;
             var original_quantity = event.target.oldvalue * 1;
             if (quantity != '' && price_per_unit != '') {
-                $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
-                $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
+                $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit * 1.32);
+                $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit * 1.32)
             }
             $('#material-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
             if (status == 'Pending') {
-                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
+                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit * 1.32);
                 calculate_sale_table();
+            } else if (status == 'New' && is_sale) {
+                $('#sale_quote_table').find('tr').eq(1).children().eq(1).html(total_price - original_price + quantity * price_per_unit * 1.32);
+                calculate_new_table();
             }
         }
 
@@ -1683,6 +1860,9 @@ if (is_sale()) {
             if (status == 'Pending') {
                 $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price);
                 calculate_sale_table();
+            } else if (status == 'New' && is_sale) {
+                $('#sale_quote_table').find('tr').eq(1).children().eq(1).html(total_price - original_price);
+                calculate_new_table();
             }
         }
 
@@ -1764,6 +1944,9 @@ if (is_sale()) {
             if (status == 'Pending') {
                 $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(total_price - original_price + quantity * 250);
                 calculate_sale_table();
+            } else if (status == 'New' && is_sale) {
+                $('#sale_quote_table').find('tr').eq(2).children().eq(1).html(total_price - original_price + quantity * 250);
+                calculate_new_table();
             }
         }
 
@@ -1779,6 +1962,9 @@ if (is_sale()) {
             if (status == 'Pending') {
                 $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(total_price - original_price);
                 calculate_sale_table();
+            } else if (status == 'New' && is_sale) {
+                $('#sale_quote_table').find('tr').eq(2).children().eq(1).html(total_price - original_price);
+                calculate_new_table();
             }
         }
 
@@ -1839,6 +2025,9 @@ if (is_sale()) {
             if (status == 'Pending') {
                 $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
                 calculate_sale_table();
+            } else if (status == 'New' && is_sale) {
+                $('#sale_quote_table').find('tr').eq(3).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
+                calculate_new_table();
             }
         }
 
@@ -1863,6 +2052,9 @@ if (is_sale()) {
             if (status == 'Pending') {
                 $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
                 calculate_sale_table();
+            } else if (status == 'New' && is_sale) {
+                $('#sale_quote_table').find('tr').eq(3).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
+                calculate_new_table();
             }
         }
 
@@ -1877,6 +2069,9 @@ if (is_sale()) {
             if (status == 'Pending') {
                 $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price);
                 calculate_sale_table();
+            } else if (status == 'New' && is_sale) {
+                $('#sale_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price);
+                calculate_new_table();
             }
         }
 
@@ -1936,6 +2131,9 @@ if (is_sale()) {
             if (status == 'Pending') {
                 $('#final_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
                 calculate_sale_table();
+            } else if (status == 'New' && is_sale) {
+                $('#sale_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
+                calculate_new_table();
             }
         }
 
@@ -1960,6 +2158,9 @@ if (is_sale()) {
             if (status == 'Pending') {
                 $('#final_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
                 calculate_sale_table();
+            } else if (status == 'New' && is_sale) {
+                $('#sale_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
+                calculate_new_table();
             }
         }
 
@@ -1976,6 +2177,9 @@ if (is_sale()) {
             if (status == 'Pending') {
                 $('#final_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price);
                 calculate_sale_table();
+            } else if (status == 'New' && is_sale) {
+                $('#sale_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price);
+                calculate_new_table();
             }
         }
 

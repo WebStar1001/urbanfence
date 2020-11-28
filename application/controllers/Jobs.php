@@ -135,6 +135,7 @@ class Jobs extends CI_Controller
         $invoice_number = $this->input->post('invoice_number');
         $payment_amount = $this->input->post('payment_amount');
         $payment_method = $this->input->post('payment_method');
+        $reference = $this->input->post('reference');
         $date = date('Y-m-d');
         $this->db->insert('payments', array(
             'job_id' => $job_id,
@@ -142,7 +143,8 @@ class Jobs extends CI_Controller
             'customer_id' => $customer_id,
             'payment_amount' => $payment_amount,
             'payment_date' => $date,
-            'payment_method' => $payment_method
+            'payment_method' => $payment_method,
+            'reference' => $reference
         ));
         $job = $this->JobModel->getJobByJobID($job_id);
 

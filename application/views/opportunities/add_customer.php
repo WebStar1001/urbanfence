@@ -241,7 +241,7 @@
                     $('#confirm-modal').find('#postalSpan').html(data.postal_code);
                     $('#confirm-modal').modal('show');
                 }else{
-                    showNotification('You can use customer name');
+                    showNotification('Customer is not found in the system');
                 }
             },
             error: function (jqXhr, textStatus, errorMessage) {

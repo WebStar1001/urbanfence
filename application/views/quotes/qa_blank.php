@@ -147,14 +147,6 @@
         </tr>
     </table>
 </div>
-<?php
-$sub_total1 = round($quote->mat_net * $quote->mat_factor + $quote->mat_net * 0.32 + $quote->labour_net * $quote->lab_factor +
-    $quote->ads_on_net * $quote->ads_on_factor + $quote->misc_net * $quote->misc_factor, 2);
-$discount_amount = round($sub_total1 * $quote->discount_set / 100, 2);
-
-$sub_total2 = round($sub_total1 - $discount_amount, 2);
-$total = round($sub_total2 + $quote->hst, 2);
-?>
 <div style="margin-top:10px;">
     <table width="100%" id="detail_table">
         <thead>
@@ -170,34 +162,34 @@ $total = round($sub_total2 + $quote->hst, 2);
                 style="text-align: left;padding-left:20px;vertical-align: middle;font-size:11px!important;">
                 <table cellpadding="0" cellspacing="0" style="padding: 0;border-collapse: separate;border-spacing: 0;">
                     <tr>
-                        <td class="no-border" style="width: 150px; font-weight: bold;">FENCE - Including Fabric,<br>
+                        <td class="no-border" style="width: 150px; font-weight: bold;height:20px;">FENCE - Including Fabric,<br>
                             Top Rail, Line Posts & Fittings:
                         </td>
-                        <td class="no-border" style="width: 150px;"><?php echo $quote->additional_col_1; ?></td>
+                        <td class="no-border" style="width: 150px;height:20px;"></td>
                     </tr>
                     <tr>
                         <td class="no-border" style="font-weight: bold;height: 17px;">END POSTS:</td>
-                        <td class="no-border" style="height: 17px;"><?php echo $quote->additional_col_2; ?></td>
+                        <td class="no-border" style="height: 17px;"></td>
                     </tr>
                     <tr>
                         <td class="no-border" style="font-weight: bold;height: 17px;">GATE POSTS:</td>
-                        <td class="no-border" style="height: 17px;"><?php echo $quote->additional_col_3; ?></td>
+                        <td class="no-border" style="height: 17px;"></td>
                     </tr>
                     <tr>
                         <td class="no-border" style="font-weight: bold;height: 17px;">CORNER POSTS:</td>
-                        <td class="no-border" style="height: 17px;"><?php echo $quote->additional_col_4; ?></td>
+                        <td class="no-border" style="height: 17px;"></td>
                     </tr>
                     <tr>
                         <td class="no-border" style="font-weight: bold;height: 17px;">STRAINING POSTS:</td>
-                        <td class="no-border" style="height: 17px;"><?php echo $quote->additional_col_4; ?></td>
+                        <td class="no-border" style="height: 17px;"></td>
                     </tr>
                     <tr>
                         <td class="no-border" style="font-weight: bold;height: 17px;">FITTINGS:</td>
-                        <td class="no-border" style="height: 17px;"><?php echo $quote->additional_col_4; ?></td>
+                        <td class="no-border" style="height: 17px;"></td>
                     </tr>
                     <tr>
                         <td class="no-border" style="font-weight: bold;height: 17px;">GATES:</td>
-                        <td class="no-border" style="height: 17px;"><?php echo $quote->additional_col_4; ?></td>
+                        <td class="no-border" style="height: 17px;"></td>
                     </tr>
                     <tr>
                         <td class="no-border" colspan="2" style="height: 25px;">
@@ -205,63 +197,61 @@ $total = round($sub_total2 + $quote->hst, 2);
                     </tr>
                     <tr>
                         <td class="no-border" colspan="2" style="height: 15px;">
-                            (In normal soil & on cleared line marked by customer with survey bars)
-                        </td>
+                            (In normal soil & on cleared line marked by customer with survey bars)</td>
                     </tr>
                     <tr>
                         <td class="no-border" colspan="2" style="height: 15px;">
-                            * Terminal posts installed <b>IN CONCRETE</b></td>
+                            * Terminal posts installed  <b>IN CONCRETE</b></td>
                     </tr>
                     <tr>
                         <td class="no-border" colspan="2" style="height: 15px;">
-                            ( IN NORMAL SOIL & ON CLEARED LINE MARKED BY CUSTOMER WITH SURVEY BARS )
-                        </td>
+                            ( IN NORMAL SOIL & ON CLEARED LINE MARKED BY CUSTOMER WITH  SURVEY BARS )</td>
                     </tr>
                 </table>
             <td>Materials</td>
-            <td><?php echo round($quote->mat_net * $quote->mat_factor + $quote->mat_net * 0.32, 2); ?></td>
+            <td></td>
         </tr>
         <tr>
             <td style="height:20px;">Labor</td>
-            <td><?php echo round($quote->labour_net * $quote->lab_factor, 2); ?></td>
+            <td></td>
         </tr>
         <tr>
             <td>Miscellaneous</td>
-            <td><?php echo round($quote->misc_net * $quote->misc_factor, 2); ?></td>
+            <td></td>
         </tr>
         <tr>
             <td>Add-On</td>
-            <td><?php echo round($quote->ads_on_net * $quote->ads_on_factor, 2); ?></td>
+            <td></td>
         </tr>
         <tr>
             <td>Sub Total1</td>
-            <td><?php echo $sub_total1; ?></td>
+            <td></td>
         </tr>
         <?php
         if ($quote->discount_set != 0):
             ?>
             <tr>
                 <td>Discount</td>
-                <td><?php echo $discount_amount; ?></td>
+                <td></td>
             </tr>
             <tr>
                 <td>Sub Total2</td>
-                <td><?php echo $sub_total2; ?></td>
+                <td></td>
             </tr>
         <?php
         endif;
         ?>
         <tr>
             <td>HST</td>
-            <td><?php echo $quote->hst; ?></td>
+            <td></td>
         </tr>
         <tr style="font-weight:bolder;">
             <td>Total</td>
-            <td><?php echo $total; ?></td>
+            <td></td>
         </tr>
         <tr style="font-weight:bolder;">
             <td>G.S.T # 848724076RT0001</td>
-            <td colspan="2">Payment Terms are <?php echo $quote->payment_term; ?></td>
+            <td colspan="2">Payment Terms are: </td>
         </tr>
         </tbody>
     </table>

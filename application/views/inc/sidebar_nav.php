@@ -1,8 +1,18 @@
 <!-- BEGIN: Side Menu -->
 <nav class="side-nav">
     <a href="<?php echo base_url("Dashboard"); ?>" class="intro-x flex items-center pl-5 pt-4">
-        <img alt="Midone Tailwind HTML Admin Template" class="w-7"
-             src="<?php echo base_url(); ?>assets/images/logo.png">
+        <?php if (is_admin()) { ?>
+            <?php if (user_company() == 1) { ?>
+                <img alt="Midone Tailwind HTML Admin Template" class="w-7"
+                     src="<?php echo base_url(); ?>assets/images/logo.png">
+            <?php } elseif (user_company() == 2) { ?>
+                <img alt="Midone Tailwind HTML Admin Template" class="w-7"
+                     src="<?php echo base_url(); ?>assets/images/logo.png">
+            <?php } elseif (user_company() == 3) { ?>
+                <img alt="Midone Tailwind HTML Admin Template" class="w-7"
+                     src="<?php echo base_url(); ?>assets/images/logo.png">
+            <?php }
+        } ?>
         <!-- <span class="hidden xl:block text-white text-lg ml-3"> Mid<span class="font-medium">one</span> </span> -->
     </a>
     <div class="side-nav__devider my-6"></div>

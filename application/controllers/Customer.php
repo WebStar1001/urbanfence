@@ -38,30 +38,30 @@ class Customer extends CI_Controller
         foreach ($customers as $customer) {
             $last_job = $this->CustomerModel->getLastJob($customer->id);
             $last_quote = $this->CustomerModel->getLastQuote($customer->id);
-            if($last_job_type_filter){
-                if($last_job){
-                    if($last_job_type_filter != $last_job->job_type){
+            if ($last_job_type_filter) {
+                if ($last_job) {
+                    if ($last_job_type_filter != $last_job->job_type) {
                         continue;
                     }
-                }else{
+                } else {
                     continue;
                 }
             }
-            if($last_sale_rep_filter){
-                if($last_job){
-                    if($last_sale_rep_filter != $last_job->sale_rep){
+            if ($last_sale_rep_filter) {
+                if ($last_job) {
+                    if ($last_sale_rep_filter != $last_job->sale_rep) {
                         continue;
                     }
-                }else{
+                } else {
                     continue;
                 }
             }
-            if($last_quote_id_filter){
-                if($last_quote){
-                    if($last_quote_id_filter != $last_quote->id){
+            if ($last_quote_id_filter) {
+                if ($last_quote) {
+                    if ($last_quote_id_filter != $last_quote->id) {
                         continue;
                     }
-                }else{
+                } else {
                     continue;
                 }
             }
@@ -81,6 +81,13 @@ class Customer extends CI_Controller
         }
         $data['data'] = $retAry;
         echo json_encode($data);
+    }
+
+    function changeCustomerStatusForJob($customer_id)
+    {
+        $this->db->where('id', $customer_id);
+        $this->db->update('customers', array('status' => 'Customer'));
+        return $customer_id;
     }
 
 }

@@ -34,7 +34,7 @@ class CustomerModel extends CI_Model
         if ($customer_id) {
             $this->db->where('customers.id', $customer_id);
         }
-        if (is_manager()) {
+        if (!is_admin()) {
             $user_company = user_company();
             $this->db->where('customers.company_id', $user_company);
         } else {
@@ -87,4 +87,10 @@ class CustomerModel extends CI_Model
             ->limit(1)->get();
         return $query->row();
     }
+    public function changeCustomerStatus($customer_id, $status){
+        $this->db->set('status', $status);
+        $this->db->where('id', $customer_id);
+        $this->db->update('customers');
+    }
+
 }

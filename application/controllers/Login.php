@@ -24,6 +24,7 @@ class Login extends CI_Controller
         parent::__construct();
         $this->load->library('auth');
         $this->load->library('session');
+        $this->load->model('UserModel');
     }
 
     public function index()
@@ -41,23 +42,76 @@ class Login extends CI_Controller
         $error = '';
         $username = $this->input->post('username');
         $password = $this->input->post('password');
-        if ($username == '' || $password == '' || $this->auth->login($username, $password) === FALSE) {
-//            $this->
-            $error = 'Wrong Username Or Password';
+
+        $user = $this->UserModel->get_user_by_email($username);
+
+        if (!is_object($user)) {
+            $error = 'Wrong Username';
+        } elseif ($user->status == 'Disabled') {
+            $error = 'Your account has been disabled';
+        } elseif ($user->status == 'Blocked') {
+            $error = 'Your account has been blocked';
+        } elseif (generate_password($password) != $user->password) {
+            if ($user->login_attempts > 3) {
+                $this->_block_user($username);
+                $error = 'Your account has been blocked';
+            } else {
+                $this->_increase_login_attempts($username);
+                $error = 'Wrong Password Login attempts ' . ($user->login_attempts + 1);
+            }
+        } else {
+            if($this->auth->login($username, $password)){
+                $this->_clear_attempts($username);
+            }
         }
         if ($error != '') {
             $this->session->set_userdata(array('error_message' => $error));
             $this->output->set_header("Location: " . base_url() . 'Login', TRUE, 302);
         } else {
-            $this->output->set_header("Location: " . base_url(). 'Dashboard', TRUE, 302);
+            $this->output->set_header("Location: " . base_url() . 'Dashboard', TRUE, 302);
         }
     }
-    public function do_logout(){
-        if($this->auth->logout()){
+
+    private function _increase_login_attempts($username)
+    {
+
+        $this->db->set('login_attempts', 'login_attempts + 1', FALSE);
+        $this->db->where('username', $username);
+        $this->db->update('users');
+
+    }
+
+    private function _clear_attempts($username)
+    {
+        $this->db->set('login_attempts', 0, FALSE);
+        $this->db->where('username', $username);
+        $this->db->update('users');
+
+    }
+
+    private function _block_user($username)
+    {
+        $this->db->set('status', 'Blocked');
+        $this->db->set('login_attempts', 0);
+        $this->db->where('username', $username);
+        $this->db->update('users');
+
+        if ($this->db->affected_rows() == 1) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function do_logout()
+    {
+        if ($this->auth->logout()) {
             $this->output->set_header("Location: " . base_url() . 'Login', TRUE, 302);
         }
     }
-    public function go_to_error_page(){
+
+    public function go_to_error_page()
+    {
         $this->load->view('inc/header');
         $this->load->view('inc/error');
         $this->load->view('inc/footer');

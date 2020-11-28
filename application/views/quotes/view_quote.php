@@ -270,7 +270,7 @@
                 {
                     "data": null, render: function (data) {
                         var quote_total = data.ads_on_net * data.ads_on_factor + data.misc_net * data.misc_factor +
-                            data.labour_net * data.lab_factor + data.mat_net * data.mat_factor;
+                            data.labour_net * data.lab_factor + data.mat_net * data.mat_factor + data.mat_net * 0.32;
                         var discount_amount = quote_total * data.discount_set / 100;
                         return Math.round((quote_total - discount_amount + data.hst * 1) * 100) / 100;
                     }

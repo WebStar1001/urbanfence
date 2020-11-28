@@ -80,7 +80,7 @@ class Opportunity extends CI_Controller
     public function create_customer()
     {
         $data = $_POST;
-        if(!is_admin()){
+        if (!is_admin()) {
             $data['company_id'] = user_company();
         }
         $data['created_by'] = user_name();
@@ -97,7 +97,7 @@ class Opportunity extends CI_Controller
         unset($data['customer_id']);
         unset($data['save']);
 
-        if(!is_admin()){
+        if (!is_admin()) {
             $data['company_id'] = user_company();
         }
         if ($customer_id != "") {
@@ -123,9 +123,8 @@ class Opportunity extends CI_Controller
         if ($data['customer_id'] == '') {
             $data['customer_id'] = $data['created_customer_id'];
         }
-        if(!is_admin()){
-            $data['company_id'] = user_company();
-        }
+        $customer = $this->CustomerModel->get_customer($data['customer_id']);
+        $data['company_id'] = $customer->company_id;
         if ($opportunity_id != "") {
             $this->db->where('id', $opportunity_id);
             $this->db->update('opportunities', $data);
@@ -158,6 +157,9 @@ class Opportunity extends CI_Controller
         $this->db->select('customers.id, customers.customer AS text');
         $this->db->from('customers');
         $this->db->like('customer', $search);
+        if(!is_admin()){
+            $this->db->where('company_id', user_company());
+        }
         $query = $this->db->get();
         echo json_encode($query->result());
     }
@@ -168,10 +170,11 @@ class Opportunity extends CI_Controller
         $data = $this->CustomerModel->get_customer($customer_id);
         echo json_encode($data);
     }
+
     public function check_customer()
     {
         $customer = $this->input->get('customer');
-        $data = $this->db->get_where('customers', array('customer'=>$customer))->row();
+        $data = $this->db->get_where('customers', array('customer' => $customer))->row();
         echo json_encode($data);
     }
 }

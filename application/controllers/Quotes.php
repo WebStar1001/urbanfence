@@ -67,7 +67,6 @@ class Quotes extends CI_Controller
         $payment_term = $this->input->post('payment_term');
         $calc_mode = $this->input->post('calc_mode');
         $customer_id = $this->input->post('customer_id');
-        $company_id = $this->input->post('company_id');
         $quote_id = $this->input->post('quote_id');
 
         $mat_category = $this->input->post('material_category');
@@ -83,9 +82,10 @@ class Quotes extends CI_Controller
         $addon_quantity = $this->input->post('addon_quantity');
         $action = $this->input->post('action');
 
-        if(!is_admin()){
-            $company_id = user_company();
-        }
+        $customer = $this->CustomerModel->get_customer($customer_id);
+
+        $company_id = $customer->company_id;
+
         if ($action == 'save_new_quote') {
             $quoteData = array(
                 'company_id' => $company_id,
@@ -94,6 +94,13 @@ class Quotes extends CI_Controller
                 'payment_term' => $payment_term,
                 'calc_mode' => $calc_mode,
             );
+            if (is_sale()) {
+                $quoteData['mat_net'] = $this->input->post('mat_net');
+                $quoteData['labour_net'] = $this->input->post('labour_net');
+                $quoteData['misc_net'] = $this->input->post('misc_net');
+                $quoteData['ads_on_net'] = $this->input->post('add_on_net');
+                $quoteData['discount_set'] = $this->input->post('discount_percent');
+            }
         } elseif ($action == 'submit_new_quote') {
             $quoteData = array(
                 'company_id' => $company_id,
@@ -103,6 +110,13 @@ class Quotes extends CI_Controller
                 'calc_mode' => $calc_mode,
                 'status' => 'Pending'
             );
+            if (is_sale()) {
+                $quoteData['mat_net'] = $this->input->post('mat_net');
+                $quoteData['labour_net'] = $this->input->post('labour_net');
+                $quoteData['misc_net'] = $this->input->post('misc_net');
+                $quoteData['ads_on_net'] = $this->input->post('add_on_net');
+                $quoteData['discount_set'] = $this->input->post('discount_percent');
+            }
         } elseif ($action == 'save_pending_quote') {
             $quoteData = array(
                 'company_id' => $company_id,
@@ -157,7 +171,13 @@ class Quotes extends CI_Controller
 
         } elseif ($action == 'save_approved_quote') {
             $quoteData = array(
-                'additional_info' => $this->input->post('additional_info'),
+                'additional_col_1' => $this->input->post('additional_col_1'),
+                'additional_col_2' => $this->input->post('additional_col_2'),
+                'additional_col_3' => $this->input->post('additional_col_3'),
+                'additional_col_4' => $this->input->post('additional_col_4'),
+                'additional_col_5' => $this->input->post('additional_col_5'),
+                'additional_col_6' => $this->input->post('additional_col_6'),
+                'additional_col_7' => $this->input->post('additional_col_7'),
                 'ia_signed' => $this->input->post('ia_signed'),
                 'form_signed' => $this->input->post('form_signed'),
                 'credit_passed' => $this->input->post('credit_passed')
@@ -166,14 +186,20 @@ class Quotes extends CI_Controller
             $quoteData['status'] = 'Pending';
         } else {
             $quoteData = array(
-                'additional_info' => $this->input->post('additional_info'),
+                'additional_col_1' => $this->input->post('additional_col_1'),
+                'additional_col_2' => $this->input->post('additional_col_2'),
+                'additional_col_3' => $this->input->post('additional_col_3'),
+                'additional_col_4' => $this->input->post('additional_col_4'),
+                'additional_col_5' => $this->input->post('additional_col_5'),
+                'additional_col_6' => $this->input->post('additional_col_6'),
+                'additional_col_7' => $this->input->post('additional_col_7'),
                 'ia_signed' => $this->input->post('ia_signed'),
                 'form_signed' => $this->input->post('form_signed'),
                 'credit_passed' => $this->input->post('credit_passed'),
                 'status' => 'Job'
             );
             $quote = $this->QuoteModel->get_quote($quote_id);
-            $quote_total = $quote->mat_net * $quote->mat_factor + $quote->labour_net * $quote->lab_factor +
+            $quote_total = $quote->mat_net * $quote->mat_factor + $quote->mat_net * 0.32 + $quote->labour_net * $quote->lab_factor +
                 +$quote->misc_net * $quote->misc_factor + $quote->ads_on_net * $quote->ads_on_factor;
             $discount_amount = $quote_total * $quote->discount_set / 100;
             $hst = $quote->hst;
@@ -185,6 +211,7 @@ class Quotes extends CI_Controller
                 'company_id' => $company_id
             );
             $this->db->insert('jobs', $jobData);
+            $this->CustomerModel->changeCustomerStatus($customer_id, 'Customer');
         }
         if ($quote_id) {
             $this->db->where('id', $quote_id);
@@ -201,7 +228,7 @@ class Quotes extends CI_Controller
             if ($mat_category) {
                 if (sizeof($mat_category) > 0) {
                     foreach ($mat_category as $key => $category) {
-                        if($category == '')
+                        if ($category == '')
                             continue;
                         $mat_data = array(
                             'quote_id' => $quote_id,
@@ -217,7 +244,7 @@ class Quotes extends CI_Controller
             if ($labor_type) {
                 if (sizeof($labor_type) > 0) {
                     foreach ($labor_type as $key => $type) {
-                        if($type == '')
+                        if ($type == '')
                             continue;
                         $lab_data = array(
                             'quote_id' => $quote_id,
@@ -232,7 +259,7 @@ class Quotes extends CI_Controller
             if ($misc_desc) {
                 if (sizeof($misc_desc) > 0) {
                     foreach ($misc_desc as $key => $desc) {
-                        if($desc == '')
+                        if ($desc == '')
                             continue;
                         $misc_data = array(
                             'quote_id' => $quote_id,
@@ -248,7 +275,7 @@ class Quotes extends CI_Controller
             if ($addon_desc) {
                 if (sizeof($addon_desc) > 0) {
                     foreach ($addon_desc as $key => $add_desc) {
-                        if($add_desc == '')
+                        if ($add_desc == '')
                             continue;
                         $addon_data = array(
                             'quote_id' => $quote_id,
@@ -301,13 +328,50 @@ class Quotes extends CI_Controller
     public function generate_qa_form()
     {
         $quote_id = $_GET['quote_id'];
-//        $quote_id = 2;
+
+        $data = $_GET;
+
+        unset($data['quote_id']);
+
         $this->db->where('id', $quote_id);
-        $this->db->update('quotes', array('additional_info' => $_GET['additional_info']));
+
+        $this->db->update('quotes', $data);
+
         $quote = $this->QuoteModel->getQuoteDatas($quote_id);
+
         $customer = $this->CustomerModel->get_customer($quote->customer_id);
 
         $this->load->view('quotes/qa_form', array('quote' => $quote, 'customer' => $customer));
+
+        $html = $this->output->get_output();
+
+        // Load pdf library
+        $this->load->library('Pdf');
+
+        // Load HTML content
+        $this->pdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation
+        $this->pdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $this->pdf->render();
+
+        // Output the generated PDF (1 = download and 0 = preview)
+        $this->pdf->stream("welcome.pdf", array("Attachment" => 0));
+        echo 'success';
+        exit;
+    }
+
+    public function generate_qa_blank()
+    {
+        $quote_id = $_GET['quote_id'];
+
+        $quote = $this->QuoteModel->getQuoteDatas($quote_id);
+
+        $customer = $this->CustomerModel->get_customer($quote->customer_id);
+
+        $this->load->view('quotes/qa_blank', array('quote' => $quote, 'customer' => $customer));
 
         $html = $this->output->get_output();
 

@@ -117,31 +117,6 @@
                         <?php } ?>
 
                     </div>
-                    <?php if (is_admin()): ?>
-                        <div class="intro-y flex flex-col sm:flex-row mt-3">
-
-                            <div class="col-span-3">
-                                <div class="sm:w-ful col-span-3 sm:m-auto sm:pl-4 sm:pr-4 mt-3 sm:mt-0 mb-3 sm:mb-0">
-                                    <label class="w-full text-left sm:pt-3">Choose Quoting Company</label>
-                                    <select name="company_id" class="input w-full border flex-1" tabindex="3">
-                                        <?php
-                                        foreach ($companies as $com) {
-                                            if (is_object($opportunity)) {
-                                                if ($opportunity->company_id == $com->id) {
-                                                    echo '<option value="' . $com->id . '" selected>' . $com->name . '</option>';
-                                                } else {
-                                                    echo '<option value="' . $com->id . '">' . $com->name . '</option>';
-                                                }
-                                            } else {
-                                                echo '<option value="' . $com->id . '">' . $com->name . '</option>';
-                                            }
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endif; ?>
                 </div>
             </div>
 

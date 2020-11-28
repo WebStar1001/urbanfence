@@ -82,7 +82,7 @@
                             <option value="Yellow Pages">Yellow Pages</option>
                             <option value="Facebook">Facebook</option>
                             <option value="Google Ad">Google Ad</option>
-                            <option value="Google Ad">Friend's Referral</option>
+                            <option value="Friend's Referral">Friend's Referral</option>
                         </select>
                     </div>
                 </div>
