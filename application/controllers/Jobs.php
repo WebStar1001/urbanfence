@@ -140,7 +140,7 @@ class Jobs extends CI_Controller
 
         $userEmail = $installer->username;
 
-        $subject = 'You have a new opportunity assigned to you';
+        $subject = 'You have a new job assigned to you';
 
         $config = array(
             'mailtype' => 'html',
