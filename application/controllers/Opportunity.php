@@ -148,7 +148,37 @@ class Opportunity extends CI_Controller
         $sale_id = $this->input->post('user_id');
         $this->db->where('id', $oppor_id);
         $this->db->update('opportunities', array('sale_rep' => $sale_id, 'status' => 'Assigned'));
+        $this->send_email_to_sale($oppor_id, $sale_id);
         echo 'Success';
+    }
+
+    private function send_email_to_sale($oppor_id, $sale_id)
+    {
+        $sale = $this->UserModel->get_user($sale_id);
+
+        $userEmail = $sale->username;
+
+        $subject = 'You have a new opportunity assigned to you';
+
+        $config = array(
+            'mailtype' => 'html',
+            'charset' => 'utf-8',
+            'priority' => '1'
+        );
+
+        $this->load->library('email', $config);
+
+        $this->email->set_newline("\r\n");
+
+        $this->email->from('Urbanfence');
+        $this->email->to($userEmail);
+        $this->email->subject($subject);
+
+        $data['oppor'] = $this->OpportunityModel->get_opportunity($oppor_id);
+
+        $body = $this->load->view('emails/assigned_sale.php', $data, TRUE);
+        $this->email->message($body);
+        $this->email->send();
     }
 
     public function get_search_customer()
@@ -157,21 +187,23 @@ class Opportunity extends CI_Controller
         $this->db->select('customers.id, customers.customer AS text');
         $this->db->from('customers');
         $this->db->like('customer', $search);
-        if(!is_admin()){
+        if (!is_admin()) {
             $this->db->where('company_id', user_company());
         }
         $query = $this->db->get();
         echo json_encode($query->result());
     }
 
-    public function get_customer()
+    public
+    function get_customer()
     {
         $customer_id = $this->input->get('customer_id');
         $data = $this->CustomerModel->get_customer($customer_id);
         echo json_encode($data);
     }
 
-    public function check_customer()
+    public
+    function check_customer()
     {
         $customer = $this->input->get('customer');
         $data = $this->db->get_where('customers', array('customer' => $customer))->row();
