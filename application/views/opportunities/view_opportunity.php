@@ -379,7 +379,7 @@
                 if (status == 'New') {
                     $(obj).parent().parent().remove();
                 } else {
-                    // window.location.reload();
+                    window.location.reload();
                 }
             },
             error: function (jqXhr, textStatus, errorMessage) {
