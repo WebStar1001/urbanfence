@@ -219,6 +219,14 @@ class Quotes extends CI_Controller
         } else {
             $this->db->insert('quotes', $quoteData);
             $quote_id = $this->db->insert_id();
+
+            if($action == 'submit_new_quote'){
+                $managers = $this->UserModel->getManagersByCompanyID($company_id);
+
+                foreach ($managers as $manager) {
+                    $this->send_email_to_manager($quote_id, $opportunity_id, $manager);
+                }
+            }
         }
         if ($action == 'save_new_quote' || $action == 'submit_new_quote' || $action == 'save_pending_quote' || $action == 'approve_pending_quote') {
             $this->db->delete('mat_details', array('quote_id' => $quote_id));
@@ -290,6 +298,37 @@ class Quotes extends CI_Controller
             }
         }
         redirect('Quotes/quotes_list');
+    }
+
+    private function send_email_to_manager($quote_id, $oppor_id, $manager)
+    {
+        $userEmail = $manager->username;
+
+        $subject = 'Please note a new Quote has been submitted for approval in the system:';
+
+        $config = array(
+            'mailtype' => 'html',
+            'charset' => 'utf-8',
+            'priority' => '1'
+        );
+
+        $this->load->library('email', $config);
+
+        $this->email->set_newline("\r\n");
+
+        $this->email->from('Urbanfence');
+        $this->email->to($userEmail);
+        $this->email->subject($subject);
+
+        $oppor = $this->OpportunityModel->get_opportunity($oppor_id);
+        $data['manager'] = $manager->name;
+        $data['quote_id'] = $quote_id;
+        $data['customer'] = $oppor->customer_name;
+        $data['job_type'] = $oppor->job_type;
+
+        $body = $this->load->view('emails/to_quote_manager.php', $data, TRUE);
+        $this->email->message($body);
+        $this->email->send();
     }
 
     public function get_quotes()

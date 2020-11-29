@@ -132,8 +132,48 @@ class Opportunity extends CI_Controller
             $data['created_by'] = user_name();
             $data['status'] = 'New';
             $this->db->insert('opportunities', $data);
+
+            $opportunity_id = $this->db->insert_id();
+
+            $managers = $this->UserModel->getManagersByCompanyID($customer->company_id);
+
+            foreach ($managers as $manager) {
+                $this->send_email_to_manager($opportunity_id, $manager);
+            }
         }
+
         redirect('Opportunity/opportunity_list');
+    }
+
+    private function send_email_to_manager($oppor_id, $manager)
+    {
+        $userEmail = $manager->username;
+
+        $subject = 'Please note a new Opportunity has been created in the system and pending for assignment';
+
+        $config = array(
+            'mailtype' => 'html',
+            'charset' => 'utf-8',
+            'priority' => '1'
+        );
+
+        $this->load->library('email', $config);
+
+        $this->email->set_newline("\r\n");
+
+        $this->email->from('Urbanfence');
+        $this->email->to($userEmail);
+        $this->email->subject($subject);
+
+        $oppor = $this->OpportunityModel->get_opportunity($oppor_id);
+        $data['manager'] = $manager->name;
+        $data['oppor_id'] = $oppor_id;
+        $data['customer'] = $oppor->customer_name;
+        $data['job_type'] = $oppor->job_type;
+
+        $body = $this->load->view('emails/assigned_manager.php', $data, TRUE);
+        $this->email->message($body);
+        $this->email->send();
     }
 
     public function get_opportunities()
@@ -158,7 +198,7 @@ class Opportunity extends CI_Controller
 
         $userEmail = $sale->username;
 
-        $subject = 'You have a new opportunity assigned to you';
+        $subject = 'You have a new job assigned to you';
 
         $config = array(
             'mailtype' => 'html',

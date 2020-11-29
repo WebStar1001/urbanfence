@@ -123,9 +123,55 @@ class Jobs extends CI_Controller
         if ($end_date) {
             $status = 'Completed';
         }
+
+        if($installer){
+            $this->send_email_to_installer($job_id, $installer);
+        }
+
         $this->db->where('id', $job_id);
-        $this->db->update('jobs', array('start_date' => $start_date, 'end_date' => $end_date, 'installer' => $installer, 'status' => $status));
+        $this->db->update('jobs', array('start_date' => $start_date, 'end_date' => $end_date,
+            'installer' => $installer, 'status' => $status));
         echo $status;
+    }
+
+    private function send_email_to_installer($job_id, $installer_id)
+    {
+        $installer = $this->UserModel->get_user($installer_id);
+
+        $userEmail = $installer->username;
+
+        $subject = 'You have a new opportunity assigned to you';
+
+        $config = array(
+            'mailtype' => 'html',
+            'charset' => 'utf-8',
+            'priority' => '1'
+        );
+
+        $this->load->library('email', $config);
+
+        $this->email->set_newline("\r\n");
+
+        $this->email->from('Urbanfence');
+        $this->email->to($userEmail);
+        $this->email->subject($subject);
+
+        $data['job_id'] = $job_id;
+
+        $job = $this->JobModel->getJobByJobID($job_id);
+
+        $oppor = $this->OpportunityModel->get_opportunity($job->oppor_id);
+
+        $data['customer'] = $oppor->customer_name;
+
+        $data['installer'] = $installer->name;
+
+        $data['job_type'] = $oppor->job_type;
+
+        $body = $this->load->view('emails/assigned_installer.php', $data, TRUE);
+
+        $this->email->message($body);
+        $this->email->send();
     }
 
     public function create_payment()
