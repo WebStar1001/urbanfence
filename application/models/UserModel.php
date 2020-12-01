@@ -69,7 +69,7 @@ class UserModel extends CI_Model
         return false;
     }
     public function getManagersByCompanyID($company_id){
-        $query = $this->db->get_where('users', array('company_id'=>$company_id, 'access_level'=>'Manager'))->get();
+        $query = $this->db->get_where('users', array('company_id'=>$company_id, 'access_level'=>'Manager'));
         return $query->result();
     }
 }

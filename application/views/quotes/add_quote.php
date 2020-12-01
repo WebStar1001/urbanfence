@@ -335,9 +335,9 @@ if (is_sale()) {
                                                         foreach ($catalogs as $cat) {
                                                             if ($cat->product_category == $mat_info[$i]->mat_category) {
                                                                 if ($cat->mat_code == $mat_info[$i]->code) {
-                                                                    $price_per_unit = $cat->price_per_unit_contractor;
+                                                                    $price_per_unit = round($cat->price_per_unit_contractor * 1.32, 4);
                                                                     if ($quote->calc_mode == 'Tender') {
-                                                                        $price_per_unit = $cat->price_per_unit_tender;
+                                                                        $price_per_unit = round($cat->price_per_unit_tender * 1.32, 4);
                                                                     }
                                                                     echo '<option value="' . $cat->mat_code . '" selected>' . $cat->mat_description . '</option>';
                                                                 } else {
@@ -358,8 +358,8 @@ if (is_sale()) {
                                             </td>
                                             <td class="text-center" <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>>
                                                 <?php
-                                                $mat_total_price += $mat_info[$i]->quantity * $price_per_unit * 1.32;
-                                                echo $price_per_unit * $mat_info[$i]->quantity * 1.32;
+                                                $mat_total_price += $mat_info[$i]->quantity * $price_per_unit;
+                                                echo $price_per_unit * $mat_info[$i]->quantity;
                                                 ?>
                                             </td>
                                             <td class="table-report__action w-56">
@@ -724,103 +724,101 @@ if (is_sale()) {
                     <!-- END: Ads-On -->
                 </div>
             </fieldset>
-            <?php if (is_sale()): ?>
-                <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
-                    <div class="intro-y col-span-12 lg:col-span-6">
-                        <!-- BEGIN: Input -->
-                        <div class="intro-y box">
-                            <div class="p-5" id="input">
-                                <div class="preview">
-                                    <div class="overflow-x-auto">
+            <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
+                <div class="intro-y col-span-12 lg:col-span-6">
+                    <!-- BEGIN: Input -->
+                    <div class="intro-y box">
+                        <div class="p-5" id="input">
+                            <div class="preview">
+                                <div class="overflow-x-auto">
 
-                                        <table class="table" style="" id="sale_quote_table">
-                                            <thead>
-                                            <tr class="bg-gray-200 text-gray-700">
-                                                <th class="whitespace-no-wrap">Items</th>
-                                                <th class="whitespace-no-wrap">Costs</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td class="border-b">Material</td>
-                                                <td class="border-b"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="border-b">Labour</td>
-                                                <td class="border-b"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="border-b">Misc</td>
-                                                <td class="border-b">
-                                            </tr>
-                                            <tr>
-                                                <td class="border-b">Add-On</td>
-                                                <td class="border-b"></td>
-                                            </tr>
-                                            <tr class="sub-total1">
-                                                <td class="border-b">Sub Total 1</td>
-                                                <td class="border-b"></td>
-                                            </tr>
-                                            <tr class="discount-row">
-                                                <td class="border-b">Discount</td>
-                                                <td class="border-b"></td>
-                                            </tr>
-                                            <tr class="sub-total2">
-                                                <td class="border-b">Sub Total 2</td>
-                                                <td class="border-b"></td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-
-
+                                    <table class="table" style="" id="sale_quote_table">
+                                        <thead>
+                                        <tr class="bg-gray-200 text-gray-700">
+                                            <th class="whitespace-no-wrap">Items</th>
+                                            <th class="whitespace-no-wrap">Costs</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td class="border-b">Material</td>
+                                            <td class="border-b"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border-b">Labour</td>
+                                            <td class="border-b"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="border-b">Misc</td>
+                                            <td class="border-b">
+                                        </tr>
+                                        <tr>
+                                            <td class="border-b">Add-On</td>
+                                            <td class="border-b"></td>
+                                        </tr>
+                                        <tr class="sub-total1">
+                                            <td class="border-b">Sub Total 1</td>
+                                            <td class="border-b"></td>
+                                        </tr>
+                                        <tr class="discount-row">
+                                            <td class="border-b">Discount</td>
+                                            <td class="border-b"></td>
+                                        </tr>
+                                        <tr class="sub-total2">
+                                            <td class="border-b">Sub Total 2</td>
+                                            <td class="border-b"></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
-                            </div>
-                        </div>
-                        <!-- END: Input -->
-                    </div>
-                    <div class="intro-y col-span-12 lg:col-span-6">
-                        <!-- BEGIN: Vertical Form -->
-                        <div class="intro-y box">
-                            <div class="p-5" id="vertical-form">
-                                <div class="preview">
-                                    <div class="overflow-x-auto">
-                                        <?php
-                                        $total_amount = '';
-                                        $discount_percent = '';
-                                        $discount_amount = '';
-                                        if (is_object($quote)) {
-                                            $total_amount = $quote->mat_net * $quote->mat_factor + $quote->labour_net * $quote->lab_factor
-                                                + $quote->misc_net * $quote->misc_factor + $quote->ads_on_net * $quote->ads_on_factor;
-                                            $discount_percent = ($quote->discount_set == 0) ? '' : $quote->discount_set;
-                                            $discount_amount = $total_amount * $quote->discount_set / 100;
-                                        }
 
-                                        ?>
-                                        <div class="mt-10">
-                                            <label class="mr-5">Add Discount</label>
-                                            <input type="number"
-                                                   class="add-discount input w-25 border col-span-4"
-                                                   placeholder="%" style="width:15%" name="discount_percent"
-                                                   value="<?php echo $discount_percent; ?>">
-                                            <input placeholder="Amount" type="number"
-                                                   class="add-discount input w-25 border col-span-4"
-                                                   style="width:20%"
-                                                   name="discount_amount"
-                                                   value="<?php echo ($discount_amount == 0) ? '' : round($discount_amount, 2); ?>">
-
-                                        </div>
-
-                                    </div>
-                                </div>
 
                             </div>
                         </div>
-                        <!-- END: Vertical Form -->
                     </div>
+                    <!-- END: Input -->
                 </div>
+                <div class="intro-y col-span-12 lg:col-span-6">
+                    <!-- BEGIN: Vertical Form -->
+                    <div class="intro-y box">
+                        <div class="p-5" id="vertical-form">
+                            <div class="preview">
+                                <div class="overflow-x-auto">
+                                    <?php
+                                    $total_amount = '';
+                                    $discount_percent = '';
+                                    $discount_amount = '';
+                                    if (is_object($quote)) {
+                                        $total_amount = $quote->mat_net * $quote->mat_factor + $quote->labour_net * $quote->lab_factor
+                                            + $quote->misc_net * $quote->misc_factor + $quote->ads_on_net * $quote->ads_on_factor;
+                                        $discount_percent = ($quote->discount_set == 0) ? '' : $quote->discount_set;
+                                        $discount_amount = $total_amount * $quote->discount_set / 100;
+                                    }
+
+                                    ?>
+                                    <div class="mt-10">
+                                        <label class="mr-5">Add Discount</label>
+                                        <input type="number"
+                                               class="add-discount input w-25 border col-span-4"
+                                               placeholder="%" style="width:15%" name="discount_percent"
+                                               value="<?php echo $discount_percent; ?>">
+                                        <input placeholder="Amount" type="number"
+                                               class="add-discount input w-25 border col-span-4"
+                                               style="width:20%"
+                                               name="discount_amount"
+                                               value="<?php echo ($discount_amount == 0) ? '' : round($discount_amount, 2); ?>">
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- END: Vertical Form -->
+                </div>
+            </div>
             <?php
-            endif;
             if (is_object($quote)):
                 if ($quote->status == 'Pending'):
                     ?>
@@ -1062,56 +1060,63 @@ if (is_sale()) {
             if ($quote->status == 'Approved' || $quote->status == 'Job'):
             ?>
             <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
-                <div class="intro-y col-span-12 lg:col-span-6 ml-2" id="additional_info_div">
+                <div class="intro-y col-span-12 lg:col-span-5 ml-2" id="additional_info_div">
                     <fieldset class="p-1 mt-2 w-full fieldset_bd_color">
                         <legend class="quote_legend_spacing">Fence Notes</legend>
                         <div class="preview" style="padding: 1em;">
-                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
                                 <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">FENCE - Including Fabric,<br>
                                     Top Rail, Line Posts & Fittings:</label>
-                                <input type="text" id="additional_col_1" name="additional_col_1" class="input border mt-2 flex-1" required=""
+                                <input type="text" id="additional_col_1" name="additional_col_1"
+                                       class="input w-100 border mt-1" required=""
                                        value="<?php echo $quote->additional_col_1; ?>" tabindex="3">
                             </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
                                 <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">END POSTS:</label>
-                                <input type="text" id="additional_col_2" name="additional_col_2" class="input border mt-2 flex-1" required=""
+                                <input type="text" id="additional_col_2" name="additional_col_2"
+                                       class="input border mt-1" required=""
                                        value="<?php echo $quote->additional_col_2; ?>" tabindex="3">
                             </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
                                 <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">GATE POSTS:</label>
-                                <input type="text" id="additional_col_3" name="additional_col_3" class="input border mt-2 flex-1" required=""
+                                <input type="text" id="additional_col_3" name="additional_col_3"
+                                       class="input border mt-1" required=""
                                        value="<?php echo $quote->additional_col_3; ?>" tabindex="3">
                             </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
                                 <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">CORNER POSTS:</label>
-                                <input type="text" id="additional_col_4" name="additional_col_4" class="input border mt-2 flex-1" required=""
+                                <input type="text" id="additional_col_4" name="additional_col_4"
+                                       class="input border mt-1" required=""
                                        value="<?php echo $quote->additional_col_4; ?>" tabindex="3">
                             </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
                                 <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">STRAINING POSTS: </label>
-                                <input type="text" id="additional_col_5" name="additional_col_5" class="input border mt-2 flex-1" required=""
+                                <input type="text" id="additional_col_5" name="additional_col_5"
+                                       class="input border mt-1" required=""
                                        value="<?php echo $quote->additional_col_5; ?>" tabindex="3">
                             </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
                                 <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">FITTINGS: </label>
-                                <input type="text" id="additional_col_6" name="additional_col_6" class="input border mt-2 flex-1" required=""
+                                <input type="text" id="additional_col_6" name="additional_col_6"
+                                       class="input border mt-1" required=""
                                        value="<?php echo $quote->additional_col_6; ?>" tabindex="3">
                             </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
                                 <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">GATES: </label>
-                                <input type="text" id="additional_col_7" name="additional_col_7" class="input border mt-2 flex-1" required=""
+                                <input type="text" id="additional_col_7" name="additional_col_7"
+                                       class="input border mt-1" required=""
                                        value="<?php echo $quote->additional_col_7; ?>" tabindex="3">
                             </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
                                 <p>* Erection of Fence & Gates: All line posts set <b>IN CONCRETE</b></p>
                             </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
                                 <p>(In normal soil & on cleared line marked by customer with survey bars)</p>
                             </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
                                 <p>* Terminal posts installed <b>IN CONCRETE</b></p>
                             </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-3">
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
                                 <p>( IN NORMAL SOIL & ON CLEARED LINE MARKED BY CUSTOMER WITH SURVEY BARS )</p>
                             </div>
                         </div>
@@ -1311,7 +1316,7 @@ if (is_sale()) {
                 $(".miscellaneous-item").slideUp();
                 $(".adsOn-item").slideUp();
             }
-            if (is_sale && status == 'New') {
+            if (status == 'New') {
                 var mat_total = $('#material-item-total').find('td').eq(2).html() * 1;
                 $('#sale_quote_table').find('tr').eq(1).children().eq(1).html(mat_total);
                 var labour_total = $('#labour-item-total').find('td').eq(2).html() * 1;
@@ -1535,7 +1540,7 @@ if (is_sale()) {
         $(".add-discount").keyup(function () {
             var discount_percent = 0;
             var discount_amount = 0;
-            if (status == 'New' && is_sale) {
+            if (status == 'New') {
                 var sub_total1 = $('#sale_quote_table').find('tr').eq(5).children().eq(1).html() * 1;
                 if ($(this).val() < 0) {
                     $(this).val('');
@@ -1759,9 +1764,9 @@ if (is_sale()) {
                 if (catalogs[j].product_category == selectedCatalog) {
                     if (first == 0) {
                         if ($('#calc_mode').val() == 'Contractor') {
-                            price_per_unit = catalogs[j].price_per_unit_contractor;
+                            price_per_unit = Math.round(catalogs[j].price_per_unit_contractor * 1.32 * 10000) / 10000;
                         } else {
-                            price_per_unit = catalogs[j].price_per_unit_tender;
+                            price_per_unit = Math.round(catalogs[j].price_per_unit_tender * 1.32 * 10000) / 10000;
                         }
                     }
 
@@ -1775,14 +1780,14 @@ if (is_sale()) {
             var total_price = $('#material-item-total').children().eq(2).html() * 1;
             var original_price = $('#material-item-row' + rowId).children().eq(4).html() * 1;
             if (quantity != '') {
-                $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit * 1.32);
-                $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit * 1.32);
+                $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
+                $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit);
             }
             if (status == 'Pending') {
-                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit * 1.32);
+                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
                 calculate_sale_table();
-            } else if (status == 'New' && is_sale) {
-                $('#sale_quote_table').find('tr').eq(1).children().eq(1).html(total_price - original_price + quantity * price_per_unit * 1.32);
+            } else if (status == 'New') {
+                $('#sale_quote_table').find('tr').eq(1).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
                 calculate_new_table();
             }
 
@@ -1796,9 +1801,9 @@ if (is_sale()) {
                 if (catalogs[j].product_category == selected_category) {
                     if (catalogs[j].mat_code == selected_mat_code) {
                         if ($('#calc_mode').val() == 'Contractor') {
-                            price_per_unit = catalogs[j].price_per_unit_contractor;
+                            price_per_unit = Math.round(catalogs[j].price_per_unit_contractor * 1.32 * 10000) / 10000;
                         } else {
-                            price_per_unit = catalogs[j].price_per_unit_tender;
+                            price_per_unit = Math.round(catalogs[j].price_per_unit_tender * 1.32 * 10000) / 10000;
                         }
                     }
                 }
@@ -1809,14 +1814,14 @@ if (is_sale()) {
             var original_price = $('#material-item-row' + rowId).children().eq(4).html() * 1;
 
             if (quantity != '') {
-                $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit * 1.32);
-                $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit * 1.32);
+                $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
+                $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit);
             }
             if (status == 'Pending') {
-                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit * 1.32);
+                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
                 calculate_sale_table();
-            } else if (status == 'New' && is_sale) {
-                $('#sale_quote_table').find('tr').eq(1).children().eq(1).html(total_price - original_price + quantity * price_per_unit * 1.32);
+            } else if (status == 'New') {
+                $('#sale_quote_table').find('tr').eq(1).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
                 calculate_new_table();
             }
         }
@@ -1836,15 +1841,15 @@ if (is_sale()) {
             var total_quantity = $('#material-item-total').children().eq(1).html() * 1;
             var original_quantity = event.target.oldvalue * 1;
             if (quantity != '' && price_per_unit != '') {
-                $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit * 1.32);
-                $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit * 1.32)
+                $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
+                $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
             $('#material-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
             if (status == 'Pending') {
-                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit * 1.32);
+                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
                 calculate_sale_table();
-            } else if (status == 'New' && is_sale) {
-                $('#sale_quote_table').find('tr').eq(1).children().eq(1).html(total_price - original_price + quantity * price_per_unit * 1.32);
+            } else if (status == 'New') {
+                $('#sale_quote_table').find('tr').eq(1).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
                 calculate_new_table();
             }
         }
@@ -1860,7 +1865,7 @@ if (is_sale()) {
             if (status == 'Pending') {
                 $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price);
                 calculate_sale_table();
-            } else if (status == 'New' && is_sale) {
+            } else if (status == 'New') {
                 $('#sale_quote_table').find('tr').eq(1).children().eq(1).html(total_price - original_price);
                 calculate_new_table();
             }
@@ -1944,7 +1949,7 @@ if (is_sale()) {
             if (status == 'Pending') {
                 $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(total_price - original_price + quantity * 250);
                 calculate_sale_table();
-            } else if (status == 'New' && is_sale) {
+            } else if (status == 'New') {
                 $('#sale_quote_table').find('tr').eq(2).children().eq(1).html(total_price - original_price + quantity * 250);
                 calculate_new_table();
             }
@@ -1962,7 +1967,7 @@ if (is_sale()) {
             if (status == 'Pending') {
                 $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(total_price - original_price);
                 calculate_sale_table();
-            } else if (status == 'New' && is_sale) {
+            } else if (status == 'New') {
                 $('#sale_quote_table').find('tr').eq(2).children().eq(1).html(total_price - original_price);
                 calculate_new_table();
             }
@@ -2025,7 +2030,7 @@ if (is_sale()) {
             if (status == 'Pending') {
                 $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
                 calculate_sale_table();
-            } else if (status == 'New' && is_sale) {
+            } else if (status == 'New') {
                 $('#sale_quote_table').find('tr').eq(3).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
                 calculate_new_table();
             }
@@ -2052,7 +2057,7 @@ if (is_sale()) {
             if (status == 'Pending') {
                 $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
                 calculate_sale_table();
-            } else if (status == 'New' && is_sale) {
+            } else if (status == 'New') {
                 $('#sale_quote_table').find('tr').eq(3).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
                 calculate_new_table();
             }
@@ -2069,7 +2074,7 @@ if (is_sale()) {
             if (status == 'Pending') {
                 $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price);
                 calculate_sale_table();
-            } else if (status == 'New' && is_sale) {
+            } else if (status == 'New') {
                 $('#sale_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price);
                 calculate_new_table();
             }
@@ -2131,7 +2136,7 @@ if (is_sale()) {
             if (status == 'Pending') {
                 $('#final_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
                 calculate_sale_table();
-            } else if (status == 'New' && is_sale) {
+            } else if (status == 'New') {
                 $('#sale_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
                 calculate_new_table();
             }
@@ -2158,7 +2163,7 @@ if (is_sale()) {
             if (status == 'Pending') {
                 $('#final_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
                 calculate_sale_table();
-            } else if (status == 'New' && is_sale) {
+            } else if (status == 'New') {
                 $('#sale_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
                 calculate_new_table();
             }
@@ -2177,7 +2182,7 @@ if (is_sale()) {
             if (status == 'Pending') {
                 $('#final_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price);
                 calculate_sale_table();
-            } else if (status == 'New' && is_sale) {
+            } else if (status == 'New') {
                 $('#sale_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price);
                 calculate_new_table();
             }
