@@ -62,7 +62,6 @@ class Jobs extends CI_Controller
         $this->load->view('inc/footer');
     }
 
-
     public function get_jobs()
     {
         $jobs = $this->JobModel->getJobs();
