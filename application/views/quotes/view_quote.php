@@ -71,8 +71,8 @@
                         <select class="input border w-full" id="status">
                             <option value="0">All</option>
                             <option>New</option>
-                            <option <?php echo (isset($_GET['status'])) ? 'selected' : ''; ?>>Pending</option>
-                            <option>Approved</option>
+                            <option>Pending</option>
+                            <option <?php echo (isset($_GET['status'])) ? 'selected' : ''; ?>>Approved</option>
                             <option>Job</option>
                         </select>
                     </div>
@@ -202,8 +202,8 @@
             '<td>' + Math.round(d.labour_net * d.lab_factor) + '</td>' +
             '<td style="font-weight: bold">HST:</td>' +
             '<td>' + d.hst + '</td>' +
-            '<td style="font-weight: bold">Site Desc:</td>' +
-            '<td>' + d.site_desc + '</td>' +
+            '<td style="font-weight: bold">Oppor. ID:</td>' +
+            '<td>' + d.oppor_id + '</td>' +
             '</tr>' +
             '<tr>' +
             '<td style="font-weight: bold">MISC Total:</td>' +
@@ -216,8 +216,6 @@
             '<tr>' +
             '<td style="font-weight: bold">Add-On Total:</td>' +
             '<td>' + Math.round(d.ads_on_net * d.ads_on_factor) + '</td>' +
-            '<td style="font-weight: bold">Oppor. ID:</td>' +
-            '<td>' + d.oppor_id + '</td>' +
             '<td style="font-weight: bold;' + hide_filed + '">Quoting Company:</td>' +
             '<td style="' + hide_filed + '">' + d.company + '</td>' +
             '</tr>' +
@@ -277,8 +275,8 @@
                 },
                 {
                     "data": null, render: function (data) {
-                        if (is_sale && data.status == 'Pending') {
-                            return "";
+                        if (is_sale && (data.status == 'Approved' || data.status == 'Job')) {
+                            return '';
                         } else {
                             return "<a href='<?php echo base_url('Quotes/add_quote?quote_id=');?>" + data.id + "'><i class='fa fa-pencil' aria-hidden='true'></i></a>"
                         }

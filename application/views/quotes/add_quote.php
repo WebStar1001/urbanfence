@@ -120,6 +120,10 @@
         height: 45px;
     }
 
+    #small_quote_table tbody tr {
+        height: 30px;
+    }
+
     tbody tr select {
         height: auto;;
     }
@@ -724,420 +728,856 @@ if (is_sale()) {
                     <!-- END: Ads-On -->
                 </div>
             </fieldset>
-            <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
-                <div class="intro-y col-span-12 lg:col-span-6">
-                    <!-- BEGIN: Input -->
-                    <div class="intro-y box">
-                        <div class="p-5" id="input">
-                            <div class="preview">
-                                <div class="overflow-x-auto">
+            <?php
+            if ((is_sale() && is_object($quote) && $quote->status == 'New') || (is_sale() && !is_object($quote)) || (is_object($quote) && $quote->status == 'Pending' && !is_sale())):
+                ?>
+                <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
+                    <div class="intro-y col-span-12 lg:col-span-6">
+                        <!-- BEGIN: Input -->
+                        <div class="intro-y box">
+                            <div class="p-5" id="input">
+                                <div class="preview">
+                                    <div class="overflow-x-auto">
 
-                                    <table class="table" style="" id="sale_quote_table">
-                                        <thead>
-                                        <tr class="bg-gray-200 text-gray-700">
-                                            <th class="whitespace-no-wrap">Items</th>
-                                            <th class="whitespace-no-wrap">Costs</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td class="border-b">Material</td>
-                                            <td class="border-b"></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="border-b">Labour</td>
-                                            <td class="border-b"></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="border-b">Misc</td>
-                                            <td class="border-b">
-                                        </tr>
-                                        <tr>
-                                            <td class="border-b">Add-On</td>
-                                            <td class="border-b"></td>
-                                        </tr>
-                                        <tr class="sub-total1">
-                                            <td class="border-b">Sub Total 1</td>
-                                            <td class="border-b"></td>
-                                        </tr>
-                                        <tr class="discount-row">
-                                            <td class="border-b">Discount</td>
-                                            <td class="border-b"></td>
-                                        </tr>
-                                        <tr class="sub-total2">
-                                            <td class="border-b">Sub Total 2</td>
-                                            <td class="border-b"></td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-
-                            </div>
-                        </div>
-                    </div>
-                    <!-- END: Input -->
-                </div>
-                <div class="intro-y col-span-12 lg:col-span-6">
-                    <!-- BEGIN: Vertical Form -->
-                    <div class="intro-y box">
-                        <div class="p-5" id="vertical-form">
-                            <div class="preview">
-                                <div class="overflow-x-auto">
-                                    <?php
-                                    $total_amount = '';
-                                    $discount_percent = '';
-                                    $discount_amount = '';
-                                    if (is_object($quote)) {
-                                        $total_amount = $quote->mat_net * $quote->mat_factor + $quote->labour_net * $quote->lab_factor
-                                            + $quote->misc_net * $quote->misc_factor + $quote->ads_on_net * $quote->ads_on_factor;
-                                        $discount_percent = ($quote->discount_set == 0) ? '' : $quote->discount_set;
-                                        $discount_amount = $total_amount * $quote->discount_set / 100;
-                                    }
-
-                                    ?>
-                                    <div class="mt-10">
-                                        <label class="mr-5">Add Discount</label>
-                                        <input type="number"
-                                               class="add-discount input w-25 border col-span-4"
-                                               placeholder="%" style="width:15%" name="discount_percent"
-                                               value="<?php echo $discount_percent; ?>">
-                                        <input placeholder="Amount" type="number"
-                                               class="add-discount input w-25 border col-span-4"
-                                               style="width:20%"
-                                               name="discount_amount"
-                                               value="<?php echo ($discount_amount == 0) ? '' : round($discount_amount, 2); ?>">
-
+                                        <table class="table" style="" id="final_quote_table">
+                                            <thead>
+                                            <tr class="bg-gray-200 text-gray-700">
+                                                <th class="whitespace-no-wrap">Items</th>
+                                                <th class="whitespace-no-wrap">Costs</th>
+                                                <th class="whitespace-no-wrap">Selling Numbers</th>
+                                                <th class="whitespace-no-wrap">Profit</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td class="border-b">Material</td>
+                                                <td class="border-b"><a></a>
+                                                </td>
+                                                <td class="border-b"></td>
+                                                <td class="border-b"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border-b">Labour</td>
+                                                <td class="border-b"><a></a>
+                                                </td>
+                                                <td class="border-b"></td>
+                                                <td class="border-b"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border-b">Misc</td>
+                                                <td class="border-b"><a></a>
+                                                <td class="border-b"></td>
+                                                <td class="border-b"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border-b">Add-On</td>
+                                                <td class="border-b"></td>
+                                                <td class="border-b"></td>
+                                                <td class="border-b"></td>
+                                            </tr>
+                                            <tr class="sub-total1">
+                                                <td class="border-b">Sub Total 1</td>
+                                                <td class="border-b"></td>
+                                                <td class="border-b"></td>
+                                                <td class="border-b"></td>
+                                            </tr>
+                                            <tr class="discount-row">
+                                                <td class="border-b">Discount</td>
+                                                <td class="border-b"></td>
+                                                <td class="border-b"></td>
+                                                <td class="border-b"></td>
+                                            </tr>
+                                            <tr class="sub-total2">
+                                                <td class="border-b">Sub Total 2</td>
+                                                <td class="border-b"></td>
+                                                <td class="border-b"></td>
+                                                <td class="border-b"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border-b">HST</td>
+                                                <td class="border-b">13%</td>
+                                                <td class="border-b"></td>
+                                                <td class="border-b"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border-b">Total</td>
+                                                <td class="border-b"></td>
+                                                <td class="border-b"></td>
+                                                <td class="border-b"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
 
+
+                                </div>
+                                <div class="source-code hidden">
+                                    <button data-target="#copy-input"
+                                            class="copy-code button button--sm border flex items-center text-gray-700">
+                                        <i
+                                                data-feather="file" class="w-4 h-4 mr-2"></i> Copy code
+                                    </button>
+
                                 </div>
                             </div>
-
                         </div>
+                        <!-- END: Input -->
                     </div>
-                    <!-- END: Vertical Form -->
+
+                    <div class="intro-y col-span-12 lg:col-span-6">
+                        <!-- BEGIN: Vertical Form -->
+                        <div class="intro-y box">
+                            <div class="p-5" id="vertical-form">
+                                <div class="preview">
+                                    <div class="overflow-x-auto">
+                                        <div class="mt-1 mb-5" style="text-align-last: end">
+                                            <label class="float-left" style="margin-right: 8px;">Set Markup
+                                                rate</label>
+                                            <?php
+                                            $material_markup_percent = (is_object($quote) && $quote->mat_factor != 0) ? ($quote->mat_factor - 1) * 100 : '';
+                                            $labor_markup_percent = (is_object($quote) && $quote->lab_factor != 0) ? ($quote->lab_factor - 1) * 100 : '';
+                                            $misc_markup_percent = (is_object($quote) && $quote->misc_factor != 0) ? ($quote->misc_factor - 1) * 100 : '';
+                                            $adson_markup_percent = (is_object($quote) && $quote->ads_on_factor != 0) ? ($quote->ads_on_factor - 1) * 100 : '';
+
+                                            $total_amount = (is_object($quote)) ? $quote->mat_net * $quote->mat_factor + $quote->labour_net * $quote->lab_factor
+                                                + $quote->misc_net * $quote->misc_factor + $quote->ads_on_net * $quote->ads_on_factor : 0;
+
+                                            $total_markup_amount = (is_object($quote)) ? $total_amount - $quote->mat_net - $quote->labour_net - $quote->misc_net - $quote->ads_on_net : 0;
+
+                                            $is_total_markup = ((is_object($quote)) && $quote->mat_factor == $quote->lab_factor && $quote->mat_factor == $quote->misc_factor
+                                                && $quote->mat_factor == $quote->ads_on_factor); ?>
+                                            <input type="radio" class="input border mr-2 float-left set_markup"
+                                                   id="horizontal-radio-chris-evans"
+                                                   name="horizontal_radio_button" <?php echo ($is_total_markup) ? 'checked' : ''; ?>>
+                                            <label class="cursor-pointer select-none float-left"
+                                                   for="horizontal-radio-chris-evans">Total Markup</label>
+
+                                            <input type="number"
+                                                   class="input-total-markup input border"
+                                                   placeholder="%" style="width:15%" name="total_markup_percent"
+                                                <?php echo ($is_total_markup) ? 'value="' . (($material_markup_percent != 0) ? $material_markup_percent : 10) . '"' : 'disabled'; ?>
+                                                   id="total_markup_percent"/>
+                                            <input type="number"
+                                                   class="input-total-markup input border"
+                                                   placeholder="Amount" style="width:20%" name="total_markup_amount"
+                                                <?php echo ($is_total_markup) ? 'value="' . $total_markup_amount . '"' : 'disabled'; ?>
+                                                   id="total_markup_amount"/>
+                                        </div>
+
+
+                                        <div class="mt-1 mb-5" style="display: inline-block;">
+                                            <label class="float-left"
+                                                   style="margin-right: 8px; visibility: hidden;">Set
+                                                Markup rate</label>
+                                            <input type="radio" class="input border mr-2 float-left set_markup"
+                                                   id="horizontal-radio-chris-evans2"
+                                                   name="horizontal_radio_button" <?php echo ($is_total_markup) ? '' : 'checked'; ?>>
+                                            <label class="cursor-pointer select-none mr-2 float-left"
+                                                   for="horizontal-radio-chris-evans2">Multiple Markups</label>
+                                        </div>
+
+                                        <div class="mt-1 mb-5 " style="text-align-last: end;">
+
+                                            <label class="mr-5">Material Markup</label>
+                                            <input placeholder="%" type="number"
+                                                   class="input-multiple-markup input border single_markup"
+                                                   style="width:15%" name="material_markup_percent"
+                                                   id="material_markup_percent"
+                                                <?php echo (!$is_total_markup) ? 'value="' . $material_markup_percent . '"' : 'disabled'; ?>/>
+                                            <input placeholder="Amount" type="number"
+                                                   class="input-multiple-markup input border single_markup"
+                                                   style="width:20%" name="material_markup_amount"
+                                                   id="material_markup_amount"
+                                                <?php if ($is_total_markup) {
+                                                    echo 'disabled';
+                                                } elseif (is_object($quote)) {
+                                                    echo 'value="' . round($material_markup_percent * $quote->mat_net / 100, 2) . '"';
+                                                }
+                                                ?>
+                                            />
+                                        </div>
+
+                                        <div class="mt-1 mb-5 " style="text-align-last: end;">
+
+                                            <label class="mr-5">Labor Markup</label>
+                                            <input placeholder="%" type="number"
+                                                   class="input-multiple-markup input border single_markup"
+                                                   style="width:15%" name="labor_markup_percent"
+                                                   id="labor_markup_percent"
+                                                <?php echo (!$is_total_markup) ? 'value="' . $labor_markup_percent . '"' : 'disabled'; ?>>
+                                            <input placeholder="Amount" type="number"
+                                                   class="input-multiple-markup input border single_markup"
+                                                   style="width:20%" name="labor_markup_amount"
+                                                   id="labor_markup_amount"
+                                                <?php if ($is_total_markup) {
+                                                    echo 'disabled';
+                                                } elseif (is_object($quote)) {
+                                                    echo 'value="' . round($labor_markup_percent * $quote->labour_net / 100, 2) . '"';
+                                                }
+                                                ?>
+                                            />
+                                        </div>
+
+
+                                        <div class="mt-1 mb-5" style="text-align-last: end;">
+                                            <label class=" mr-5">Misc Markup</label>
+                                            <input type="number" placeholder="%"
+                                                   class="input-multiple-markup input border ml-1 single_markup"
+                                                   style="width:15%" name="misc_markup_percent"
+                                                   id="misc_markup_percent"
+                                                <?php echo (!$is_total_markup) ? 'value="' . $misc_markup_percent . '"' : 'disabled'; ?>>
+                                            <input placeholder="Amount" type="number"
+                                                   class="input-multiple-markup input border single_markup"
+                                                   style="width:20%" name="misc_markup_amount"
+                                                   id="misc_markup_amount"
+                                                <?php if ($is_total_markup) {
+                                                    echo 'disabled';
+                                                } elseif (is_object($quote)) {
+                                                    echo 'value="' . round($misc_markup_percent * $quote->misc_net / 100, 2) . '"';
+                                                }
+                                                ?>
+                                            />
+                                        </div>
+
+
+                                        <div class="mt-1 mb-5" style="text-align-last: end;">
+                                            <label class=" mr-5">Add-On Markup</label>
+                                            <input placeholder="%" type="number"
+                                                   class="input-multiple-markup input border single_markup"
+                                                   style="width:15%" name="adson_markup_percent"
+                                                   id="adson_markup_percent"
+                                                <?php echo (!$is_total_markup) ? 'value="' . $adson_markup_percent . '"' : 'disabled'; ?>>
+                                            <input placeholder="Amount" type="number"
+                                                   class="input-multiple-markup input border single_markup"
+                                                   style="width:20%" name="adson_markup_amount"
+                                                   id="adson_markup_amount"
+                                                <?php if ($is_total_markup) {
+                                                    echo 'disabled';
+                                                } elseif (is_object($quote)) {
+                                                    echo 'value="' . round($adson_markup_percent * $quote->ads_on_net / 100, 2) . '"';
+                                                }
+                                                ?>
+                                            />
+                                        </div>
+                                        <div class="mt-10">
+                                            <?php
+
+                                            $discount_amount = (is_object($quote)) ? round($total_amount * $quote->discount_set / 100, 2) : '';
+                                            $discount_percent = (is_object($quote)) ? $quote->discount_set : '';
+                                            ?>
+                                            <label class="mr-5">Add Discount</label>
+                                            <input type="number"
+                                                   class="add-discount input w-25 border col-span-4"
+                                                   placeholder="%" style="width:15%" name="discount_percent"
+                                                   value="<?php echo $discount_percent; ?>">
+                                            <input placeholder="Amount" type="number"
+                                                   class="add-discount input w-25 border col-span-4"
+                                                   style="width:20%"
+                                                   name="discount_amount"
+                                                   value="<?php echo $discount_amount; ?>">
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- END: Vertical Form -->
+                    </div>
                 </div>
-            </div>
             <?php
-            if (is_object($quote)):
-                if ($quote->status == 'Pending'):
-                    ?>
+            endif;
+            if ((is_sale() && (is_object($quote) && $quote->status == 'Pending')) || (!is_sale() && $quote->status == 'Approved')):
+                ?>
+                <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
+                    <div class="intro-y col-span-12 lg:col-span-6">
+                        <!-- BEGIN: Input -->
+                        <div class="intro-y box">
+                            <div class="p-5" id="input">
+                                <div class="preview">
+                                    <div class="overflow-x-auto">
+
+                                        <table class="table" style="text-align: center;" id="small_quote_table">
+                                            <thead>
+                                            <tr class="bg-gray-200 text-gray-700">
+                                                <th class="whitespace-no-wrap">Items</th>
+                                                <th class="whitespace-no-wrap">Costs</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td class="border-b">Material</td>
+                                                <td class="border-b"><a></a></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border-b">Labour</td>
+                                                <td class="border-b"><a></a></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border-b">Misc</td>
+                                                <td class="border-b"><a></a></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border-b">Add-On</td>
+                                                <td class="border-b"></td>
+                                            </tr>
+                                            <tr class="sub-total1">
+                                                <td class="border-b">Sub Total 1</td>
+                                                <td class="border-b"></td>
+                                            </tr>
+                                            <tr class="discount-row">
+                                                <td class="border-b">Discount (<span
+                                                            id="discount_span"><?php echo ($quote->discount_set == 0) ? '' : $quote->discount_set; ?></span>%)
+                                                </td>
+                                                <td class="border-b"></td>
+                                            </tr>
+                                            <tr class="sub-total2">
+                                                <td class="border-b">Sub Total 2</td>
+                                                <td class="border-b"></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border-b">HST</td>
+                                                <td class="border-b">13%</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="border-b">Total</td>
+                                                <td class="border-b"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
 
 
-                    <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
-                        <div class="intro-y col-span-12 lg:col-span-6">
-                            <!-- BEGIN: Input -->
+                                </div>
+
+                            </div>
+                        </div>
+                        <?php if ($opportunity->job_type == 'New Fence' || $opportunity->job_type == 'New Fence and Gate c/w Operator') { ?>
                             <div class="intro-y box">
                                 <div class="p-5" id="input">
                                     <div class="preview">
-                                        <div class="overflow-x-auto">
-
-                                            <table class="table" style="" id="final_quote_table">
-                                                <thead>
-                                                <tr class="bg-gray-200 text-gray-700">
-                                                    <th class="whitespace-no-wrap">Items</th>
-                                                    <th class="whitespace-no-wrap">Costs</th>
-                                                    <th class="whitespace-no-wrap">Selling Numbers</th>
-                                                    <th class="whitespace-no-wrap">Profit</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td class="border-b">Material</td>
-                                                    <td class="border-b"><a></a>
-                                                    </td>
-                                                    <td class="border-b"></td>
-                                                    <td class="border-b"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="border-b">Labour</td>
-                                                    <td class="border-b"><a></a>
-                                                    </td>
-                                                    <td class="border-b"></td>
-                                                    <td class="border-b"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="border-b">Misc</td>
-                                                    <td class="border-b"><a></a>
-                                                    <td class="border-b"></td>
-                                                    <td class="border-b"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="border-b">Add-On</td>
-                                                    <td class="border-b"></td>
-                                                    <td class="border-b"></td>
-                                                    <td class="border-b"></td>
-                                                </tr>
-                                                <tr class="sub-total1">
-                                                    <td class="border-b">Sub Total 1</td>
-                                                    <td class="border-b"></td>
-                                                    <td class="border-b"></td>
-                                                    <td class="border-b"></td>
-                                                </tr>
-                                                <tr class="discount-row">
-                                                    <td class="border-b">Discount</td>
-                                                    <td class="border-b">` + discount_percent + `%</td>
-                                                    <td class="border-b">` + discount_amount + `</td>
-                                                    <td class="border-b"></td>
-                                                </tr>
-                                                <tr class="sub-total2">
-                                                    <td class="border-b">Sub Total 2</td>
-                                                    <td class="border-b"></td>
-                                                    <td class="border-b">` + (sub_total1 - discount_amount) + `</td>
-                                                    <td class="border-b"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="border-b">HST</td>
-                                                    <td class="border-b">13%</td>
-                                                    <td class="border-b"></td>
-                                                    <td class="border-b"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="border-b">Total</td>
-                                                    <td class="border-b"></td>
-                                                    <td class="border-b"></td>
-                                                    <td class="border-b"></td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                        <div>
+                                            <div style="width: 40%;display: inline-block;">
+                                                <a class="button bg-gray-200 text-gray-600 mr-5"
+                                                   href="generate_ia?quote_id=<?php echo $quote->id; ?>" target="_blank"
+                                                   style="float: inherit;">
+                                                    Generate IA
+                                                </a>
+                                            </div>
+                                            <div style="width: 50%;display: inline;">
+                                                <input type="checkbox" class="input border  mr-2" id="ia_signed"
+                                                       name="ia_signed"
+                                                       value="1" <?php echo ($quote->ia_signed == 1) ? 'checked' : ''; ?>><label>IA
+                                                    is
+                                                    signed</label>
+                                            </div>
                                         </div>
+                                        <div class="mt-5">
+                                            <div style="width: 40%;display: inline-block;">
+                                                <button class="button bg-gray-200 text-gray-600" style="float: inherit;"
+                                                        id="generate_qa_form_button" target="_blank"
+                                                        onclick="generate_form();">
+                                                    Generate Quote Form
+                                                </button>
+                                            </div>
+                                            <div style="width: 50%;display: inline;">
+                                                <input type="checkbox" class="input border mr-2" id="form_signed"
+                                                       name="form_signed"
+                                                       value="1" <?php echo ($quote->form_signed == 1) ? 'checked' : ''; ?>><label>Quote
+                                                    Form is
+                                                    signed</label>
+                                            </div>
+                                        </div>
+                                        <div class="mt-5">
+                                            <div style="width: 40%;display: inline-block;visibility: hidden;">
+                                                <a class="button bg-gray-200 text-gray-600" style="float: inherit;"
+                                                   href="generate_qa_blank?quote_id=<?php echo $quote->id; ?>"
+                                                   target="_blank">
+                                                    Generate
+                                                    Blank Form
+                                                </a>
+                                            </div>
+                                            <div style="width: 50%;display: inline;">
+                                                <input type="checkbox" class="input border" id="credit_passed"
+                                                       name="credit_passed"
+                                                       value="1" <?php echo ($quote->credit_passed == 1) ? 'checked' : ''; ?>>
+                                                <label class="cursor-pointer select-none" for="credit_passed"
+                                                       style="width: auto;">Customer passed Credit-Check</label>
+                                            </div>
 
-
-                                    </div>
-                                    <div class="source-code hidden">
-                                        <button data-target="#copy-input"
-                                                class="copy-code button button--sm border flex items-center text-gray-700">
-                                            <i
-                                                    data-feather="file" class="w-4 h-4 mr-2"></i> Copy code
-                                        </button>
-
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- END: Input -->
+                            <?php
+                        } ?>
+                        <!-- END: Input -->
+                    </div>
+                    <div class="intro-y col-span-12 lg:col-span-6">
+                        <div class="intro-y col-span-12 lg:col-span-5 ml-2" id="additional_info_div">
+                            <fieldset class="p-1 mt-2 w-full fieldset_bd_color">
+                                <legend class="quote_legend_spacing">Fence Notes</legend>
+                                <?php if ($opportunity->job_type == 'New Fence' || $opportunity->job_type == 'New Fence and Gate c/w Operator') { ?>
+                                    <div class="preview" style="padding: 1em;">
+                                        <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                            <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">FENCE - Including
+                                                Fabric,<br>
+                                                Top Rail, Line Posts & Fittings:</label>
+                                            <input type="text" id="additional_col_1" name="additional_col_1"
+                                                   class="input w-100 border mt-1" required=""
+                                                   value="<?php echo $quote->additional_col_1; ?>" tabindex="1">
+                                        </div>
+                                        <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                            <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">END POSTS:</label>
+                                            <input type="text" id="additional_col_2" name="additional_col_2"
+                                                   class="input border mt-1" required=""
+                                                   value="<?php echo $quote->additional_col_2; ?>" tabindex="2">
+                                        </div>
+                                        <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                            <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">GATE
+                                                POSTS:</label>
+                                            <input type="text" id="additional_col_3" name="additional_col_3"
+                                                   class="input border mt-1" required=""
+                                                   value="<?php echo $quote->additional_col_3; ?>" tabindex="3">
+                                        </div>
+                                        <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                            <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">CORNER
+                                                POSTS:</label>
+                                            <input type="text" id="additional_col_4" name="additional_col_4"
+                                                   class="input border mt-1" required=""
+                                                   value="<?php echo $quote->additional_col_4; ?>" tabindex="4">
+                                        </div>
+                                        <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                            <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">STRAINING
+                                                POSTS: </label>
+                                            <input type="text" id="additional_col_5" name="additional_col_5"
+                                                   class="input border mt-1" required=""
+                                                   value="<?php echo $quote->additional_col_5; ?>" tabindex="5">
+                                        </div>
+                                        <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                            <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">FITTINGS: </label>
+                                            <input type="text" id="additional_col_6" name="additional_col_6"
+                                                   class="input border mt-1" required=""
+                                                   value="<?php echo $quote->additional_col_6; ?>" tabindex="6">
+                                        </div>
+                                        <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                            <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">GATES: </label>
+                                            <input type="text" id="additional_col_7" name="additional_col_7"
+                                                   class="input border mt-1" required=""
+                                                   value="<?php echo $quote->additional_col_7; ?>" tabindex="7"/>
+                                        </div>
+                                        <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                            <p>* Erection of Fence & Gates: All line posts set
+                                                <select name="additional_select_1" class="input border" tabindex="8">
+                                                    <option <?php echo ($quote->additional_select_1 == 'IN CONCRETE') ? 'selected' : ''; ?>>
+                                                        IN CONCRETE
+                                                    </option>
+                                                    <option <?php echo ($quote->additional_select_1 == 'ON FLANGES') ? 'selected' : ''; ?>>
+                                                        ON FLANGES
+                                                    </option>
+                                                    <option <?php echo ($quote->additional_select_1 == 'COREDRILLED') ? 'selected' : ''; ?>>
+                                                        COREDRILLED
+                                                    </option>
+                                                </select>
+                                            </p>
+                                        </div>
+                                        <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                            <p>(In normal soil & on cleared line marked by customer with survey
+                                                bars)</p>
+                                        </div>
+                                        <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                            <p>* Terminal posts installed
+                                                <select name="additional_select_2" class="input border" tabindex="9">
+                                                    <option <?php echo ($quote->additional_select_1 == 'IN CONCRETE') ? 'selected' : ''; ?>>
+                                                        IN CONCRETE
+                                                    </option>
+                                                    <option <?php echo ($quote->additional_select_1 == 'ON FLANGES') ? 'selected' : ''; ?>>
+                                                        ON FLANGES
+                                                    </option>
+                                                    <option <?php echo ($quote->additional_select_1 == 'COREDRILLED') ? 'selected' : ''; ?>>
+                                                        COREDRILLED
+                                                    </option>
+                                                </select></p>
+                                        </div>
+                                        <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                            <p>( IN NORMAL SOIL & ON CLEARED LINE MARKED BY CUSTOMER WITH SURVEY BARS
+                                                )</p>
+                                        </div>
+                                    </div>
+                                    <?php
+                                } else { ?>
+                                    <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                        <textarea id="additional_notes" name="additional_notes" style="width: 100%"
+                                                  class="input w-100 border mt-1"
+                                                  tabindex="1"><?php echo $quote->additional_notes; ?></textarea>
+                                    </div>
+                                    <?php
+                                } ?>
+                            </fieldset>
                         </div>
-                        <div class="intro-y col-span-12 lg:col-span-6">
-                            <!-- BEGIN: Vertical Form -->
+                        <?php if ($opportunity->job_type != 'New Fence' && $opportunity->job_type != 'New Fence and Gate c/w Operator') { ?>
                             <div class="intro-y box">
-                                <div class="p-5" id="vertical-form">
+                                <div class="p-5" id="input">
                                     <div class="preview">
-                                        <div class="overflow-x-auto">
-                                            <div class="mt-1 mb-5" style="text-align-last: end">
-                                                <label class="float-left" style="margin-right: 8px;">Set Markup
-                                                    rate</label>
-                                                <?php
-                                                $material_markup_percent = ($quote->mat_factor != 0) ? ($quote->mat_factor - 1) * 100 : '';
-                                                $labor_markup_percent = ($quote->lab_factor != 0) ? ($quote->lab_factor - 1) * 100 : '';
-                                                $misc_markup_percent = ($quote->misc_factor != 0) ? ($quote->misc_factor - 1) * 100 : '';
-                                                $adson_markup_percent = ($quote->ads_on_factor != 0) ? ($quote->ads_on_factor - 1) * 100 : '';
-
-                                                $total_amount = $quote->mat_net * $quote->mat_factor + $quote->labour_net * $quote->lab_factor
-                                                    + $quote->misc_net * $quote->misc_factor + $quote->ads_on_net * $quote->ads_on_factor;
-
-                                                $total_markup_amount = $total_amount - $quote->mat_net - $quote->labour_net - $quote->misc_net - $quote->ads_on_net;
-
-                                                $is_total_markup = ($quote->mat_factor == $quote->lab_factor && $quote->mat_factor == $quote->misc_factor
-                                                    && $quote->mat_factor == $quote->ads_on_factor); ?>
-                                                <input type="radio" class="input border mr-2 float-left set_markup"
-                                                       id="horizontal-radio-chris-evans"
-                                                       name="horizontal_radio_button" <?php echo ($is_total_markup) ? 'checked' : ''; ?>>
-                                                <label class="cursor-pointer select-none float-left"
-                                                       for="horizontal-radio-chris-evans">Total Markup</label>
-
-                                                <input type="number"
-                                                       class="input-total-markup input border bg-gray-100 cursor-not-allowed"
-                                                       placeholder="%" style="width:15%" name="total_markup_percent"
-                                                    <?php echo ($is_total_markup) ? 'value="' . (($material_markup_percent != 0) ? $material_markup_percent : 10) . '"' : 'disabled'; ?>
-                                                       id="total_markup_percent"/>
-                                                <input type="number"
-                                                       class="input-total-markup input border bg-gray-100 cursor-not-allowed"
-                                                       placeholder="Amount" style="width:20%" name="total_markup_amount"
-                                                    <?php echo ($is_total_markup) ? 'value="' . $total_markup_amount . '"' : 'disabled'; ?>
-                                                       id="total_markup_amount"/>
+                                        <div>
+                                            <div style="width: 40%;display: inline-block;">
+                                                <a class="button bg-gray-200 text-gray-600 mr-5"
+                                                   href="generate_ia?quote_id=<?php echo $quote->id; ?>" target="_blank"
+                                                   style="float: inherit;">
+                                                    Generate IA
+                                                </a>
                                             </div>
-
-
-                                            <div class="mt-1 mb-5" style="display: inline-block;">
-                                                <label class="float-left"
-                                                       style="margin-right: 8px; visibility: hidden;">Set
-                                                    Markup rate</label>
-                                                <input type="radio" class="input border mr-2 float-left set_markup"
-                                                       id="horizontal-radio-chris-evans2"
-                                                       name="horizontal_radio_button" <?php echo ($is_total_markup) ? '' : 'checked'; ?>>
-                                                <label class="cursor-pointer select-none mr-2 float-left"
-                                                       for="horizontal-radio-chris-evans2">Multiple Markups</label>
+                                            <div style="width: 50%;display: inline;">
+                                                <input type="checkbox" class="input border  mr-2" id="ia_signed"
+                                                       name="ia_signed"
+                                                       value="1" <?php echo ($quote->ia_signed == 1) ? 'checked' : ''; ?>><label>IA
+                                                    is
+                                                    signed</label>
                                             </div>
-
-                                            <div class="mt-1 mb-5 " style="text-align-last: end;">
-
-                                                <label class="mr-5">Material Markup</label>
-                                                <input placeholder="%" type="number"
-                                                       class="input-multiple-markup input border single_markup"
-                                                       style="width:15%" name="material_markup_percent"
-                                                       id="material_markup_percent"
-                                                    <?php echo (!$is_total_markup) ? 'value="' . $material_markup_percent . '"' : 'disabled'; ?>/>
-                                                <input placeholder="Amount" type="number"
-                                                       class="input-multiple-markup input border single_markup"
-                                                       style="width:20%" name="material_markup_amount"
-                                                       id="material_markup_amount"
-                                                    <?php echo (!$is_total_markup) ? 'value="' . round($material_markup_percent * $quote->mat_net / 100, 2) . '"' : 'disabled'; ?>/>
+                                        </div>
+                                        <div class="mt-5">
+                                            <div style="width: 40%;display: inline-block;">
+                                                <button class="button bg-gray-200 text-gray-600" style="float: inherit;"
+                                                        id="generate_qa_form_button" target="_blank"
+                                                        onclick="generate_form();">
+                                                    Generate Quote Form
+                                                </button>
                                             </div>
-
-                                            <div class="mt-1 mb-5 " style="text-align-last: end;">
-
-                                                <label class="mr-5">Labor Markup</label>
-                                                <input placeholder="%" type="number"
-                                                       class="input-multiple-markup input border single_markup"
-                                                       style="width:15%" name="labor_markup_percent"
-                                                       id="labor_markup_percent"
-                                                    <?php echo (!$is_total_markup) ? 'value="' . $labor_markup_percent . '"' : 'disabled'; ?>>
-                                                <input placeholder="Amount" type="number"
-                                                       class="input-multiple-markup input border single_markup"
-                                                       style="width:20%" name="labor_markup_amount"
-                                                       id="labor_markup_amount"
-                                                    <?php echo (!$is_total_markup) ? 'value="' . round($labor_markup_percent * $quote->labour_net / 100, 2) . '"' : 'disabled'; ?>>
+                                            <div style="width: 50%;display: inline;">
+                                                <input type="checkbox" class="input border mr-2" id="form_signed"
+                                                       name="form_signed"
+                                                       value="1" <?php echo ($quote->form_signed == 1) ? 'checked' : ''; ?>><label>Quote
+                                                    Form is
+                                                    signed</label>
                                             </div>
+                                        </div>
+                                        <div class="mt-5">
 
-
-                                            <div class="mt-1 mb-5" style="text-align-last: end;">
-                                                <label class=" mr-5">Misc Markup</label>
-                                                <input type="number" placeholder="%"
-                                                       class="input-multiple-markup input border ml-1 single_markup"
-                                                       style="width:15%" name="misc_markup_percent"
-                                                       id="misc_markup_percent"
-                                                    <?php echo (!$is_total_markup) ? 'value="' . $misc_markup_percent . '"' : 'disabled'; ?>>
-                                                <input placeholder="Amount" type="number"
-                                                       class="input-multiple-markup input border single_markup"
-                                                       style="width:20%" name="misc_markup_amount"
-                                                       id="misc_markup_amount"
-                                                    <?php echo (!$is_total_markup) ? 'value="' . round($misc_markup_percent * $quote->misc_net / 100, 2) . '"' : 'disabled'; ?>>
+                                            <div style="width: 40%;display: inline-block;visibility: hidden;">
+                                                <a class="button bg-gray-200 text-gray-600" style="float: inherit;"
+                                                   href="generate_qa_blank?quote_id=<?php echo $quote->id; ?>"
+                                                   target="_blank">
+                                                    Generate
+                                                    Blank Form
+                                                </a>
                                             </div>
-
-
-                                            <div class="mt-1 mb-5" style="text-align-last: end;">
-                                                <label class=" mr-5">Add-On Markup</label>
-                                                <input placeholder="%" type="number"
-                                                       class="input-multiple-markup input border single_markup"
-                                                       style="width:15%" name="adson_markup_percent"
-                                                       id="adson_markup_percent"
-                                                    <?php echo (!$is_total_markup) ? 'value="' . $adson_markup_percent . '"' : 'disabled'; ?>>
-                                                <input placeholder="Amount" type="number"
-                                                       class="input-multiple-markup input border single_markup"
-                                                       style="width:20%" name="adson_markup_amount"
-                                                       id="adson_markup_amount"
-                                                <?php echo (!$is_total_markup) ? 'value="' . round($adson_markup_percent * $quote->ads_on_net / 100, 2) . '"' : 'disabled'; ?>
-                                            </div>
-                                            <div class="mt-10">
-                                                <?php
-
-                                                $discount_amount = $total_amount * $quote->discount_set / 100;
-                                                ?>
-                                                <label class="mr-5">Add Discount</label>
-                                                <input type="number"
-                                                       class="add-discount input w-25 border col-span-4"
-                                                       placeholder="%" style="width:15%" name="discount_percent"
-                                                       value="<?php echo ($quote->discount_set == 0) ? '' : $quote->discount_set; ?>">
-                                                <input placeholder="Amount" type="number"
-                                                       class="add-discount input w-25 border col-span-4"
-                                                       style="width:20%"
-                                                       name="discount_amount"
-                                                       value="<?php echo ($quote->discount_set == 0) ? '' : round($discount_amount, 2); ?>">
-
+                                            <div style="width: 50%;display: inline;">
+                                                <input type="checkbox" class="input border" id="credit_passed"
+                                                       name="credit_passed"
+                                                       value="1" <?php echo ($quote->credit_passed == 1) ? 'checked' : ''; ?>>
+                                                <label class="cursor-pointer select-none" for="credit_passed"
+                                                       style="width: auto;">Customer passed Credit-Check</label>
                                             </div>
 
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
-                            <!-- END: Vertical Form -->
+                            <?php
+                        } ?>
+                    </div>
+                </div>
+
+                <fieldset class="p-1 mt-2 w-full fieldset_bd_color intro-y installation_detail">
+                    <legend class="quote_legend_spacing">Installation Details</legend>
+                    <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
+                        <div class="col-span-4" style="padding: 1em;">
+                            <h3><b>Specifications: </b></h3>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Mesh:</label>
+                                <input type="text" id="installation_detail_1" name="installation_detail_1"
+                                       class="input w-100 border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_1; ?>" tabindex="10">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Line Post:</label>
+                                <input type="text" id="installation_detail_2" name="installation_detail_2"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_2; ?>" tabindex="11">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Top Rail:</label>
+                                <input type="text" id="installation_detail_3" name="installation_detail_3"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_3; ?>" tabindex="12">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Main Post:</label>
+                                <input type="text" id="installation_detail_4" name="installation_detail_4"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_4; ?>" tabindex="13">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Holes Thru: </label>
+                                <input type="text" id="installation_detail_5" name="installation_detail_5"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_5; ?>" tabindex="14">
+                            </div>
+                            <h3><b>Specifications: </b></h3>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Mains : </label>
+                                <input type="text" id="installation_detail_6" name="installation_detail_6"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_6; ?>" tabindex="15">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Lines : </label>
+                                <input type="text" id="installation_detail_7" name="installation_detail_7"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_7; ?>" tabindex="16">
+                            </div>
+                            <h3><b>Footing Diameter: </b></h3>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Bottom : </label>
+                                <input type="text" id="installation_detail_8" name="installation_detail_8"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_8; ?>" tabindex="17">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Centre : </label>
+                                <input type="text" id="installation_detail_9" name="installation_detail_9"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_9; ?>" tabindex="19">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Braces : </label>
+                                <input type="text" id="installation_detail_10" name="installation_detail_10"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_10; ?>" tabindex="20">
+                            </div>
+                        </div>
+                        <div class="col-span-4" style="padding: 1em;">
+                            <h3><b>Locate Fence By: </b></h3>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Stakes:</label>
+                                <input type="text" id="installation_detail_11" name="installation_detail_11"
+                                       class="input w-100 border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_11; ?>" tabindex="21">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Ex Fence:</label>
+                                <input type="text" id="installation_detail_12" name="installation_detail_12"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_12; ?>" tabindex="22">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Sales Rep:</label>
+                                <input type="text" id="installation_detail_13" name="installation_detail_13"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_13; ?>" tabindex="23">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Customer:</label>
+                                <input type="text" id="installation_detail_14" name="installation_detail_14"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_14; ?>" tabindex="24">
+                            </div>
+                            <h3><b>Keep Fence: </b></h3>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* On Line : </label>
+                                <input type="text" id="installation_detail_15" name="installation_detail_15"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_15; ?>" tabindex="25">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Inside Line : </label>
+                                <input type="text" id="installation_detail_16" name="installation_detail_16"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_16; ?>" tabindex="26">
+                            </div>
+                            <h3><b>Main Post Set: </b></h3>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Concrete : </label>
+                                <input type="text" id="installation_detail_17" name="installation_detail_17"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_17; ?>" tabindex="27">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Driven : </label>
+                                <input type="text" id="installation_detail_18" name="installation_detail_18"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_18; ?>" tabindex="28">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Flanged : </label>
+                                <input type="text" id="installation_detail_19" name="installation_detail_19"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_19; ?>" tabindex="29">
+                            </div>
+                        </div>
+                        <div class="col-span-4" style="padding: 1em;">
+                            <h3><b>Footing Depth: </b></h3>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Mains:</label>
+                                <input type="text" id="installation_detail_20" name="installation_detail_20"
+                                       class="input w-100 border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_20; ?>" tabindex="30">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Lines:</label>
+                                <input type="text" id="installation_detail_21" name="installation_detail_21"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_21; ?>" tabindex="31">
+                            </div>
+                            <h3><b>Barbwire: </b></h3>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* None : </label>
+                                <input type="text" id="installation_detail_22" name="installation_detail_22"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_22; ?>" tabindex="32">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* In : </label>
+                                <input type="text" id="installation_detail_23" name="installation_detail_23"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_23; ?>" tabindex="33">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Out : </label>
+                                <input type="text" id="installation_detail_24" name="installation_detail_24"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_24; ?>" tabindex="34">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Vertical : </label>
+                                <input type="text" id="installation_detail_25" name="installation_detail_25"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_25; ?>" tabindex="35">
+                            </div>
+                            <h3><b>Existing Fence: </b></h3>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* None : </label>
+                                <input type="text" id="installation_detail_26" name="installation_detail_26"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_26; ?>" tabindex="36">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Remove : </label>
+                                <input type="text" id="installation_detail_27" name="installation_detail_27"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_27; ?>" tabindex="37">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Haul Away : </label>
+                                <input type="text" id="installation_detail_28" name="installation_detail_28"
+                                       class="input border mt-1" required=""
+                                       value="<?php echo $quote->installation_detail_28; ?>" tabindex="38">
+                            </div>
                         </div>
                     </div>
-                <?php
-                endif;
+                </fieldset>
+            <?php
             endif;
-            if (is_object($quote)):
-            if ($quote->status == 'Approved' || $quote->status == 'Job'):
+            if ($quote->status == 'Job'):
             ?>
             <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
                 <div class="intro-y col-span-12 lg:col-span-5 ml-2" id="additional_info_div">
                     <fieldset class="p-1 mt-2 w-full fieldset_bd_color">
                         <legend class="quote_legend_spacing">Fence Notes</legend>
-                        <div class="preview" style="padding: 1em;">
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">FENCE - Including Fabric,<br>
-                                    Top Rail, Line Posts & Fittings:</label>
-                                <input type="text" id="additional_col_1" name="additional_col_1"
-                                       class="input w-100 border mt-1" required=""
-                                       value="<?php echo $quote->additional_col_1; ?>" tabindex="3">
+                        <?php if ($opportunity->job_type == 'New Fence' || $opportunity->job_type == 'New Fence and Gate c/w Operator') { ?>
+                            <div class="preview" style="padding: 1em;">
+                                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">FENCE - Including
+                                        Fabric,<br>
+                                        Top Rail, Line Posts & Fittings:</label>
+                                    <input type="text" id="additional_col_1" name="additional_col_1"
+                                           class="input w-100 border mt-1" required=""
+                                           value="<?php echo $quote->additional_col_1; ?>" tabindex="3">
+                                </div>
+                                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">END POSTS:</label>
+                                    <input type="text" id="additional_col_2" name="additional_col_2"
+                                           class="input border mt-1" required=""
+                                           value="<?php echo $quote->additional_col_2; ?>" tabindex="3">
+                                </div>
+                                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">GATE
+                                        POSTS:</label>
+                                    <input type="text" id="additional_col_3" name="additional_col_3"
+                                           class="input border mt-1" required=""
+                                           value="<?php echo $quote->additional_col_3; ?>" tabindex="3">
+                                </div>
+                                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">CORNER
+                                        POSTS:</label>
+                                    <input type="text" id="additional_col_4" name="additional_col_4"
+                                           class="input border mt-1" required=""
+                                           value="<?php echo $quote->additional_col_4; ?>" tabindex="3">
+                                </div>
+                                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">STRAINING
+                                        POSTS: </label>
+                                    <input type="text" id="additional_col_5" name="additional_col_5"
+                                           class="input border mt-1" required=""
+                                           value="<?php echo $quote->additional_col_5; ?>" tabindex="3">
+                                </div>
+                                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">FITTINGS: </label>
+                                    <input type="text" id="additional_col_6" name="additional_col_6"
+                                           class="input border mt-1" required=""
+                                           value="<?php echo $quote->additional_col_6; ?>" tabindex="3">
+                                </div>
+                                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">GATES: </label>
+                                    <input type="text" id="additional_col_7" name="additional_col_7"
+                                           class="input border mt-1" required=""
+                                           value="<?php echo $quote->additional_col_7; ?>" tabindex="3">
+                                </div>
+                                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                    <p>* Erection of Fence & Gates: All line posts set
+                                        <select name="additional_select_1" class="input border">
+                                            <option <?php echo ($quote->additional_select_1 == 'IN CONCRETE') ? 'selected' : ''; ?>>
+                                                IN CONCRETE
+                                            </option>
+                                            <option <?php echo ($quote->additional_select_1 == 'ON FLANGES') ? 'selected' : ''; ?>>
+                                                ON FLANGES
+                                            </option>
+                                            <option <?php echo ($quote->additional_select_1 == 'COREDRILLED') ? 'selected' : ''; ?>>
+                                                COREDRILLED
+                                            </option>
+                                        </select>
+                                    </p>
+                                </div>
+                                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                    <p>(In normal soil & on cleared line marked by customer with survey
+                                        bars)</p>
+                                </div>
+                                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                    <p>* Terminal posts installed
+                                        <select name="additional_select_2" class="input border">
+                                            <option <?php echo ($quote->additional_select_1 == 'IN CONCRETE') ? 'selected' : ''; ?>>
+                                                IN CONCRETE
+                                            </option>
+                                            <option <?php echo ($quote->additional_select_1 == 'ON FLANGES') ? 'selected' : ''; ?>>
+                                                ON FLANGES
+                                            </option>
+                                            <option <?php echo ($quote->additional_select_1 == 'COREDRILLED') ? 'selected' : ''; ?>>
+                                                COREDRILLED
+                                            </option>
+                                        </select></p>
+                                </div>
+                                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                    <p>( IN NORMAL SOIL & ON CLEARED LINE MARKED BY CUSTOMER WITH SURVEY BARS
+                                        )</p>
+                                </div>
                             </div>
+                            <?php
+                        } else { ?>
                             <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">END POSTS:</label>
-                                <input type="text" id="additional_col_2" name="additional_col_2"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->additional_col_2; ?>" tabindex="3">
+                                        <textarea id="additional_notes" name="additional_notes" style="width: 100%"
+                                                  class="input w-100 border mt-1"
+                                                  tabindex="3"><?php echo $quote->additional_notes; ?></textarea>
                             </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">GATE POSTS:</label>
-                                <input type="text" id="additional_col_3" name="additional_col_3"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->additional_col_3; ?>" tabindex="3">
-                            </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">CORNER POSTS:</label>
-                                <input type="text" id="additional_col_4" name="additional_col_4"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->additional_col_4; ?>" tabindex="3">
-                            </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">STRAINING POSTS: </label>
-                                <input type="text" id="additional_col_5" name="additional_col_5"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->additional_col_5; ?>" tabindex="3">
-                            </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">FITTINGS: </label>
-                                <input type="text" id="additional_col_6" name="additional_col_6"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->additional_col_6; ?>" tabindex="3">
-                            </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">GATES: </label>
-                                <input type="text" id="additional_col_7" name="additional_col_7"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->additional_col_7; ?>" tabindex="3">
-                            </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <p>* Erection of Fence & Gates: All line posts set <b>IN CONCRETE</b></p>
-                            </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <p>(In normal soil & on cleared line marked by customer with survey bars)</p>
-                            </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <p>* Terminal posts installed <b>IN CONCRETE</b></p>
-                            </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <p>( IN NORMAL SOIL & ON CLEARED LINE MARKED BY CUSTOMER WITH SURVEY BARS )</p>
-                            </div>
-                        </div>
+                            <?php
+                        } ?>
                     </fieldset>
                 </div>
-                <div class="intro-y col-span-12 lg:col-span-6">
+                <div class="intro-y col-span-12 lg:col-span-6" style="padding: 2em;">
                     <!-- BEGIN: Input -->
                     <div class="intro-y box">
                         <div class="p-5" id="input">
                             <div class="preview">
-                                <!-- hidden -->
-                                <div class="mt-1 mb-5 hidden">
-                                    <label class="mr-5">Assign Installer </label>
-                                    <select class="input border mr-2">
-                                        <option>Chris Evans</option>
-                                        <option>Liam Neeson</option>
-                                        <option>Daniel Craig</option>
-                                    </select>
-                                </div>
-                                <!-- close -->
-
                                 <div>
                                     <div style="width: 40%;display: inline-block;">
                                         <a class="button bg-gray-200 text-gray-600 mr-5"
@@ -1153,13 +1593,11 @@ if (is_sale()) {
                                             is
                                             signed</label>
                                     </div>
-
-
                                 </div>
                                 <div class="mt-5">
                                     <div style="width: 40%;display: inline-block;">
                                         <button class="button bg-gray-200 text-gray-600" style="float: inherit;"
-                                                id="generate_qa_form_button" target="_blank">
+                                                id="generate_qa_form_button" target="_blank" onclick="generate_form();">
                                             Generate Quote Form
                                         </button>
                                     </div>
@@ -1173,7 +1611,7 @@ if (is_sale()) {
                                 </div>
                                 <div class="mt-5">
 
-                                    <div style="width: 40%;display: inline-block;">
+                                    <div style="width: 40%;display: inline-block;visibility: hidden;">
                                         <a class="button bg-gray-200 text-gray-600" style="float: inherit;"
                                            href="generate_qa_blank?quote_id=<?php echo $quote->id; ?>" target="_blank">
                                             Generate
@@ -1195,7 +1633,6 @@ if (is_sale()) {
                     <!-- END: Input -->
                 </div>
                 <?php
-                endif;
                 endif;
                 ?>
 
@@ -1219,18 +1656,6 @@ if (is_sale()) {
                 <input type="hidden" name="hst" id="hst_amount"/>
             </div>
         </form>
-        <form id="generateForm" action="generate_qa_form" method="get" target="_blank">
-            <input type="hidden" name="quote_id"
-                   value="<?php echo (is_object($quote)) ? $quote->id : ''; ?>">
-            <input type="hidden" name="additional_col_1"></input>
-            <input type="hidden" name="additional_col_2"></input>
-            <input type="hidden" name="additional_col_3"></input>
-            <input type="hidden" name="additional_col_4"></input>
-            <input type="hidden" name="additional_col_5"></input>
-            <input type="hidden" name="additional_col_6"></input>
-            <input type="hidden" name="additional_col_7"></input>
-        </form>
-
         <div class="intro-y col-span-12 flex items-center justify-center sm:justify-end mt-5">
             <?php
             if (!is_object($quote)):
@@ -1238,9 +1663,9 @@ if (is_sale()) {
                 <button class="button w-24 justify-center block bg-theme-1 text-white" id="save_new_quote"
                         onclick="save_new_quote();">Save
                 </button>
-                <button class="button w-50 justify-center block bg-theme-1 text-white ml-2 mr-3"
+                <button class="button w-24 justify-center block bg-theme-1 text-white ml-2 mr-3"
                         id="submit_new_quote"
-                        onclick="submit_new_quote();">Save & Submit
+                        onclick="submit_new_quote();">Next
                 </button>
             <?php
             endif;
@@ -1250,43 +1675,52 @@ if (is_sale()) {
                     <button class="button w-24 justify-center block bg-theme-1 text-white" id="save_new_quote"
                             onclick="save_new_quote();">Save
                     </button>
-                    <button class="button w-50 justify-center block bg-theme-1 text-white ml-2 mr-3"
+                    <button class="button w-24 justify-center block bg-theme-1 text-white ml-2 mr-3"
                             id="submit_new_quote"
-                            onclick="submit_new_quote();">Save & Submit
+                            onclick="submit_new_quote();">Next
                     </button>
                 <?php
                 endif;
             endif;
             if (is_object($quote)):
                 if ($quote->status == 'Pending'):
-
-                    ?>
-                    <button class="button w-24 justify-center block bg-theme-1 text-white" id="reject_pending_quote"
-                            onclick="reject_pending_quote();">Reject
-                    </button>
-                    <button class="button w-24 justify-center block bg-theme-1 text-white ml-2 mr-3"
-                            id="save_pending_quote"
-                            onclick="save_pending_quote();">Save
-                    </button>
-                    <button class="button w-50 justify-center block bg-theme-1 text-white ml-2 mr-3"
-                            id="approve_pending_quote"
-                            onclick="approve_pending_quote();">Approve
-                    </button>
-                <?php
+                    if (is_sale()) {
+                        ?>
+                        <button class="button w-24 justify-center block bg-theme-1 text-white" id="reject_pending_quote"
+                                onclick="reject_pending_quote_sale();">Back
+                        </button>
+                        <button class="button w-24 justify-center block bg-theme-1 text-white ml-2 mr-3"
+                                id="save_pending_quote"
+                                onclick="save_pending_quote_sale();">Save
+                        </button>
+                        <button class="button w-24 justify-center block bg-theme-1 text-white ml-2 mr-3"
+                                id="approve_pending_quote"
+                                onclick="submit_pending_quote_sale();">Submit
+                        </button>
+                        <?php
+                    } else {
+                        ?>
+                        <button class="button w-24 justify-center block bg-theme-1 text-white" id="reject_pending_quote"
+                                onclick="reject_pending_quote();">Reject
+                        </button>
+                        <button class="button w-24 justify-center block bg-theme-1 text-white ml-2 mr-3"
+                                id="save_pending_quote"
+                                onclick="save_pending_quote();">Save
+                        </button>
+                        <button class="button w-24 justify-center block bg-theme-1 text-white ml-2 mr-3"
+                                id="approve_pending_quote"
+                                onclick="approve_pending_quote();">Approve
+                        </button>
+                        <?php
+                    }
                 endif;
             endif;
             if (is_object($quote)):
                 if ($quote->status == 'Approved'):
-                    if (!is_sale()):
-                        ?>
-                        <button class="button w-24 justify-center block bg-theme-1 text-white"
-                                id="reject_approved_quote"
-                                onclick="reject_approved_quote();">Reject
-                        </button>
-                    <?php endif; ?>
-                    <button class="button w-24 justify-center block bg-theme-1 text-white ml-2 mr-3"
-                            id="save_approved_quote"
-                            onclick="save_approved_quote();">Save
+                    ?>
+                    <button class="button w-24 justify-center block bg-theme-1 text-white"
+                            id="reject_approved_quote"
+                            onclick="reject_approved_quote();">Reject
                     </button>
                     <button class="button w-50 justify-center block bg-theme-1 text-white ml-2 mr-3"
                             id="create_job"
@@ -1316,33 +1750,38 @@ if (is_sale()) {
                 $(".miscellaneous-item").slideUp();
                 $(".adsOn-item").slideUp();
             }
-            if (status == 'New') {
-                var mat_total = $('#material-item-total').find('td').eq(2).html() * 1;
-                $('#sale_quote_table').find('tr').eq(1).children().eq(1).html(mat_total);
-                var labour_total = $('#labour-item-total').find('td').eq(2).html() * 1;
-                $('#sale_quote_table').find('tr').eq(2).children().eq(1).html(labour_total);
-                var mis_total = $('#miscellaneous-item-total').find('td').eq(2).html() * 1;
-                $('#sale_quote_table').find('tr').eq(3).children().eq(1).html(mis_total);
-
-                var addon_total = $('#adsOn-item-total').find('td').eq(2).html() * 1;
-                $('#sale_quote_table').find('tr').eq(4).children().eq(1).html(addon_total);
-                calculate_new_table();
-            }
-            if (status == 'Pending') {
+            if ((status == 'Pending' && !is_sale) || (status == 'New' && is_sale)) {
 
                 var mat_total = $('#material-item-total').find('td').eq(2).html() * 1;
-                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(mat_total / 1.32);
+                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(!is_sale ? mat_total / 1.32 : mat_total);
                 if (mat_total == 0) {
-                    $('#material_markup_percent').attr('readonly', true);
-                    $('#material_markup_amount').attr('readonly', true);
+                    $('#material_markup_percent').attr('disabled', true);
+                    $('#material_markup_amount').attr('disabled', true);
                 }
+
+
                 var labour_total = $('#labour-item-total').find('td').eq(2).html() * 1;
+                if (labour_total == 0) {
+                    $('#labor_markup_percent').attr('disabled', true);
+                    $('#labor_markup_amount').attr('disabled', true);
+                }
                 $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(labour_total);
+
+
                 var mis_total = $('#miscellaneous-item-total').find('td').eq(2).html() * 1;
                 $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(mis_total);
+                if (mis_total == 0) {
+                    $('#misc_markup_percent').attr('disabled', true);
+                    $('#misc_markup_amount').attr('disabled', true);
+                }
 
                 var addon_total = $('#adsOn-item-total').find('td').eq(2).html() * 1;
                 $('#final_quote_table').find('tr').eq(4).children().eq(1).html(addon_total);
+
+                if (addon_total == 0) {
+                    $('#adson_markup_percent').attr('disabled', true);
+                    $('#adson_markup_amount').attr('disabled', true);
+                }
 
                 if ($('#total_markup_percent').val() == '10' && $('#total_markup_amount').val() == '0') {
                     var total_profit = (mat_total + labour_total + mis_total + addon_total) * 0.1;
@@ -1355,10 +1794,40 @@ if (is_sale()) {
                 }
 
                 calculate_sale_table();
+            }
+            if ((status == 'Pending' && is_sale) || (status == 'Approved' && !is_sale)) {
+
+                var mat_total = $('#material-item-total').find('td').eq(2).html() * 1;
+                $('#small_quote_table').find('tr').eq(1).children().eq(1).find('a').html(mat_total);
+
+                var labour_total = $('#labour-item-total').find('td').eq(2).html() * 1;
+
+                $('#small_quote_table').find('tr').eq(2).children().eq(1).find('a').html(labour_total);
+
+
+                var mis_total = $('#miscellaneous-item-total').find('td').eq(2).html() * 1;
+                $('#small_quote_table').find('tr').eq(3).children().eq(1).find('a').html(mis_total);
+
+                var addon_total = $('#adsOn-item-total').find('td').eq(2).html() * 1;
+                $('#small_quote_table').find('tr').eq(4).children().eq(1).html(addon_total);
+
+                calculate_small_table();
+
+                $('fieldset').find('input').attr('readonly', true);
+                $('fieldset').find('select').attr('disabled', true);
+                if (is_sale) {
+                    $('#additional_info_div').find('input').attr('readonly', false);
+                    $('#additional_info_div').find('select').attr('disabled', false);
+                } else {
+                    $('.installation_detail').find('input').attr('readonly', false);
+                    $('input[type="checkbox"]').attr('disabled', true);
+                }
+                $('.delete_detail_row').hide();
+                $('.add_detail_row').hide();
+
             } else if (status == 'Approved') {
                 $('fieldset').find('input').attr('readonly', true);
                 $('fieldset').find('select').attr('disabled', true);
-                $('#additional_info_div').find('input').attr('readonly', false);
                 $('.delete_detail_row').hide();
                 $('.add_detail_row').hide();
             } else if (status == 'Job') {
@@ -1370,25 +1839,12 @@ if (is_sale()) {
             }
         });
         $('#quoteForm').keypress(function (e) {
+            var $targ = $(e.target);
             var key = e.charCode || e.keyCode || 0;
-            if (key == 13) {
+            if (e.targetkey == 13 && !$targ.is("textarea")) {
                 e.preventDefault();
             }
         });
-        $('#generate_qa_form_button').click(function () {
-
-            $('#generateForm').find('input[name="additional_col_1"]').val($('#additional_col_1').val());
-            $('#generateForm').find('input[name="additional_col_2"]').val($('#additional_col_2').val());
-            $('#generateForm').find('input[name="additional_col_3"]').val($('#additional_col_3').val());
-            $('#generateForm').find('input[name="additional_col_4"]').val($('#additional_col_4').val());
-            $('#generateForm').find('input[name="additional_col_5"]').val($('#additional_col_5').val());
-            $('#generateForm').find('input[name="additional_col_6"]').val($('#additional_col_6').val());
-            $('#generateForm').find('input[name="additional_col_7"]').val($('#additional_col_7').val());
-
-            event.preventDefault();
-
-            $('#generateForm').submit();
-        })
         $('#calc_mode').change(function () {
             var calc_mode = $('#calc_mode').val();
             var material_total = 0;
@@ -1399,9 +1855,9 @@ if (is_sale()) {
                     for (var i in catalogs) {
                         if (catalogs[i].product_category == row_category) {
                             if (catalogs[i].mat_code == row_code) {
-                                var price_per_unit = catalogs[i].price_per_unit_contractor;
+                                var price_per_unit = catalogs[i].price_per_unit_contractor * 1.32;
                                 if (calc_mode == 'Tender') {
-                                    price_per_unit = catalogs[i].price_per_unit_tender;
+                                    price_per_unit = catalogs[i].price_per_unit_tender * 1.32;
                                 }
                                 $(this).children().eq(2).html(price_per_unit)
                                 var quantity = $(this).children().eq(3).find('input').val() * 1
@@ -1414,10 +1870,8 @@ if (is_sale()) {
                 }
             })
             $('#material-item-total').children().eq(2).html(material_total);
-            if (status == 'Pending') {
-                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(material_total);
-                calculate_sale_table();
-            }
+            $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? material_total : material_total / 1.32);
+            calculate_sale_table();
         })
 
 
@@ -1434,6 +1888,41 @@ if (is_sale()) {
             }
         });
 
+        function calculate_small_table() {
+            var mat_cost = $('#small_quote_table').find('tr').eq(1).children().eq(1).find('a').html() * 1;
+
+            var labour_cost = $('#small_quote_table').find('tr').eq(2).children().eq(1).find('a').html() * 1;
+
+            var misc_cost = $('#small_quote_table').find('tr').eq(3).children().eq(1).find('a').html() * 1;
+
+            var adson_cost = $('#small_quote_table').find('tr').eq(4).children().eq(1).html() * 1;
+
+
+            var subtotal_cost1 = mat_cost + labour_cost + misc_cost + adson_cost;
+
+
+            var discount_percent = $('#discount_span').html() * 1;
+
+            var discount_cost = (subtotal_cost1 * discount_percent / 100);
+
+            var subtotal_cost2 = subtotal_cost1 - discount_cost;
+
+            var HST = subtotal_cost2 * 13 / 100;
+
+            var total_cost = subtotal_cost2 + HST;
+
+            $('#small_quote_table').find('tr').eq(5).children().eq(1).html(Math.round(subtotal_cost1 * 100) / 100);
+
+            $('#small_quote_table').find('tr').eq(6).children().eq(1).html(Math.round(discount_cost * 100) / 100);
+
+            $('#small_quote_table').find('tr').eq(7).children().eq(1).html(Math.round(subtotal_cost2 * 100) / 100);
+
+            $('#small_quote_table').find('tr').eq(8).children().eq(1).html(Math.round(HST * 100) / 100);
+
+            $('#small_quote_table').find('tr').eq(9).children().eq(1).html(Math.round(total_cost * 100) / 100);
+
+        }
+
         function calculate_sale_table() {
             var mat_cost = $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html() * 1;
 
@@ -1443,17 +1932,35 @@ if (is_sale()) {
 
             var adson_cost = $('#final_quote_table').find('tr').eq(4).children().eq(1).html() * 1;
 
+
             var subtotal_cost1 = mat_cost + labour_cost + misc_cost + adson_cost;
 
             var material_markup_percent = $('#material_markup_percent').val() * 1;
             var labour_markup_percent = $('#labor_markup_percent').val() * 1;
             var misc_markup_percent = $('#misc_markup_percent').val() * 1;
             var adson_markup_percent = $('#adson_markup_percent').val() * 1;
-            if (document.getElementById('horizontal-radio-chris-evans').checked) {
+            if ($('#horizontal-radio-chris-evans').is(':checked')) {
                 material_markup_percent = $('#total_markup_percent').val() * 1;
                 labour_markup_percent = $('#total_markup_percent').val() * 1;
                 misc_markup_percent = $('#total_markup_percent').val() * 1;
                 adson_markup_percent = $('#total_markup_percent').val() * 1;
+            } else {
+                if (mat_cost != 0) {
+                    $('#material_markup_percent').attr('disabled', false);
+                    $('#material_markup_amount').attr('disabled', false);
+                }
+                if (labour_cost != 0) {
+                    $('#labor_markup_percent').attr('disabled', false);
+                    $('#labor_markup_amount').attr('disabled', false);
+                }
+                if (misc_cost != 0) {
+                    $('#misc_markup_percent').attr('disabled', false);
+                    $('#misc_markup_amount').attr('disabled', false);
+                }
+                if (adson_cost != 0) {
+                    $('#adson_markup_percent').attr('disabled', false);
+                    $('#adson_markup_amount').attr('disabled', false);
+                }
             }
             var discount_percent = $('input[name="discount_percent"]').val() * 1;
 
@@ -1508,87 +2015,38 @@ if (is_sale()) {
 
         }
 
-        function calculate_new_table() {
-            var mat_cost = $('#sale_quote_table').find('tr').eq(1).children().eq(1).html() * 1;
-
-            var labour_cost = $('#sale_quote_table').find('tr').eq(2).children().eq(1).html() * 1;
-
-            var misc_cost = $('#sale_quote_table').find('tr').eq(3).children().eq(1).html() * 1;
-
-            var adson_cost = $('#sale_quote_table').find('tr').eq(4).children().eq(1).html() * 1;
-
-            var subtotal_cost1 = mat_cost + labour_cost + misc_cost + adson_cost;
-
-            var discount_percent = $('input[name="discount_percent"]').val() * 1;
-
-            var discount_cost = (subtotal_cost1 * discount_percent / 100);
-
-            var subtotal_cost2 = subtotal_cost1 - discount_cost;
-
-            $('#sale_quote_table').find('tr').eq(5).children().eq(1).html(Math.round(subtotal_cost1 * 100) / 100);
-
-            $('#sale_quote_table').find('tr').eq(6).children().eq(1).html(Math.round(discount_cost * 100) / 100);
-
-            $('#sale_quote_table').find('tr').eq(7).children().eq(1).html(Math.round(subtotal_cost2 * 100) / 100);
-
-            $('#mat_net').val(mat_cost);
-            $('#labour_net').val(labour_cost);
-            $('#misc_net').val(misc_cost);
-            $('#add_on_net').val(adson_cost);
-        }
-
         $(".add-discount").keyup(function () {
             var discount_percent = 0;
             var discount_amount = 0;
-            if (status == 'New') {
-                var sub_total1 = $('#sale_quote_table').find('tr').eq(5).children().eq(1).html() * 1;
-                if ($(this).val() < 0) {
-                    $(this).val('');
-                    showNotification('Discount input can’t be negative values.');
-                    $(this).focus();
-                    return;
-                }
-                if ($(this).attr('name') == 'discount_percent') {
-                    if ($(this).val() > 21) {
-                        $(this).val('');
-                        showNotification('Discount input can’t be bigger than 21.');
-                        $(this).focus();
-                        return;
-                    }
-                    discount_percent = $(this).val() * 1;
-                    discount_amount = sub_total1 * discount_percent / 100;
-                    $('input[name="discount_amount"]').val(Math.round(discount_amount * 100) / 100);
-                } else {
-                    discount_amount = $(this).val() * 1;
-                    discount_percent = (discount_amount / sub_total1) * 100;
-                    if (discount_percent > 21) {
-                        $(this).val('');
-                        showNotification('Discount input can’t be bigger than 21.');
-                        $(this).focus();
-                        return;
-                    }
-                    $('input[name="discount_percent"]').val(Math.round(discount_percent * 100) / 100);
-                }
-                calculate_new_table();
-            } else {
-                var sub_total1 = $('#final_quote_table').find('tr').eq(5).children().eq(2).html() * 1;
-                if ($(this).val() < 0) {
-                    $(this).val('');
-                    showNotification('Markups input can’t be negative values.');
-                    $(this).focus();
-                    return;
-                }
-                if ($(this).attr('name') == 'discount_percent') {
-                    discount_percent = $(this).val() * 1;
-                    discount_amount = sub_total1 * discount_percent / 100;
-                    $('input[name="discount_amount"]').val(Math.round(discount_amount * 100) / 100);
-                } else {
-                    discount_amount = $(this).val() * 1;
-                    discount_percent = (discount_amount / sub_total1) * 100;
-                    $('input[name="discount_percent"]').val(Math.round(discount_percent * 100) / 100);
-                }
-                calculate_sale_table();
+            var sub_total1 = $('#final_quote_table').find('tr').eq(5).children().eq(2).html() * 1;
+            if ($(this).val() < 0) {
+                $(this).val('');
+                showNotification('Discount input can’t be negative values.');
+                $(this).focus();
+                return;
             }
+            if ($(this).attr('name') == 'discount_percent') {
+                if ($(this).val() > 21) {
+                    $(this).val('');
+                    showNotification('Discount input can’t be bigger than 21.');
+                    $(this).focus();
+                    return;
+                }
+                discount_percent = $(this).val() * 1;
+                discount_amount = sub_total1 * discount_percent / 100;
+                $('input[name="discount_amount"]').val(Math.round(discount_amount * 100) / 100);
+            } else {
+                discount_amount = $(this).val() * 1;
+                discount_percent = (discount_amount / sub_total1) * 100;
+                if (discount_percent > 21) {
+                    $(this).val('');
+                    showNotification('Discount input can’t be bigger than 21.');
+                    $(this).focus();
+                    return;
+                }
+                $('input[name="discount_percent"]').val(Math.round(discount_percent * 100) / 100);
+            }
+            calculate_sale_table();
         });
         $('#total_markup_percent, #total_markup_amount').keyup(function () {
             var total_percent = 0;
@@ -1756,7 +2214,6 @@ if (is_sale()) {
 
         function get_cate_code(rowId) {
             var selectedCatalog = event.target.value;
-            console.log(selectedCatalog);
             var matOptions = '';
             var price_per_unit = '';
             var first = 0;
@@ -1783,14 +2240,8 @@ if (is_sale()) {
                 $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
                 $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit);
             }
-            if (status == 'Pending') {
-                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
-                calculate_sale_table();
-            } else if (status == 'New') {
-                $('#sale_quote_table').find('tr').eq(1).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
-                calculate_new_table();
-            }
-
+            $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? total_price - original_price + quantity * price_per_unit : (total_price - original_price + quantity * price_per_unit) / 1.32);
+            calculate_sale_table();
         }
 
         function change_mat_code(rowId) {
@@ -1817,13 +2268,8 @@ if (is_sale()) {
                 $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
                 $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit);
             }
-            if (status == 'Pending') {
-                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
-                calculate_sale_table();
-            } else if (status == 'New') {
-                $('#sale_quote_table').find('tr').eq(1).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
-                calculate_new_table();
-            }
+            $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? total_price - original_price + quantity * price_per_unit : (total_price - original_price + quantity * price_per_unit) / 1.32);
+            calculate_sale_table();
         }
 
         function change_mat_quantity(rowId) {
@@ -1845,13 +2291,8 @@ if (is_sale()) {
                 $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
             $('#material-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
-            if (status == 'Pending') {
-                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
-                calculate_sale_table();
-            } else if (status == 'New') {
-                $('#sale_quote_table').find('tr').eq(1).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
-                calculate_new_table();
-            }
+            $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? total_price - original_price + quantity * price_per_unit : (total_price - original_price + quantity * price_per_unit) / 1.32);
+            calculate_sale_table();
         }
 
         function delete_material_item(rowId) {
@@ -1862,13 +2303,8 @@ if (is_sale()) {
             $('#material-item-total').children().eq(1).html(total_quantity - original_quantity);
             $('#material-item-total').children().eq(2).html(total_price - original_price);
             $("#material-item-row" + rowId).remove();
-            if (status == 'Pending') {
-                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(total_price - original_price);
-                calculate_sale_table();
-            } else if (status == 'New') {
-                $('#sale_quote_table').find('tr').eq(1).children().eq(1).html(total_price - original_price);
-                calculate_new_table();
-            }
+            $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? total_price - original_price : (total_price - original_price) / 1.32);
+            calculate_sale_table();
         }
 
 
@@ -1946,12 +2382,9 @@ if (is_sale()) {
                 $('#labour-item-total').children().eq(2).html(total_price - original_price + quantity * 250)
             }
             $('#labour-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
-            if (status == 'Pending') {
+            if (status == 'Pending' || status == 'New') {
                 $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(total_price - original_price + quantity * 250);
                 calculate_sale_table();
-            } else if (status == 'New') {
-                $('#sale_quote_table').find('tr').eq(2).children().eq(1).html(total_price - original_price + quantity * 250);
-                calculate_new_table();
             }
         }
 
@@ -1964,12 +2397,9 @@ if (is_sale()) {
             var original_quantity = $('#labour-item-row' + rowId).children().eq(1).find('input').val() * 1;
             $('#labour-item-total').children().eq(1).html(total_quantity - original_quantity);
             $("#labour-item-row" + rowId).remove();
-            if (status == 'Pending') {
+            if (status == 'Pending' || status == 'New') {
                 $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(total_price - original_price);
                 calculate_sale_table();
-            } else if (status == 'New') {
-                $('#sale_quote_table').find('tr').eq(2).children().eq(1).html(total_price - original_price);
-                calculate_new_table();
             }
         }
 
@@ -2027,12 +2457,9 @@ if (is_sale()) {
                 $('#miscellaneous-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
                 $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
-            if (status == 'Pending') {
+            if (status == 'Pending' || status == 'New') {
                 $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
                 calculate_sale_table();
-            } else if (status == 'New') {
-                $('#sale_quote_table').find('tr').eq(3).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
-                calculate_new_table();
             }
         }
 
@@ -2054,12 +2481,9 @@ if (is_sale()) {
                 $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
             $('#miscellaneous-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
-            if (status == 'Pending') {
+            if (status == 'Pending' || status == 'New') {
                 $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
                 calculate_sale_table();
-            } else if (status == 'New') {
-                $('#sale_quote_table').find('tr').eq(3).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
-                calculate_new_table();
             }
         }
 
@@ -2071,12 +2495,9 @@ if (is_sale()) {
             var original_quantity = $('#miscellaneous-item-row' + rowId).children().eq(3).find('input').val() * 1;
             $('#miscellaneous-item-total').children().eq(1).html(total_quantity - original_quantity);
             $("#miscellaneous-item-row" + rowId).remove();
-            if (status == 'Pending') {
+            if (status == 'Pending' || status == 'New') {
                 $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price);
                 calculate_sale_table();
-            } else if (status == 'New') {
-                $('#sale_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price);
-                calculate_new_table();
             }
         }
 
@@ -2133,12 +2554,9 @@ if (is_sale()) {
                 $('#adsOn-item-row' + rowId).children().eq(3).html(quantity * price_per_unit);
                 $('#adsOn-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
-            if (status == 'Pending') {
+            if (status == 'Pending' || status == 'New') {
                 $('#final_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
                 calculate_sale_table();
-            } else if (status == 'New') {
-                $('#sale_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
-                calculate_new_table();
             }
         }
 
@@ -2160,12 +2578,9 @@ if (is_sale()) {
                 $('#adsOn-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
             $('#adsOn-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
-            if (status == 'Pending') {
+            if (status == 'Pending' || status == 'New') {
                 $('#final_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
                 calculate_sale_table();
-            } else if (status == 'New') {
-                $('#sale_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
-                calculate_new_table();
             }
         }
 
@@ -2179,12 +2594,9 @@ if (is_sale()) {
             $('#adsOn-item-total').children().eq(1).html(total_quantity - original_quantity);
 
             $("#adsOn-item-row" + rowId).remove();
-            if (status == 'Pending') {
+            if (status == 'Pending' || status == 'New') {
                 $('#final_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price);
                 calculate_sale_table();
-            } else if (status == 'New') {
-                $('#sale_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price);
-                calculate_new_table();
             }
         }
 
@@ -2203,11 +2615,13 @@ if (is_sale()) {
         }
 
         function save_new_quote() {
+            $('#quoteForm').attr('target', '_self');
             $('#action').val('save_new_quote');
             $('#quoteForm').submit();
         }
 
         function submit_new_quote() {
+            $('#quoteForm').attr('target', '_self');
             $('#action').val('submit_new_quote');
             $('#quoteForm').submit();
         }
@@ -2217,27 +2631,51 @@ if (is_sale()) {
             $('#quoteForm').submit();
         }
 
+        function reject_pending_quote_sale() {
+            $('#quoteForm').attr('target', '_self');
+            $('#action').val('reject_pending_quote_sale');
+            $('#quoteForm').submit();
+        }
+
         function save_pending_quote() {
+            $('#quoteForm').attr('target', '_self');
             $('#action').val('save_pending_quote');
             $('#quoteForm').submit();
         }
 
+        function save_pending_quote_sale() {
+            $('#action').val('save_pending_quote_sale');
+            $('#quoteForm').submit();
+        }
+
         function approve_pending_quote() {
+            $('#quoteForm').attr('target', '_self');
             $('#action').val('approve_pending_quote');
             $('#quoteForm').submit();
         }
 
+        function submit_pending_quote_sale() {
+            $('#quoteForm').attr('target', '_self');
+            $('#action').val('submit_pending_quote_sale');
+            if (!$("#ia_signed").is(':checked') || !$("#form_signed").is(':checked') || !$('#credit_passed').is(':checked')) {
+                showNotification('Customer must pass credit check and sign both IA and Quote form in order to proceed to the job');
+                $('#ia_signed').focus();
+                return;
+            } else {
+                $('#quoteForm').submit();
+            }
+            $('#quoteForm').submit();
+
+        }
+
         function reject_approved_quote() {
+            $('#quoteForm').attr('target', '_self');
             $('#action').val('reject_approved_quote');
             $('#quoteForm').submit();
         }
 
-        function save_approved_quote() {
-            $('#action').val('save_approved_quote');
-            $('#quoteForm').submit();
-        }
-
         function create_job() {
+            $('#quoteForm').attr('target', '_self');
             $('#action').val('create_job');
             if (!$("#ia_signed").is(':checked') || !$("#form_signed").is(':checked') || !$('#credit_passed').is(':checked')) {
                 showNotification('Customer must pass credit check and sign both IA and Quote form in order to proceed to the job');
@@ -2248,7 +2686,14 @@ if (is_sale()) {
             }
         }
 
+        function generate_form() {
+            $('#action').val('generate_form');
+            $('#quoteForm').attr('target', '_blank');
+            $('#quoteForm').submit();
+        }
+
         function save_quote() {
+            $('#quoteForm').attr('target', '_self');
             if (!$("#ia_signed").is(':checked') || !$("#form_signed").is(':checked')) {
                 showNotification('Customer must sign both IA and Quote form in order to proceed to the job');
                 $('#ia_signed').focus();

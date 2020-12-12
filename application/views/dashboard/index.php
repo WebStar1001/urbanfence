@@ -57,8 +57,8 @@
                 <div class="text-gray-600 mt-2 w-3/4 text-center mx-auto">
                     <ul class="shortcut-box">
                         <?php if (!is_sale()): ?>
-                            <li><a href="<?php echo base_url("Quotes/quotes_list?status=Pending"); ?>">Pending
-                                    Quotes</a>
+                            <li><a href="<?php echo base_url("Quotes/quotes_list?status=Approved"); ?>">Quotes to
+                                    Review</a>
                             </li>
                         <?php endif; ?>
                         <li><a href="<?php echo base_url("Quotes/quotes_list"); ?>">View Quotes</a></li>
@@ -71,7 +71,7 @@
             <div class="font-medium text-center text-base mt-3">Jobs</div>
             <div class="text-gray-600 mt-2 w-3/4 text-center mx-auto">
                 <ul class="shortcut-box">
-                    <?php if (!is_sale()):?>
+                    <?php if (!is_sale()): ?>
                         <li><a href="<?php echo base_url("Jobs/job_detail"); ?>">Job Details</a></li>
                     <?php endif; ?>
                     <li><a href="<?php echo base_url("Jobs/jobs_list"); ?>">Jobs View</a></li>

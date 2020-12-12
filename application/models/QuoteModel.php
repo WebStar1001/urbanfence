@@ -28,7 +28,7 @@ class QuoteModel extends CI_Model
         $company_id = $this->input->get('company_id');
         $this->db->select('quotes.*,date(quotes.created_at) AS quote_date, customers.customer AS customer, users.name AS sale_rep, 
         opportunities.job_type AS job_type, opportunities.site_city AS site_city, opportunities.site_address AS site_address,
-        customers.contact_person AS contact_person, opportunities.site_desc AS site_desc, companies.name AS company');
+        customers.contact_person AS contact_person, companies.name AS company');
         $this->db->from('quotes');
         $this->db->join('customers', 'quotes.customer_id = customers.id', 'inner');
         $this->db->join('opportunities', 'quotes.oppor_id = opportunities.id', 'inner');

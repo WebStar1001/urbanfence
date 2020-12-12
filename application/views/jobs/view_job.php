@@ -215,8 +215,6 @@
             '<tr>' +
             '<td style="font-weight: bold;">Job Type:</td>' +
             '<td>' + d.job_type + '</td>' +
-            '<td style="font-weight: bold;">Site Desc:</td>' +
-            '<td>' + d.site_desc + '</td>' +
             '<td style="font-weight: bold;' + hide_filed + '">Quoting Company:</td>' +
             '<td style="' + hide_filed + '">' + d.company + '</td>' +
             '</tr>' +

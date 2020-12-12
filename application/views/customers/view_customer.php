@@ -84,6 +84,20 @@
                     </div>
                 </div>
             </div>
+            <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
+                <div class=""><label>Phone</label>
+                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full"
+                                             id="phone">
+                    </div>
+                </div>
+            </div>
+            <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
+                <div class=""><label>Postal Code</label>
+                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full"
+                                             id="postal_code">
+                    </div>
+                </div>
+            </div>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Last Job Type</label>
                     <div class="mt-1">
@@ -222,6 +236,8 @@
                     data.status = $('#status').val();
                     data.contact_person = $('#contact_person').val();
                     data.city = $('#city').val();
+                    data.phone = $('#phone').val();
+                    data.postal_code = $('#postal_code').val();
                     data.last_job_type = $('#last_job_type').val();
                     data.last_sale_rep = $('#last_sale_rep').val();
                     data.last_quote_id = $('#last_quote_id').val();

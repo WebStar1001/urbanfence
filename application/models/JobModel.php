@@ -35,7 +35,7 @@ class JobModel extends CI_Model
 
         $this->db->select('jobs.*, customers.customer AS customer, customers.contact_person AS contact_person,
         opportunities.job_type AS job_type,opportunities.site_address AS site_address,opportunities.contact_onsite AS contact_onsite,
-        opportunities.site_city AS site_city, opportunities.site_desc AS site_desc, users.name AS installer, companies.name AS company');
+        opportunities.site_city AS site_city, users.name AS installer, companies.name AS company');
         $this->db->from('jobs');
         if ($job_id) {
             $this->db->where('jobs.id', $job_id);

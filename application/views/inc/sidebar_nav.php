@@ -95,10 +95,10 @@
                 <ul class="<?= ($this->uri->segment(1) == 'Quotes') ? 'side-menu__sub-open' : '' ?>">
                     <?php if (!is_sale()): ?>
                         <li>
-                            <a href="<?php echo base_url("Quotes/quotes_list?status=Pending"); ?>"
+                            <a href="<?php echo base_url("Quotes/quotes_list?status=Approved"); ?>"
                                class="side-menu <?= ($this->uri->segment(2) == 'quotes_list' && isset($_GET['status'])) ? 'side-menu--active' : '' ?>">
                                 <div class="side-menu__icon"><i data-feather="edit"></i></div>
-                                <div class="side-menu__title"> Pending Quotes</div>
+                                <div class="side-menu__title"> Quotes to Review</div>
                             </a>
                         </li>
                     <?php endif; ?>

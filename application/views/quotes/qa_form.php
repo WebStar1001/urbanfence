@@ -166,9 +166,11 @@ $total = round($sub_total2 + $quote->hst, 2);
         </thead>
         <tbody>
         <tr>
+            <?php if ($quote->job_type == 'New Fence' || $quote->job_type == 'New Fence and Gate c/w Operator') { ?>
             <td rowspan="<?php echo ($quote->discount_set != 0) ? 9 : 7; ?>>"
                 style="text-align: left;padding-left:20px;vertical-align: middle;font-size:11px!important;">
-                <table cellpadding="0" cellspacing="0" style="padding: 0;border-collapse: separate;border-spacing: 0;">
+                <table cellpadding="0" cellspacing="0"
+                       style="padding: 0;border-collapse: separate;border-spacing: 0;">
                     <tr>
                         <td class="no-border" style="width: 150px; font-weight: bold;">FENCE - Including Fabric,<br>
                             Top Rail, Line Posts & Fittings:
@@ -189,19 +191,20 @@ $total = round($sub_total2 + $quote->hst, 2);
                     </tr>
                     <tr>
                         <td class="no-border" style="font-weight: bold;height: 17px;">STRAINING POSTS:</td>
-                        <td class="no-border" style="height: 17px;"><?php echo $quote->additional_col_4; ?></td>
+                        <td class="no-border" style="height: 17px;"><?php echo $quote->additional_col_5; ?></td>
                     </tr>
                     <tr>
                         <td class="no-border" style="font-weight: bold;height: 17px;">FITTINGS:</td>
-                        <td class="no-border" style="height: 17px;"><?php echo $quote->additional_col_4; ?></td>
+                        <td class="no-border" style="height: 17px;"><?php echo $quote->additional_col_6; ?></td>
                     </tr>
                     <tr>
                         <td class="no-border" style="font-weight: bold;height: 17px;">GATES:</td>
-                        <td class="no-border" style="height: 17px;"><?php echo $quote->additional_col_4; ?></td>
+                        <td class="no-border" style="height: 17px;"><?php echo $quote->additional_col_7; ?></td>
                     </tr>
                     <tr>
                         <td class="no-border" colspan="2" style="height: 25px;">
-                            * Erection of Fence & Gates: All line posts set <b>IN CONCRETE</b></td>
+                            * Erection of Fence & Gates: All line posts set
+                            <b><?php echo $quote->additional_select_1; ?></b></td>
                     </tr>
                     <tr>
                         <td class="no-border" colspan="2" style="height: 15px;">
@@ -210,7 +213,7 @@ $total = round($sub_total2 + $quote->hst, 2);
                     </tr>
                     <tr>
                         <td class="no-border" colspan="2" style="height: 15px;">
-                            * Terminal posts installed <b>IN CONCRETE</b></td>
+                            * Terminal posts installed <b><?php echo $quote->additional_select_2; ?></b></td>
                     </tr>
                     <tr>
                         <td class="no-border" colspan="2" style="height: 15px;">
@@ -218,6 +221,14 @@ $total = round($sub_total2 + $quote->hst, 2);
                         </td>
                     </tr>
                 </table>
+                <?php } else {
+                ?>
+            <td rowspan="<?php echo ($quote->discount_set != 0) ? 9 : 7; ?>>"
+                style="text-align: left;padding-left:20px;vertical-align: top;font-size:11px!important;">
+                <?php
+                echo nl2br($quote->additional_notes);
+                } ?>
+            </td>
             <td>Materials</td>
             <td><?php echo round($quote->mat_net * $quote->mat_factor + $quote->mat_net * 0.32, 2); ?></td>
         </tr>

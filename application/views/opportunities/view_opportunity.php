@@ -74,16 +74,9 @@
                 </div>
             <?php endif; ?>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                <div><label>Sale Source</label>
-                    <div class="mt-1">
-                        <select class="input border w-full" id="sale_source">
-                            <option value="0">All</option>
-                            <option value="Returned Customer">Returned Customer</option>
-                            <option value="Yellow Pages">Yellow Pages</option>
-                            <option value="Facebook">Facebook</option>
-                            <option value="Google Ad">Google Ad</option>
-                            <option value="Friend's Referral">Friend's Referral</option>
-                        </select>
+                <div><label>Phone</label>
+                    <div class="mt-1"><input type="text" placeholder="Search" class="input pl-12 border w-full"
+                                             id="phone"/>
                     </div>
                 </div>
             </div>
@@ -151,13 +144,9 @@
                 </div>
             </div>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
-                <div><label>Urgency</label>
+                <div><label>Site Postal Code</label>
                     <div class="mt-1">
-                        <select class="input border w-full" id="urgency">
-                            <option value="0">All</option>
-                            <option value="Normal">Normal</option>
-                            <option value="Urgent">Urgent</option>
-                        </select>
+                        <input type="text" placeholder="Search" class="input pl-12 border w-full" id="site_postal_code">
                     </div>
                 </div>
             </div>
@@ -216,7 +205,7 @@
             '<tr>' +
             '<td style="width:15%;font-weight: bold">Contact Person:</td>' +
             '<td style="width:23%;">' + d.contact_person + '</td>' +
-            '<td  style="width:14%;font-weight: bold">Site Address:</td>' +
+            '<td  style="width:18%;font-weight: bold">Site Address:</td>' +
             '<td style="width:23%;">' + d.site_address + '</td>' +
             '<td style="width:13%;font-weight: bold">Contact onsite:</td>' +
             '<td style="width:20%;">' + d.contact_onsite + '</td>' +
@@ -231,14 +220,12 @@
             '<tr>' +
             '<td style="font-weight: bold">Urgency:</td>' +
             '<td>' + d.urgency + '</td>' +
-            '<td style="font-weight: bold">Site Desc:</td>' +
-            '<td>' + d.site_desc + '.</td>' +
             '<td style="font-weight: bold">Customer ID:</td>' +
             '<td>' + d.customer_id + '</td>' +
-            '</tr>' +
-            '<tr>' +
             '<td style="font-weight: bold">Details:</td>' +
             '<td>' + d.details + '</td>' +
+            '</tr>' +
+            '<tr>' +
             '<td style="width:15%;font-weight: bold;">Created By:</td>' +
             '<td style="width:20%;">' + d.created_by + '</td>' +
             '<td style="font-weight: bold;' + hide_filed + '">Quoting Company:</td>' +
@@ -262,7 +249,7 @@
                 url: '<?php echo base_url("Opportunity/get_opportunities");?>',
                 data: function (data) {
                     data.job_type = $('#job_type').val();
-                    data.sale_source = $('#sale_source').val();
+                    data.phone = $('#phone').val();
                     data.status = $('#status').val();
                     data.sale_rep = $('#sale_rep').val();
                     data.customer = $('#customer').val();
@@ -271,7 +258,7 @@
                     data.id = $('#id').val();
                     data.date = $('#date').val();
                     data.site_city = $('#site_city').val();
-                    data.urgency = $('#urgency').val();
+                    data.site_postal_code = $('#site_postal_code').val();
                 },
                 type: 'GET',
             },

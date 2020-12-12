@@ -183,6 +183,11 @@
                             <label class="cursor-pointer select-none" for="vertical-remember-me_r3"
                                    style="width: auto;">Materials Delivered</label>
                         </div>
+                        <div class="pl-3 pt-2">
+                            <a data-target="#installation_summary" data-toggle="modal"
+                               class="button  bg-theme-1 text-white"
+                               data-backdrop="static" data-keyboard="false">Installation Summary</a>
+                        </div>
                     </div>
                 </fieldset>
             </div>
@@ -210,7 +215,7 @@
                     <div class="mt-1 mb-2">
                         <label class="mr-1">Start Date</label>
                         <input type="date" class="input w-1/3 lg:w-2/3 border col-span-4" id="start_date"
-                               value="<?php echo ($job) ? $job->start_date : ''; ?>" />
+                               value="<?php echo ($job) ? $job->start_date : ''; ?>"/>
                     </div>
                     <div class="mt-1 mb-2">
                         <label class="mr-1">Completion Date</label>
@@ -226,7 +231,7 @@
 
         <div class="p-5">
             <a data-target="#material-detailed" data-toggle="modal" class="button  bg-theme-1 text-white"
-               data-backdrop="static" data-keyboard="false">Material Tracking</a>
+               data-backdrop="static" data-keyboard="false">Materials Tracking</a>
         </div>
 
         <div class="intro-y grid grid-cols-12 p-5 mt-5 gap-2">
@@ -240,55 +245,6 @@
         <?php if (!is_user()): ?>
             <fieldset class="p-1 status_width fieldset_bd_color" style="margin-top: 3%;">
                 <legend class="legend_spacing">Credits-Debits Tracking</legend>
-                <div class="intro-y grid grid-cols-12 box">
-                    <div class="col-span-12 p-5 box">
-                        <div class="w-100 float-left text-left m-auto mr-3">
-                            <p><b>Take Payment</b></p>
-                        </div>
-
-                        <div class="w-full sm:w-1/2 lg:w-1/6 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left ">
-                            <div class="sm:w-full">
-                                <label class="w-full sm:w-1/3 text-left">Invoice #</label>
-                                <input type="text" class="input w-full border flex-1 md:text-center"
-                                       id="invoice_number">
-                            </div>
-                        </div>
-
-                        <div class="w-full sm:w-1/2 lg:w-1/6 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left">
-                            <div class="sm:w-full">
-                                <label class="w-full text-left">Payment amount</label>
-                                <input type="text" class="input w-full border flex-1 md:text-center"
-                                       id="payment_amount">
-                            </div>
-                        </div>
-                        <div class="w-full sm:w-1/2 lg:w-1/6 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left">
-                            <div class="sm:w-full">
-                                <label class="w-full text-left">Reference #</label>
-                                <input type="text" class="input w-full border flex-1 md:text-center"
-                                       id="reference">
-                            </div>
-                        </div>
-
-                        <div class="w-full sm:w-1/2 lg:w-1/6 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left">
-                            <div class="sm:w-full">
-                                <label class="w-full text-left">Payment Method</label>
-                                <select class="input w-full border flex-1" id="payment_method">
-                                    <option value="0">Choose</option>
-                                    <option>Visa</option>
-                                    <option>Mater-Card</option>
-                                    <option>Amex</option>
-                                    <option>Cash</option>
-                                    <option>Cheque</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="w-full sm:w-1/2 lg:w-1/6 float-left sm:mt-2 p-2 lg:p-0  pt-5 lg:mt-5">
-                            <button class="button bg-theme-1 text-white" id="create_payment">Create Payment</button>
-                        </div>
-                    </div>
-
-                </div>
                 <div class="intro-y grid grid-cols-12 box" style="margin-top: 2%;">
                     <div class="col-span-12 p-5">
                         <div class="w-full lg:w-1/6 float-left text-left m-auto">
@@ -321,6 +277,55 @@
                         </div>
                     </div>
                 </div>
+                <div class="intro-y grid grid-cols-12 box">
+                    <div class="col-span-12 float-left text-left ml-5">
+                        <p><b>Take Payment</b></p>
+                    </div>
+                    <div class="col-span-12 p-5 box">
+                        <div class="w-full sm:w-1/2 lg:w-1/6 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left ">
+                            <div class="sm:w-full">
+                                <label class="w-full sm:w-1/3 text-left">Invoice #</label>
+                                <input type="text" class="input w-full border flex-1 md:text-center"
+                                       id="invoice_number">
+                            </div>
+                        </div>
+
+                        <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left">
+                            <div class="sm:w-full">
+                                <label class="w-full text-left">Payment amount</label>
+                                <input type="text" class="input w-full border flex-1 md:text-center"
+                                       id="payment_amount">
+                            </div>
+                        </div>
+                        <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left">
+                            <div class="sm:w-full">
+                                <label class="w-full text-left">Reference #</label>
+                                <input type="text" class="input w-full border flex-1 md:text-center"
+                                       id="reference">
+                            </div>
+                        </div>
+
+                        <div class="w-full sm:w-1/2 lg:w-1/5 lg:mr-3 float-left mb-2 md:mb-0 p-2 lg:p-0 sm:text-left">
+                            <div class="sm:w-full">
+                                <label class="w-full text-left">Payment Method</label>
+                                <select class="input w-full border flex-1" id="payment_method">
+                                    <option value="0">Choose</option>
+                                    <option>Visa</option>
+                                    <option>Mater-Card</option>
+                                    <option>Amex</option>
+                                    <option>Cash</option>
+                                    <option>Cheque</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="w-full sm:w-1/2 lg:w-1/6 float-left sm:mt-2 p-2 lg:p-0  pt-5 lg:mt-5">
+                            <button class="button bg-theme-1 text-white" id="create_payment">Create Payment</button>
+                        </div>
+                    </div>
+
+                </div>
+
                 <!-- BEGIN: Datatable -->
                 <div class="intro-y box p-5 mt-5" id="table_main_div">
                     <table id="jobDetailTable" class="display"
@@ -445,6 +450,258 @@
         </form>
     </div>
 
+</div>
+<div class="modal" id="installation_summary">
+    <div class="modal__content modal__content--lg p-5 text-center" style="width: 75%;">
+        <div class="flex items-center py-5 sm:py-3 border-b border-gray-200">
+            <h2 class="font-medium text-base mr-auto">Installation Summary</h2>
+        </div>
+        <div class="intro-y flex flex-col sm:flex-row mt-1"><h2><b>Customer Info: </b></h2></div>
+        <div class="grid grid-cols-12 gap-6" id="customer_detail">
+            <div class="col-span-4" style="padding: 1em;text-align: left;">
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">Customer:</label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $customer->customer; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Address:</label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $customer->address; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> City:</label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $customer->city; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Job Type:</label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $oppor->job_type; ?></label>
+                </div>
+            </div>
+            <div class="col-span-6" style="padding: 1em;text-align: left;">
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">Contact Person:</label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $customer->contact_person; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Phone:</label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $customer->phone1; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Postal Code:</label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $customer->postal_code; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> City:</label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $oppor->sale_rep; ?></label>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="intro-y flex flex-col sm:flex-row mt-1"><h2><b>Quote Notes: </b></h2></div>
+        <div class="grid grid-cols-12 gap-6" id="quote_notes">
+            <?php
+            if ($oppor->job_type == 'New Fence' || $oppor->job_type == 'New Fence and Gate c/w Operator') {
+                ?>
+                <div class="col-span-4" style="padding: 1em;text-align: left;">
+                    <div class="intro-y flex flex-col sm:flex-row mt-1">
+                        <label class="md:mr-5 pt-1 sm:pt-3" style="width: 250px;">FENCE - Including Fabric,
+                            Top Rail, Line Posts & Fittings:</label>
+                        <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->additional_col_1; ?></label>
+                    </div>
+                    <div class="intro-y flex flex-col sm:flex-row mt-1">
+                        <label class="md:mr-5 pt-1 sm:pt-3" style="width: 250px;"> END POSTS:</label>
+                        <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->additional_col_2; ?></label>
+                    </div>
+                    <div class="intro-y flex flex-col sm:flex-row mt-1">
+                        <label class="md:mr-5 pt-1 sm:pt-3" style="width: 250px;"> GATE POSTS:
+                        </label>
+                        <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->additional_col_3; ?></label>
+                    </div>
+                    <div class="intro-y flex flex-col sm:flex-row mt-1">
+                        <label class="md:mr-5 pt-1 sm:pt-3" style="width: 250px;"> CORNER POSTS:</label>
+                        <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->additional_col_4; ?></label>
+                    </div>
+                </div>
+                <div class="col-span-8" style="padding: 1em;text-align: left;">
+                    <div class="intro-y flex flex-col sm:flex-row mt-1">
+                        <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">STRAINING POSTS:</label>
+                        <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->additional_col_5; ?></label>
+                    </div>
+                    <div class="intro-y flex flex-col sm:flex-row mt-1">
+                        <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;"> FITTINGS:</label>
+                        <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->additional_col_6; ?></label>
+                    </div>
+                    <div class="intro-y flex flex-col sm:flex-row mt-1">
+                        <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;"> GATES:</label>
+                        <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->additional_col_7; ?></label>
+                    </div>
+                    <div class="intro-y flex flex-col sm:flex-row mt-1">
+                        * Erection of Fence & Gates: All line posts set <?php echo $quote->additional_select_1; ?>
+                    </div>
+                    <div class="intro-y flex flex-col sm:flex-row mt-1">
+                        (In normal soil & on cleared line marked by customer with survey bars)
+                    </div>
+                    <div class="intro-y flex flex-col sm:flex-row mt-1">
+                        * Terminal posts installed <?php echo $quote->additional_select_2; ?>
+                    </div>
+                    <div class="intro-y flex flex-col sm:flex-row mt-1">
+                        ( IN NORMAL SOIL & ON CLEARED LINE MARKED BY CUSTOMER WITH SURVEY BARS )
+                    </div>
+                </div>
+                <?php
+            } else {
+                ?>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <?php echo nl2br($quote->additional_notes); ?>
+                </div>
+            <?php } ?>
+        </div>
+        <hr>
+        <div class="intro-y flex flex-col sm:flex-row mt-1"><h2><b>Installation Details: </b></h2></div>
+        <div class="grid grid-cols-12 gap-6" id="installation_detail">
+            <div class="col-span-4" style="padding: 1em;text-align: left;">
+                <div class="intro-y flex flex-col sm:flex-row mt-1"><h3><b>Specifications: </b></h3></div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Mesh:</label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_1; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Line Post:</label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_2; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Top Rail:</label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_3; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Main Post:</label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_4; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Holes Thru: </label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_5; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1"><h3><b>Specifications: </b></h3></div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Mains : </label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_6; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Lines : </label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_7; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1"><h3><b>Footing Diameter: </b></h3></div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Bottom : </label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_8; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Centre : </label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_9; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Braces : </label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_10; ?></label>
+                </div>
+            </div>
+            <div class="col-span-4" style="padding: 1em;">
+                <div class="intro-y flex flex-col sm:flex-row mt-1"><h3><b>Locate Fence By: </b></h3></div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Stakes:</label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_11; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Ex Fence:</label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_12; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Sales Rep:</label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_13; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Customer:</label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_14; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1"><h3><b>Keep Fence: </b></h3></div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> On Line : </label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_15; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Inside Line : </label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_16; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1"><h3><b>Main Post Set: </b></h3></div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Concrete : </label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_17; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Driven : </label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_18; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Flanged : </label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_19; ?></label>
+                </div>
+            </div>
+            <div class="col-span-4" style="padding: 1em;">
+                <div class="intro-y flex flex-col sm:flex-row mt-1"><h3><b>Footing Depth: </b></h3></div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Mains:</label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_20; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Lines:</label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_21; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1"><h3><b>Barbwire: </b></h3></div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> None : </label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_22; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> In : </label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_23; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Out : </label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_24; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Vertical : </label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_25; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1"><h3><b>Existing Fence: </b></h3></div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> None : </label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_26; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Remove : </label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_27; ?></label>
+                </div>
+                <div class="intro-y flex flex-col sm:flex-row mt-1">
+                    <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;"> Haul Away : </label>
+                    <label class="md:mr-5 pt-1 sm:pt-3"><?php echo $quote->installation_detail_28; ?></label>
+                </div>
+            </div>
+            <div class="intro-y col-span-12 mt-1 text-left"><h2><b>Before leaving the yard make sure you have all
+                        the tools and materials to do the job </b></h2></div>
+            <div class="intro-y col-span-12 mt-1 text-left"><b>
+                    Before leaving the yard make sure you have all the tools and materials to do the job</b></div>
+            <div class="intro-y col-span-12 mt-1 text-left"><b>
+            Do not dig a hole until you have the cable locates for all utilities in you hand and you have read and
+                    understand them</b></div>
+            <div class="intro-y  col-span-12 mt-1 text-left"><b>
+                    Installers must provide a drawing for all completed jobs</b></div>
+
+        </div>
+        <div class=" py-3 text-right border-t border-gray-200">
+            <button data-dismiss="modal" class="button w-24 bg-theme-1 text-white">Print
+            </button>
+            <button data-dismiss="modal" class="button w-24 bg-theme-6 text-white" id="closeModalBtn">Close</button>
+        </div>
+    </div>
 </div>
 <div class="modal" id="confirm-modal">
     <div class="modal__content modal__content--lg p-5 text-center">

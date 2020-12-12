@@ -96,9 +96,13 @@ class Quotes extends CI_Controller
             );
             if (is_sale()) {
                 $quoteData['mat_net'] = $this->input->post('mat_net');
+                $quoteData['mat_factor'] = $this->input->post('mat_factor');
                 $quoteData['labour_net'] = $this->input->post('labour_net');
+                $quoteData['lab_factor'] = $this->input->post('lab_factor');
                 $quoteData['misc_net'] = $this->input->post('misc_net');
+                $quoteData['misc_factor'] = $this->input->post('misc_factor');
                 $quoteData['ads_on_net'] = $this->input->post('add_on_net');
+                $quoteData['ads_on_factor'] = $this->input->post('ads_on_factor');
                 $quoteData['discount_set'] = $this->input->post('discount_percent');
             }
         } elseif ($action == 'submit_new_quote') {
@@ -135,6 +139,50 @@ class Quotes extends CI_Controller
                 'discount_set' => $this->input->post('discount_percent'),
                 'hst' => $this->input->post('hst')
             );
+        } elseif ($action == 'save_pending_quote_sale') {
+            $quoteData = array(
+                'additional_col_1' => $this->input->post('additional_col_1'),
+                'additional_col_2' => $this->input->post('additional_col_2'),
+                'additional_col_3' => $this->input->post('additional_col_3'),
+                'additional_col_4' => $this->input->post('additional_col_4'),
+                'additional_col_5' => $this->input->post('additional_col_5'),
+                'additional_col_6' => $this->input->post('additional_col_6'),
+                'additional_col_7' => $this->input->post('additional_col_7'),
+                'additional_select_1' => $this->input->post('additional_select_1'),
+                'additional_select_2' => $this->input->post('additional_select_2'),
+                'additional_notes' => $this->input->post('additional_notes'),
+                'installation_detail_1' => $this->input->post('installation_detail_1'),
+                'installation_detail_2' => $this->input->post('installation_detail_2'),
+                'installation_detail_3' => $this->input->post('installation_detail_3'),
+                'installation_detail_4' => $this->input->post('installation_detail_4'),
+                'installation_detail_5' => $this->input->post('installation_detail_5'),
+                'installation_detail_6' => $this->input->post('installation_detail_6'),
+                'installation_detail_7' => $this->input->post('installation_detail_7'),
+                'installation_detail_8' => $this->input->post('installation_detail_8'),
+                'installation_detail_9' => $this->input->post('installation_detail_9'),
+                'installation_detail_10' => $this->input->post('installation_detail_10'),
+                'installation_detail_11' => $this->input->post('installation_detail_11'),
+                'installation_detail_12' => $this->input->post('installation_detail_12'),
+                'installation_detail_13' => $this->input->post('installation_detail_13'),
+                'installation_detail_14' => $this->input->post('installation_detail_14'),
+                'installation_detail_15' => $this->input->post('installation_detail_15'),
+                'installation_detail_16' => $this->input->post('installation_detail_16'),
+                'installation_detail_17' => $this->input->post('installation_detail_17'),
+                'installation_detail_18' => $this->input->post('installation_detail_18'),
+                'installation_detail_19' => $this->input->post('installation_detail_19'),
+                'installation_detail_20' => $this->input->post('installation_detail_20'),
+                'installation_detail_21' => $this->input->post('installation_detail_21'),
+                'installation_detail_22' => $this->input->post('installation_detail_22'),
+                'installation_detail_23' => $this->input->post('installation_detail_23'),
+                'installation_detail_24' => $this->input->post('installation_detail_24'),
+                'installation_detail_25' => $this->input->post('installation_detail_25'),
+                'installation_detail_26' => $this->input->post('installation_detail_26'),
+                'installation_detail_27' => $this->input->post('installation_detail_27'),
+                'installation_detail_28' => $this->input->post('installation_detail_28'),
+                'ia_signed' => $this->input->post('ia_signed'),
+                'form_signed' => $this->input->post('form_signed'),
+                'credit_passed' => $this->input->post('credit_passed')
+            );
         } elseif ($action == 'approve_pending_quote') {
             $quoteData = array(
                 'company_id' => $company_id,
@@ -154,8 +202,55 @@ class Quotes extends CI_Controller
                 'discount_set' => $this->input->post('discount_percent'),
                 'hst' => $this->input->post('hst')
             );
+
+        } elseif ($action == 'submit_pending_quote_sale') {
+            $quoteData = array(
+                'status' => 'Approved',
+                'additional_col_1' => $this->input->post('additional_col_1'),
+                'additional_col_2' => $this->input->post('additional_col_2'),
+                'additional_col_3' => $this->input->post('additional_col_3'),
+                'additional_col_4' => $this->input->post('additional_col_4'),
+                'additional_col_5' => $this->input->post('additional_col_5'),
+                'additional_col_6' => $this->input->post('additional_col_6'),
+                'additional_col_7' => $this->input->post('additional_col_7'),
+                'additional_select_1' => $this->input->post('additional_select_1'),
+                'additional_select_2' => $this->input->post('additional_select_2'),
+                'additional_notes' => $this->input->post('additional_notes'),
+                'installation_detail_1' => $this->input->post('installation_detail_1'),
+                'installation_detail_2' => $this->input->post('installation_detail_2'),
+                'installation_detail_3' => $this->input->post('installation_detail_3'),
+                'installation_detail_4' => $this->input->post('installation_detail_4'),
+                'installation_detail_5' => $this->input->post('installation_detail_5'),
+                'installation_detail_6' => $this->input->post('installation_detail_6'),
+                'installation_detail_7' => $this->input->post('installation_detail_7'),
+                'installation_detail_8' => $this->input->post('installation_detail_8'),
+                'installation_detail_9' => $this->input->post('installation_detail_9'),
+                'installation_detail_10' => $this->input->post('installation_detail_10'),
+                'installation_detail_11' => $this->input->post('installation_detail_11'),
+                'installation_detail_12' => $this->input->post('installation_detail_12'),
+                'installation_detail_13' => $this->input->post('installation_detail_13'),
+                'installation_detail_14' => $this->input->post('installation_detail_14'),
+                'installation_detail_15' => $this->input->post('installation_detail_15'),
+                'installation_detail_16' => $this->input->post('installation_detail_16'),
+                'installation_detail_17' => $this->input->post('installation_detail_17'),
+                'installation_detail_18' => $this->input->post('installation_detail_18'),
+                'installation_detail_19' => $this->input->post('installation_detail_19'),
+                'installation_detail_20' => $this->input->post('installation_detail_20'),
+                'installation_detail_21' => $this->input->post('installation_detail_21'),
+                'installation_detail_22' => $this->input->post('installation_detail_22'),
+                'installation_detail_23' => $this->input->post('installation_detail_23'),
+                'installation_detail_24' => $this->input->post('installation_detail_24'),
+                'installation_detail_25' => $this->input->post('installation_detail_25'),
+                'installation_detail_26' => $this->input->post('installation_detail_26'),
+                'installation_detail_27' => $this->input->post('installation_detail_27'),
+                'installation_detail_28' => $this->input->post('installation_detail_28'),
+                'ia_signed' => $this->input->post('ia_signed'),
+                'form_signed' => $this->input->post('form_signed'),
+                'credit_passed' => $this->input->post('credit_passed')
+            );
         } elseif ($action == 'reject_pending_quote') {
-            $quoteData = array('status' => 'New',
+            $quoteData = array(
+                'status' => 'New',
                 'mat_factor' => 0,
                 'lab_factor' => 0,
                 'misc_factor' => 0,
@@ -169,8 +264,9 @@ class Quotes extends CI_Controller
             );
 
 
-        } elseif ($action == 'save_approved_quote') {
+        } elseif ($action == 'reject_pending_quote_sale') {
             $quoteData = array(
+                'status' => 'New',
                 'additional_col_1' => $this->input->post('additional_col_1'),
                 'additional_col_2' => $this->input->post('additional_col_2'),
                 'additional_col_3' => $this->input->post('additional_col_3'),
@@ -178,25 +274,135 @@ class Quotes extends CI_Controller
                 'additional_col_5' => $this->input->post('additional_col_5'),
                 'additional_col_6' => $this->input->post('additional_col_6'),
                 'additional_col_7' => $this->input->post('additional_col_7'),
+                'additional_select_1' => $this->input->post('additional_select_1'),
+                'additional_select_2' => $this->input->post('additional_select_2'),
+                'additional_notes' => $this->input->post('additional_notes'),
+                'installation_detail_1' => $this->input->post('installation_detail_1'),
+                'installation_detail_2' => $this->input->post('installation_detail_2'),
+                'installation_detail_3' => $this->input->post('installation_detail_3'),
+                'installation_detail_4' => $this->input->post('installation_detail_4'),
+                'installation_detail_5' => $this->input->post('installation_detail_5'),
+                'installation_detail_6' => $this->input->post('installation_detail_6'),
+                'installation_detail_7' => $this->input->post('installation_detail_7'),
+                'installation_detail_8' => $this->input->post('installation_detail_8'),
+                'installation_detail_9' => $this->input->post('installation_detail_9'),
+                'installation_detail_10' => $this->input->post('installation_detail_10'),
+                'installation_detail_11' => $this->input->post('installation_detail_11'),
+                'installation_detail_12' => $this->input->post('installation_detail_12'),
+                'installation_detail_13' => $this->input->post('installation_detail_13'),
+                'installation_detail_14' => $this->input->post('installation_detail_14'),
+                'installation_detail_15' => $this->input->post('installation_detail_15'),
+                'installation_detail_16' => $this->input->post('installation_detail_16'),
+                'installation_detail_17' => $this->input->post('installation_detail_17'),
+                'installation_detail_18' => $this->input->post('installation_detail_18'),
+                'installation_detail_19' => $this->input->post('installation_detail_19'),
+                'installation_detail_20' => $this->input->post('installation_detail_20'),
+                'installation_detail_21' => $this->input->post('installation_detail_21'),
+                'installation_detail_22' => $this->input->post('installation_detail_22'),
+                'installation_detail_23' => $this->input->post('installation_detail_23'),
+                'installation_detail_24' => $this->input->post('installation_detail_24'),
+                'installation_detail_25' => $this->input->post('installation_detail_25'),
+                'installation_detail_26' => $this->input->post('installation_detail_26'),
+                'installation_detail_27' => $this->input->post('installation_detail_27'),
+                'installation_detail_28' => $this->input->post('installation_detail_28'),
                 'ia_signed' => $this->input->post('ia_signed'),
                 'form_signed' => $this->input->post('form_signed'),
                 'credit_passed' => $this->input->post('credit_passed')
             );
-        } elseif ($action == 'reject_approved_quote') {
-            $quoteData['status'] = 'Pending';
-        } else {
+        } elseif ($action == 'save_approved_quote') {
             $quoteData = array(
-                'additional_col_1' => $this->input->post('additional_col_1'),
-                'additional_col_2' => $this->input->post('additional_col_2'),
-                'additional_col_3' => $this->input->post('additional_col_3'),
-                'additional_col_4' => $this->input->post('additional_col_4'),
-                'additional_col_5' => $this->input->post('additional_col_5'),
-                'additional_col_6' => $this->input->post('additional_col_6'),
-                'additional_col_7' => $this->input->post('additional_col_7'),
-                'ia_signed' => $this->input->post('ia_signed'),
-                'form_signed' => $this->input->post('form_signed'),
-                'credit_passed' => $this->input->post('credit_passed'),
-                'status' => 'Job'
+                'installation_detail_1' => $this->input->post('installation_detail_1'),
+                'installation_detail_2' => $this->input->post('installation_detail_2'),
+                'installation_detail_3' => $this->input->post('installation_detail_3'),
+                'installation_detail_4' => $this->input->post('installation_detail_4'),
+                'installation_detail_5' => $this->input->post('installation_detail_5'),
+                'installation_detail_6' => $this->input->post('installation_detail_6'),
+                'installation_detail_7' => $this->input->post('installation_detail_7'),
+                'installation_detail_8' => $this->input->post('installation_detail_8'),
+                'installation_detail_9' => $this->input->post('installation_detail_9'),
+                'installation_detail_10' => $this->input->post('installation_detail_10'),
+                'installation_detail_11' => $this->input->post('installation_detail_11'),
+                'installation_detail_12' => $this->input->post('installation_detail_12'),
+                'installation_detail_13' => $this->input->post('installation_detail_13'),
+                'installation_detail_14' => $this->input->post('installation_detail_14'),
+                'installation_detail_15' => $this->input->post('installation_detail_15'),
+                'installation_detail_16' => $this->input->post('installation_detail_16'),
+                'installation_detail_17' => $this->input->post('installation_detail_17'),
+                'installation_detail_18' => $this->input->post('installation_detail_18'),
+                'installation_detail_19' => $this->input->post('installation_detail_19'),
+                'installation_detail_20' => $this->input->post('installation_detail_20'),
+                'installation_detail_21' => $this->input->post('installation_detail_21'),
+                'installation_detail_22' => $this->input->post('installation_detail_22'),
+                'installation_detail_23' => $this->input->post('installation_detail_23'),
+                'installation_detail_24' => $this->input->post('installation_detail_24'),
+                'installation_detail_25' => $this->input->post('installation_detail_25'),
+                'installation_detail_26' => $this->input->post('installation_detail_26'),
+                'installation_detail_27' => $this->input->post('installation_detail_27'),
+                'installation_detail_28' => $this->input->post('installation_detail_28')
+            );
+        } elseif ($action == 'reject_approved_quote') {
+            $quoteData = array(
+                'status' => 'Pending',
+                'installation_detail_1' => $this->input->post('installation_detail_1'),
+                'installation_detail_2' => $this->input->post('installation_detail_2'),
+                'installation_detail_3' => $this->input->post('installation_detail_3'),
+                'installation_detail_4' => $this->input->post('installation_detail_4'),
+                'installation_detail_5' => $this->input->post('installation_detail_5'),
+                'installation_detail_6' => $this->input->post('installation_detail_6'),
+                'installation_detail_7' => $this->input->post('installation_detail_7'),
+                'installation_detail_8' => $this->input->post('installation_detail_8'),
+                'installation_detail_9' => $this->input->post('installation_detail_9'),
+                'installation_detail_10' => $this->input->post('installation_detail_10'),
+                'installation_detail_11' => $this->input->post('installation_detail_11'),
+                'installation_detail_12' => $this->input->post('installation_detail_12'),
+                'installation_detail_13' => $this->input->post('installation_detail_13'),
+                'installation_detail_14' => $this->input->post('installation_detail_14'),
+                'installation_detail_15' => $this->input->post('installation_detail_15'),
+                'installation_detail_16' => $this->input->post('installation_detail_16'),
+                'installation_detail_17' => $this->input->post('installation_detail_17'),
+                'installation_detail_18' => $this->input->post('installation_detail_18'),
+                'installation_detail_19' => $this->input->post('installation_detail_19'),
+                'installation_detail_20' => $this->input->post('installation_detail_20'),
+                'installation_detail_21' => $this->input->post('installation_detail_21'),
+                'installation_detail_22' => $this->input->post('installation_detail_22'),
+                'installation_detail_23' => $this->input->post('installation_detail_23'),
+                'installation_detail_24' => $this->input->post('installation_detail_24'),
+                'installation_detail_25' => $this->input->post('installation_detail_25'),
+                'installation_detail_26' => $this->input->post('installation_detail_26'),
+                'installation_detail_27' => $this->input->post('installation_detail_27'),
+                'installation_detail_28' => $this->input->post('installation_detail_28')
+            );
+        } elseif ($action == 'create_job') {
+            $quoteData = array(
+                'status' => 'Job',
+                'installation_detail_1' => $this->input->post('installation_detail_1'),
+                'installation_detail_2' => $this->input->post('installation_detail_2'),
+                'installation_detail_3' => $this->input->post('installation_detail_3'),
+                'installation_detail_4' => $this->input->post('installation_detail_4'),
+                'installation_detail_5' => $this->input->post('installation_detail_5'),
+                'installation_detail_6' => $this->input->post('installation_detail_6'),
+                'installation_detail_7' => $this->input->post('installation_detail_7'),
+                'installation_detail_8' => $this->input->post('installation_detail_8'),
+                'installation_detail_9' => $this->input->post('installation_detail_9'),
+                'installation_detail_10' => $this->input->post('installation_detail_10'),
+                'installation_detail_11' => $this->input->post('installation_detail_11'),
+                'installation_detail_12' => $this->input->post('installation_detail_12'),
+                'installation_detail_13' => $this->input->post('installation_detail_13'),
+                'installation_detail_14' => $this->input->post('installation_detail_14'),
+                'installation_detail_15' => $this->input->post('installation_detail_15'),
+                'installation_detail_16' => $this->input->post('installation_detail_16'),
+                'installation_detail_17' => $this->input->post('installation_detail_17'),
+                'installation_detail_18' => $this->input->post('installation_detail_18'),
+                'installation_detail_19' => $this->input->post('installation_detail_19'),
+                'installation_detail_20' => $this->input->post('installation_detail_20'),
+                'installation_detail_21' => $this->input->post('installation_detail_21'),
+                'installation_detail_22' => $this->input->post('installation_detail_22'),
+                'installation_detail_23' => $this->input->post('installation_detail_23'),
+                'installation_detail_24' => $this->input->post('installation_detail_24'),
+                'installation_detail_25' => $this->input->post('installation_detail_25'),
+                'installation_detail_26' => $this->input->post('installation_detail_26'),
+                'installation_detail_27' => $this->input->post('installation_detail_27'),
+                'installation_detail_28' => $this->input->post('installation_detail_28')
             );
             $quote = $this->QuoteModel->get_quote($quote_id);
             $quote_total = $quote->mat_net * $quote->mat_factor + $quote->mat_net * 0.32 + $quote->labour_net * $quote->lab_factor +
@@ -212,6 +418,20 @@ class Quotes extends CI_Controller
             );
             $this->db->insert('jobs', $jobData);
             $this->CustomerModel->changeCustomerStatus($customer_id, 'Customer');
+        } elseif ($action == 'generate_form') {
+            $quoteData = array(
+                'additional_col_1' => $this->input->post('additional_col_1'),
+                'additional_col_2' => $this->input->post('additional_col_2'),
+                'additional_col_3' => $this->input->post('additional_col_3'),
+                'additional_col_4' => $this->input->post('additional_col_4'),
+                'additional_col_5' => $this->input->post('additional_col_5'),
+                'additional_col_6' => $this->input->post('additional_col_6'),
+                'additional_col_7' => $this->input->post('additional_col_7'),
+                'additional_select_1' => $this->input->post('additional_select_1'),
+                'additional_select_2' => $this->input->post('additional_select_2'),
+                'additional_notes' => $this->input->post('additional_notes')
+            );
+
         }
         if ($quote_id) {
             $this->db->where('id', $quote_id);
@@ -220,7 +440,7 @@ class Quotes extends CI_Controller
             $this->db->insert('quotes', $quoteData);
             $quote_id = $this->db->insert_id();
 
-            if($action == 'submit_new_quote'){
+            if ($action == 'submit_new_quote') {
                 $managers = $this->UserModel->getManagersByCompanyID($company_id);
 
                 foreach ($managers as $manager) {
@@ -297,7 +517,35 @@ class Quotes extends CI_Controller
                 }
             }
         }
-        redirect('Quotes/quotes_list');
+        if ($action == 'generate_form') {
+
+            $quote = $this->QuoteModel->getQuoteDatas($quote_id);
+
+            $customer = $this->CustomerModel->get_customer($quote->customer_id);
+
+            $this->load->view('quotes/qa_form', array('quote' => $quote, 'customer' => $customer));
+
+            $html = $this->output->get_output();
+
+            // Load pdf library
+            $this->load->library('Pdf');
+
+            // Load HTML content
+            $this->pdf->loadHtml($html);
+
+            // (Optional) Setup the paper size and orientation
+            $this->pdf->setPaper('A4', 'portrait');
+
+            // Render the HTML as PDF
+            $this->pdf->render();
+
+            // Output the generated PDF (1 = download and 0 = preview)
+            $this->pdf->stream("welcome.pdf", array("Attachment" => 0));
+            echo 'success';
+            exit;
+        } else {
+            redirect('Quotes/quotes_list');
+        }
     }
 
     private function send_email_to_manager($quote_id, $oppor_id, $manager)
@@ -343,44 +591,6 @@ class Quotes extends CI_Controller
 //        $quote_id = 2;
         $quote = $this->QuoteModel->getQuoteDatas($quote_id);
         $this->load->view('quotes/generate_ia', array('quote' => $quote));
-
-        $html = $this->output->get_output();
-
-        // Load pdf library
-        $this->load->library('Pdf');
-
-        // Load HTML content
-        $this->pdf->loadHtml($html);
-
-        // (Optional) Setup the paper size and orientation
-        $this->pdf->setPaper('A4', 'portrait');
-
-        // Render the HTML as PDF
-        $this->pdf->render();
-
-        // Output the generated PDF (1 = download and 0 = preview)
-        $this->pdf->stream("welcome.pdf", array("Attachment" => 0));
-        echo 'success';
-        exit;
-    }
-
-    public function generate_qa_form()
-    {
-        $quote_id = $_GET['quote_id'];
-
-        $data = $_GET;
-
-        unset($data['quote_id']);
-
-        $this->db->where('id', $quote_id);
-
-        $this->db->update('quotes', $data);
-
-        $quote = $this->QuoteModel->getQuoteDatas($quote_id);
-
-        $customer = $this->CustomerModel->get_customer($quote->customer_id);
-
-        $this->load->view('quotes/qa_form', array('quote' => $quote, 'customer' => $customer));
 
         $html = $this->output->get_output();
 

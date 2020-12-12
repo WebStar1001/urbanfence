@@ -22,6 +22,8 @@ class CustomerModel extends CI_Model
         $status = $this->input->get('status');
         $contact_person = $this->input->get('contact_person');
         $city = $this->input->get('city');
+        $phone = $this->input->get('phone');
+        $postal_code = $this->input->get('postal_code');
 
         $last_job_id = $this->input->get('last_job_id');
 
@@ -50,6 +52,13 @@ class CustomerModel extends CI_Model
         }
         if ($city) {
             $this->db->like('city', $city);
+        }
+        if ($phone) {
+            $this->db->where('phone1', $phone);
+            $this->db->or_where('phone2', $phone);
+        }
+        if ($postal_code) {
+            $this->db->where('postal_code', $postal_code);
         }
         if ($last_job_id) {
             $this->db->where('last_job_id', $last_job_id);
@@ -87,7 +96,9 @@ class CustomerModel extends CI_Model
             ->limit(1)->get();
         return $query->row();
     }
-    public function changeCustomerStatus($customer_id, $status){
+
+    public function changeCustomerStatus($customer_id, $status)
+    {
         $this->db->set('status', $status);
         $this->db->where('id', $customer_id);
         $this->db->update('customers');

@@ -16,7 +16,7 @@ class OpportunityModel extends CI_Model
     {
         $job_type = $this->input->get('job_type');
         $company_id = $this->input->get('company_id');
-        $sale_source = $this->input->get('sale_source');
+        $phone = $this->input->get('phone');
         $status = $this->input->get('status');
         $sale_rep = $this->input->get('sale_rep');
         $customer = $this->input->get('customer');
@@ -24,7 +24,7 @@ class OpportunityModel extends CI_Model
         $customer_id = $this->input->get('customer_id');
         $date = $this->input->get('date');
         $site_city = $this->input->get('site_city');
-        $urgency = $this->input->get('urgency');
+        $site_postal_code = $this->input->get('site_postal_code');
         $this->db->select('opportunities.*, customers.customer AS customer, customers.contact_person AS contact_person, 
                         quotes.id AS quote_id,companies.name AS company');
         $this->db->from('opportunities');
@@ -34,8 +34,9 @@ class OpportunityModel extends CI_Model
         if ($job_type) {
             $this->db->where('job_type', $job_type);
         }
-        if ($sale_source) {
-            $this->db->where('sale_source', $sale_source);
+        if ($phone) {
+            $this->db->where('phone1', $phone);
+            $this->db->or_where('phone2', $phone);
         }
         if ($status) {
             $this->db->where('opportunities.status', $status);
@@ -64,8 +65,8 @@ class OpportunityModel extends CI_Model
             $this->db->where('date >= "' . date('Y-m-d', strtotime($start_date)) . '"', null, false);
             $this->db->where('date <= "' . date('Y-m-d', strtotime($end_date)) . '"', null, false);
         }
-        if ($urgency) {
-            $this->db->where('urgency', $urgency);
+        if ($site_postal_code) {
+            $this->db->where('site_postal_code', $site_postal_code);
         }
         $this->db->join('customers', 'customers.id=opportunities.customer_id', 'inner');
         $this->db->join('quotes', 'quotes.oppor_id=opportunities.id', 'left');

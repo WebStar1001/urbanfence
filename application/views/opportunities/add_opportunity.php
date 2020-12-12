@@ -250,32 +250,26 @@
                                        tabindex="12"
                                        value="<?php echo (is_object($opportunity)) ? $opportunity->site_city : ''; ?>">
                             </div>
-                            <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
-                                <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site Desc</label>
-                                <input type="text" name="site_desc" class="input border mt-2 flex-1"
-                                       tabindex="14"
-                                       value="<?php echo (is_object($opportunity)) ? $opportunity->site_desc : '' ?>">
-                            </div>
+                        </div>
+                        <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
+                            <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site Address *</label>
+                            <input type="text" name="site_address" class="input border mt-2 flex-1" required
+                                   tabindex="14"
+                                   value="<?php echo (is_object($opportunity)) ? $opportunity->site_address : '' ?>">
                         </div>
                     </div>
                     <div class="col-span-12 sm:col-span-6 md:col-span-6 md:mr-3" id="add_opppor_right_info">
                         <div class="preview">
                             <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
-                                <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site Address *</label>
-                                <input type="text" name="site_address" class="input border mt-2 flex-1" required
-                                       tabindex="13"
-                                       value="<?php echo (is_object($opportunity)) ? $opportunity->site_address : '' ?>">
-                            </div>
-                            <div class="intro-y flex flex-col sm:flex-row mb-3 sm:mb-0">
                                 <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3">Site Postal Code
                                     *</label>
                                 <input type="text" name="site_postal_code" class="input border mt-2 flex-1" required
-                                       tabindex="15"
+                                       tabindex="13"
                                        value="<?php echo (is_object($opportunity)) ? $opportunity->site_postal_code : '' ?>">
                             </div>
                             <input type="button" value="Use Customer Info" style="float: right;"
                                    id="copy_from_customer"
-                                   class="button bg-theme-1 text-white mt-5 p-2 ml-2" tabindex="16"/>
+                                   class="button bg-theme-1 text-white mt-5 p-2 ml-2" tabindex="15"/>
                         </div>
                     </div>
                 </div>
@@ -284,7 +278,7 @@
                 <div class="preview">
                     <div class="intro-y flex flex-col sm:flex-row">
                         <label class="w-full sm:text-left md:mr-5 width6 pt-1 sm:pt-3"> Details</label>
-                        <textarea class="input w-full border mt-2" name="details" tabindex="17"
+                        <textarea class="input w-full border mt-2" name="details" tabindex="16"
                                   placeholder=""><?php echo (is_object($opportunity)) ? $opportunity->details : ''; ?></textarea>
                     </div>
                 </div>
@@ -295,7 +289,7 @@
             <div class="col-span-12">
                 <div class="preview">
                     <input type="submit" value="Save Opportunity"
-                           style="float: right;" class="button bg-theme-1 text-white mt-5 sm:p-2" tabindex="18"/>
+                           style="float: right;" class="button bg-theme-1 text-white mt-5 sm:p-2" tabindex="17"/>
                 </div>
             </div>
         </div>
@@ -422,7 +416,6 @@
                         $('input[name="site_address"]').val(data.address);
                         $('input[name="site_city"]').val(data.city);
                         $('input[name="site_postal_code"]').val(data.postal_code);
-                        $('input[name="site_desc"]').val('home');
                     },
                     error: function (jqXhr, textStatus, errorMessage) {
                         console.log(errorMessage);
