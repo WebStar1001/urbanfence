@@ -988,7 +988,7 @@ if (is_sale()) {
                 </div>
             <?php
             endif;
-            if ((is_sale() && (is_object($quote) && $quote->status == 'Pending')) || (!is_sale() && $quote->status == 'Approved')):
+            if ((is_sale() && (is_object($quote) && $quote->status == 'Pending')) || (!is_sale() && is_object($quote) && $quote->status == 'Approved')):
                 ?>
                 <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
                     <div class="intro-y col-span-12 lg:col-span-6">
@@ -1469,7 +1469,7 @@ if (is_sale()) {
                 </fieldset>
             <?php
             endif;
-            if ($quote->status == 'Job'):
+            if (is_object($quote) && $quote->status == 'Job'):
             ?>
             <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
                 <div class="intro-y col-span-12 lg:col-span-5 ml-2" id="additional_info_div">
