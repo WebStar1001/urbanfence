@@ -1501,8 +1501,8 @@ if (is_sale()) {
             endif;
             if (is_object($quote) && $quote->status == 'Job'):
             ?>
-            <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
-                <div class="intro-y col-span-12 lg:col-span-7 ml-2" id="additional_info_div">
+            <div class="grid grid-cols-12 mt-5" id="final_quote_section">
+                <div class="intro-y col-span-12 lg:col-span-7" id="additional_info_div">
                     <fieldset class="p-1 mt-2 w-full fieldset_bd_color">
                         <legend class="quote_legend_spacing">Quote Notes</legend>
                         <?php if ($opportunity->job_type == 'New Fence' || $opportunity->job_type == 'New Fence and Gate c/w Operator') { ?>
@@ -1617,7 +1617,7 @@ if (is_sale()) {
                         } ?>
                     </fieldset>
                 </div>
-                <div class="intro-y col-span-12 lg:col-span-5" style="padding: 2em;">
+                <div class="intro-y col-span-12 lg:col-span-5" style="padding: 0.5em;">
                     <!-- BEGIN: Input -->
                     <div class="intro-y box">
                         <div class="p-5" id="input">
