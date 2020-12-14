@@ -251,7 +251,7 @@ class Jobs extends CI_Controller
                 $retAry[$j]['payment_id'] = $pay->id;
                 $retAry[$j]['debit'] = '';
                 $retAry[$j]['credit'] = $pay->payment_amount;
-                $retAry[$j]['due_date'] = date('Y-m-d', strtotime($pay->payment_date));
+                $retAry[$j]['due_date'] = '';
                 $retAry[$j]['job_balance'] = round($job_balance - $pay->payment_amount, 2);
                 $retAry[$j]['account_balance'] = $invoice_total - $pay->payment_amount;
                 $retAry[$j]['payment_method'] = $pay->payment_method;
