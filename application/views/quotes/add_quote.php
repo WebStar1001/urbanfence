@@ -1653,7 +1653,7 @@ if (is_sale()) {
                                             signed</label>
                                     </div>
                                 </div>
-                                <div class="mt-5">
+                                <div>
 
                                     <div style="width: 30%;display: inline-block;visibility: hidden;">
                                         <a class="button bg-gray-200 text-gray-600" style="float: inherit;"
