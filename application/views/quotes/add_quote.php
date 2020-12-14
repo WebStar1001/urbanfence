@@ -1655,7 +1655,7 @@ if (is_sale()) {
                                 </div>
                                 <div class="mt-5">
 
-                                    <div style="width: 40%;display: inline-block;visibility: hidden;">
+                                    <div style="width: 35%;display: inline-block;visibility: hidden;">
                                         <a class="button bg-gray-200 text-gray-600" style="float: inherit;"
                                            href="generate_qa_blank?quote_id=<?php echo $quote->id;?>" target="_blank">
                                             Generate
