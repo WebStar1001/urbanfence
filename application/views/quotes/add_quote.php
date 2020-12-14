@@ -1502,7 +1502,7 @@ if (is_sale()) {
             if (is_object($quote) && $quote->status == 'Job'):
             ?>
             <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
-                <div class="intro-y col-span-12 lg:col-span-5 ml-2" id="additional_info_div">
+                <div class="intro-y col-span-12 lg:col-span-7 ml-2" id="additional_info_div">
                     <fieldset class="p-1 mt-2 w-full fieldset_bd_color">
                         <legend class="quote_legend_spacing">Quote Notes</legend>
                         <?php if ($opportunity->job_type == 'New Fence' || $opportunity->job_type == 'New Fence and Gate c/w Operator') { ?>
@@ -1617,7 +1617,7 @@ if (is_sale()) {
                         } ?>
                     </fieldset>
                 </div>
-                <div class="intro-y col-span-12 lg:col-span-6" style="padding: 2em;">
+                <div class="intro-y col-span-12 lg:col-span-5" style="padding: 2em;">
                     <!-- BEGIN: Input -->
                     <div class="intro-y box">
                         <div class="p-5" id="input">
@@ -1655,15 +1655,13 @@ if (is_sale()) {
                                 </div>
                                 <div class="mt-5">
 
-                                    <!--                                    <div style="width: 40%;display: inline-block;visibility: hidden;">-->
-                                    <!--                                        <a class="button bg-gray-200 text-gray-600" style="float: inherit;"-->
-                                    <!--                                           href="generate_qa_blank?quote_id=-->
-                                    <?php //echo $quote->id;
-                                    ?><!--" target="_blank">-->
-                                    <!--                                            Generate-->
-                                    <!--                                            Blank Form-->
-                                    <!--                                        </a>-->
-                                    <!--                                    </div>-->
+                                    <div style="width: 40%;display: inline-block;visibility: hidden;">
+                                        <a class="button bg-gray-200 text-gray-600" style="float: inherit;"
+                                           href="generate_qa_blank?quote_id=<?php echo $quote->id;?>" target="_blank">
+                                            Generate
+                                            Blank Form
+                                        </a>
+                                    </div>
                                     <div style="width: 50%;display: inline;">
                                         <input type="checkbox" class="input border" id="credit_passed"
                                                name="credit_passed"
