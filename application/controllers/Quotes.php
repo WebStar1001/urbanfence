@@ -382,7 +382,7 @@ class Quotes extends CI_Controller
             $this->db->insert('quotes', $quoteData);
             $quote_id = $this->db->insert_id();
 
-            if ($action == 'submit_new_quote') {
+            if ($action == 'submit_pending_quote') {
                 $managers = $this->UserModel->getManagersByCompanyID($company_id);
 
                 foreach ($managers as $manager) {
