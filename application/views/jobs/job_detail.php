@@ -966,8 +966,6 @@
 
         });
         $('#generate_invoice').click(function () {
-            console.log(job_balance);
-            console.log(invoice_amount);
             var available_invoice_amount = Math.round((job_balance - invoice_amount) * 110) / 100;
 
             if ($('#invoice_id').val() == '' || $('#invoice_amount').val() == '' || $('#invoice_due_date').val() == '') {
