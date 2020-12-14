@@ -43,7 +43,7 @@ class Users extends CI_Controller
         if ($user_id) {
             $this->db->where('id', $user_id);
             $this->db->update('users', array(
-                'username' => $username,
+                'username' => str_replace(' ', '', $username),
                 'password' => md5('gil' . $password),
                 'name' => $name,
                 'access_level' => $access_level

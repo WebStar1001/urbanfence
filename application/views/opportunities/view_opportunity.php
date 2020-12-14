@@ -75,7 +75,7 @@
             <?php endif; ?>
             <div class="col-span-12 sm:col-span-6 md:col-span-4">
                 <div><label>Phone</label>
-                    <div class="mt-1"><input type="text" placeholder="647-787-9089" class="input pl-12 border w-full"
+                    <div class="mt-1"><input type="text" placeholder="123-456-7890" class="input pl-12 border w-full"
                                              id="phone"/>
                     </div>
                 </div>
@@ -278,6 +278,8 @@
                 {
                     "data": null, render: function (data) {
                         var sales_rp_select = "<select id='sale_rep_" + data.id + "'><option value='0'>Please Select</option>";
+                        // console.log(sale_users);
+                        sale_users = data.sales;
                         for (var i in sale_users) {
                             if (sale_users[i].id == data.sale_rep) {
                                 sales_rp_select += '<option value="' + sale_users[i].id + '" selected>' + sale_users[i].name +

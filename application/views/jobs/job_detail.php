@@ -875,7 +875,7 @@
                 {"data": "payment_id"},
                 {"data": "debit"},
                 {"data": "credit"},
-                {"data": "due_date"},
+                {"data": "due_date", 'width' : '15%'},
                 {"data": "account_balance"},
                 {"data": "job_balance"},
                 {"data": "notes", "width": "15%"},

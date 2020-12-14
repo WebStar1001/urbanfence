@@ -208,7 +208,15 @@ $total = round($sub_total2 + $quote->hst, 2);
                     </tr>
                     <tr>
                         <td class="no-border" colspan="2" style="height: 15px;">
-                            (In normal soil & on cleared line marked by customer with survey bars)
+                            <?php if ($quote->additional_select_1 == '' || $quote->additional_select_1 == 'IN CONCRETE') { ?>
+                                (In normal soil & on cleared line marked by customer with survey
+                                    bars)
+                            <?php } elseif ($quote->additional_select_1 == 'ON FLANGES') { ?>
+                                On normal concrete slab cleared of all obstacles 72" radius.
+                            <?php } elseif ($quote->additional_select_1 == 'COREDRILLED') { ?>
+                                (Radar Scan / X-Ray services and / or location of embedded objects
+                                    not included in this quotation.)
+                            <?php } ?>
                         </td>
                     </tr>
                     <tr>
@@ -217,7 +225,15 @@ $total = round($sub_total2 + $quote->hst, 2);
                     </tr>
                     <tr>
                         <td class="no-border" colspan="2" style="height: 15px;">
-                            ( IN NORMAL SOIL & ON CLEARED LINE MARKED BY CUSTOMER WITH SURVEY BARS )
+                            <?php if ($quote->additional_select_2 == '' || $quote->additional_select_2 == 'IN CONCRETE') { ?>
+                                (In normal soil & on cleared line marked by customer with survey
+                                bars)
+                            <?php } elseif ($quote->additional_select_2 == 'ON FLANGES') { ?>
+                                On normal concrete slab cleared of all obstacles 72" radius.
+                            <?php } elseif ($quote->additional_select_2 == 'COREDRILLED') { ?>
+                                (Radar Scan / X-Ray services and / or location of embedded objects
+                                not included in this quotation.)
+                            <?php } ?>
                         </td>
                     </tr>
                 </table>

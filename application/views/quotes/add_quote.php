@@ -1512,46 +1512,46 @@ if (is_sale()) {
                                         Fabric,<br>
                                         Top Rail, Line Posts & Fittings:</label>
                                     <input type="text" id="additional_col_1" name="additional_col_1"
-                                           class="input w-100 border mt-1" required=""
+                                           class="input border mt-1" style="width:30%;height:40px;"
                                            value="<?php echo $quote->additional_col_1; ?>" tabindex="3">
                                 </div>
                                 <div class="intro-y flex flex-col sm:flex-row mt-1">
                                     <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">END POSTS:</label>
                                     <input type="text" id="additional_col_2" name="additional_col_2"
-                                           class="input border mt-1" required=""
+                                           class="input border mt-1" style="width:30%;"
                                            value="<?php echo $quote->additional_col_2; ?>" tabindex="3">
                                 </div>
                                 <div class="intro-y flex flex-col sm:flex-row mt-1">
                                     <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">GATE
                                         POSTS:</label>
                                     <input type="text" id="additional_col_3" name="additional_col_3"
-                                           class="input border mt-1" required=""
+                                           class="input border mt-1" style="width:30%;"
                                            value="<?php echo $quote->additional_col_3; ?>" tabindex="3">
                                 </div>
                                 <div class="intro-y flex flex-col sm:flex-row mt-1">
                                     <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">CORNER
                                         POSTS:</label>
                                     <input type="text" id="additional_col_4" name="additional_col_4"
-                                           class="input border mt-1" required=""
+                                           class="input border mt-1" style="width:30%;"
                                            value="<?php echo $quote->additional_col_4; ?>" tabindex="3">
                                 </div>
                                 <div class="intro-y flex flex-col sm:flex-row mt-1">
                                     <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">STRAINING
                                         POSTS: </label>
                                     <input type="text" id="additional_col_5" name="additional_col_5"
-                                           class="input border mt-1" required=""
+                                           class="input border mt-1" style="width:30%;"
                                            value="<?php echo $quote->additional_col_5; ?>" tabindex="3">
                                 </div>
                                 <div class="intro-y flex flex-col sm:flex-row mt-1">
                                     <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">FITTINGS: </label>
                                     <input type="text" id="additional_col_6" name="additional_col_6"
-                                           class="input border mt-1" required=""
+                                           class="input border mt-1" style="width:30%;"
                                            value="<?php echo $quote->additional_col_6; ?>" tabindex="3">
                                 </div>
                                 <div class="intro-y flex flex-col sm:flex-row mt-1">
                                     <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">GATES: </label>
                                     <input type="text" id="additional_col_7" name="additional_col_7"
-                                           class="input border mt-1" required=""
+                                           class="input border mt-1" style="width:30%;"
                                            value="<?php echo $quote->additional_col_7; ?>" tabindex="3">
                                 </div>
                                 <div class="intro-y flex flex-col sm:flex-row mt-1">
@@ -1653,15 +1653,15 @@ if (is_sale()) {
                                             signed</label>
                                     </div>
                                 </div>
-                                <div>
+                                <div class="mt-5">
 
-                                    <div style="width: 40%;display: inline-block;visibility: hidden;">
-                                        <a class="button bg-gray-200 text-gray-600" style="float: inherit;"
-                                           href="generate_qa_blank?quote_id=<?php echo $quote->id; ?>" target="_blank">
-                                            Generate
-                                            Blank Form
-                                        </a>
-                                    </div>
+<!--                                    <div style="width: 40%;display: inline-block;visibility: hidden;">-->
+<!--                                        <a class="button bg-gray-200 text-gray-600" style="float: inherit;"-->
+<!--                                           href="generate_qa_blank?quote_id=--><?php //echo $quote->id; ?><!--" target="_blank">-->
+<!--                                            Generate-->
+<!--                                            Blank Form-->
+<!--                                        </a>-->
+<!--                                    </div>-->
                                     <div style="width: 50%;display: inline;">
                                         <input type="checkbox" class="input border" id="credit_passed"
                                                name="credit_passed"

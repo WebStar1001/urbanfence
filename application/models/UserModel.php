@@ -53,6 +53,16 @@ class UserModel extends CI_Model
 
         return $query->result();
     }
+    public function getSalesByCompany($company_id){
+        $this->db->select('*')
+            ->from('users')
+            ->where('status != "Disabled"', null, false)
+            ->where('access_level', 'Sales')
+            ->where('company_id', $company_id);
+        $query = $this->db->get();
+
+        return $query->result();
+    }
 
     function check_valid_user($username, $password)
     {

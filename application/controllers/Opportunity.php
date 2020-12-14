@@ -178,7 +178,14 @@ class Opportunity extends CI_Controller
 
     public function get_opportunities()
     {
-        $data['data'] = $this->OpportunityModel->getOpportunities();
+        $opportunities = $this->OpportunityModel->getOpportunities();
+        $retAry = array();
+        foreach($opportunities as $key=>$oppor){
+            $sales = $this->UserModel->getSalesByCompany($oppor['company_id']);
+            $retAry[$key] = $oppor;
+            $retAry[$key]['sales'] = $sales;
+        }
+        $data['data'] = $retAry;
         echo json_encode($data);
     }
 
@@ -190,6 +197,12 @@ class Opportunity extends CI_Controller
         $this->db->update('opportunities', array('sale_rep' => $sale_id, 'status' => 'Assigned'));
         $this->send_email_to_sale($oppor_id, $sale_id);
         echo 'Success';
+    }
+    public function get_sale_rep()
+    {
+        $company_id = $this->input->get('company_id');
+        $sales = $this->UserModel->getSalesByCompany($company_id);
+        echo json_encode($sales);
     }
 
     private function send_email_to_sale($oppor_id, $sale_id)

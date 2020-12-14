@@ -86,7 +86,7 @@
             </div>
             <div class="ml-sm-3 col-span-12 sm:col-span-6 md:col-span-4">
                 <div class=""><label>Phone</label>
-                    <div class="mt-1"><input type="text"  placeholder="647-787-9089" class="input pl-12 border w-full"
+                    <div class="mt-1"><input type="text"  placeholder="123-456-7890" class="input pl-12 border w-full"
                                              id="phone">
                     </div>
                 </div>
