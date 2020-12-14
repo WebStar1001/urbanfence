@@ -22,5 +22,13 @@ class PaymentModel extends CI_Model
         $query = $this->db->get();
         return $query->result();
     }
-
+    public function getPaymentByInvoiceDate($job_id, $current_invoice_date, $next_invoice_date){
+        $this->db->select('*');
+        $this->db->from('payments');
+        $this->db->where('job_id', $job_id);
+        $this->db->where('created_at >=', $current_invoice_date);
+        $this->db->where('created_at <=', $next_invoice_date);
+        $query = $this->db->get();
+        return $query->result();
+    }
 }

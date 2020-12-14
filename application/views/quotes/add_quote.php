@@ -1655,13 +1655,15 @@ if (is_sale()) {
                                 </div>
                                 <div class="mt-5">
 
-<!--                                    <div style="width: 40%;display: inline-block;visibility: hidden;">-->
-<!--                                        <a class="button bg-gray-200 text-gray-600" style="float: inherit;"-->
-<!--                                           href="generate_qa_blank?quote_id=--><?php //echo $quote->id; ?><!--" target="_blank">-->
-<!--                                            Generate-->
-<!--                                            Blank Form-->
-<!--                                        </a>-->
-<!--                                    </div>-->
+                                    <!--                                    <div style="width: 40%;display: inline-block;visibility: hidden;">-->
+                                    <!--                                        <a class="button bg-gray-200 text-gray-600" style="float: inherit;"-->
+                                    <!--                                           href="generate_qa_blank?quote_id=-->
+                                    <?php //echo $quote->id;
+                                    ?><!--" target="_blank">-->
+                                    <!--                                            Generate-->
+                                    <!--                                            Blank Form-->
+                                    <!--                                        </a>-->
+                                    <!--                                    </div>-->
                                     <div style="width: 50%;display: inline;">
                                         <input type="checkbox" class="input border" id="credit_passed"
                                                name="credit_passed"
@@ -1878,18 +1880,18 @@ if (is_sale()) {
                                 if (calc_mode == 'Tender') {
                                     price_per_unit = catalogs[i].price_per_unit_tender * 1.32;
                                 }
-                                $(this).children().eq(2).html(price_per_unit)
+                                $(this).children().eq(2).html(Math.round(price_per_unit * 100) / 100)
                                 var quantity = $(this).children().eq(3).find('input').val() * 1
                                 var row_total = quantity * price_per_unit;
-                                $(this).children().eq(4).html(row_total)
+                                $(this).children().eq(4).html(Math.round(row_total * 100) / 100)
                                 material_total += row_total;
                             }
                         }
                     }
                 }
             })
-            $('#material-item-total').children().eq(2).html(material_total);
-            $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? material_total : material_total / 1.32);
+            $('#material-item-total').children().eq(2).html(Math.round(material_total * 100) / 100);
+            $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? Math.round(material_total * 100) / 100 : Math.round(material_total / 1.32 * 100) / 100);
             calculate_sale_table();
         })
 
@@ -2275,7 +2277,7 @@ if (is_sale()) {
                 }
             }
             $('#material-item-row' + rowId).children().eq(1).find('select').html(matOptions);
-            $('#material-item-row' + rowId).children().eq(2).html(price_per_unit);
+            $('#material-item-row' + rowId).children().eq(2).html(Math.round(price_per_unit * 100) / 100);
             var quantity = $('#material-item-row' + rowId).children().eq(3).find('input').val();
             var total_price = $('#material-item-total').children().eq(2).html() * 1;
             var original_price = $('#material-item-row' + rowId).children().eq(4).html() * 1;
@@ -2302,7 +2304,7 @@ if (is_sale()) {
                     }
                 }
             }
-            $('#material-item-row' + rowId).children().eq(2).html(price_per_unit);
+            $('#material-item-row' + rowId).children().eq(2).html(Math.round(price_per_unit * 100) / 100);
             var quantity = $('#material-item-row' + rowId).children().eq(3).find('input').val();
             var total_price = $('#material-item-total').children().eq(2).html() * 1;
             var original_price = $('#material-item-row' + rowId).children().eq(4).html() * 1;
@@ -2333,7 +2335,7 @@ if (is_sale()) {
                 $('#material-item-row' + rowId).children().eq(4).html(Math.round(quantity * price_per_unit * 100) / 100);
                 $('#material-item-total').children().eq(2).html(Math.round((total_price - original_price + quantity * price_per_unit) * 100) / 100)
             }
-            $('#material-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
+            $('#material-item-total').children().eq(1).html(Math.round((total_quantity - original_quantity + quantity * 1) * 100) / 100);
             $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? Math.round((total_price - original_price + quantity * price_per_unit) * 100) / 100 : Math.round((total_price - original_price + quantity * price_per_unit) / 1.32 * 100) / 100);
             calculate_sale_table();
         }

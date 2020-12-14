@@ -95,7 +95,7 @@ class Jobs extends CI_Controller
         $mat_item_status = 'MAT Collected';
         for ($i = 0; $i < count($mat_ids); $i++) {
             $matRow = $this->db->get_where('mat_details', array('id' => $mat_ids[$i]))->row();
-            if(!is_object($matRow))
+            if (!is_object($matRow))
                 continue;
             $this->db->where('id', $mat_ids[$i]);
             $this->db->update('mat_details', array('items_collected_for_job' => $item_collects[$i]));
@@ -123,7 +123,7 @@ class Jobs extends CI_Controller
             $status = 'Completed';
         }
 
-        if($installer){
+        if ($installer) {
             $this->send_email_to_installer($job_id, $installer);
         }
 
@@ -233,11 +233,17 @@ class Jobs extends CI_Controller
         $retAry = array();
         $i = 0;
         $job_balance = $job->job_balance;
-
+        $k = 0;
+        $invoice_total = 0;
         foreach ($invoices as $inv) {
-            $total_pay_amount = 0;
-            $invoice_total = $inv->invoice_amount;
             $j = $i + 1;
+            $l = $k + 1;
+
+            $total_pay_amount = 0;
+            $invoice_total += $inv->invoice_amount;
+            $current_invoice_date = $invoices[$k]->created_at;
+            $next_invoice_date = (isset($invoices[$l])) ? $invoices[$l]->created_at : '2099-12-31';
+
             $retAry[$i]['invoice_id'] = $inv->id;
             $retAry[$i]['payment_id'] = '';
             $retAry[$i]['debit'] = $inv->invoice_amount;
@@ -245,9 +251,9 @@ class Jobs extends CI_Controller
             $retAry[$i]['job_balance'] = round($job_balance, 2);
             $retAry[$i]['account_balance'] = $invoice_total;
             $retAry[$i]['due_date'] = $inv->due_date;
-            $payments = $this->PaymentModel->getPaymentByInvoiceID($inv->id);
+            $payments = $this->PaymentModel->getPaymentByInvoiceDate($job_id, $current_invoice_date, $next_invoice_date);
             foreach ($payments as $pay) {
-                $retAry[$j]['invoice_id'] = '';
+                $retAry[$j]['invoice_id'] = $pay->invoice_id;
                 $retAry[$j]['payment_id'] = $pay->id;
                 $retAry[$j]['debit'] = '';
                 $retAry[$j]['credit'] = $pay->payment_amount;
@@ -270,6 +276,7 @@ class Jobs extends CI_Controller
                 $retAry[$i]['notes'] = '<span style="color:red;">Invoice Past Due</span>';
             }
             $i = $j;
+            $k++;
         }
         $data['data'] = $retAry;
         echo json_encode($data);
@@ -292,13 +299,15 @@ class Jobs extends CI_Controller
             echo 'Completed and Paid';
         }
     }
-    public function check_available_invoice(){
+
+    public function check_available_invoice()
+    {
         $invoice_id = $this->input->post('invoice_number');
         $job_id = $this->input->post('job_id');
-        $invoice = $this->db->get_where('invoices', array('id'=>$invoice_id))->row();
-        if(is_object($invoice)){
+        $invoice = $this->db->get_where('invoices', array('id' => $invoice_id))->row();
+        if (is_object($invoice)) {
             echo 'exist';
-        }else{
+        } else {
             echo 'not_exist';
         }
     }

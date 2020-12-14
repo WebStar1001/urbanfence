@@ -891,7 +891,7 @@
                 {"data": "payment_id"},
                 {"data": "debit"},
                 {"data": "credit"},
-                {"data": "due_date", 'width' : '15%'},
+                {"data": "due_date", 'width': '15%'},
                 {"data": "account_balance"},
                 {"data": "job_balance"},
                 {"data": "notes", "width": "15%"},
@@ -920,7 +920,7 @@
             }
         });
         $('#create_payment').click(function () {
-            var available_payment_amount = Math.round((job_balance - pay_amount) * 110) / 100;
+            var available_payment_amount = Math.round((job_balance * 1 - pay_amount * 1) * 110) / 100;
             if ($('#invoice_number').val() == '' || $('#payment_amount').val() == '' || $('#payment_method').val() == ''
                 || $('#reference').val() == '') {
                 showNotification('You need to input all information for creating payment');
@@ -982,7 +982,7 @@
 
         });
         $('#generate_invoice').click(function () {
-            var available_invoice_amount = Math.round((job_balance - invoice_amount) * 110) / 100;
+            var available_invoice_amount = Math.round((job_balance * 1 - invoice_amount * 1) * 110) / 100;
 
             if ($('#invoice_id').val() == '' || $('#invoice_amount').val() == '' || $('#invoice_due_date').val() == '') {
                 showNotification('You need to input all information for generating invoice');
