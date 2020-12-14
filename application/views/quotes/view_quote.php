@@ -275,7 +275,7 @@
                 },
                 {
                     "data": null, render: function (data) {
-                        if (is_sale && (data.status == 'Approved' || data.status == 'Job')) {
+                        if (is_sale && (data.status == 'Approved')) {
                             return '';
                         } else {
                             return "<a href='<?php echo base_url('Quotes/add_quote?quote_id=');?>" + data.id + "'><i class='fa fa-pencil' aria-hidden='true'></i></a>"

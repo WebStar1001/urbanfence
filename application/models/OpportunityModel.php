@@ -35,8 +35,8 @@ class OpportunityModel extends CI_Model
             $this->db->where('job_type', $job_type);
         }
         if ($phone) {
-            $this->db->where('phone1', $phone);
-            $this->db->or_where('phone2', $phone);
+            $this->db->where('REPLACE(phone1, "-", "") = '.intval($phone), null, false);
+            $this->db->or_where('REPLACE(phone2, "-", "") = '.intval($phone), null, false);
         }
         if ($status) {
             $this->db->where('opportunities.status', $status);

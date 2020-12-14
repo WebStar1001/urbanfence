@@ -728,9 +728,7 @@ if (is_sale()) {
                     <!-- END: Ads-On -->
                 </div>
             </fieldset>
-            <?php
-            if ((is_sale() && is_object($quote) && $quote->status == 'New') || (is_sale() && !is_object($quote)) || (is_object($quote) && $quote->status == 'Pending' && !is_sale())):
-                ?>
+            <?php if ((is_object($quote) && $quote->status == 'New') || !is_object($quote)): ?>
                 <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
                     <div class="intro-y col-span-12 lg:col-span-6">
                         <!-- BEGIN: Input -->
@@ -844,8 +842,8 @@ if (is_sale()) {
 
                                             $total_markup_amount = (is_object($quote)) ? $total_amount - $quote->mat_net - $quote->labour_net - $quote->misc_net - $quote->ads_on_net : 0;
 
-                                            $is_total_markup = ((is_object($quote)) && $quote->mat_factor == $quote->lab_factor && $quote->mat_factor == $quote->misc_factor
-                                                && $quote->mat_factor == $quote->ads_on_factor); ?>
+                                            $is_total_markup = (is_object($quote)) ? $quote->mat_factor == $quote->lab_factor && $quote->mat_factor == $quote->misc_factor
+                                                && $quote->mat_factor == $quote->ads_on_factor : !(is_object($quote)); ?>
                                             <input type="radio" class="input border mr-2 float-left set_markup"
                                                    id="horizontal-radio-chris-evans"
                                                    name="horizontal_radio_button" <?php echo ($is_total_markup) ? 'checked' : ''; ?>>
@@ -855,7 +853,7 @@ if (is_sale()) {
                                             <input type="number"
                                                    class="input-total-markup input border"
                                                    placeholder="%" style="width:15%" name="total_markup_percent"
-                                                <?php echo ($is_total_markup) ? 'value="' . (($material_markup_percent != 0) ? $material_markup_percent : 10) . '"' : 'disabled'; ?>
+                                                <?php echo ($is_total_markup) ? 'value="' . (($material_markup_percent != '') ? $material_markup_percent : '10') . '"' : 'disabled'; ?>
                                                    id="total_markup_percent"/>
                                             <input type="number"
                                                    class="input-total-markup input border"
@@ -988,10 +986,10 @@ if (is_sale()) {
                 </div>
             <?php
             endif;
-            if ((is_sale() && (is_object($quote) && $quote->status == 'Pending')) || (!is_sale() && is_object($quote) && $quote->status == 'Approved')):
+            if ((is_object($quote) && $quote->status == 'Pending') || (is_object($quote) && $quote->status == 'Approved')):
                 ?>
                 <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
-                    <div class="intro-y col-span-12 lg:col-span-6">
+                    <div class="intro-y col-span-12 lg:col-span-5">
                         <!-- BEGIN: Input -->
                         <div class="intro-y box">
                             <div class="p-5" id="input">
@@ -1078,7 +1076,7 @@ if (is_sale()) {
                                                 <button class="button bg-gray-200 text-gray-600" style="float: inherit;"
                                                         id="generate_qa_form_button" target="_blank"
                                                         onclick="generate_form();">
-                                                    Generate Quote Form
+                                                    Generate Form
                                                 </button>
                                             </div>
                                             <div style="width: 50%;display: inline;">
@@ -1089,7 +1087,7 @@ if (is_sale()) {
                                                     signed</label>
                                             </div>
                                         </div>
-                                        <div class="mt-5">
+                                        <div>
                                             <div style="width: 40%;display: inline-block;visibility: hidden;">
                                                 <a class="button bg-gray-200 text-gray-600" style="float: inherit;"
                                                    href="generate_qa_blank?quote_id=<?php echo $quote->id; ?>"
@@ -1114,10 +1112,10 @@ if (is_sale()) {
                         } ?>
                         <!-- END: Input -->
                     </div>
-                    <div class="intro-y col-span-12 lg:col-span-6">
-                        <div class="intro-y col-span-12 lg:col-span-5 ml-2" id="additional_info_div">
+                    <div class="intro-y col-span-12 lg:col-span-7">
+                        <div class="intro-y col-span-12 ml-2" id="additional_info_div">
                             <fieldset class="p-1 mt-2 w-full fieldset_bd_color">
-                                <legend class="quote_legend_spacing">Fence Notes</legend>
+                                <legend class="quote_legend_spacing">Quote Notes</legend>
                                 <?php if ($opportunity->job_type == 'New Fence' || $opportunity->job_type == 'New Fence and Gate c/w Operator') { ?>
                                     <div class="preview" style="padding: 1em;">
                                         <div class="intro-y flex flex-col sm:flex-row mt-1">
@@ -1125,46 +1123,46 @@ if (is_sale()) {
                                                 Fabric,<br>
                                                 Top Rail, Line Posts & Fittings:</label>
                                             <input type="text" id="additional_col_1" name="additional_col_1"
-                                                   class="input w-100 border mt-1" required=""
+                                                   class="input w-100 border mt-1" style="height: 30px;"
                                                    value="<?php echo $quote->additional_col_1; ?>" tabindex="1">
                                         </div>
                                         <div class="intro-y flex flex-col sm:flex-row mt-1">
                                             <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">END POSTS:</label>
                                             <input type="text" id="additional_col_2" name="additional_col_2"
-                                                   class="input border mt-1" required=""
+                                                   class="input border mt-1" style="height: 30px;"
                                                    value="<?php echo $quote->additional_col_2; ?>" tabindex="2">
                                         </div>
                                         <div class="intro-y flex flex-col sm:flex-row mt-1">
                                             <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">GATE
                                                 POSTS:</label>
                                             <input type="text" id="additional_col_3" name="additional_col_3"
-                                                   class="input border mt-1" required=""
+                                                   class="input border mt-1" style="height: 30px;"
                                                    value="<?php echo $quote->additional_col_3; ?>" tabindex="3">
                                         </div>
                                         <div class="intro-y flex flex-col sm:flex-row mt-1">
                                             <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">CORNER
                                                 POSTS:</label>
                                             <input type="text" id="additional_col_4" name="additional_col_4"
-                                                   class="input border mt-1" required=""
+                                                   class="input border mt-1" style="height: 30px;"
                                                    value="<?php echo $quote->additional_col_4; ?>" tabindex="4">
                                         </div>
                                         <div class="intro-y flex flex-col sm:flex-row mt-1">
                                             <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">STRAINING
                                                 POSTS: </label>
                                             <input type="text" id="additional_col_5" name="additional_col_5"
-                                                   class="input border mt-1" required=""
+                                                   class="input border mt-1" style="height: 30px;"
                                                    value="<?php echo $quote->additional_col_5; ?>" tabindex="5">
                                         </div>
                                         <div class="intro-y flex flex-col sm:flex-row mt-1">
                                             <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">FITTINGS: </label>
                                             <input type="text" id="additional_col_6" name="additional_col_6"
-                                                   class="input border mt-1" required=""
+                                                   class="input border mt-1" style="height: 30px;"
                                                    value="<?php echo $quote->additional_col_6; ?>" tabindex="6">
                                         </div>
                                         <div class="intro-y flex flex-col sm:flex-row mt-1">
                                             <label class="md:mr-5 pt-1 sm:pt-3" style="width: 200px;">GATES: </label>
                                             <input type="text" id="additional_col_7" name="additional_col_7"
-                                                   class="input border mt-1" required=""
+                                                   class="input border mt-1" style="height: 30px;"
                                                    value="<?php echo $quote->additional_col_7; ?>" tabindex="7"/>
                                         </div>
                                         <div class="intro-y flex flex-col sm:flex-row mt-1">
@@ -1182,27 +1180,43 @@ if (is_sale()) {
                                                 </select>
                                             </p>
                                         </div>
-                                        <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                            <p>(In normal soil & on cleared line marked by customer with survey
-                                                bars)</p>
+                                        <div class="intro-y flex flex-col sm:flex-row mt-1"
+                                             id="additional_select_comment1">
+                                            <?php if ($quote->additional_select_1 == '' || $quote->additional_select_1 == 'IN CONCRETE') { ?>
+                                                <p>(In normal soil & on cleared line marked by customer with survey
+                                                    bars)</p>
+                                            <?php } elseif ($quote->additional_select_1 == 'ON FLANGES') { ?>
+                                                <p>On normal concrete slab cleared of all obstacles 72" radius.</p>
+                                            <?php } elseif ($quote->additional_select_1 == 'COREDRILLED') { ?>
+                                                <p>(Radar Scan / X-Ray services and / or location of embedded objects
+                                                    not included in this quotation.)</p>
+                                            <?php } ?>
                                         </div>
                                         <div class="intro-y flex flex-col sm:flex-row mt-1">
                                             <p>* Terminal posts installed
                                                 <select name="additional_select_2" class="input border" tabindex="9">
-                                                    <option <?php echo ($quote->additional_select_1 == 'IN CONCRETE') ? 'selected' : ''; ?>>
+                                                    <option <?php echo ($quote->additional_select_2 == 'IN CONCRETE') ? 'selected' : ''; ?>>
                                                         IN CONCRETE
                                                     </option>
-                                                    <option <?php echo ($quote->additional_select_1 == 'ON FLANGES') ? 'selected' : ''; ?>>
+                                                    <option <?php echo ($quote->additional_select_2 == 'ON FLANGES') ? 'selected' : ''; ?>>
                                                         ON FLANGES
                                                     </option>
-                                                    <option <?php echo ($quote->additional_select_1 == 'COREDRILLED') ? 'selected' : ''; ?>>
+                                                    <option <?php echo ($quote->additional_select_2 == 'COREDRILLED') ? 'selected' : ''; ?>>
                                                         COREDRILLED
                                                     </option>
                                                 </select></p>
                                         </div>
-                                        <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                            <p>( IN NORMAL SOIL & ON CLEARED LINE MARKED BY CUSTOMER WITH SURVEY BARS
-                                                )</p>
+                                        <div class="intro-y flex flex-col sm:flex-row mt-1"
+                                             id="additional_select_comment2">
+                                            <?php if ($quote->additional_select_2 == '' || $quote->additional_select_2 == 'IN CONCRETE') { ?>
+                                                <p>(In normal soil & on cleared line marked by customer with survey
+                                                    bars)</p>
+                                            <?php } elseif ($quote->additional_select_2 == 'ON FLANGES') { ?>
+                                                <p>On normal concrete slab cleared of all obstacles 72" radius.</p>
+                                            <?php } elseif ($quote->additional_select_2 == 'COREDRILLED') { ?>
+                                                <p>(Radar Scan / X-Ray services and / or location of embedded objects
+                                                    not included in this quotation.)</p>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                     <?php
@@ -1241,7 +1255,7 @@ if (is_sale()) {
                                                 <button class="button bg-gray-200 text-gray-600" style="float: inherit;"
                                                         id="generate_qa_form_button" target="_blank"
                                                         onclick="generate_form();">
-                                                    Generate Quote Form
+                                                    Generate Form
                                                 </button>
                                             </div>
                                             <div style="width: 50%;display: inline;">
@@ -1281,190 +1295,206 @@ if (is_sale()) {
 
                 <fieldset class="p-1 mt-2 w-full fieldset_bd_color intro-y installation_detail">
                     <legend class="quote_legend_spacing">Installation Details</legend>
-                    <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
+                    <div class="grid grid-cols-12 mt-5">
                         <div class="col-span-4" style="padding: 1em;">
                             <h3><b>Specifications: </b></h3>
                             <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Mesh:</label>
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Mesh:</label>
                                 <input type="text" id="installation_detail_1" name="installation_detail_1"
-                                       class="input w-100 border mt-1" required=""
+                                       class="input w-50 border mt-1" style="width: 120px;height:30px;"
                                        value="<?php echo $quote->installation_detail_1; ?>" tabindex="10">
                             </div>
                             <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Line Post:</label>
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Line Post:</label>
                                 <input type="text" id="installation_detail_2" name="installation_detail_2"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_2; ?>" tabindex="11">
+                                       class="input border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_2; ?>" tabindex="12">
                             </div>
                             <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Top Rail:</label>
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Top Rail:</label>
                                 <input type="text" id="installation_detail_3" name="installation_detail_3"
-                                       class="input border mt-1" required=""
+                                       class="input border mt-1" style="width: 120px;height:30px;"
                                        value="<?php echo $quote->installation_detail_3; ?>" tabindex="12">
                             </div>
                             <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Main Post:</label>
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Main Post:</label>
                                 <input type="text" id="installation_detail_4" name="installation_detail_4"
-                                       class="input border mt-1" required=""
+                                       class="input border mt-1" style="width: 120px;height:30px;"
                                        value="<?php echo $quote->installation_detail_4; ?>" tabindex="13">
                             </div>
                             <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Holes Thru: </label>
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Holes Thru: </label>
                                 <input type="text" id="installation_detail_5" name="installation_detail_5"
-                                       class="input border mt-1" required=""
+                                       class="input border mt-1" style="width: 120px;height:30px;"
                                        value="<?php echo $quote->installation_detail_5; ?>" tabindex="14">
-                            </div>
-                            <h3><b>Specifications: </b></h3>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Mains : </label>
-                                <input type="text" id="installation_detail_6" name="installation_detail_6"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_6; ?>" tabindex="15">
-                            </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Lines : </label>
-                                <input type="text" id="installation_detail_7" name="installation_detail_7"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_7; ?>" tabindex="16">
-                            </div>
-                            <h3><b>Footing Diameter: </b></h3>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Bottom : </label>
-                                <input type="text" id="installation_detail_8" name="installation_detail_8"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_8; ?>" tabindex="17">
-                            </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Centre : </label>
-                                <input type="text" id="installation_detail_9" name="installation_detail_9"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_9; ?>" tabindex="19">
-                            </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Braces : </label>
-                                <input type="text" id="installation_detail_10" name="installation_detail_10"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_10; ?>" tabindex="20">
                             </div>
                         </div>
                         <div class="col-span-4" style="padding: 1em;">
                             <h3><b>Locate Fence By: </b></h3>
                             <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Stakes:</label>
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Stakes:</label>
                                 <input type="text" id="installation_detail_11" name="installation_detail_11"
-                                       class="input w-100 border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_11; ?>" tabindex="21">
+                                       class="input w-100 border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_11; ?>" tabindex="16">
                             </div>
                             <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Ex Fence:</label>
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Ex Fence:</label>
                                 <input type="text" id="installation_detail_12" name="installation_detail_12"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_12; ?>" tabindex="22">
+                                       class="input border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_12; ?>" tabindex="16">
                             </div>
                             <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Sales Rep:</label>
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Sales Rep:</label>
                                 <input type="text" id="installation_detail_13" name="installation_detail_13"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_13; ?>" tabindex="23">
+                                       class="input border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_13; ?>" tabindex="17">
                             </div>
                             <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Customer:</label>
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Customer:</label>
                                 <input type="text" id="installation_detail_14" name="installation_detail_14"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_14; ?>" tabindex="24">
-                            </div>
-                            <h3><b>Keep Fence: </b></h3>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* On Line : </label>
-                                <input type="text" id="installation_detail_15" name="installation_detail_15"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_15; ?>" tabindex="25">
-                            </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Inside Line : </label>
-                                <input type="text" id="installation_detail_16" name="installation_detail_16"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_16; ?>" tabindex="26">
-                            </div>
-                            <h3><b>Main Post Set: </b></h3>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Concrete : </label>
-                                <input type="text" id="installation_detail_17" name="installation_detail_17"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_17; ?>" tabindex="27">
-                            </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Driven : </label>
-                                <input type="text" id="installation_detail_18" name="installation_detail_18"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_18; ?>" tabindex="28">
-                            </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Flanged : </label>
-                                <input type="text" id="installation_detail_19" name="installation_detail_19"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_19; ?>" tabindex="29">
+                                       class="input border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_14; ?>" tabindex="18">
                             </div>
                         </div>
                         <div class="col-span-4" style="padding: 1em;">
-                            <h3><b>Footing Depth: </b></h3>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Mains:</label>
-                                <input type="text" id="installation_detail_20" name="installation_detail_20"
-                                       class="input w-100 border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_20; ?>" tabindex="30">
-                            </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Lines:</label>
-                                <input type="text" id="installation_detail_21" name="installation_detail_21"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_21; ?>" tabindex="31">
-                            </div>
                             <h3><b>Barbwire: </b></h3>
                             <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* None : </label>
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* None : </label>
                                 <input type="text" id="installation_detail_22" name="installation_detail_22"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_22; ?>" tabindex="32">
+                                       class="input border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_22; ?>" tabindex="19">
                             </div>
                             <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* In : </label>
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* In : </label>
                                 <input type="text" id="installation_detail_23" name="installation_detail_23"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_23; ?>" tabindex="33">
+                                       class="input border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_23; ?>" tabindex="20">
                             </div>
                             <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Out : </label>
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Out : </label>
                                 <input type="text" id="installation_detail_24" name="installation_detail_24"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_24; ?>" tabindex="34">
+                                       class="input border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_24; ?>" tabindex="21">
                             </div>
                             <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Vertical : </label>
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Vertical : </label>
                                 <input type="text" id="installation_detail_25" name="installation_detail_25"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_25; ?>" tabindex="35">
-                            </div>
-                            <h3><b>Existing Fence: </b></h3>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* None : </label>
-                                <input type="text" id="installation_detail_26" name="installation_detail_26"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_26; ?>" tabindex="36">
-                            </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Remove : </label>
-                                <input type="text" id="installation_detail_27" name="installation_detail_27"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_27; ?>" tabindex="37">
-                            </div>
-                            <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 100px;">* Haul Away : </label>
-                                <input type="text" id="installation_detail_28" name="installation_detail_28"
-                                       class="input border mt-1" required=""
-                                       value="<?php echo $quote->installation_detail_28; ?>" tabindex="38">
+                                       class="input border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_25; ?>" tabindex="22">
                             </div>
                         </div>
+
+                        <div class="col-span-4" style="padding: 1em;">
+                            <h3><b>Rails: </b></h3>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Bottom : </label>
+                                <input type="text" id="installation_detail_8" name="installation_detail_8"
+                                       class="input border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_8; ?>" tabindex="23">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Centre : </label>
+                                <input type="text" id="installation_detail_9" name="installation_detail_9"
+                                       class="input border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_9; ?>" tabindex="24">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Braces : </label>
+                                <input type="text" id="installation_detail_10" name="installation_detail_10"
+                                       class="input border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_10; ?>" tabindex="25">
+                            </div>
+                        </div>
+                        <div class="col-span-4" style="padding: 1em;">
+                            <h3><b>Main Post Set: </b></h3>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Concrete : </label>
+                                <input type="text" id="installation_detail_17" name="installation_detail_17"
+                                       class="input border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_17; ?>" tabindex="26">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Driven : </label>
+                                <input type="text" id="installation_detail_18" name="installation_detail_18"
+                                       class="input border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_18; ?>" tabindex="27">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Flanged : </label>
+                                <input type="text" id="installation_detail_19" name="installation_detail_19"
+                                       class="input border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_19; ?>" tabindex="28">
+                            </div>
+                        </div>
+                        <div class="col-span-4" style="padding: 1em;">
+                            <h3><b>Existing Fence: </b></h3>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* None : </label>
+                                <input type="text" id="installation_detail_26" name="installation_detail_26"
+                                       class="input border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_26; ?>" tabindex="29">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Remove : </label>
+                                <input type="text" id="installation_detail_27" name="installation_detail_27"
+                                       class="input border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_27; ?>" tabindex="30">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Haul Away : </label>
+                                <input type="text" id="installation_detail_28" name="installation_detail_28"
+                                       class="input border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_28; ?>" tabindex="31">
+                            </div>
+                        </div>
+                        <div class="col-span-4" style="padding: 1em;">
+                            <h3><b>Keep Fence: </b></h3>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* On Line : </label>
+                                <input type="text" id="installation_detail_15" name="installation_detail_15"
+                                       class="input border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_15; ?>" tabindex="32">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Inside Line : </label>
+                                <input type="text" id="installation_detail_16" name="installation_detail_16"
+                                       class="input border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_16; ?>" tabindex="33">
+                            </div>
+                        </div>
+                        <div class="col-span-4" style="padding: 1em;">
+                            <h3><b>Footing Diameter: </b></h3>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Mains : </label>
+                                <input type="text" id="installation_detail_6" name="installation_detail_6"
+                                       class="input border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_6; ?>" tabindex="34">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Lines : </label>
+                                <input type="text" id="installation_detail_7" name="installation_detail_7"
+                                       class="input border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_7; ?>" tabindex="35">
+                            </div>
+                        </div>
+
+                        <div class="col-span-4" style="padding: 1em;">
+                            <h3><b>Footing Depth: </b></h3>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Mains:</label>
+                                <input type="text" id="installation_detail_20" name="installation_detail_20"
+                                       class="input w-100 border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_20; ?>" tabindex="36">
+                            </div>
+                            <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                <label class="md:mr-5 pt-1 sm:pt-3" style="width: 150px;">* Lines:</label>
+                                <input type="text" id="installation_detail_21" name="installation_detail_21"
+                                       class="input border mt-1" style="width: 120px;height:30px;"
+                                       value="<?php echo $quote->installation_detail_21; ?>" tabindex="37">
+                            </div>
+                        </div>
+
+
                     </div>
                 </fieldset>
             <?php
@@ -1474,7 +1504,7 @@ if (is_sale()) {
             <div class="grid grid-cols-12 gap-6 mt-5" id="final_quote_section">
                 <div class="intro-y col-span-12 lg:col-span-5 ml-2" id="additional_info_div">
                     <fieldset class="p-1 mt-2 w-full fieldset_bd_color">
-                        <legend class="quote_legend_spacing">Fence Notes</legend>
+                        <legend class="quote_legend_spacing">Quote Notes</legend>
                         <?php if ($opportunity->job_type == 'New Fence' || $opportunity->job_type == 'New Fence and Gate c/w Operator') { ?>
                             <div class="preview" style="padding: 1em;">
                                 <div class="intro-y flex flex-col sm:flex-row mt-1">
@@ -1539,27 +1569,41 @@ if (is_sale()) {
                                         </select>
                                     </p>
                                 </div>
-                                <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                    <p>(In normal soil & on cleared line marked by customer with survey
-                                        bars)</p>
+                                <div class="intro-y flex flex-col sm:flex-row mt-1" id="additional_select_comment1">
+                                    <?php if ($quote->additional_select_1 == '' || $quote->additional_select_1 == 'IN CONCRETE') { ?>
+                                        <p>(In normal soil & on cleared line marked by customer with survey
+                                            bars)</p>
+                                    <?php } elseif ($quote->additional_select_1 == 'ON FLANGES') { ?>
+                                        <p>On normal concrete slab cleared of all obstacles 72" radius.</p>
+                                    <?php } elseif ($quote->additional_select_1 == 'COREDRILLED') { ?>
+                                        <p>(Radar Scan / X-Ray services and / or location of embedded objects
+                                            not included in this quotation.)</p>
+                                    <?php } ?>
                                 </div>
                                 <div class="intro-y flex flex-col sm:flex-row mt-1">
                                     <p>* Terminal posts installed
                                         <select name="additional_select_2" class="input border">
-                                            <option <?php echo ($quote->additional_select_1 == 'IN CONCRETE') ? 'selected' : ''; ?>>
+                                            <option <?php echo ($quote->additional_select_2 == 'IN CONCRETE') ? 'selected' : ''; ?>>
                                                 IN CONCRETE
                                             </option>
-                                            <option <?php echo ($quote->additional_select_1 == 'ON FLANGES') ? 'selected' : ''; ?>>
+                                            <option <?php echo ($quote->additional_select_2 == 'ON FLANGES') ? 'selected' : ''; ?>>
                                                 ON FLANGES
                                             </option>
-                                            <option <?php echo ($quote->additional_select_1 == 'COREDRILLED') ? 'selected' : ''; ?>>
+                                            <option <?php echo ($quote->additional_select_2 == 'COREDRILLED') ? 'selected' : ''; ?>>
                                                 COREDRILLED
                                             </option>
                                         </select></p>
                                 </div>
-                                <div class="intro-y flex flex-col sm:flex-row mt-1">
-                                    <p>( IN NORMAL SOIL & ON CLEARED LINE MARKED BY CUSTOMER WITH SURVEY BARS
-                                        )</p>
+                                <div class="intro-y flex flex-col sm:flex-row mt-1" id="additional_select_comment2">
+                                    <?php if ($quote->additional_select_2 == '' || $quote->additional_select_2 == 'IN CONCRETE') { ?>
+                                        <p>(In normal soil & on cleared line marked by customer with survey
+                                            bars)</p>
+                                    <?php } elseif ($quote->additional_select_2 == 'ON FLANGES') { ?>
+                                        <p>On normal concrete slab cleared of all obstacles 72" radius.</p>
+                                    <?php } elseif ($quote->additional_select_2 == 'COREDRILLED') { ?>
+                                        <p>(Radar Scan / X-Ray services and / or location of embedded objects
+                                            not included in this quotation.)</p>
+                                    <?php } ?>
                                 </div>
                             </div>
                             <?php
@@ -1598,7 +1642,7 @@ if (is_sale()) {
                                     <div style="width: 40%;display: inline-block;">
                                         <button class="button bg-gray-200 text-gray-600" style="float: inherit;"
                                                 id="generate_qa_form_button" target="_blank" onclick="generate_form();">
-                                            Generate Quote Form
+                                            Generate Form
                                         </button>
                                     </div>
                                     <div style="width: 50%;display: inline;">
@@ -1609,7 +1653,7 @@ if (is_sale()) {
                                             signed</label>
                                     </div>
                                 </div>
-                                <div class="mt-5">
+                                <div>
 
                                     <div style="width: 40%;display: inline-block;visibility: hidden;">
                                         <a class="button bg-gray-200 text-gray-600" style="float: inherit;"
@@ -1684,35 +1728,19 @@ if (is_sale()) {
             endif;
             if (is_object($quote)):
                 if ($quote->status == 'Pending'):
-                    if (is_sale()) {
-                        ?>
-                        <button class="button w-24 justify-center block bg-theme-1 text-white" id="reject_pending_quote"
-                                onclick="reject_pending_quote_sale();">Back
-                        </button>
-                        <button class="button w-24 justify-center block bg-theme-1 text-white ml-2 mr-3"
-                                id="save_pending_quote"
-                                onclick="save_pending_quote_sale();">Save
-                        </button>
-                        <button class="button w-24 justify-center block bg-theme-1 text-white ml-2 mr-3"
-                                id="approve_pending_quote"
-                                onclick="submit_pending_quote_sale();">Submit
-                        </button>
-                        <?php
-                    } else {
-                        ?>
-                        <button class="button w-24 justify-center block bg-theme-1 text-white" id="reject_pending_quote"
-                                onclick="reject_pending_quote();">Reject
-                        </button>
-                        <button class="button w-24 justify-center block bg-theme-1 text-white ml-2 mr-3"
-                                id="save_pending_quote"
-                                onclick="save_pending_quote();">Save
-                        </button>
-                        <button class="button w-24 justify-center block bg-theme-1 text-white ml-2 mr-3"
-                                id="approve_pending_quote"
-                                onclick="approve_pending_quote();">Approve
-                        </button>
-                        <?php
-                    }
+                    ?>
+                    <button class="button w-24 justify-center block bg-theme-1 text-white" id="reject_pending_quote"
+                            onclick="reject_pending_quote();">Back
+                    </button>
+                    <button class="button w-24 justify-center block bg-theme-1 text-white ml-2 mr-3"
+                            id="save_pending_quote"
+                            onclick="save_pending_quote();">Save
+                    </button>
+                    <button class="button w-24 justify-center block bg-theme-1 text-white ml-2 mr-3"
+                            id="approve_pending_quote"
+                            onclick="submit_pending_quote();">Submit
+                    </button>
+                <?php
                 endif;
             endif;
             if (is_object($quote)):
@@ -1750,7 +1778,7 @@ if (is_sale()) {
                 $(".miscellaneous-item").slideUp();
                 $(".adsOn-item").slideUp();
             }
-            if ((status == 'Pending' && !is_sale) || (status == 'New' && is_sale)) {
+            if (status == 'New') {
 
                 var mat_total = $('#material-item-total').find('td').eq(2).html() * 1;
                 $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(!is_sale ? mat_total / 1.32 : mat_total);
@@ -1785,17 +1813,12 @@ if (is_sale()) {
 
                 if ($('#total_markup_percent').val() == '10' && $('#total_markup_amount').val() == '0') {
                     var total_profit = (mat_total + labour_total + mis_total + addon_total) * 0.1;
-                    if (total_profit == 0) {
-                        $('#total_markup_amount').val('');
-                        $('#total_markup_percent').val('');
-                    } else {
-                        $('#total_markup_amount').val(Math.round(total_profit * 100) / 100);
-                    }
+                    $('#total_markup_amount').val(Math.round(total_profit * 100) / 100);
                 }
 
                 calculate_sale_table();
             }
-            if ((status == 'Pending' && is_sale) || (status == 'Approved' && !is_sale)) {
+            if (status == 'Pending' || status == 'Approved') {
 
                 var mat_total = $('#material-item-total').find('td').eq(2).html() * 1;
                 $('#small_quote_table').find('tr').eq(1).children().eq(1).find('a').html(mat_total);
@@ -1815,9 +1838,10 @@ if (is_sale()) {
 
                 $('fieldset').find('input').attr('readonly', true);
                 $('fieldset').find('select').attr('disabled', true);
-                if (is_sale) {
+                if (status == 'Pending') {
                     $('#additional_info_div').find('input').attr('readonly', false);
                     $('#additional_info_div').find('select').attr('disabled', false);
+                    $('.installation_detail').find('input').attr('readonly', false);
                 } else {
                     $('.installation_detail').find('input').attr('readonly', false);
                     $('input[type="checkbox"]').attr('disabled', true);
@@ -1825,11 +1849,6 @@ if (is_sale()) {
                 $('.delete_detail_row').hide();
                 $('.add_detail_row').hide();
 
-            } else if (status == 'Approved') {
-                $('fieldset').find('input').attr('readonly', true);
-                $('fieldset').find('select').attr('disabled', true);
-                $('.delete_detail_row').hide();
-                $('.add_detail_row').hide();
             } else if (status == 'Job') {
                 $('body').find('input').attr('readonly', true);
                 $('body').find('input:checkbox').attr('disabled', true);
@@ -1841,7 +1860,7 @@ if (is_sale()) {
         $('#quoteForm').keypress(function (e) {
             var $targ = $(e.target);
             var key = e.charCode || e.keyCode || 0;
-            if (e.targetkey == 13 && !$targ.is("textarea")) {
+            if (key == 13 && !$targ.is("textarea")) {
                 e.preventDefault();
             }
         });
@@ -1885,6 +1904,24 @@ if (is_sale()) {
                 $(".input-multiple-markup").removeClass('bg-gray-100 cursor-not-allowed').removeAttr('disabled');
                 $(".input-total-markup").addClass('bg-gray-100 cursor-not-allowed').prop("disabled", true);
                 $(".input-total-markup").val('');
+            }
+        });
+        $('select[name="additional_select_1"]').change(function () {
+            if (this.value == 'IN CONCRETE') {
+                $('#additional_select_comment1').html('<p>(In normal soil & on cleared line marked by customer with survey bars.)</p>')
+            } else if (this.value == 'ON FLANGES') {
+                $('#additional_select_comment1').html('<p>(On normal concrete slab cleared of all obstacles 72" radius.)</p>')
+            } else if (this.value == 'COREDRILLED') {
+                $('#additional_select_comment1').html('<p>(Radar Scan / X-Ray services and / or location of embadded objects not included in this quotation.)</p>')
+            }
+        });
+        $('select[name="additional_select_2"]').change(function () {
+            if (this.value == 'IN CONCRETE') {
+                $('#additional_select_comment2').html('<p>(In normal soil & on cleared line marked by customer with survey bars.)</p>')
+            } else if (this.value == 'ON FLANGES') {
+                $('#additional_select_comment2').html('<p>(On normal concrete slab cleared of all obstacles 72" radius.)</p>')
+            } else if (this.value == 'COREDRILLED') {
+                $('#additional_select_comment2').html('<p>(Radar Scan / X-Ray services and / or location of embadded objects not included in this quotation.)</p>')
             }
         });
 
@@ -1981,6 +2018,12 @@ if (is_sale()) {
             var total_selling = subtotal_selling2 + HST;
 
             var total_profit1 = mat_profit + labour_profit + misc_profit + adson_profit;
+
+            if ($('#horizontal-radio-chris-evans').is(':checked')) {
+                if (subtotal_cost1 != 0 && $('#total_markup_percent').val() * 1 != 0) {
+                    $('#total_markup_amount').val(Math.round(total_profit1 * 100) / 100);
+                }
+            }
 
             $('#final_quote_table').find('tr').eq(1).children().eq(2).html(Math.round((mat_cost + mat_profit) * 100) / 100);
             $('#final_quote_table').find('tr').eq(1).children().eq(3).html(Math.round(mat_profit * 100) / 100);
@@ -2237,10 +2280,10 @@ if (is_sale()) {
             var total_price = $('#material-item-total').children().eq(2).html() * 1;
             var original_price = $('#material-item-row' + rowId).children().eq(4).html() * 1;
             if (quantity != '') {
-                $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
-                $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit);
+                $('#material-item-row' + rowId).children().eq(4).html(Math.round(quantity * price_per_unit * 100) / 100);
+                $('#material-item-total').children().eq(2).html(Math.round((total_price - original_price + quantity * price_per_unit) * 100) / 100);
             }
-            $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? total_price - original_price + quantity * price_per_unit : (total_price - original_price + quantity * price_per_unit) / 1.32);
+            $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? Math.round((total_price - original_price + quantity * price_per_unit) * 100) / 100 : Math.round((total_price - original_price + quantity * price_per_unit) / 1.32 * 100) / 100);
             calculate_sale_table();
         }
 
@@ -2265,10 +2308,10 @@ if (is_sale()) {
             var original_price = $('#material-item-row' + rowId).children().eq(4).html() * 1;
 
             if (quantity != '') {
-                $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
-                $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit);
+                $('#material-item-row' + rowId).children().eq(4).html(Math.round(quantity * price_per_unit * 100) / 100);
+                $('#material-item-total').children().eq(2).html(Math.round((total_price - original_price + quantity * price_per_unit) * 100) / 100);
             }
-            $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? total_price - original_price + quantity * price_per_unit : (total_price - original_price + quantity * price_per_unit) / 1.32);
+            $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? Math.round((total_price - original_price + quantity * price_per_unit) * 100) / 100 : Math.round((total_price - original_price + quantity * price_per_unit) / 1.32 * 100) / 100);
             calculate_sale_table();
         }
 
@@ -2287,11 +2330,11 @@ if (is_sale()) {
             var total_quantity = $('#material-item-total').children().eq(1).html() * 1;
             var original_quantity = event.target.oldvalue * 1;
             if (quantity != '' && price_per_unit != '') {
-                $('#material-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
-                $('#material-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
+                $('#material-item-row' + rowId).children().eq(4).html(Math.round(quantity * price_per_unit * 100) / 100);
+                $('#material-item-total').children().eq(2).html(Math.round((total_price - original_price + quantity * price_per_unit) * 100) / 100)
             }
             $('#material-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
-            $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? total_price - original_price + quantity * price_per_unit : (total_price - original_price + quantity * price_per_unit) / 1.32);
+            $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? Math.round((total_price - original_price + quantity * price_per_unit) * 100) / 100 : Math.round((total_price - original_price + quantity * price_per_unit) / 1.32 * 100) / 100);
             calculate_sale_table();
         }
 
@@ -2382,7 +2425,7 @@ if (is_sale()) {
                 $('#labour-item-total').children().eq(2).html(total_price - original_price + quantity * 250)
             }
             $('#labour-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
-            if (status == 'Pending' || status == 'New') {
+            if (status == 'New') {
                 $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(total_price - original_price + quantity * 250);
                 calculate_sale_table();
             }
@@ -2397,7 +2440,7 @@ if (is_sale()) {
             var original_quantity = $('#labour-item-row' + rowId).children().eq(1).find('input').val() * 1;
             $('#labour-item-total').children().eq(1).html(total_quantity - original_quantity);
             $("#labour-item-row" + rowId).remove();
-            if (status == 'Pending' || status == 'New') {
+            if (status == 'New') {
                 $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(total_price - original_price);
                 calculate_sale_table();
             }
@@ -2457,7 +2500,7 @@ if (is_sale()) {
                 $('#miscellaneous-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
                 $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
-            if (status == 'Pending' || status == 'New') {
+            if (status == 'New') {
                 $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
                 calculate_sale_table();
             }
@@ -2481,7 +2524,7 @@ if (is_sale()) {
                 $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
             $('#miscellaneous-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
-            if (status == 'Pending' || status == 'New') {
+            if (status == 'New') {
                 $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
                 calculate_sale_table();
             }
@@ -2495,7 +2538,7 @@ if (is_sale()) {
             var original_quantity = $('#miscellaneous-item-row' + rowId).children().eq(3).find('input').val() * 1;
             $('#miscellaneous-item-total').children().eq(1).html(total_quantity - original_quantity);
             $("#miscellaneous-item-row" + rowId).remove();
-            if (status == 'Pending' || status == 'New') {
+            if (status == 'New') {
                 $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price);
                 calculate_sale_table();
             }
@@ -2554,7 +2597,7 @@ if (is_sale()) {
                 $('#adsOn-item-row' + rowId).children().eq(3).html(quantity * price_per_unit);
                 $('#adsOn-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
-            if (status == 'Pending' || status == 'New') {
+            if (status == 'New') {
                 $('#final_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
                 calculate_sale_table();
             }
@@ -2578,7 +2621,7 @@ if (is_sale()) {
                 $('#adsOn-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
             }
             $('#adsOn-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
-            if (status == 'Pending' || status == 'New') {
+            if (status == 'New') {
                 $('#final_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
                 calculate_sale_table();
             }
@@ -2594,7 +2637,7 @@ if (is_sale()) {
             $('#adsOn-item-total').children().eq(1).html(total_quantity - original_quantity);
 
             $("#adsOn-item-row" + rowId).remove();
-            if (status == 'Pending' || status == 'New') {
+            if (status == 'New') {
                 $('#final_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price);
                 calculate_sale_table();
             }
@@ -2627,13 +2670,8 @@ if (is_sale()) {
         }
 
         function reject_pending_quote() {
-            $('#action').val('reject_pending_quote');
-            $('#quoteForm').submit();
-        }
-
-        function reject_pending_quote_sale() {
             $('#quoteForm').attr('target', '_self');
-            $('#action').val('reject_pending_quote_sale');
+            $('#action').val('reject_pending_quote');
             $('#quoteForm').submit();
         }
 
@@ -2643,20 +2681,9 @@ if (is_sale()) {
             $('#quoteForm').submit();
         }
 
-        function save_pending_quote_sale() {
-            $('#action').val('save_pending_quote_sale');
-            $('#quoteForm').submit();
-        }
-
-        function approve_pending_quote() {
+        function submit_pending_quote() {
             $('#quoteForm').attr('target', '_self');
-            $('#action').val('approve_pending_quote');
-            $('#quoteForm').submit();
-        }
-
-        function submit_pending_quote_sale() {
-            $('#quoteForm').attr('target', '_self');
-            $('#action').val('submit_pending_quote_sale');
+            $('#action').val('submit_pending_quote');
             if (!$("#ia_signed").is(':checked') || !$("#form_signed").is(':checked') || !$('#credit_passed').is(':checked')) {
                 showNotification('Customer must pass credit check and sign both IA and Quote form in order to proceed to the job');
                 $('#ia_signed').focus();

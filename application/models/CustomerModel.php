@@ -54,8 +54,8 @@ class CustomerModel extends CI_Model
             $this->db->like('city', $city);
         }
         if ($phone) {
-            $this->db->where('phone1', $phone);
-            $this->db->or_where('phone2', $phone);
+            $this->db->where('REPLACE(phone1, "-", "") = '.intval($phone), null, false);
+            $this->db->or_where('REPLACE(phone2, "-", "") = '.intval($phone), null, false);
         }
         if ($postal_code) {
             $this->db->where('postal_code', $postal_code);

@@ -94,17 +94,15 @@ class Quotes extends CI_Controller
                 'payment_term' => $payment_term,
                 'calc_mode' => $calc_mode,
             );
-            if (is_sale()) {
-                $quoteData['mat_net'] = $this->input->post('mat_net');
-                $quoteData['mat_factor'] = $this->input->post('mat_factor');
-                $quoteData['labour_net'] = $this->input->post('labour_net');
-                $quoteData['lab_factor'] = $this->input->post('lab_factor');
-                $quoteData['misc_net'] = $this->input->post('misc_net');
-                $quoteData['misc_factor'] = $this->input->post('misc_factor');
-                $quoteData['ads_on_net'] = $this->input->post('add_on_net');
-                $quoteData['ads_on_factor'] = $this->input->post('ads_on_factor');
-                $quoteData['discount_set'] = $this->input->post('discount_percent');
-            }
+            $quoteData['mat_net'] = $this->input->post('mat_net');
+            $quoteData['mat_factor'] = $this->input->post('mat_factor');
+            $quoteData['labour_net'] = $this->input->post('labour_net');
+            $quoteData['lab_factor'] = $this->input->post('lab_factor');
+            $quoteData['misc_net'] = $this->input->post('misc_net');
+            $quoteData['misc_factor'] = $this->input->post('misc_factor');
+            $quoteData['ads_on_net'] = $this->input->post('add_on_net');
+            $quoteData['ads_on_factor'] = $this->input->post('ads_on_factor');
+            $quoteData['discount_set'] = $this->input->post('discount_percent');
         } elseif ($action == 'submit_new_quote') {
             $quoteData = array(
                 'company_id' => $company_id,
@@ -114,33 +112,13 @@ class Quotes extends CI_Controller
                 'calc_mode' => $calc_mode,
                 'status' => 'Pending'
             );
-            if (is_sale()) {
-                $quoteData['mat_net'] = $this->input->post('mat_net');
-                $quoteData['labour_net'] = $this->input->post('labour_net');
-                $quoteData['misc_net'] = $this->input->post('misc_net');
-                $quoteData['ads_on_net'] = $this->input->post('add_on_net');
-                $quoteData['discount_set'] = $this->input->post('discount_percent');
-            }
+            $quoteData['mat_net'] = $this->input->post('mat_net');
+            $quoteData['labour_net'] = $this->input->post('labour_net');
+            $quoteData['misc_net'] = $this->input->post('misc_net');
+            $quoteData['ads_on_net'] = $this->input->post('add_on_net');
+            $quoteData['discount_set'] = $this->input->post('discount_percent');
         } elseif ($action == 'save_pending_quote') {
             $quoteData = array(
-                'company_id' => $company_id,
-                'customer_id' => $customer_id,
-                'oppor_id' => $opportunity_id,
-                'payment_term' => $payment_term,
-                'calc_mode' => $calc_mode,
-                'mat_net' => $this->input->post('mat_net'),
-                'labour_net' => $this->input->post('labour_net'),
-                'misc_net' => $this->input->post('misc_net'),
-                'ads_on_net' => $this->input->post('add_on_net'),
-                'mat_factor' => $this->input->post('mat_factor'),
-                'lab_factor' => $this->input->post('lab_factor'),
-                'misc_factor' => $this->input->post('misc_factor'),
-                'ads_on_factor' => $this->input->post('ads_on_factor'),
-                'discount_set' => $this->input->post('discount_percent'),
-                'hst' => $this->input->post('hst')
-            );
-        } elseif ($action == 'save_pending_quote_sale') {
-            $quoteData = array(
                 'additional_col_1' => $this->input->post('additional_col_1'),
                 'additional_col_2' => $this->input->post('additional_col_2'),
                 'additional_col_3' => $this->input->post('additional_col_3'),
@@ -183,27 +161,7 @@ class Quotes extends CI_Controller
                 'form_signed' => $this->input->post('form_signed'),
                 'credit_passed' => $this->input->post('credit_passed')
             );
-        } elseif ($action == 'approve_pending_quote') {
-            $quoteData = array(
-                'company_id' => $company_id,
-                'customer_id' => $customer_id,
-                'oppor_id' => $opportunity_id,
-                'payment_term' => $payment_term,
-                'calc_mode' => $calc_mode,
-                'status' => 'Approved',
-                'mat_net' => $this->input->post('mat_net'),
-                'labour_net' => $this->input->post('labour_net'),
-                'misc_net' => $this->input->post('misc_net'),
-                'ads_on_net' => $this->input->post('add_on_net'),
-                'mat_factor' => $this->input->post('mat_factor'),
-                'lab_factor' => $this->input->post('lab_factor'),
-                'misc_factor' => $this->input->post('misc_factor'),
-                'ads_on_factor' => $this->input->post('ads_on_factor'),
-                'discount_set' => $this->input->post('discount_percent'),
-                'hst' => $this->input->post('hst')
-            );
-
-        } elseif ($action == 'submit_pending_quote_sale') {
+        }elseif ($action == 'submit_pending_quote') {
             $quoteData = array(
                 'status' => 'Approved',
                 'additional_col_1' => $this->input->post('additional_col_1'),
@@ -248,23 +206,7 @@ class Quotes extends CI_Controller
                 'form_signed' => $this->input->post('form_signed'),
                 'credit_passed' => $this->input->post('credit_passed')
             );
-        } elseif ($action == 'reject_pending_quote') {
-            $quoteData = array(
-                'status' => 'New',
-                'mat_factor' => 0,
-                'lab_factor' => 0,
-                'misc_factor' => 0,
-                'ads_on_factor' => 0,
-                'discount_set' => 0,
-                'mat_net' => 0,
-                'labour_net' => 0,
-                'misc_net' => 0,
-                'ads_on_net' => 0,
-                'hst' => 0
-            );
-
-
-        } elseif ($action == 'reject_pending_quote_sale') {
+        }elseif ($action == 'reject_pending_quote') {
             $quoteData = array(
                 'status' => 'New',
                 'additional_col_1' => $this->input->post('additional_col_1'),
@@ -448,7 +390,7 @@ class Quotes extends CI_Controller
                 }
             }
         }
-        if ($action == 'save_new_quote' || $action == 'submit_new_quote' || $action == 'save_pending_quote' || $action == 'approve_pending_quote') {
+        if ($action == 'save_new_quote' || $action == 'submit_new_quote') {
             $this->db->delete('mat_details', array('quote_id' => $quote_id));
             $this->db->delete('lab_details', array('quote_id' => $quote_id));
             $this->db->delete('misc_details', array('quote_id' => $quote_id));
