@@ -251,6 +251,8 @@ class Jobs extends CI_Controller
             $retAry[$i]['job_balance'] = round($job_balance, 2);
             $retAry[$i]['account_balance'] = $invoice_total;
             $retAry[$i]['due_date'] = $inv->due_date;
+            $retAry[$i]['has_payment'] = $this->InvoiceModel->has_payment($inv->id);
+            $retAry[$i]['type'] = 'invoice';
             $payments = $this->PaymentModel->getPaymentByInvoiceDate($job_id, $current_invoice_date, $next_invoice_date);
             foreach ($payments as $pay) {
                 $retAry[$j]['invoice_id'] = $pay->invoice_id;
@@ -258,11 +260,12 @@ class Jobs extends CI_Controller
                 $retAry[$j]['debit'] = '';
                 $retAry[$j]['credit'] = $pay->payment_amount;
                 $retAry[$j]['due_date'] = '';
-                $retAry[$j]['job_balance'] = round($job_balance - $pay->payment_amount, 2);
-                $retAry[$j]['account_balance'] = $invoice_total - $pay->payment_amount;
+                $retAry[$j]['job_balance'] = (($job_balance - $pay->payment_amount) >= 0) ? round($job_balance - $pay->payment_amount, 2) : 0;
+                $retAry[$j]['account_balance'] = (($invoice_total - $pay->payment_amount) >= 0) ? ($invoice_total - $pay->payment_amount) : 0;
                 $retAry[$j]['payment_method'] = $pay->payment_method;
                 $retAry[$j]['payment_date'] = date('Y-m-d', strtotime($pay->payment_date));
                 $retAry[$j]['notes'] = '';
+                $retAry[$j]['type'] = 'payment';
                 $total_pay_amount += $pay->payment_amount;
                 $job_balance -= $pay->payment_amount;
                 $invoice_total -= $pay->payment_amount;
@@ -298,6 +301,14 @@ class Jobs extends CI_Controller
             $this->db->update('jobs', array('status' => 'Completed and Paid'));
             echo 'Completed and Paid';
         }
+    }
+    public function cancel_invoice()
+    {
+        $invoice_id = $this->input->post('invoice_id');
+
+        $this->db->where('id', $invoice_id);
+        $this->db->delete('invoices');
+        echo $invoice_id;
     }
 
     public function check_available_invoice()

@@ -756,7 +756,7 @@
         </div>
     </div>
 </div>
-<div class="modal" id="confirm-modal">
+<div class="modal" id="cancel-payment-modal">
     <div class="modal__content modal__content--lg p-5 text-center">
         <div class="flex items-center py-5 sm:py-3 border-b border-gray-200">
             <h2 class="font-medium text-base mr-auto">Notification</h2>
@@ -766,6 +766,24 @@
         </div>
         <input type="hidden" id="cancel_payment_id"/>
         <input type="hidden" id="cancel_payment_amount"/>
+        <div class=" py-3 text-right border-t border-gray-200">
+            <button type="button" class="button w-20 bg-theme-6 text-white" id="OkayBtn">OK
+            </button>
+            <button data-dismiss="modal" type="button" class="button w-20 bg-theme-6 text-white" id="CancelBtn">Cancel
+            </button>
+        </div>
+    </div>
+</div>
+<div class="modal" id="cancel-invoice-modal">
+    <div class="modal__content modal__content--lg p-5 text-center">
+        <div class="flex items-center py-5 sm:py-3 border-b border-gray-200">
+            <h2 class="font-medium text-base mr-auto">Notification</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <p>Do you want to cancel this invoice</p>
+        </div>
+        <input type="hidden" id="cancel_invoice_id"/>
+        <input type="hidden" id="cancel_invoice_amount"/>
         <div class=" py-3 text-right border-t border-gray-200">
             <button type="button" class="button w-20 bg-theme-6 text-white" id="OkayBtn">OK
             </button>
@@ -787,9 +805,9 @@
     function format(d) {
         /*console.log(d.JobCity);*/
         // `d` is the original data object for the row
-        if (d.invoice_id == "") {
+        if (d.type == "payment") {
             return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-align:left;width: 100%;">' +
-                '<tr style="background-color:yellow;text-align:left">' +
+                '<tr style="background-color:deepskyblue;text-align:left">' +
                 '<td>Trans. Date:</td>' +
                 '<td>' + d.payment_date + '</td>' +
                 '<td>Paymen Method:</td>' +
@@ -797,14 +815,25 @@
                 '<td><button class="button  bg-theme-6 text-white" onclick="cancel_payment(' + d.payment_id + ',' + d.credit * 1 + ')">Cancel Payment</button></td>' +
                 '</tr></table>';
         } else {
-            return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-align:left;width: 100%;">' +
-                '<tr style="background-color:yellow;text-align:left">' +
-                '<td width="150px">Trans. Date:</td>' +
-                '<td>' + d.due_date + '</td>' +
-                '<td> </td>' +
-                '<td> </td>' +
-                '<td> </td>' +
-                '</tr></table>';
+            if(d.has_payment != '0'){
+                return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-align:left;width: 100%;">' +
+                    '<tr style="background-color:deepskyblue;text-align:left">' +
+                    '<td width="150px">Trans. Date:</td>' +
+                    '<td>' + d.due_date + '</td>' +
+                    '<td> </td>' +
+                    '<td> </td>' +
+                    '<td></td>' +
+                    '</tr></table>';
+            }else{
+                return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-align:left;width: 100%;">' +
+                    '<tr style="background-color:deepskyblue;text-align:left">' +
+                    '<td width="150px">Trans. Date:</td>' +
+                    '<td>' + d.due_date + '</td>' +
+                    '<td> </td>' +
+                    '<td> </td>' +
+                    '<td><button class="button  bg-theme-6 text-white" onclick="cancel_invoice(' + d.invoice_id + ',' + d.debit * 1 + ')">Cancel Invoice</button></td>' +
+                    '</tr></table>';
+            }
         }
     }
 
@@ -929,11 +958,13 @@
                 showNotification('Payment amount must be bigger than 0');
                 $('#payment_amount').select();
                 return;
-            } else if ($('#payment_amount').val() * 1 > available_payment_amount) {
-                showNotification('Payment amount cannot exceed ' + available_payment_amount);
-                $('#payment_amount').select();
-                return;
-            } else if ($('#invoice_number').val()) {
+            }
+                // else if ($('#payment_amount').val() * 1 > available_payment_amount) {
+                //     showNotification('Payment amount cannot exceed ' + available_payment_amount);
+                //     $('#payment_amount').select();
+                //     return;
+            // }
+            else if ($('#invoice_number').val()) {
 
                 $.ajax('check_available_invoice', {
                     type: 'POST',  // http method
@@ -991,11 +1022,13 @@
                 showNotification('Invoice amount must be bigger than 0.');
                 $('#invoice_amount').select();
                 return;
-            } else if ($('#invoice_amount').val() * 1 > available_invoice_amount) {
-                showNotification('Invoice amount can not be bigger than ' + available_invoice_amount);
-                $('#invoice_amount').select();
-                return;
-            } else {
+            }
+                // else if ($('#invoice_amount').val() * 1 > available_invoice_amount) {
+                //     showNotification('Invoice amount can not be bigger than ' + available_invoice_amount);
+                //     $('#invoice_amount').select();
+                //     return;
+            // }
+            else {
                 $.ajax('check_available_invoice', {
                     type: 'POST',  // http method
                     data: {
@@ -1035,7 +1068,7 @@
                 });
             }
         });
-        $('#confirm-modal').on('click', '#OkayBtn', function () {
+        $('#cancel-payment-modal').on('click', '#OkayBtn', function () {
             var payment_id = $('#cancel_payment_id').val();
             var payment_amount = $('#cancel_payment_amount').val() * 1;
             $.ajax('cancel_payment', {
@@ -1045,7 +1078,23 @@
                     pay_amount -= payment_amount;
                     table.ajax.reload(null, false);
                     $('#status_filed').html(data);
-                    $('#confirm-modal').modal('hide');
+                    $('#cancel-payment-modal').modal('hide');
+                },
+                error: function (jqXhr, textStatus, errorMessage) {
+                    console.log(errorMessage);
+                }
+            });
+        });
+        $('#cancel-invoice-modal').on('click', '#OkayBtn', function () {
+            var invoice_id = $('#cancel_invoice_id').val();
+            var invoice_amount = $('#cancel_invoice_amount').val() * 1;
+            $.ajax('cancel_invoice', {
+                type: 'POST',  // http method
+                data: {invoice_id: invoice_id, job_id: job_id},  // data to submit
+                success: function (data) {
+                    invoice_amount -= invoice_amount;
+                    table.ajax.reload(null, false);
+                    $('#cancel-invoice-modal').modal('hide');
                 },
                 error: function (jqXhr, textStatus, errorMessage) {
                     console.log(errorMessage);
@@ -1084,9 +1133,17 @@
     }
 
     function cancel_payment(payment_id, payment_amount) {
-        $("#confirm-modal").modal('show');
+        $("#cancel-payment-modal").modal('show');
         $('#cancel_payment_id').val(payment_id);
         $('#cancel_payment_amount').val(payment_amount);
+
+
+    }
+
+    function cancel_invoice(invoice_id, invoice_amount) {
+        $("#cancel-invoice-modal").modal('show');
+        $('#cancel_invoice_id').val(invoice_id);
+        $('#cancel_invoice_amount').val(invoice_amount);
 
 
     }

@@ -22,5 +22,13 @@ class InvoiceModel extends CI_Model
         $query = $this->db->get();
         return $query->result();
     }
+    public function has_payment($invoice_id)
+    {
+        $this->db->select('*');
+        $this->db->from('payments');
+        $this->db->where('invoice_id', $invoice_id);
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
 
 }

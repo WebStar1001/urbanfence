@@ -369,11 +369,13 @@ class Quotes extends CI_Controller
                 'additional_col_5' => $this->input->post('additional_col_5'),
                 'additional_col_6' => $this->input->post('additional_col_6'),
                 'additional_col_7' => $this->input->post('additional_col_7'),
-                'additional_select_1' => $this->input->post('additional_select_1'),
-                'additional_select_2' => $this->input->post('additional_select_2'),
                 'additional_notes' => $this->input->post('additional_notes')
             );
-
+            $quote = $this->QuoteModel->get_quote($quote_id);
+            if($quote->status == 'Pending'){
+                $quoteData['additional_select_1'] = $this->input->post('additional_select_1');
+                $quoteData['additional_select_2'] = $this->input->post('additional_select_2');
+            }
         }
         if ($quote_id) {
             $this->db->where('id', $quote_id);

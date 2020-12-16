@@ -1620,10 +1620,10 @@ if (is_sale()) {
                 <div class="intro-y col-span-12 lg:col-span-5" style="padding: 0.5em;">
                     <!-- BEGIN: Input -->
                     <div class="intro-y box">
-                        <div class="p-5" id="input">
+                        <div id="input">
                             <div class="preview">
                                 <div>
-                                    <div style="width: 40%;display: inline-block;">
+                                    <div style="width: 35%;display: inline-block;">
                                         <a class="button bg-gray-200 text-gray-600 mr-5"
                                            href="generate_ia?quote_id=<?php echo $quote->id; ?>" target="_blank"
                                            style="float: inherit;">
@@ -1639,7 +1639,7 @@ if (is_sale()) {
                                     </div>
                                 </div>
                                 <div class="mt-5">
-                                    <div style="width: 40%;display: inline-block;">
+                                    <div style="width: 35%;display: inline-block;">
                                         <button class="button bg-gray-200 text-gray-600" style="float: inherit;"
                                                 id="generate_qa_form_button" target="_blank" onclick="generate_form();">
                                             Generate Form
@@ -1655,9 +1655,9 @@ if (is_sale()) {
                                 </div>
                                 <div>
 
-                                    <div style="width: 30%;display: inline-block;visibility: hidden;">
+                                    <div style="width: 35%;display: inline-block;visibility: hidden;">
                                         <a class="button bg-gray-200 text-gray-600" style="float: inherit;"
-                                           href="generate_qa_blank?quote_id=<?php echo $quote->id;?>" target="_blank">
+                                           href="generate_qa_blank?quote_id=<?php echo $quote->id; ?>" target="_blank">
                                             Generate
                                             Blank Form
                                         </a>
@@ -2069,7 +2069,7 @@ if (is_sale()) {
                 return;
             }
             if ($(this).attr('name') == 'discount_percent') {
-                if ($(this).val() > 21) {
+                if ($(this).val() > 21 && is_sale) {
                     $(this).val('');
                     showNotification('Discount input can’t be bigger than 21.');
                     $(this).focus();
@@ -2081,7 +2081,7 @@ if (is_sale()) {
             } else {
                 discount_amount = $(this).val() * 1;
                 discount_percent = (discount_amount / sub_total1) * 100;
-                if (discount_percent > 21) {
+                if (discount_percent > 21 && is_sale) {
                     $(this).val('');
                     showNotification('Discount input can’t be bigger than 21.');
                     $(this).focus();
