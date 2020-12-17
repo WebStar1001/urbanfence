@@ -249,12 +249,19 @@
                     <p class="w-full p-2" id="status_filed"><?php echo ($job) ? $job->status : ''; ?></p>
                 </fieldset>
             </div>
-            <div class="col-span-4">
-                <fieldset class="p-2 mb-3 w-full fieldset_bd_color box">
-                    <legend class="legend_spacing">Office Notes</legend>
-                    <p class="w-full p-2" id="status_filed"><?php echo ($job) ? $quote->additional_office_notes : ''; ?></p>
-                </fieldset>
-            </div>
+            <?php
+            if (!is_user()):
+                ?>
+                <div class="col-span-4">
+                    <fieldset class="p-2 mb-3 w-full fieldset_bd_color box">
+                        <legend class="legend_spacing">Office Notes</legend>
+                        <p class="w-full p-2"
+                           id="status_filed"><?php echo ($job) ? $quote->additional_office_notes : ''; ?></p>
+                    </fieldset>
+                </div>
+            <?php
+            endif;
+            ?>
         </div>
         <?php if (!is_user()): ?>
             <fieldset class="p-1 status_width fieldset_bd_color" style="margin-top: 3%;">
