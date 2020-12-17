@@ -23,14 +23,14 @@
             <!-- BEGIN: Login Info -->
             <div class="hidden xl:flex flex-col min-h-screen">
                 <a href="" class="-intro-x flex items-center pt-5" style="justify-content: center;">
-                    <img alt="Midone Tailwind HTML Admin Template" class="w-7"
+                    <img alt="Midone Tailwind HTML Admin Template" class="w-7" style="width: 30%;"
                          src="<?php echo base_url(); ?>assets/images/logo.png">
                     <!-- <span class="text-white text-lg ml-3"> Mid<span class="font-medium">One</span> </span> -->
                 </a>
                 <a href="" class="-intro-x flex items-center pt-5" style="justify-content: center;">
-                    <img alt="Midone Tailwind HTML Admin Template" class="w-7"
+                    <img alt="Midone Tailwind HTML Admin Template" class="w-7" style="width: 30%;"
                          src="<?php echo base_url(); ?>assets/images/city-fence-logo.png">
-                    <img alt="Midone Tailwind HTML Admin Template" class="w-7 ml-2"
+                    <img alt="Midone Tailwind HTML Admin Template" class="w-7 ml-2" style="width: 30%;"
                          src="<?php echo base_url(); ?>assets/images/linkun-logo.png">
                     <!-- <span class="text-white text-lg ml-3"> Mid<span class="font-medium">One</span> </span> -->
                 </a>
