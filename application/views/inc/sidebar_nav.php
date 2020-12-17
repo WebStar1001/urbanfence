@@ -1,20 +1,33 @@
 <!-- BEGIN: Side Menu -->
 <nav class="side-nav">
+    <?php if (!is_admin()) { ?>
     <a href="<?php echo base_url("Dashboard"); ?>" class="intro-x flex items-center pl-5 pt-4">
-        <?php if (is_admin()) { ?>
-            <?php if (user_company() == 1) { ?>
-                <img alt="Midone Tailwind HTML Admin Template" class="w-7"
-                     src="<?php echo base_url(); ?>assets/images/logo.png">
-            <?php } elseif (user_company() == 2) { ?>
-                <img alt="Midone Tailwind HTML Admin Template" class="w-7"
-                     src="<?php echo base_url(); ?>assets/images/logo.png">
-            <?php } elseif (user_company() == 3) { ?>
-                <img alt="Midone Tailwind HTML Admin Template" class="w-7"
-                     src="<?php echo base_url(); ?>assets/images/logo.png">
-            <?php }
-        } ?>
-        <!-- <span class="hidden xl:block text-white text-lg ml-3"> Mid<span class="font-medium">one</span> </span> -->
-    </a>
+        <?php if (user_company() == 1) { ?>
+            <img alt="Midone Tailwind HTML Admin Template" class="w-7"
+                 src="<?php echo base_url(); ?>assets/images/logo.png">
+        <?php } elseif (user_company() == 2) { ?>
+            <img alt="Midone Tailwind HTML Admin Template" class="w-7"
+                 src="<?php echo base_url(); ?>assets/images/city-fence-logo.png">
+        <?php } elseif (user_company() == 3) { ?>
+            <img alt="Midone Tailwind HTML Admin Template" class="w-7"
+                 src="<?php echo base_url(); ?>assets/images/linkun-logo.png">
+            </a>
+        <?php }
+    } else {
+        ?>
+        <a href="<?php echo base_url("Dashboard"); ?>" class="intro-x flex items-center pl-5 pt-4" style="justify-content: center;">
+            <img alt="Midone Tailwind HTML Admin Template" class="w-7" width="80px" height="30px"
+                 src="<?php echo base_url(); ?>assets/images/logo.png">
+        </a>
+        <a href="<?php echo base_url("Dashboard"); ?>" class="intro-x flex items-center pl-5 pt-4" style="justify-content: center;">
+            <img alt="Midone Tailwind HTML Admin Template" class="w-7" width="80px" height="30px"
+                 src="<?php echo base_url(); ?>assets/images/city-fence-logo.png">
+            <img alt="Midone Tailwind HTML Admin Template" class="w-7 ml-2" width="80px" height="30px"
+                 src="<?php echo base_url(); ?>assets/images/linkun-logo.png">
+        </a>
+        <?php
+    } ?>
+    <!-- <span class="hidden xl:block text-white text-lg ml-3"> Mid<span class="font-medium">one</span> </span> -->
     <div class="side-nav__devider my-6"></div>
     <ul>
         <li>

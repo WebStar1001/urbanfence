@@ -1230,7 +1230,20 @@ if (is_sale()) {
                                 } ?>
                             </fieldset>
                         </div>
-                        <?php if ($opportunity->job_type != 'New Fence' && $opportunity->job_type != 'New Fence and Gate c/w Operator') { ?>
+                        <?php if ($opportunity->job_type != 'New Fence' || $opportunity->job_type != 'New Fence and Gate c/w Operator') { ?>
+                            <div class="intro-y col-span-12 ml-2" id="additional_info_div">
+                                <fieldset class="p-1 mt-2 w-full fieldset_bd_color">
+                                    <legend class="quote_legend_spacing">Office Notes</legend>
+                                    <div class="intro-y flex flex-col sm:flex-row mt-1">
+                                        <textarea id="additional_office_notes" name="additional_office_notes"
+                                                  style="width: 100%;height: 30px;"
+                                                  class="input w-100 border"
+                                                  tabindex="1"><?php echo $quote->additional_office_notes; ?></textarea>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        <?php }
+                        if ($opportunity->job_type != 'New Fence' && $opportunity->job_type != 'New Fence and Gate c/w Operator') { ?>
                             <div class="intro-y box">
                                 <div class="p-5" id="input">
                                     <div class="preview">
@@ -1502,7 +1515,7 @@ if (is_sale()) {
             if (is_object($quote) && $quote->status == 'Job'):
             ?>
             <div class="grid grid-cols-12 mt-5" id="final_quote_section">
-                <div class="intro-y col-span-12 lg:col-span-7" id="additional_info_div">
+                <div class="intro-y col-span-12 lg:col-span-6" id="additional_info_div">
                     <fieldset class="p-1 mt-2 w-full fieldset_bd_color">
                         <legend class="quote_legend_spacing">Quote Notes</legend>
                         <?php if ($opportunity->job_type == 'New Fence' || $opportunity->job_type == 'New Fence and Gate c/w Operator') { ?>
@@ -1617,7 +1630,7 @@ if (is_sale()) {
                         } ?>
                     </fieldset>
                 </div>
-                <div class="intro-y col-span-12 lg:col-span-5" style="padding: 0.5em;">
+                <div class="intro-y col-span-12 lg:col-span-6" style="padding: 0.5em;">
                     <!-- BEGIN: Input -->
                     <div class="intro-y box">
                         <div id="input">
@@ -1838,10 +1851,12 @@ if (is_sale()) {
 
                 $('fieldset').find('input').attr('readonly', true);
                 $('fieldset').find('select').attr('disabled', true);
+                $('fieldset').find('textarea').attr('readonly', true);
                 if (status == 'Pending') {
                     $('#additional_info_div').find('input').attr('readonly', false);
                     $('#additional_info_div').find('select').attr('disabled', false);
                     $('.installation_detail').find('input').attr('readonly', false);
+                    $('fieldset').find('textarea').attr('readonly', false);
                 } else {
                     $('.installation_detail').find('input').attr('readonly', false);
                     $('input[type="checkbox"]').attr('disabled', true);

@@ -230,21 +230,29 @@
             </div>
         </div>
 
-        <div class="p-5">
-            <a data-target="#material-detailed" data-toggle="modal" class="button  bg-theme-1 text-white"
-               data-backdrop="static" data-keyboard="false">Materials Tracking</a>
-        </div>
-        <div class="p-5">
-            <a data-target="#installation_summary" data-toggle="modal"
-               class="button  bg-theme-1 text-white"
-               data-backdrop="static" data-keyboard="false">Installation Summary</a>
-        </div>
-
         <div class="intro-y grid grid-cols-12 p-5 mt-5 gap-2">
-            <div class="col-span-12">
-                <fieldset class="p-2 mb-3 w-2/4 sm:w-2/5 lg:w-1/4 m-auto fieldset_bd_color box">
+            <div class="col-span-4">
+                <div class="p-5">
+                    <a data-target="#material-detailed" data-toggle="modal" class="button  bg-theme-1 text-white"
+                       data-backdrop="static" data-keyboard="false">Materials Tracking</a>
+                </div>
+                <div class="p-5">
+                    <a data-target="#installation_summary" data-toggle="modal"
+                       class="button  bg-theme-1 text-white"
+                       data-backdrop="static" data-keyboard="false">Installation Summary</a>
+                </div>
+            </div>
+
+            <div class="col-span-4">
+                <fieldset class="p-2 mb-3 w-2/4 sm:w-2/5 lg:w-1/2 fieldset_bd_color box">
                     <legend class="legend_spacing">Status</legend>
                     <p class="w-full p-2" id="status_filed"><?php echo ($job) ? $job->status : ''; ?></p>
+                </fieldset>
+            </div>
+            <div class="col-span-4">
+                <fieldset class="p-2 mb-3 w-full fieldset_bd_color box">
+                    <legend class="legend_spacing">Office Notes</legend>
+                    <p class="w-full p-2" id="status_filed"><?php echo ($job) ? $quote->additional_office_notes : ''; ?></p>
                 </fieldset>
             </div>
         </div>
@@ -815,7 +823,7 @@
                 '<td><button class="button  bg-theme-6 text-white" onclick="cancel_payment(' + d.payment_id + ',' + d.credit * 1 + ')">Cancel Payment</button></td>' +
                 '</tr></table>';
         } else {
-            if(d.has_payment != '0'){
+            if (d.has_payment != '0') {
                 return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-align:left;width: 100%;">' +
                     '<tr style="background-color:deepskyblue;text-align:left">' +
                     '<td width="150px">Trans. Date:</td>' +
@@ -824,7 +832,7 @@
                     '<td> </td>' +
                     '<td></td>' +
                     '</tr></table>';
-            }else{
+            } else {
                 return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px; text-align:left;width: 100%;">' +
                     '<tr style="background-color:deepskyblue;text-align:left">' +
                     '<td width="150px">Trans. Date:</td>' +

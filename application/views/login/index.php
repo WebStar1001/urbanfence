@@ -18,13 +18,20 @@
 </head>
 <body class="login">
 <form name="login" action="Login/do_login" method="post">
-    <div class="container sm:px-10">
+    <div class="container">
         <div class="block xl:grid grid-cols-2 gap-4">
             <!-- BEGIN: Login Info -->
             <div class="hidden xl:flex flex-col min-h-screen">
-                <a href="" class="-intro-x flex items-center pt-5">
+                <a href="" class="-intro-x flex items-center pt-5" style="justify-content: center;">
                     <img alt="Midone Tailwind HTML Admin Template" class="w-7"
                          src="<?php echo base_url(); ?>assets/images/logo.png">
+                    <!-- <span class="text-white text-lg ml-3"> Mid<span class="font-medium">One</span> </span> -->
+                </a>
+                <a href="" class="-intro-x flex items-center pt-5" style="justify-content: center;">
+                    <img alt="Midone Tailwind HTML Admin Template" class="w-7"
+                         src="<?php echo base_url(); ?>assets/images/city-fence-logo.png">
+                    <img alt="Midone Tailwind HTML Admin Template" class="w-7 ml-2"
+                         src="<?php echo base_url(); ?>assets/images/linkun-logo.png">
                     <!-- <span class="text-white text-lg ml-3"> Mid<span class="font-medium">One</span> </span> -->
                 </a>
                 <div class="my-auto">
