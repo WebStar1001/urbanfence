@@ -488,6 +488,18 @@ if (is_sale()) {
                                                         <option <?php echo ($lab_info[$i]->labour_type == 'Man Day Travel') ? 'selected' : ''; ?>>
                                                             Man Day Travel
                                                         </option>
+                                                        <option <?php echo ($lab_info[$i]->labour_type == 'Core Drill - See Steve') ? 'selected' : ''; ?>>
+                                                            Core Drill - See Steve
+                                                        </option>
+                                                        <option <?php echo ($lab_info[$i]->labour_type == 'Man Day Stretch Mesh') ? 'selected' : ''; ?>>
+                                                            Man Day Stretch Mesh
+                                                        </option>
+                                                        <option <?php echo ($lab_info[$i]->labour_type == 'Man Day Welding') ? 'selected' : ''; ?>>
+                                                            Man Day Welding
+                                                        </option>
+                                                        <option <?php echo ($lab_info[$i]->labour_type == 'Man Day Room And Board') ? 'selected' : ''; ?>>
+                                                            Man Day Room And Board
+                                                        </option>
                                                     </select>
                                                 </div>
                                             </td>
@@ -498,7 +510,16 @@ if (is_sale()) {
                                                        value="<?php echo $lab_info[$i]->total_days; ?>"
                                                        onchange="set_labour_price(<?php echo $nextRow; ?>);this.oldvalue = this.value;">
                                             </td>
-                                            <td <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>><?php echo $lab_info[$i]->total_days * 250; ?></td>
+                                            <td <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>>
+                                                <?php
+                                                if ($quote->calc_mode == 'Tender') {
+
+                                                    echo $lab_info[$i]->total_days * 1095.85;
+                                                } else {
+                                                    echo $lab_info[$i]->total_days * 1148.88;
+                                                }
+                                                ?>
+                                            </td>
                                             <td class="table-report__action w-56">
                                                 <div class="flex justify-center items-center">
 
@@ -521,7 +542,15 @@ if (is_sale()) {
                                 </td>
 
                                 <td><?php echo $lab_total_days; ?></td>
-                                <td <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>><?php echo $lab_total_days * 250; ?></td>
+                                <td <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>>
+                                    <?php
+                                    if ($quote->calc_mode == 'Tender') {
+                                        echo $lab_total_days * 1095.85;
+                                    } else {
+                                        echo $lab_total_days * 1148.88;
+                                    }
+                                    ?>
+                                </td>
                                 <td class="table-report__action w-56">
                                     <div class="flex justify-center items-center">
 
@@ -1902,9 +1931,26 @@ if (is_sale()) {
                         }
                     }
                 }
-            })
+            });
             $('#material-item-total').children().eq(2).html(Math.round(material_total * 100) / 100);
             $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? Math.round(material_total * 100) / 100 : Math.round(material_total / 1.32 * 100) / 100);
+
+            var labour_total = 0;
+            $('#labour').find('tr').each(function (index) {
+                if ($(this).attr('id') != 'labour-item-row0' && $(this).attr('id') != 'labour-item-total' && $(this).attr('id') != 'labour_thead') {
+                    var quantity = $(this).children().eq(1).find('input').val() * 1
+                    if (calc_mode == 'Tender') {
+                        var row_total = quantity * 1095.85;
+                        $(this).children().eq(2).html(Math.round(row_total * 100) / 100)
+                    }else{
+                        var row_total = quantity * 1095.85;
+                        $(this).children().eq(2).html(Math.round(row_total * 100) / 100)
+                    }
+                    labour_total += row_total;
+                }
+            });
+            $('#labour-item-total').children().eq(2).html(Math.round(labour_total * 100) / 100);
+            $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(Math.round(labour_total * 100) / 100);
             calculate_sale_table();
         })
 
@@ -2405,6 +2451,10 @@ if (is_sale()) {
                                                   <option>Man Day Removal</option>
                                                   <option>Man Day Cut Brush</option>
                                                   <option>Man Day Travel</option>
+                                                  <option>Core Drill - See Steve</option>
+                                                  <option>Man Day Stretch Mesh</option>
+                                                  <option>Man Day Welding</option>
+                                                  <option>Man Day Room And Board</option>
                                                </select>
                                            </div>
                                        </td>
@@ -2436,12 +2486,18 @@ if (is_sale()) {
             var total_quantity = $('#labour-item-total').children().eq(1).html() * 1;
             var original_quantity = event.target.oldvalue * 1;
             if (quantity != '') {
-                $('#labour-item-row' + rowId).children().eq(2).html(quantity * 250);
-                $('#labour-item-total').children().eq(2).html(total_price - original_price + quantity * 250)
+                if ($('#calc_mode').val() == 'Contractor') {
+                    $('#labour-item-row' + rowId).children().eq(2).html(quantity * 1148.88);
+                    $('#labour-item-total').children().eq(2).html(total_price - original_price + quantity * 1148.88)
+                    $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(total_price - original_price + quantity * 1148.88);
+                } else {
+                    $('#labour-item-row' + rowId).children().eq(2).html(quantity * 1095.85);
+                    $('#labour-item-total').children().eq(2).html(total_price - original_price + quantity * 1095.85)
+                    $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(total_price - original_price + quantity * 1095.85);
+                }
             }
             $('#labour-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
             if (status == 'New') {
-                $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(total_price - original_price + quantity * 250);
                 calculate_sale_table();
             }
         }
