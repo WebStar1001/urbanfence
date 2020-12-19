@@ -508,9 +508,6 @@ if (is_sale()) {
                                                         <option <?php echo ($lab_info[$i]->labour_type == 'Man Day Travel') ? 'selected' : ''; ?>>
                                                             Man Day Travel
                                                         </option>
-                                                        <option <?php echo ($lab_info[$i]->labour_type == 'Core Drill - See Steve') ? 'selected' : ''; ?>>
-                                                            Core Drill - See Steve
-                                                        </option>
                                                         <option <?php echo ($lab_info[$i]->labour_type == 'Man Day Stretch Mesh') ? 'selected' : ''; ?>>
                                                             Man Day Stretch Mesh
                                                         </option>
@@ -2492,7 +2489,6 @@ if (is_sale()) {
                                                   <option>Man Day Removal</option>
                                                   <option>Man Day Cut Brush</option>
                                                   <option>Man Day Travel</option>
-                                                  <option>Core Drill - See Steve</option>
                                                   <option>Man Day Stretch Mesh</option>
                                                   <option>Man Day Welding</option>
                                                   <option>Man Day Room And Board</option>
