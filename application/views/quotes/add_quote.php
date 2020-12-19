@@ -184,7 +184,6 @@ if (is_sale()) {
 ?>
 <script>
     var catalogs =<?php echo json_encode($catalogs); ?>;
-    console.log(catalogs);
     var categories =<?php echo json_encode($categories); ?>;
     var status = '<?php echo (is_object($quote)) ? $quote->status : 'New';?>';
     var hide_price = <?php echo ($hide_price) ? 1 : 0;?>;
