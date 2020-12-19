@@ -12,6 +12,7 @@ class Users extends CI_Controller
         $this->load->library('session');
         $this->auth->check_permission();
         $this->load->model('UserModel');
+        $this->load->model('CompanyModel');
     }
 
     public function users_list()
@@ -28,8 +29,9 @@ class Users extends CI_Controller
         if (isset($_GET['user_id'])) {
             $user = $this->UserModel->get_user($_GET['user_id']);
         }
+        $companies = $this->CompanyModel->getCompanies();
         $this->load->view('inc/header');
-        $this->load->view('users/add_user', array('user' => $user));
+        $this->load->view('users/add_user', array('user' => $user, 'company' => $companies));
         $this->load->view('inc/footer');
     }
 
@@ -39,6 +41,7 @@ class Users extends CI_Controller
         $password = $this->input->post('password');
         $name = $this->input->post('name');
         $access_level = $this->input->post('access_level');
+        $company_id = $this->input->post('company_id');
         $user_id = $this->input->post('user_id');
         if ($user_id) {
             $this->db->where('id', $user_id);
@@ -46,7 +49,8 @@ class Users extends CI_Controller
                 'username' => str_replace(' ', '', $username),
                 'password' => md5('gil' . $password),
                 'name' => $name,
-                'access_level' => $access_level
+                'access_level' => $access_level,
+                'company_id' => $company_id
             ));
         } else {
             $user = $this->UserModel->get_user_by_email($username);
@@ -58,7 +62,8 @@ class Users extends CI_Controller
                     'username' => $username,
                     'password' => md5('gil' . $password),
                     'name' => $name,
-                    'access_level' => $access_level
+                    'access_level' => $access_level,
+                    'company_id' => $company_id
                 ));
                 $data['user_id'] = $this->db->insert_id();
             }

@@ -338,7 +338,7 @@ if (is_sale()) {
                                                 </select>
                                             </td>
 
-                                            <td class="text-center" style="width: 100px;">
+                                            <td style="width: 100px;">
                                                 <select class="input border" name="sub_categories[]"
                                                         onchange="get_cate_code(<?php echo $nextRow; ?>)">
                                                     <option></option>
@@ -354,7 +354,7 @@ if (is_sale()) {
                                                     ?>
                                                 </select>
                                             </td>
-                                            <td class="text-center" style="width: 100px;">
+                                            <td style="width: 100px;">
                                                 <select class="input border" name="material_code[]"
                                                         onchange="change_mat_code(<?php echo $nextRow; ?>)">
                                                     <option></option>
@@ -362,9 +362,9 @@ if (is_sale()) {
                                                     $price_per_unit = 0;
                                                     foreach ($catalogs[$mat_info[$i]->mat_category][$mat_info[$i]->sub_category] as $code => $values) {
                                                         if ($code == $mat_info[$i]->code) {
-                                                            $price_per_unit = round($values['price_per_unit_contractor'] * 1.32, 4);
+                                                            $price_per_unit = round($values['price_per_unit_contractor'] * 1.32, 2);
                                                             if ($quote->calc_mode == 'Tender') {
-                                                                $price_per_unit = round($values['price_per_unit_tender'] * 1.32, 4);
+                                                                $price_per_unit = round($values['price_per_unit_tender'] * 1.32, 2);
                                                             }
                                                             echo '<option value="' . $code . '" selected>' . $values['mat_description'] . '</option>';
                                                         } else {
@@ -376,10 +376,10 @@ if (is_sale()) {
                                             </td>
                                             <td class="text-center" <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>>
                                                 <?php echo $price_per_unit; ?></td>
-                                            <td class="text-center"><input type="number" name="mat_quantity[]"
+                                            <td class="text-center" style="width: 8%;"><input type="number" name="mat_quantity[]"
                                                                            class="text-center"
                                                                            onfocus="this.oldvalue = this.value;"
-                                                                           style="max-width: 40px;"
+                                                                           style="width: 100%;"
                                                                            value="<?php echo $mat_info[$i]->quantity; ?>"
                                                                            onchange="change_mat_quantity(<?php echo $nextRow; ?>);this.oldvalue = this.value;">
                                             </td>

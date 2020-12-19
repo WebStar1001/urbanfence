@@ -24,23 +24,23 @@
             <div class="col-span-12 sm:col-span-7">
                 <div class="preview">
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
-                        <label class="w-full width6 sm:mr-5">Username*</label>
-                        <input type="email" class="input w-full border mt-2 flex-1" name="username"
+                        <label class="sm:mr-5 mt-1" style="width: 200px;">Username*</label>
+                        <input type="email" class="input w-full border flex-1" name="username"
                                value="<?php echo ($user) ? $user->username : ''; ?>" required>
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
-                        <label class="w-full width6 sm:mr-5">Password*</label>
-                        <input type="password" class="input w-full border mt-2 flex-1" name="password"
+                        <label class="sm:mr-5 mt-1" style="width: 200px;">Password*</label>
+                        <input type="password" class="input w-full border flex-1" name="password"
                                value="<?php echo ($user) ? $user->password : ''; ?>" required>
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
-                        <label class="w-full width6 sm:mr-5">Name*</label>
-                        <input type="text" class="input w-full border mt-2 flex-1" name="name"
+                        <label class="sm:mr-5 mt-1" style="width: 200px;">Name*</label>
+                        <input type="text" class="input w-full border flex-1" name="name"
                                value="<?php echo ($user) ? $user->name : ''; ?>" required>
                     </div>
                     <div class="intro-y flex flex-col sm:flex-row mt-3">
-                        <label class="w-full width6 sm:mr-5">Access Level*</label>
-                        <select class="input border w-full mt-2 flex-1" name="access_level" required>
+                        <label class="sm:mr-5 mt-1" style="width: 200px;">Access Level*</label>
+                        <select class="input border w-full flex-1" name="access_level" required>
                             <?php
                             if ($user):
                                 ?>
@@ -52,7 +52,7 @@
                                 <option <?php echo ($user->access_level == 'Manager') ? "selected" : "" ?>>Manager
                                 </option>
                                 <option <?php echo ($user->access_level == 'Sales') ? "selected" : "" ?>>Sales</option>
-                                <option <?php echo ($user->access_level == 'User') ? "selected" : "" ?>>Customer
+                                <option <?php echo ($user->access_level == 'User') ? "selected" : "" ?>>User
                                 </option>
                             <?php
                             else:
@@ -67,6 +67,26 @@
                             endif;
                             ?>
                         </select>
+                    </div>
+                    <div class="intro-y flex flex-col sm:flex-row mt-2">
+                        <label class="sm:mr-5 mt-1" style="width: 200px;">Quoting Company*</label>
+                        <select class="input border w-full flex-1" name="company_id" required>
+                            <option value="">Choose</option>
+                            <?php
+                            foreach ($company as $com) {
+                                if (is_object($user)) {
+                                    if ($user->company_id == $com->id) {
+                                        echo '<option value="' . $com->id . '" selected>' . $com->name . '</option>';
+                                    } else {
+                                        echo '<option value="' . $com->id . '">' . $com->name . '</option>';
+                                    }
+                                } else {
+                                    echo '<option value="' . $com->id . '">' . $com->name . '</option>';
+                                }
+                            }
+                            ?>
+                        </select>
+
                     </div>
                 </div>
             </div>
