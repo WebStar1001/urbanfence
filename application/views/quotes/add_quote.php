@@ -457,6 +457,7 @@ if (is_sale()) {
                             </tr>
                             <?php
                             $lab_total_days = 0;
+                            $lab_total_prices = 0;
                             if (is_object($quote)):
                                 if (sizeof($lab_info) > 0):
                                     for ($i = 0;
@@ -532,9 +533,10 @@ if (is_sale()) {
                                             <td <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>>
                                                 <?php
                                                 if ($quote->calc_mode == 'Tender') {
-
+                                                    $lab_total_prices += $lab_info[$i]->total_days * 1095.85;
                                                     echo $lab_info[$i]->total_days * 1095.85;
                                                 } else {
+                                                    $lab_total_prices += $lab_info[$i]->total_days * 1148.88;
                                                     echo $lab_info[$i]->total_days * 1148.88;
                                                 }
                                                 ?>
@@ -561,13 +563,9 @@ if (is_sale()) {
                                 </td>
 
                                 <td><?php echo $lab_total_days; ?></td>
-                                <td <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>>
+                                <td>
                                     <?php
-                                    if ($quote->calc_mode == 'Tender') {
-                                        echo $lab_total_days * 1095.85;
-                                    } else {
-                                        echo $lab_total_days * 1148.88;
-                                    }
+                                        echo $lab_total_prices;
                                     ?>
                                 </td>
                                 <td class="table-report__action w-56">
@@ -1842,7 +1840,7 @@ if (is_sale()) {
             if (status == 'New') {
 
                 var mat_total = $('#material-item-total').find('td').eq(2).html() * 1;
-                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(!is_sale ? Math.round(mat_total / 1.32*100)/100 : mat_total);
+                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(!is_sale ? Math.round(mat_total / 1.32 * 100) / 100 : mat_total);
                 if (mat_total == 0) {
                     $('#material_markup_percent').attr('disabled', true);
                     $('#material_markup_amount').attr('disabled', true);
@@ -2454,7 +2452,7 @@ if (is_sale()) {
             $('#material-item-total').children().eq(1).html(total_quantity - original_quantity);
             $('#material-item-total').children().eq(2).html(Math.round((total_price - original_price) * 100) / 100);
             $("#material-item-row" + rowId).remove();
-            $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? Math.round((total_price - original_price) * 100) / 100 : Math.round((total_price - original_price) / 1.32*100)/100);
+            $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? Math.round((total_price - original_price) * 100) / 100 : Math.round((total_price - original_price) / 1.32 * 100) / 100);
             calculate_sale_table();
         }
 
