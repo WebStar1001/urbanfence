@@ -2318,7 +2318,7 @@ if (is_sale()) {
                                             </select>
                                         </td>
                                         <td class="text-center">` + price_per_unit + `</td>
-                                        <td class="text-center"><input type="number" name="mat_quantity[]" style="text-align: center;" onfocus="this.oldvalue = this.value;" onchange="change_mat_quantity(` + nextRow + `);this.oldvalue = this.value;"></td>
+                                        <td class="text-center"><input type="number" name="mat_quantity[]" style="text-align: center;max-width: 40px;" onfocus="this.oldvalue = this.value;" onchange="change_mat_quantity(` + nextRow + `);this.oldvalue = this.value;"></td>
                                         <td class="text-center" ` + none_price + `></td>
                                         <td class="table-report__action">
                                             <div class="flex justify-center items-center">
