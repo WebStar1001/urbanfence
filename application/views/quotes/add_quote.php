@@ -162,6 +162,16 @@
         }
     }
 
+    #materials td {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+
+    #materials th {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+    }
+
     /*.input-total-markup,.input-multiple-markup{
       display: none;
     }*/
@@ -174,6 +184,7 @@ if (is_sale()) {
 ?>
 <script>
     var catalogs =<?php echo json_encode($catalogs); ?>;
+    console.log(catalogs);
     var categories =<?php echo json_encode($categories); ?>;
     var status = '<?php echo (is_object($quote)) ? $quote->status : 'New';?>';
     var hide_price = <?php echo ($hide_price) ? 1 : 0;?>;
@@ -274,25 +285,25 @@ if (is_sale()) {
                             <thead>
                             <tr id="material_thead">
                                 <th class="whitespace-no-wrap">Category</th>
+                                <th class="whitespace-no-wrap">Sub Category</th>
                                 <th class="whitespace-no-wrap">Code</th>
-                                <th class="text-center whitespace-no-wrap" <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>>
+                                <th class="text-center" style="max-width: 60px;">
                                     Price per unit
                                 </th>
-                                <th class="text-center whitespace-no-wrap">Quantity</th>
-                                <th class="text-center whitespace-no-wrap" <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>>
+                                <th class="text-center" style="max-width: 60px;">Quantity</th>
+                                <th class="text-center" style="max-width: 70px;">
                                     Total price
                                 </th>
-
-                                <th class="text-center whitespace-no-wrap">ACTIONS</th>
+                                <th class="text-center">ACTIONS</th>
                             </tr>
                             </thead>
                             <tbody>
 
                             <tr id="material-item-row0" row="0" class="intro-x material-item">
-                                <td <?php echo ($hide_price) ? 'colspan="3"' : 'colspan="5"' ?>></td>
-                                <td class="table-report__action w-56">
+                                <td <?php echo ($hide_price) ? 'colspan="3"' : 'colspan="6"' ?>></td>
+                                <td class="table-report__action" style="max-width: 40px;">
                                     <div class="flex justify-center items-center">
-                                        <a class="flex items-center mr-3 add_detail_row" onclick="add_material_item()"
+                                        <a class="flex items-center add_detail_row" onclick="add_material_item()"
                                            href="javascript:;">+</a>
 
                                     </div>
@@ -311,52 +322,64 @@ if (is_sale()) {
                                         ?>
                                         <tr id="material-item-row<?php echo $nextRow; ?>" row="<?php echo $nextRow; ?>"
                                             class="intro-x material-item">
-                                            <td class="w-40">
-                                                <div class="flex">
-                                                    <select class="input border mr-2" name="material_category[]"
-                                                            onchange="get_cate_code(<?php echo $nextRow; ?>)">
-                                                        <option value=""></option>
-                                                        <?php
-                                                        foreach ($categories as $category) {
-                                                            if ($category->product_category == $mat_info[$i]->mat_category) {
-                                                                echo '<option selected>' . $category->product_category . '</option>';
-                                                            } else {
-                                                                echo '<option>' . $category->product_category . '</option>';
-                                                            }
+                                            <td style="width: 100px;">
+                                                <select class="input border" name="material_category[]"
+                                                        onchange="get_mat_sub_category(<?php echo $nextRow; ?>)">
+                                                    <option value=""></option>
+                                                    <?php
+                                                    foreach ($categories as $category) {
+                                                        if ($category->product_category == $mat_info[$i]->mat_category) {
+                                                            echo '<option selected>' . $category->product_category . '</option>';
+                                                        } else {
+                                                            echo '<option>' . $category->product_category . '</option>';
                                                         }
-                                                        ?>
-                                                    </select>
-                                                </div>
+                                                    }
+                                                    ?>
+                                                </select>
                                             </td>
 
-                                            <td class="w-40">
-                                                <div class="flex">
-                                                    <select class="input border mr-2" name="material_code[]"
-                                                            onchange="change_mat_code(<?php echo $nextRow; ?>)">
-                                                        <option></option>
-                                                        <?php
-                                                        $price_per_unit = 0;
-                                                        foreach ($catalogs as $cat) {
-                                                            if ($cat->product_category == $mat_info[$i]->mat_category) {
-                                                                if ($cat->mat_code == $mat_info[$i]->code) {
-                                                                    $price_per_unit = round($cat->price_per_unit_contractor * 1.32, 4);
-                                                                    if ($quote->calc_mode == 'Tender') {
-                                                                        $price_per_unit = round($cat->price_per_unit_tender * 1.32, 4);
-                                                                    }
-                                                                    echo '<option value="' . $cat->mat_code . '" selected>' . $cat->mat_description . '</option>';
-                                                                } else {
-                                                                    echo '<option value="' . $cat->mat_code . '">' . $cat->mat_description . '</option>';
-                                                                }
-                                                            }
+                                            <td class="text-center" style="width: 100px;">
+                                                <select class="input border" name="sub_categories[]"
+                                                        onchange="get_cate_code(<?php echo $nextRow; ?>)">
+                                                    <option></option>
+                                                    <?php
+                                                    $price_per_unit = 0;
+                                                    foreach ($catalogs[$mat_info[$i]->mat_category] as $sub_category => $codes) {
+                                                        if ($sub_category == $mat_info[$i]->sub_category) {
+                                                            echo '<option value="' . $sub_category . '" selected>' . $sub_category . '</option>';
+                                                        } else {
+                                                            echo '<option value="' . $sub_category . '">' . $sub_category . '</option>';
                                                         }
-                                                        ?>
-                                                    </select>
-                                                </div>
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </td>
+                                            <td class="text-center" style="width: 100px;">
+                                                <select class="input border" name="material_code[]"
+                                                        onchange="change_mat_code(<?php echo $nextRow; ?>)">
+                                                    <option></option>
+                                                    <?php
+                                                    $price_per_unit = 0;
+                                                    foreach ($catalogs[$mat_info[$i]->mat_category][$mat_info[$i]->sub_category] as $code => $values) {
+                                                        if ($code == $mat_info[$i]->code) {
+                                                            $price_per_unit = round($values['price_per_unit_contractor'] * 1.32, 4);
+                                                            if ($quote->calc_mode == 'Tender') {
+                                                                $price_per_unit = round($values['price_per_unit_tender'] * 1.32, 4);
+                                                            }
+                                                            echo '<option value="' . $code . '" selected>' . $values['mat_description'] . '</option>';
+                                                        } else {
+                                                            echo '<option value="' . $code . '">' . $values['mat_description'] . '</option>';
+                                                        }
+                                                    }
+                                                    ?>
+                                                </select>
                                             </td>
                                             <td class="text-center" <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>>
                                                 <?php echo $price_per_unit; ?></td>
                                             <td class="text-center"><input type="number" name="mat_quantity[]"
+                                                                           class="text-center"
                                                                            onfocus="this.oldvalue = this.value;"
+                                                                           style="max-width: 40px;"
                                                                            value="<?php echo $mat_info[$i]->quantity; ?>"
                                                                            onchange="change_mat_quantity(<?php echo $nextRow; ?>);this.oldvalue = this.value;">
                                             </td>
@@ -366,14 +389,12 @@ if (is_sale()) {
                                                 echo $price_per_unit * $mat_info[$i]->quantity;
                                                 ?>
                                             </td>
-                                            <td class="table-report__action w-56">
-                                                <div class="flex justify-center items-center">
-                                                    <a style="background-color:unset;border:unset"
-                                                       class="flex items-center mr-3 delete_detail_row"
-                                                       onclick="delete_material_item(<?php echo $nextRow; ?>)"
-                                                       href="javascript:;"><i style="font-size: 20px;
+                                            <td class="table-report__action text-center">
+                                                <a style="background-color:unset;border:unset;"
+                                                   class="items-center delete_detail_row text-center"
+                                                   onclick="delete_material_item(<?php echo $nextRow; ?>)"
+                                                   href="javascript:;"><i style="font-size: 20px;
     color: red;" class="fa fa-trash" aria-hidden="true"></i></a>
-                                                </div>
                                             </td>
                                         </tr>
                                     <?php
@@ -382,19 +403,17 @@ if (is_sale()) {
                             endif;
                             ?>
                             <tr id="material-item-total" class="intro-x">
-                                <td <?php echo ($hide_price) ? 'colspan="2"' : 'colspan="3"' ?>
+                                <td <?php echo ($hide_price) ? 'colspan="2"' : 'colspan="4"' ?>
                                         class="w-40 text-center">Total
                                 </td>
 
-                                <td><?php echo $mat_total_quantity; ?></td>
-                                <td <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>><?php echo $mat_total_price; ?></td>
-                                <td class="table-report__action w-56">
-                                    <div class="flex justify-center items-center">
+                                <td class="text-center"><?php echo $mat_total_quantity; ?></td>
+                                <td class="text-center"><?php echo $mat_total_price; ?></td>
+                                <td class="table-report__action text-center">
 
-                                        <i style="font-size: 20px;cursor: pointer;"
-                                           onclick="toogle_material_item(this)"
-                                           class="fa fa-angle-down toggle-action"></i>
-                                    </div>
+                                    <i style="font-size: 20px;cursor: pointer;"
+                                       onclick="toogle_material_item(this)"
+                                       class="fa fa-angle-down toggle-action"></i>
                                 </td>
                             </tr>
 
@@ -1823,7 +1842,7 @@ if (is_sale()) {
             if (status == 'New') {
 
                 var mat_total = $('#material-item-total').find('td').eq(2).html() * 1;
-                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(!is_sale ? mat_total / 1.32 : mat_total);
+                $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(!is_sale ? Math.round(mat_total / 1.32*100)/100 : mat_total);
                 if (mat_total == 0) {
                     $('#material_markup_percent').attr('disabled', true);
                     $('#material_markup_amount').attr('disabled', true);
@@ -1942,7 +1961,7 @@ if (is_sale()) {
                     if (calc_mode == 'Tender') {
                         var row_total = quantity * 1095.85;
                         $(this).children().eq(2).html(Math.round(row_total * 100) / 100)
-                    }else{
+                    } else {
                         var row_total = quantity * 1095.85;
                         $(this).children().eq(2).html(Math.round(row_total * 100) / 100)
                     }
@@ -2274,7 +2293,6 @@ if (is_sale()) {
             let html = '';
             let rowId = parseInt($(".material-item").last().attr("row"));
             let nextRow = rowId + 1;
-            var firstCatalog = '';
             var catalogOptions = '';
             var matOptions = '';
             var price_per_unit = '';
@@ -2284,26 +2302,27 @@ if (is_sale()) {
             var none_price = (hide_price) ? 'style="display:none"' : '';
 
             html += `<tr id="material-item-row` + nextRow + `" row="` + nextRow + `" class="intro-x material-item">
-                                        <td class="w-40">
+                                        <td>
                                             <div class="flex">
-                                                <select class="input border mr-2" name="material_category[]" onchange="get_cate_code(` + nextRow + `)">
+                                                <select class="input border mr-2" name="material_category[]" onchange="get_mat_sub_category(` + nextRow + `)">
                                                     <option value=""></option>
                                                     ` + catalogOptions + `
                                                 </select>
                                             </div>
                                         </td>
 
-                                        <td class="w-40">
-                                            <div class="flex">
-                                                <select class="input border mr-2" name="material_code[]" onchange="change_mat_code(` + nextRow + `)">
-                                                    ` + matOptions + `
-                                                </select>
-                                            </div>
+                                        <td>
+                                            <select class="input border mr-2" name="sub_categories[]" onchange="get_cate_code(` + nextRow + `)">
+                                            </select>
                                         </td>
-                                        <td class="text-center" ` + none_price + `>` + price_per_unit + `</td>
-                                        <td class="text-center"><input type="number" name="mat_quantity[]" onfocus="this.oldvalue = this.value;" onchange="change_mat_quantity(` + nextRow + `);this.oldvalue = this.value;"></td>
+                                        <td>
+                                            <select class="input border mr-2" name="material_code[]" onchange="change_mat_code(` + nextRow + `)">
+                                            </select>
+                                        </td>
+                                        <td class="text-center">` + price_per_unit + `</td>
+                                        <td class="text-center"><input type="number" name="mat_quantity[]" style="text-align: center;" onfocus="this.oldvalue = this.value;" onchange="change_mat_quantity(` + nextRow + `);this.oldvalue = this.value;"></td>
                                         <td class="text-center" ` + none_price + `></td>
-                                        <td class="table-report__action w-56">
+                                        <td class="table-report__action">
                                             <div class="flex justify-center items-center">
 
                                               <a style="background-color:unset;border:unset" class="flex items-center mr-3" onclick="delete_material_item(` + nextRow + `)" href="javascript:;" ><i style="font-size: 20px;
@@ -2316,32 +2335,63 @@ if (is_sale()) {
 
         }
 
-        function get_cate_code(rowId) {
+        function get_mat_sub_category(rowId) {
             var selectedCatalog = event.target.value;
-            var matOptions = '';
+            var subOptions = '';
+            var first = 0;
+            var sub_catalogs = catalogs[selectedCatalog];
+
+            Object.keys(sub_catalogs).forEach(function (key) {
+                var codes = Object.keys(sub_catalogs[key]);
+                if (first == 0) {
+                    if ($('#calc_mode').val() == 'Contractor') {
+                        price_per_unit = Math.round(sub_catalogs[key][codes[0]].price_per_unit_contractor * 1.32 * 10000) / 10000;
+                    } else {
+                        price_per_unit = Math.round(sub_catalogs[key][codes[0]].price_per_unit_tender * 1.32 * 10000) / 10000;
+                    }
+                }
+                subOptions += '<option value="' + key + '">' + key + '</option>';
+                first++;
+            });
+            $('#material-item-row' + rowId).children().eq(1).find('select').html(subOptions);
+            $('#material-item-row' + rowId).children().eq(3).html(Math.round(price_per_unit * 100) / 100);
+            var quantity = $('#material-item-row' + rowId).children().eq(4).find('input').val();
+            var total_price = $('#material-item-total').children().eq(2).html() * 1;
+            var original_price = $('#material-item-row' + rowId).children().eq(5).html() * 1;
+            if (quantity != '') {
+                $('#material-item-row' + rowId).children().eq(5).html(Math.round(quantity * price_per_unit * 100) / 100);
+                $('#material-item-total').children().eq(2).html(Math.round((total_price - original_price + quantity * price_per_unit) * 100) / 100);
+            }
+            $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? Math.round((total_price - original_price + quantity * price_per_unit) * 100) / 100 : Math.round((total_price - original_price + quantity * price_per_unit) / 1.32 * 100) / 100);
+            get_cate_code(rowId);
+            calculate_sale_table();
+        }
+
+        function get_cate_code(rowId) {
+            var selectedCatalog = $('#material-item-row' + rowId).children().eq(0).find('select').val();
+            var selectedSubCatalog = $('#material-item-row' + rowId).children().eq(1).find('select').val();
+            var codes = catalogs[selectedCatalog][selectedSubCatalog];
+            var codeOptions = '';
             var price_per_unit = '';
             var first = 0;
-            for (var j in catalogs) {
-                if (catalogs[j].product_category == selectedCatalog) {
-                    if (first == 0) {
-                        if ($('#calc_mode').val() == 'Contractor') {
-                            price_per_unit = Math.round(catalogs[j].price_per_unit_contractor * 1.32 * 10000) / 10000;
-                        } else {
-                            price_per_unit = Math.round(catalogs[j].price_per_unit_tender * 1.32 * 10000) / 10000;
-                        }
+            for (var j in codes) {
+                if (first == 0) {
+                    if ($('#calc_mode').val() == 'Contractor') {
+                        price_per_unit = Math.round(codes[j].price_per_unit_contractor * 1.32 * 10000) / 10000;
+                    } else {
+                        price_per_unit = Math.round(codes[j].price_per_unit_tender * 1.32 * 10000) / 10000;
                     }
-
-                    matOptions += '<option value="' + catalogs[j].mat_code + '">' + catalogs[j].mat_description + '</option>';
-                    first++;
                 }
+                codeOptions += '<option value="' + j + '">' + codes[j].mat_description + '</option>';
+                first++;
             }
-            $('#material-item-row' + rowId).children().eq(1).find('select').html(matOptions);
-            $('#material-item-row' + rowId).children().eq(2).html(Math.round(price_per_unit * 100) / 100);
-            var quantity = $('#material-item-row' + rowId).children().eq(3).find('input').val();
+            $('#material-item-row' + rowId).children().eq(2).find('select').html(codeOptions);
+            $('#material-item-row' + rowId).children().eq(3).html(Math.round(price_per_unit * 100) / 100);
+            var quantity = $('#material-item-row' + rowId).children().eq(4).find('input').val();
             var total_price = $('#material-item-total').children().eq(2).html() * 1;
-            var original_price = $('#material-item-row' + rowId).children().eq(4).html() * 1;
+            var original_price = $('#material-item-row' + rowId).children().eq(5).html() * 1;
             if (quantity != '') {
-                $('#material-item-row' + rowId).children().eq(4).html(Math.round(quantity * price_per_unit * 100) / 100);
+                $('#material-item-row' + rowId).children().eq(5).html(Math.round(quantity * price_per_unit * 100) / 100);
                 $('#material-item-total').children().eq(2).html(Math.round((total_price - original_price + quantity * price_per_unit) * 100) / 100);
             }
             $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? Math.round((total_price - original_price + quantity * price_per_unit) * 100) / 100 : Math.round((total_price - original_price + quantity * price_per_unit) / 1.32 * 100) / 100);
@@ -2350,26 +2400,21 @@ if (is_sale()) {
 
         function change_mat_code(rowId) {
             var selected_category = $('#material-item-row' + rowId).children().eq(0).find('select').val();
-            var selected_mat_code = $('#material-item-row' + rowId).children().eq(1).find('select').val();
+            var selected_sub_category = $('#material-item-row' + rowId).children().eq(1).find('select').val();
+            var selected_mat_code = $('#material-item-row' + rowId).children().eq(2).find('select').val();
             var price_per_unit = '';
-            for (var j in catalogs) {
-                if (catalogs[j].product_category == selected_category) {
-                    if (catalogs[j].mat_code == selected_mat_code) {
-                        if ($('#calc_mode').val() == 'Contractor') {
-                            price_per_unit = Math.round(catalogs[j].price_per_unit_contractor * 1.32 * 10000) / 10000;
-                        } else {
-                            price_per_unit = Math.round(catalogs[j].price_per_unit_tender * 1.32 * 10000) / 10000;
-                        }
-                    }
-                }
+            if ($('#calc_mode').val() == 'Contractor') {
+                price_per_unit = Math.round(catalogs[selected_category][selected_sub_category][selected_mat_code].price_per_unit_contractor * 1.32 * 10000) / 10000;
+            } else {
+                price_per_unit = Math.round(catalogs[selected_category][selected_sub_category][selected_mat_code].price_per_unit_tender * 1.32 * 10000) / 10000;
             }
-            $('#material-item-row' + rowId).children().eq(2).html(Math.round(price_per_unit * 100) / 100);
-            var quantity = $('#material-item-row' + rowId).children().eq(3).find('input').val();
+            $('#material-item-row' + rowId).children().eq(3).html(Math.round(price_per_unit * 100) / 100);
+            var quantity = $('#material-item-row' + rowId).children().eq(4).find('input').val();
             var total_price = $('#material-item-total').children().eq(2).html() * 1;
-            var original_price = $('#material-item-row' + rowId).children().eq(4).html() * 1;
+            var original_price = $('#material-item-row' + rowId).children().eq(5).html() * 1;
 
             if (quantity != '') {
-                $('#material-item-row' + rowId).children().eq(4).html(Math.round(quantity * price_per_unit * 100) / 100);
+                $('#material-item-row' + rowId).children().eq(5).html(Math.round(quantity * price_per_unit * 100) / 100);
                 $('#material-item-total').children().eq(2).html(Math.round((total_price - original_price + quantity * price_per_unit) * 100) / 100);
             }
             $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? Math.round((total_price - original_price + quantity * price_per_unit) * 100) / 100 : Math.round((total_price - original_price + quantity * price_per_unit) / 1.32 * 100) / 100);
@@ -2378,36 +2423,38 @@ if (is_sale()) {
 
         function change_mat_quantity(rowId) {
 
-            var price_per_unit = $('#material-item-row' + rowId).children().eq(2).html();
-            var quantity = $('#material-item-row' + rowId).children().eq(3).find('input').val();
+            var price_per_unit = $('#material-item-row' + rowId).children().eq(3).html();
+            var quantity = $('#material-item-row' + rowId).children().eq(4).find('input').val();
             if (quantity < 0) {
-                $('#material-item-row' + rowId).children().eq(3).find('input').val('');
-                $('#material-item-row' + rowId).children().eq(3).find('input').focus();
+                $('#material-item-row' + rowId).children().eq(4).find('input').val('');
+                $('#material-item-row' + rowId).children().eq(4).find('input').focus();
                 showNotification('Quantity must be bigger than 0');
                 return;
             }
             var total_price = $('#material-item-total').children().eq(2).html() * 1;
-            var original_price = $('#material-item-row' + rowId).children().eq(4).html() * 1;
+            var original_price = $('#material-item-row' + rowId).children().eq(5).html() * 1;
             var total_quantity = $('#material-item-total').children().eq(1).html() * 1;
             var original_quantity = event.target.oldvalue * 1;
             if (quantity != '' && price_per_unit != '') {
-                $('#material-item-row' + rowId).children().eq(4).html(Math.round(quantity * price_per_unit * 100) / 100);
+                $('#material-item-row' + rowId).children().eq(5).html(Math.round(quantity * price_per_unit * 100) / 100);
                 $('#material-item-total').children().eq(2).html(Math.round((total_price - original_price + quantity * price_per_unit) * 100) / 100)
             }
+
             $('#material-item-total').children().eq(1).html(Math.round((total_quantity - original_quantity + quantity * 1) * 100) / 100);
+
             $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? Math.round((total_price - original_price + quantity * price_per_unit) * 100) / 100 : Math.round((total_price - original_price + quantity * price_per_unit) / 1.32 * 100) / 100);
             calculate_sale_table();
         }
 
         function delete_material_item(rowId) {
             var total_price = $('#material-item-total').children().eq(2).html() * 1;
-            var original_price = $('#material-item-row' + rowId).children().eq(4).html() * 1;
+            var original_price = $('#material-item-row' + rowId).children().eq(5).html() * 1;
             var total_quantity = $('#material-item-total').children().eq(1).html() * 1;
-            var original_quantity = $('#material-item-row' + rowId).children().eq(3).find('input').val() * 1;
+            var original_quantity = $('#material-item-row' + rowId).children().eq(4).find('input').val() * 1;
             $('#material-item-total').children().eq(1).html(total_quantity - original_quantity);
-            $('#material-item-total').children().eq(2).html(total_price - original_price);
+            $('#material-item-total').children().eq(2).html(Math.round((total_price - original_price) * 100) / 100);
             $("#material-item-row" + rowId).remove();
-            $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? total_price - original_price : (total_price - original_price) / 1.32);
+            $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? Math.round((total_price - original_price) * 100) / 100 : Math.round((total_price - original_price) / 1.32*100)/100);
             calculate_sale_table();
         }
 

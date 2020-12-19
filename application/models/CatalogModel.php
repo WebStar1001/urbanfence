@@ -19,8 +19,18 @@ class CatalogModel extends CI_Model
         $this->db->select('*');
         $this->db->from('product_catalogs');
         $query = $this->db->get();
-        return $query->result();
+        $catalogs = $query->result();
+        $retAry = array();
+        foreach ($catalogs as $catalog) {
+            $retAry[$catalog->product_category][$catalog->sub_category][$catalog->mat_code] = array(
+                    'mat_description'=>$catalog->mat_description,
+                    'price_per_unit_tender'=>$catalog->price_per_unit_tender,
+                    'price_per_unit_contractor'=>$catalog->price_per_unit_contractor
+            );
+        }
+        return $retAry;
     }
+
     public function getProductCategories()
     {
         $this->db->select('*');
@@ -37,22 +47,4 @@ class CatalogModel extends CI_Model
         return $query->row();
     }
 
-    public function getCatalogOptions()
-    {
-        $catalogs = $this->getCatalogs();
-        $optionsHtml = '';
-        foreach ($catalogs as $item) {
-            $optionsHtml .= '<option value="' . $item->id . '">' . $item->product_category . '</option>';
-        }
-        return $optionsHtml;
-    }
-    public function getMetacodeOptions()
-    {
-        $catalogs = $this->getCatalogs();
-        $optionsHtml = '';
-        foreach ($catalogs as $item) {
-            $optionsHtml .= '<option value="' . $item->id . '">' . $item->mat_code . '</option>';
-        }
-        return $optionsHtml;
-    }
 }

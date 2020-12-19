@@ -43,7 +43,6 @@ class Quotes extends CI_Controller
         $data['categories'] = $this->CatalogModel->getProductCategories();
         $data['catalogs'] = $this->CatalogModel->getCatalogs();
         $data['companies'] = $this->CompanyModel->getCompanies();
-        $data['catalog_options'] = $this->CatalogModel->getCatalogOptions();
         $this->load->view('inc/header');
         $this->load->view('quotes/add_quote', $data);
         $this->load->view('inc/footer');
@@ -70,6 +69,8 @@ class Quotes extends CI_Controller
         $quote_id = $this->input->post('quote_id');
 
         $mat_category = $this->input->post('material_category');
+        $sub_category = $this->input->post('sub_categories');
+
         $material_code = $this->input->post('material_code');
         $mat_quantity = $this->input->post('mat_quantity');
         $labor_type = $this->input->post('labor_type');
@@ -409,6 +410,7 @@ class Quotes extends CI_Controller
                             'quote_id' => $quote_id,
                             'mat_category' => $category,
                             'code' => $material_code[$key],
+                            'sub_category' => $sub_category[$key],
                             'quantity' => $mat_quantity[$key],
                             'company_id' => $company_id
                         );
