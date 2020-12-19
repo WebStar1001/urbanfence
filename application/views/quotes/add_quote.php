@@ -565,7 +565,7 @@ if (is_sale()) {
                                 <td><?php echo $lab_total_days; ?></td>
                                 <td>
                                     <?php
-                                        echo $lab_total_prices;
+                                    echo $lab_total_prices;
                                     ?>
                                 </td>
                                 <td class="table-report__action w-56">
@@ -1931,22 +1931,17 @@ if (is_sale()) {
             $('#materials').find('tr').each(function (index) {
                 if ($(this).attr('id') != 'material-item-row0' && $(this).attr('id') != 'material-item-total' && $(this).attr('id') != 'material_thead') {
                     var row_category = $(this).children().eq(0).find('select').val();
-                    var row_code = $(this).children().eq(1).find('select').val();
-                    for (var i in catalogs) {
-                        if (catalogs[i].product_category == row_category) {
-                            if (catalogs[i].mat_code == row_code) {
-                                var price_per_unit = catalogs[i].price_per_unit_contractor * 1.32;
-                                if (calc_mode == 'Tender') {
-                                    price_per_unit = catalogs[i].price_per_unit_tender * 1.32;
-                                }
-                                $(this).children().eq(2).html(Math.round(price_per_unit * 100) / 100)
-                                var quantity = $(this).children().eq(3).find('input').val() * 1
-                                var row_total = quantity * price_per_unit;
-                                $(this).children().eq(4).html(Math.round(row_total * 100) / 100)
-                                material_total += row_total;
-                            }
-                        }
+                    var sub_category = $(this).children().eq(1).find('select').val();
+                    var row_code = $(this).children().eq(2).find('select').val();
+                    var price_per_unit = catalogs[row_category][sub_category][row_code].price_per_unit_contractor * 1.32;
+                    if (calc_mode == 'Tender') {
+                        price_per_unit = catalogs[row_category][sub_category][row_code].price_per_unit_tender * 1.32;
                     }
+                    $(this).children().eq(3).html(Math.round(price_per_unit * 100) / 100)
+                    var quantity = $(this).children().eq(4).find('input').val() * 1
+                    var row_total = quantity * price_per_unit;
+                    $(this).children().eq(5).html(Math.round(row_total * 100) / 100)
+                    material_total += row_total;
                 }
             });
             $('#material-item-total').children().eq(2).html(Math.round(material_total * 100) / 100);
@@ -1956,13 +1951,14 @@ if (is_sale()) {
             $('#labour').find('tr').each(function (index) {
                 if ($(this).attr('id') != 'labour-item-row0' && $(this).attr('id') != 'labour-item-total' && $(this).attr('id') != 'labour_thead') {
                     var quantity = $(this).children().eq(1).find('input').val() * 1
+
+                    var row_total = quantity * 1148.88;
+
                     if (calc_mode == 'Tender') {
-                        var row_total = quantity * 1095.85;
-                        $(this).children().eq(2).html(Math.round(row_total * 100) / 100)
-                    } else {
-                        var row_total = quantity * 1095.85;
-                        $(this).children().eq(2).html(Math.round(row_total * 100) / 100)
+                        row_total = quantity * 1095.85;
                     }
+                    $(this).children().eq(2).html(Math.round(row_total * 100) / 100)
+
                     labour_total += row_total;
                 }
             });
