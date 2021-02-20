@@ -119,18 +119,36 @@ class Opportunity extends CI_Controller
     {
         $data = $_POST;
         $opportunity_id = $this->input->post('opportunity_id');
+
         unset($data['opportunity_id']);
+        if (isset($data['proceed_to_quote'])) {
+            unset($data['proceed_to_quote']);
+        }
+        if (isset($data['save_opper'])) {
+            unset($data['save_opper']);
+        }
+        unset($data['proceed_to_quote']);
+
         if ($data['customer_id'] == '') {
             $data['customer_id'] = $data['created_customer_id'];
         }
         $customer = $this->CustomerModel->get_customer($data['customer_id']);
         $data['company_id'] = $customer->company_id;
         if ($opportunity_id != "") {
+            if (isset($_POST['proceed_to_quote'])) {
+                $data['status'] = 'Assigned';
+                $data['sale_rep'] = logged_user_id();
+            }
             $this->db->where('id', $opportunity_id);
             $this->db->update('opportunities', $data);
         } else {
             $data['created_by'] = user_name();
-            $data['status'] = 'New';
+            if (isset($_POST['proceed_to_quote'])) {
+                $data['status'] = 'Assigned';
+                $data['sale_rep'] = logged_user_id();
+            } else {
+                $data['status'] = 'New';
+            }
             $this->db->insert('opportunities', $data);
 
             $opportunity_id = $this->db->insert_id();
@@ -141,8 +159,11 @@ class Opportunity extends CI_Controller
                 $this->send_email_to_manager($opportunity_id, $manager);
             }
         }
-
-        redirect('Opportunity/opportunity_list');
+        if (isset($_POST['proceed_to_quote'])) {
+            redirect('Quotes/add_quote?opportunity_id=' . $opportunity_id);
+        } else {
+            redirect('Opportunity/opportunity_list');
+        }
     }
 
     private function send_email_to_manager($oppor_id, $manager)
@@ -180,7 +201,7 @@ class Opportunity extends CI_Controller
     {
         $opportunities = $this->OpportunityModel->getOpportunities();
         $retAry = array();
-        foreach($opportunities as $key=>$oppor){
+        foreach ($opportunities as $key => $oppor) {
             $sales = $this->UserModel->getSalesByCompany($oppor['company_id']);
             $retAry[$key] = $oppor;
             $retAry[$key]['sales'] = $sales;
@@ -198,6 +219,7 @@ class Opportunity extends CI_Controller
         $this->send_email_to_sale($oppor_id, $sale_id);
         echo 'Success';
     }
+
     public function get_sale_rep()
     {
         $company_id = $this->input->get('company_id');

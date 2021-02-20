@@ -61,6 +61,11 @@ function user_company()
     return $CI->session->userdata('company_id');
 }
 
+function logged_user_id(){
+    $CI =& get_instance();
+    return $CI->session->userdata('user_id');
+}
+
 function user_name()
 {
     $CI =& get_instance();

@@ -288,7 +288,11 @@
                    value="<?php echo (is_object($opportunity)) ? $opportunity->id : ''; ?>"/>
             <div class="col-span-12">
                 <div class="preview">
-                    <input type="submit" value="Save Opportunity"
+                    <?php if(!is_user()):?>
+                    <input type="submit" value="Proceed to Quote" name="proceed_to_quote"
+                           style="float: right;" class="button bg-theme-1 text-white mt-5  ml-2 sm:p-2" tabindex="17"/>
+                    <?php endif;?>
+                    <input type="submit" value="Save Opportunity" name="save_opper"
                            style="float: right;" class="button bg-theme-1 text-white mt-5 sm:p-2" tabindex="17"/>
                 </div>
             </div>
