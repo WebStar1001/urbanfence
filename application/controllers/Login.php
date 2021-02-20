@@ -51,6 +51,8 @@ class Login extends CI_Controller
             $error = 'Your account has been disabled';
         } elseif ($user->status == 'Blocked') {
             $error = 'Your account has been blocked';
+        }elseif (!$user->company_id) {
+            $error = 'Quoting company isn\'t defined for the user';
         } elseif (generate_password($password) != $user->password) {
             if ($user->login_attempts > 3) {
                 $this->_block_user($username);

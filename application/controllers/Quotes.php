@@ -163,7 +163,7 @@ class Quotes extends CI_Controller
                 'form_signed' => $this->input->post('form_signed'),
                 'credit_passed' => $this->input->post('credit_passed')
             );
-        }elseif ($action == 'submit_pending_quote') {
+        } elseif ($action == 'submit_pending_quote') {
             $quoteData = array(
                 'status' => 'Approved',
                 'additional_col_1' => $this->input->post('additional_col_1'),
@@ -209,7 +209,7 @@ class Quotes extends CI_Controller
                 'form_signed' => $this->input->post('form_signed'),
                 'credit_passed' => $this->input->post('credit_passed')
             );
-        }elseif ($action == 'reject_pending_quote') {
+        } elseif ($action == 'reject_pending_quote') {
             $quoteData = array(
                 'status' => 'New',
                 'additional_col_1' => $this->input->post('additional_col_1'),
@@ -376,7 +376,7 @@ class Quotes extends CI_Controller
                 'additional_notes' => $this->input->post('additional_notes')
             );
             $quote = $this->QuoteModel->get_quote($quote_id);
-            if($quote->status == 'Pending'){
+            if ($quote->status == 'Pending') {
                 $quoteData['additional_select_1'] = $this->input->post('additional_select_1');
                 $quoteData['additional_select_2'] = $this->input->post('additional_select_2');
             }
@@ -493,7 +493,11 @@ class Quotes extends CI_Controller
             echo 'success';
             exit;
         } else {
-            redirect('Quotes/quotes_list');
+            if ($action == 'submit_new_quote' || $action == 'reject_pending_quote') {
+                redirect('/Quotes/add_quote?quote_id=' . $quote_id);
+            } else {
+                redirect('/Quotes/quotes_list');
+            }
         }
     }
 
