@@ -375,12 +375,13 @@ if (is_sale()) {
                                             </td>
                                             <td class="text-center" <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>>
                                                 <?php echo $price_per_unit; ?></td>
-                                            <td class="text-center" style="width: 8%;"><input type="number" name="mat_quantity[]"
-                                                                           class="text-center"
-                                                                           onfocus="this.oldvalue = this.value;"
-                                                                           style="width: 100%;"
-                                                                           value="<?php echo $mat_info[$i]->quantity; ?>"
-                                                                           onchange="change_mat_quantity(<?php echo $nextRow; ?>);this.oldvalue = this.value;">
+                                            <td class="text-center" style="width: 8%;"><input type="number"
+                                                                                              name="mat_quantity[]"
+                                                                                              class="text-center"
+                                                                                              onfocus="this.oldvalue = this.value;"
+                                                                                              style="width: 100%;"
+                                                                                              value="<?php echo $mat_info[$i]->quantity; ?>"
+                                                                                              onchange="change_mat_quantity(<?php echo $nextRow; ?>);this.oldvalue = this.value;">
                                             </td>
                                             <td class="text-center" <?php echo ($hide_price) ? 'style="display:none;"' : '' ?>>
                                                 <?php
@@ -2521,15 +2522,18 @@ if (is_sale()) {
             }
             var total_quantity = $('#labour-item-total').children().eq(1).html() * 1;
             var original_quantity = event.target.oldvalue * 1;
+            var labor_row_price;
             if (quantity != '') {
                 if ($('#calc_mode').val() == 'Contractor') {
-                    $('#labour-item-row' + rowId).children().eq(2).html(quantity * 1148.88);
-                    $('#labour-item-total').children().eq(2).html(total_price - original_price + quantity * 1148.88)
-                    $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(total_price - original_price + quantity * 1148.88);
+                    labor_row_price = Math.round(quantity * 1148.88 * 100) / 100;
+                    $('#labour-item-row' + rowId).children().eq(2).html(labor_row_price);
+                    $('#labour-item-total').children().eq(2).html(total_price - original_price + labor_row_price)
+                    $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(total_price - original_price + labor_row_price);
                 } else {
-                    $('#labour-item-row' + rowId).children().eq(2).html(quantity * 1095.85);
-                    $('#labour-item-total').children().eq(2).html(total_price - original_price + quantity * 1095.85)
-                    $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(total_price - original_price + quantity * 1095.85);
+                    labor_row_price = Math.round(quantity * 1095.85 * 100) / 100;
+                    $('#labour-item-row' + rowId).children().eq(2).html(labor_row_price);
+                    $('#labour-item-total').children().eq(2).html(total_price - original_price + labor_row_price)
+                    $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(total_price - original_price + labor_row_price);
                 }
             }
             $('#labour-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);

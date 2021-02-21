@@ -63,6 +63,16 @@ class UserModel extends CI_Model
 
         return $query->result();
     }
+    public function getManagersByCompany($company_id){
+        $this->db->select('*')
+            ->from('users')
+            ->where('status != "Disabled"', null, false)
+            ->where('access_level', 'Manager')
+            ->where('company_id', $company_id);
+        $query = $this->db->get();
+
+        return $query->result();
+    }
 
     function check_valid_user($username, $password)
     {
@@ -81,5 +91,15 @@ class UserModel extends CI_Model
     public function getManagersByCompanyID($company_id){
         $query = $this->db->get_where('users', array('company_id'=>$company_id, 'access_level'=>'Manager'));
         return $query->result();
+    }
+    public function getManagerByUserName($username, $company_id){
+        $this->db->select('*')
+            ->from('users')
+            ->where('status != "Disabled"', null, false)
+            ->where('access_level', 'Manager')
+            ->where('company_id', $company_id)
+            ->where('name', $username);
+        $query = $this->db->get();
+        return $query->row();
     }
 }

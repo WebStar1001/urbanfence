@@ -39,7 +39,6 @@ class Opportunity extends CI_Controller
             $data['status'] = 'New';
         }
         $data['companies'] = $this->CompanyModel->getCompanies();
-        $data['sales'] = $this->UserModel->getUserByAccessLevel('Sales');
         $this->load->view('inc/header');
         $this->load->view('opportunities/view_opportunity', $data);
         $this->load->view('inc/footer');
@@ -137,7 +136,12 @@ class Opportunity extends CI_Controller
         if ($opportunity_id != "") {
             if (isset($_POST['proceed_to_quote'])) {
                 $data['status'] = 'Assigned';
-                $data['sale_rep'] = logged_user_id();
+                if(is_admin()){
+                    $auto_manager = $this->UserModel->getManagerByUserName(user_name(), $customer->company_id);
+                    $data['sale_rep'] = $auto_manager->id;
+                }else{
+                    $data['sale_rep'] = logged_user_id();
+                }
             }
             $this->db->where('id', $opportunity_id);
             $this->db->update('opportunities', $data);
@@ -145,7 +149,12 @@ class Opportunity extends CI_Controller
             $data['created_by'] = user_name();
             if (isset($_POST['proceed_to_quote'])) {
                 $data['status'] = 'Assigned';
-                $data['sale_rep'] = logged_user_id();
+                if(is_admin()){
+                    $auto_manager = $this->UserModel->getManagerByUserName(user_name(), $customer->company_id);
+                    $data['sale_rep'] = $auto_manager->id;
+                }else{
+                    $data['sale_rep'] = logged_user_id();
+                }
             } else {
                 $data['status'] = 'New';
             }
@@ -203,8 +212,10 @@ class Opportunity extends CI_Controller
         $retAry = array();
         foreach ($opportunities as $key => $oppor) {
             $sales = $this->UserModel->getSalesByCompany($oppor['company_id']);
+            $managers = $this->UserModel->getManagersByCompany($oppor['company_id']);
             $retAry[$key] = $oppor;
             $retAry[$key]['sales'] = $sales;
+            $retAry[$key]['managers'] = $managers;
         }
         $data['data'] = $retAry;
         echo json_encode($data);

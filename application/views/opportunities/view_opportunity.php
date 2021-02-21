@@ -193,7 +193,6 @@
 
 ?>
 <script type="text/javascript">
-    var sale_users = <?php echo json_encode($sales);?>;
     var status = '<?php echo $status;?>';
 
     function format(d) {
@@ -278,8 +277,8 @@
                 {
                     "data": null, render: function (data) {
                         var sales_rp_select = "<select id='sale_rep_" + data.id + "'><option value='0'>Please Select</option>";
-                        // console.log(sale_users);
-                        sale_users = data.sales;
+
+                        var sale_users = data.sales;
                         for (var i in sale_users) {
                             if (sale_users[i].id == data.sale_rep) {
                                 sales_rp_select += '<option value="' + sale_users[i].id + '" selected>' + sale_users[i].name +
@@ -289,6 +288,17 @@
                                     '</option>';
                             }
                         }
+                        var managers = data.managers;
+                        for (var i in managers) {
+                            if (managers[i].id == data.sale_rep) {
+                                sales_rp_select += '<option value="' + managers[i].id + '" selected>' + managers[i].name +
+                                    '</option>';
+                            } else {
+                                sales_rp_select += '<option value="' + managers[i].id + '">' + managers[i].name +
+                                    '</option>';
+                            }
+                        }
+
                         return sales_rp_select;
                     }
                 },
