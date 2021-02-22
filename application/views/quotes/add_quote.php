@@ -171,7 +171,9 @@
         padding-left: 0px !important;
         padding-right: 0px !important;
     }
-
+    input:invalid {
+        box-shadow: none;
+    }
     /*.input-total-markup,.input-multiple-markup{
       display: none;
     }*/
@@ -880,7 +882,9 @@ if (is_sale()) {
                                             $misc_markup_percent = (is_object($quote) && $quote->misc_factor != 0) ? ($quote->misc_factor - 1) * 100 : '';
                                             $adson_markup_percent = (is_object($quote) && $quote->ads_on_factor != 0) ? ($quote->ads_on_factor - 1) * 100 : '';
 
-                                            $total_amount = (is_object($quote)) ? $quote->mat_net * $quote->mat_factor + $quote->labour_net * $quote->lab_factor
+                                            $total_amount = (is_object($quote)) ?
+                                                (($quote->calc_mode == 'Contractor') ? $quote->mat_net * $quote->mat_factor + $quote->mat_net * 0.32 : $quote->mat_factor * $quote->mat_net)
+                                                + $quote->labour_net * $quote->lab_factor
                                                 + $quote->misc_net * $quote->misc_factor + $quote->ads_on_net * $quote->ads_on_factor : 0;
 
                                             $total_markup_amount = (is_object($quote)) ? $total_amount - $quote->mat_net - $quote->labour_net - $quote->misc_net - $quote->ads_on_net : 0;
@@ -1038,44 +1042,58 @@ if (is_sale()) {
                             <div class="p-5" id="input">
                                 <div class="preview">
                                     <div class="overflow-x-auto">
-
+                                        <?php
+                                        $total_amount1 = (($quote->calc_mode == 'Contractor') ? $quote->mat_net * $quote->mat_factor + $quote->mat_net * 0.32 : $quote->mat_factor * $quote->mat_net)
+                                            + $quote->labour_net * $quote->lab_factor
+                                            + $quote->misc_net * $quote->misc_factor + $quote->ads_on_net * $quote->ads_on_factor;
+                                        $discount_amount = round($total_amount1 * $quote->discount_set / 100, 2);
+                                        $discount_percent = $quote->discount_set;
+                                        $total_amount2 = $total_amount1 - $discount_amount;
+                                        $total_amount = $total_amount2 + $total_amount2 * 0.13;
+                                        ?>
                                         <table class="table" style="text-align: center;" id="small_quote_table">
                                             <thead>
                                             <tr class="bg-gray-200 text-gray-700">
                                                 <th class="whitespace-no-wrap">Items</th>
-                                                <th class="whitespace-no-wrap">Costs</th>
+                                                <th class="whitespace-no-wrap">Selling Numbers</th>
                                             </tr>
                                             </thead>
                                             <tbody>
                                             <tr>
                                                 <td class="border-b">Material</td>
-                                                <td class="border-b"><a></a></td>
+                                                <td class="border-b">
+                                                    <a><?php echo round(($quote->calc_mode == 'Contractor') ? $quote->mat_net * $quote->mat_factor + $quote->mat_net * 0.32 : $quote->mat_factor * $quote->mat_net, 2) ?></a>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td class="border-b">Labour</td>
-                                                <td class="border-b"><a></a></td>
+                                                <td class="border-b">
+                                                    <a><?php echo round($quote->labour_net * $quote->lab_factor, 2); ?></a>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td class="border-b">Misc</td>
-                                                <td class="border-b"><a></a></td>
+                                                <td class="border-b">
+                                                    <a><?php echo round($quote->misc_net * $quote->misc_factor, 2); ?></a>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td class="border-b">Add-On</td>
-                                                <td class="border-b"></td>
+                                                <td class="border-b"><?php echo round($quote->ads_on_net * $quote->ads_on_factor, 2); ?></td>
                                             </tr>
                                             <tr class="sub-total1">
                                                 <td class="border-b">Sub Total 1</td>
-                                                <td class="border-b"></td>
+                                                <td class="border-b"><?php echo round($total_amount1, 2); ?></td>
                                             </tr>
                                             <tr class="discount-row">
                                                 <td class="border-b">Discount (<span
                                                             id="discount_span"><?php echo ($quote->discount_set == 0) ? '' : $quote->discount_set; ?></span>%)
                                                 </td>
-                                                <td class="border-b"></td>
+                                                <td class="border-b"><?php echo $discount_amount ?></td>
                                             </tr>
                                             <tr class="sub-total2">
                                                 <td class="border-b">Sub Total 2</td>
-                                                <td class="border-b"></td>
+                                                <td class="border-b"><?php echo round($total_amount2, 2); ?></td>
                                             </tr>
                                             <tr>
                                                 <td class="border-b">HST</td>
@@ -1083,7 +1101,7 @@ if (is_sale()) {
                                             </tr>
                                             <tr>
                                                 <td class="border-b">Total</td>
-                                                <td class="border-b"></td>
+                                                <td class="border-b"><?php echo round($total_amount, 2); ?></td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -1876,22 +1894,6 @@ if (is_sale()) {
             }
             if (status == 'Pending' || status == 'Approved') {
 
-                var mat_total = $('#material-item-total').find('td').eq(2).html() * 1;
-                $('#small_quote_table').find('tr').eq(1).children().eq(1).find('a').html(mat_total);
-
-                var labour_total = $('#labour-item-total').find('td').eq(2).html() * 1;
-
-                $('#small_quote_table').find('tr').eq(2).children().eq(1).find('a').html(labour_total);
-
-
-                var mis_total = $('#miscellaneous-item-total').find('td').eq(2).html() * 1;
-                $('#small_quote_table').find('tr').eq(3).children().eq(1).find('a').html(mis_total);
-
-                var addon_total = $('#adsOn-item-total').find('td').eq(2).html() * 1;
-                $('#small_quote_table').find('tr').eq(4).children().eq(1).html(addon_total);
-
-                calculate_small_table();
-
                 $('fieldset').find('input').attr('readonly', true);
                 $('fieldset').find('select').attr('disabled', true);
                 $('fieldset').find('textarea').attr('readonly', true);
@@ -1995,41 +1997,6 @@ if (is_sale()) {
                 $('#additional_select_comment2').html('<p>(Radar Scan / X-Ray services and / or location of embadded objects not included in this quotation.)</p>')
             }
         });
-
-        function calculate_small_table() {
-            var mat_cost = $('#small_quote_table').find('tr').eq(1).children().eq(1).find('a').html() * 1;
-
-            var labour_cost = $('#small_quote_table').find('tr').eq(2).children().eq(1).find('a').html() * 1;
-
-            var misc_cost = $('#small_quote_table').find('tr').eq(3).children().eq(1).find('a').html() * 1;
-
-            var adson_cost = $('#small_quote_table').find('tr').eq(4).children().eq(1).html() * 1;
-
-
-            var subtotal_cost1 = mat_cost + labour_cost + misc_cost + adson_cost;
-
-
-            var discount_percent = $('#discount_span').html() * 1;
-
-            var discount_cost = (subtotal_cost1 * discount_percent / 100);
-
-            var subtotal_cost2 = subtotal_cost1 - discount_cost;
-
-            var HST = subtotal_cost2 * 13 / 100;
-
-            var total_cost = subtotal_cost2 + HST;
-
-            $('#small_quote_table').find('tr').eq(5).children().eq(1).html(Math.round(subtotal_cost1 * 100) / 100);
-
-            $('#small_quote_table').find('tr').eq(6).children().eq(1).html(Math.round(discount_cost * 100) / 100);
-
-            $('#small_quote_table').find('tr').eq(7).children().eq(1).html(Math.round(subtotal_cost2 * 100) / 100);
-
-            $('#small_quote_table').find('tr').eq(8).children().eq(1).html(Math.round(HST * 100) / 100);
-
-            $('#small_quote_table').find('tr').eq(9).children().eq(1).html(Math.round(total_cost * 100) / 100);
-
-        }
 
         function calculate_sale_table() {
             var mat_cost = $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html() * 1;
@@ -2601,6 +2568,7 @@ if (is_sale()) {
             var original_price = $('#miscellaneous-item-row' + rowId).children().eq(4).html() * 1;
             var price_per_unit = $('#miscellaneous-item-row' + rowId).children().eq(2).find('input').val();
             var quantity = $('#miscellaneous-item-row' + rowId).children().eq(3).find('input').val();
+            var mis_row_price = Math.round(quantity * price_per_unit * 100) / 100
             if (price_per_unit < 0) {
                 $('#miscellaneous-item-row' + rowId).children().eq(2).find('input').val('');
                 $('#miscellaneous-item-row' + rowId).children().eq(2).find('input').focus();
@@ -2608,11 +2576,11 @@ if (is_sale()) {
                 return;
             }
             if (quantity != '' && price_per_unit != '') {
-                $('#miscellaneous-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
-                $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
+                $('#miscellaneous-item-row' + rowId).children().eq(4).html(mis_row_price);
+                $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price + mis_row_price)
             }
             if (status == 'New') {
-                $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
+                $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price + mis_row_price);
                 calculate_sale_table();
             }
         }
@@ -2624,6 +2592,7 @@ if (is_sale()) {
             var quantity = $('#miscellaneous-item-row' + rowId).children().eq(3).find('input').val();
             var total_quantity = $('#miscellaneous-item-total').children().eq(1).html() * 1;
             var original_quantity = event.target.oldvalue * 1;
+            var mis_row_price = Math.round(quantity * price_per_unit * 100) / 100
             if (quantity < 0) {
                 $('#miscellaneous-item-row' + rowId).children().eq(3).find('input').val('');
                 $('#miscellaneous-item-row' + rowId).children().eq(3).find('input').focus();
@@ -2631,12 +2600,12 @@ if (is_sale()) {
                 return;
             }
             if (quantity != '' && price_per_unit != '') {
-                $('#miscellaneous-item-row' + rowId).children().eq(4).html(quantity * price_per_unit);
-                $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
+                $('#miscellaneous-item-row' + rowId).children().eq(4).html(mis_row_price);
+                $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price + mis_row_price)
             }
             $('#miscellaneous-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
             if (status == 'New') {
-                $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price + quantity * price_per_unit);
+                $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price + mis_row_price);
                 calculate_sale_table();
             }
         }
@@ -2698,6 +2667,7 @@ if (is_sale()) {
             var original_price = $('#adsOn-item-row' + rowId).children().eq(3).html() * 1;
             var price_per_unit = $('#adsOn-item-row' + rowId).children().eq(1).find('input').val();
             var quantity = $('#adsOn-item-row' + rowId).children().eq(2).find('input').val();
+            var addon_row_price = Math.round(quantity * price_per_unit * 100) / 100
             if (price_per_unit < 0) {
                 $('#adsOn-item-row' + rowId).children().eq(1).find('input').val('');
                 $('#adsOn-item-row' + rowId).children().eq(1).find('input').focus();
@@ -2705,11 +2675,11 @@ if (is_sale()) {
                 return;
             }
             if (quantity != '' && price_per_unit != '') {
-                $('#adsOn-item-row' + rowId).children().eq(3).html(quantity * price_per_unit);
-                $('#adsOn-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
+                $('#adsOn-item-row' + rowId).children().eq(3).html(addon_row_price);
+                $('#adsOn-item-total').children().eq(2).html(total_price - original_price + addon_row_price)
             }
             if (status == 'New') {
-                $('#final_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
+                $('#final_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price + addon_row_price);
                 calculate_sale_table();
             }
         }
@@ -2721,6 +2691,7 @@ if (is_sale()) {
             var quantity = $('#adsOn-item-row' + rowId).children().eq(2).find('input').val();
             var total_quantity = $('#adsOn-item-total').children().eq(1).html() * 1;
             var original_quantity = event.target.oldvalue * 1;
+            var addon_row_price = Math.round(quantity * price_per_unit * 100) / 100
             if (quantity < 0) {
                 $('#adsOn-item-row' + rowId).children().eq(2).find('input').val('');
                 $('#adsOn-item-row' + rowId).children().eq(2).find('input').focus();
@@ -2728,12 +2699,12 @@ if (is_sale()) {
                 return;
             }
             if (quantity != '' && price_per_unit != '') {
-                $('#adsOn-item-row' + rowId).children().eq(3).html(quantity * price_per_unit);
-                $('#adsOn-item-total').children().eq(2).html(total_price - original_price + quantity * price_per_unit)
+                $('#adsOn-item-row' + rowId).children().eq(3).html(addon_row_price);
+                $('#adsOn-item-total').children().eq(2).html(total_price - original_price + addon_row_price)
             }
             $('#adsOn-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
             if (status == 'New') {
-                $('#final_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price + quantity * price_per_unit);
+                $('#final_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price + addon_row_price);
                 calculate_sale_table();
             }
         }
