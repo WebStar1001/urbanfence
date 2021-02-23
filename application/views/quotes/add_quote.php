@@ -2704,12 +2704,11 @@ if (is_sale()) {
                 $('#adsOn-item-row' + rowId).children().eq(3).html(addon_row_price);
                 $('#adsOn-item-total').children().eq(2).html(Math.round((total_price - original_price + addon_row_price) * 100) / 100)
             }
-            $('#adsOn-item-total').children().eq(1).html(Math.round((total_quantity - original_quantity + quantity * 1) * 100) / 100)
-        );
-        if (status == 'New') {
-            $('#final_quote_table').find('tr').eq(4).children().eq(1).html(Math.round((total_price - original_price + addon_row_price) * 100) / 100);
-            calculate_sale_table();
-        }
+            $('#adsOn-item-total').children().eq(1).html(Math.round((total_quantity - original_quantity + quantity * 1) * 100) / 100);
+            if (status == 'New') {
+                $('#final_quote_table').find('tr').eq(4).children().eq(1).html(Math.round((total_price - original_price + addon_row_price) * 100) / 100);
+                calculate_sale_table();
+            }
         }
 
 
