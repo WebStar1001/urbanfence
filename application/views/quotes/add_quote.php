@@ -2681,7 +2681,7 @@ if (is_sale()) {
                 $('#adsOn-item-total').children().eq(2).html(Math.round((total_price - original_price + addon_row_price) * 100) / 100)
             }
             if (status == 'New') {
-                $('#final_quote_table').find('tr').eq(4).children().eq(1).html(Math.round(total_price - original_price + addon_row_price) * 100) / 100;
+                $('#final_quote_table').find('tr').eq(4).children().eq(1).html(Math.round((total_price - original_price + addon_row_price) * 100) / 100);
                 calculate_sale_table();
             }
         }
