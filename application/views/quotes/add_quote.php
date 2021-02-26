@@ -566,7 +566,7 @@ if (is_sale()) {
                                 <td><?php echo $lab_total_days; ?></td>
                                 <td>
                                     <?php
-                                    echo $lab_total_prices;
+                                    echo round($lab_total_prices, 2);
                                     ?>
                                 </td>
                                 <td class="table-report__action w-56">
@@ -1064,7 +1064,7 @@ if (is_sale()) {
                                             <tr>
                                                 <td class="border-b">Material</td>
                                                 <td class="border-b">
-                                                    <a><?php echo round(($quote->calc_mode == 'Contractor') ? $quote->mat_net * $quote->mat_factor + $quote->mat_net * 0.32 : $quote->mat_factor * $quote->mat_net, 2) ?></a>
+                                                    <a><?php echo round(($quote->calc_mode == 'Contractor') ? $quote->mat_net + $quote->mat_net / 1.32 * ($quote->mat_factor - 1) : $quote->mat_factor * $quote->mat_net, 2) ?></a>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -2001,6 +2001,7 @@ if (is_sale()) {
         });
 
         function calculate_sale_table() {
+
             var mat_cost = $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html() * 1;
 
             var labour_cost = $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html() * 1;
@@ -2042,7 +2043,7 @@ if (is_sale()) {
             var discount_percent = $('input[name="discount_percent"]').val() * 1;
 
 
-            var mat_profit = (mat_cost * material_markup_percent / 100 + mat_cost * 0.32);
+            var mat_profit = (is_sale) ? mat_cost / 1.32 * material_markup_percent / 100 : (mat_cost * material_markup_percent / 100 + mat_cost * 0.32);
             var labour_profit = (labour_cost * labour_markup_percent / 100);
             var misc_profit = (misc_cost * misc_markup_percent / 100);
             var adson_profit = (adson_cost * adson_markup_percent / 100);
@@ -2496,16 +2497,16 @@ if (is_sale()) {
                 if ($('#calc_mode').val() == 'Contractor') {
                     labor_row_price = Math.round(quantity * 1148.88 * 100) / 100;
                     $('#labour-item-row' + rowId).children().eq(2).html(labor_row_price);
-                    $('#labour-item-total').children().eq(2).html(total_price - original_price + labor_row_price)
-                    $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(total_price - original_price + labor_row_price);
+                    $('#labour-item-total').children().eq(2).html(Math.round((total_price - original_price + labor_row_price) * 100) / 100)
+                    $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(Math.round((total_price - original_price + labor_row_price) * 100) / 100);
                 } else {
                     labor_row_price = Math.round(quantity * 1095.85 * 100) / 100;
                     $('#labour-item-row' + rowId).children().eq(2).html(labor_row_price);
-                    $('#labour-item-total').children().eq(2).html(total_price - original_price + labor_row_price)
-                    $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(total_price - original_price + labor_row_price);
+                    $('#labour-item-total').children().eq(2).html(Math.round((total_price - original_price + labor_row_price) * 100) / 100)
+                    $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(Math.round((total_price - original_price + labor_row_price) * 100) / 100);
                 }
             }
-            $('#labour-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
+            $('#labour-item-total').children().eq(1).html(Math.round((total_quantity - original_quantity + quantity * 1) * 100) / 100);
             if (status == 'New') {
                 calculate_sale_table();
             }
@@ -2579,10 +2580,10 @@ if (is_sale()) {
             }
             if (quantity != '' && price_per_unit != '') {
                 $('#miscellaneous-item-row' + rowId).children().eq(4).html(mis_row_price);
-                $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price + mis_row_price)
+                $('#miscellaneous-item-total').children().eq(2).html(Math.round((total_price - original_price + mis_row_price) * 100) / 100)
             }
             if (status == 'New') {
-                $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price + mis_row_price);
+                $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(Math.round((total_price - original_price + mis_row_price) * 100) / 100);
                 calculate_sale_table();
             }
         }
@@ -2603,11 +2604,11 @@ if (is_sale()) {
             }
             if (quantity != '' && price_per_unit != '') {
                 $('#miscellaneous-item-row' + rowId).children().eq(4).html(mis_row_price);
-                $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price + mis_row_price)
+                $('#miscellaneous-item-total').children().eq(2).html(Math.round((total_price - original_price + mis_row_price) * 100) / 100)
             }
-            $('#miscellaneous-item-total').children().eq(1).html(total_quantity - original_quantity + quantity * 1);
+            $('#miscellaneous-item-total').children().eq(1).html(Math.round((total_quantity - original_quantity + quantity * 1) * 100) / 100);
             if (status == 'New') {
-                $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price + mis_row_price);
+                $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(Math.round((total_price - original_price + mis_row_price) * 100) / 100);
                 calculate_sale_table();
             }
         }
