@@ -2519,10 +2519,10 @@ if (is_sale()) {
             $('#labour-item-total').children().eq(2).html(total_price - original_price);
             var total_quantity = $('#labour-item-total').children().eq(1).html() * 1;
             var original_quantity = $('#labour-item-row' + rowId).children().eq(1).find('input').val() * 1;
-            $('#labour-item-total').children().eq(1).html(total_quantity - original_quantity);
+            $('#labour-item-total').children().eq(1).html(Math.round((total_quantity - original_quantity) * 100) / 100);
             $("#labour-item-row" + rowId).remove();
             if (status == 'New') {
-                $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(total_price - original_price);
+                $('#final_quote_table').find('tr').eq(2).children().eq(1).find('a').html(Math.round((total_price - original_price) * 100) / 100);
                 calculate_sale_table();
             }
         }
@@ -2619,10 +2619,10 @@ if (is_sale()) {
             $('#miscellaneous-item-total').children().eq(2).html(total_price - original_price);
             var total_quantity = $('#miscellaneous-item-total').children().eq(1).html() * 1;
             var original_quantity = $('#miscellaneous-item-row' + rowId).children().eq(3).find('input').val() * 1;
-            $('#miscellaneous-item-total').children().eq(1).html(total_quantity - original_quantity);
+            $('#miscellaneous-item-total').children().eq(1).html(Math.round((total_quantity - original_quantity) * 100) / 100);
             $("#miscellaneous-item-row" + rowId).remove();
             if (status == 'New') {
-                $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(total_price - original_price);
+                $('#final_quote_table').find('tr').eq(3).children().eq(1).find('a').html(Math.round((total_price - original_price) * 100) / 100);
                 calculate_sale_table();
             }
         }
@@ -2719,11 +2719,11 @@ if (is_sale()) {
             $('#adsOn-item-total').children().eq(2).html(total_price - original_price);
             var total_quantity = $('#adsOn-item-total').children().eq(1).html() * 1;
             var original_quantity = $('#adsOn-item-row' + rowId).children().eq(2).find('input').val() * 1;
-            $('#adsOn-item-total').children().eq(1).html(total_quantity - original_quantity);
+            $('#adsOn-item-total').children().eq(1).html(Math.round((total_quantity - original_quantity) * 100) / 100);
 
             $("#adsOn-item-row" + rowId).remove();
             if (status == 'New') {
-                $('#final_quote_table').find('tr').eq(4).children().eq(1).html(total_price - original_price);
+                $('#final_quote_table').find('tr').eq(4).children().eq(1).html(Math.round((total_price - original_price) * 100 / 100);
                 calculate_sale_table();
             }
         }
