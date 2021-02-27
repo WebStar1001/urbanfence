@@ -2516,7 +2516,7 @@ if (is_sale()) {
         function delete_labour_item(rowId) {
             var total_price = $('#labour-item-total').children().eq(2).html() * 1;
             var original_price = $('#labour-item-row' + rowId).children().eq(2).html() * 1;
-            $('#labour-item-total').children().eq(2).html(total_price - original_price);
+            $('#labour-item-total').children().eq(2).html(Math.round((total_price - original_price) * 100) / 100);
             var total_quantity = $('#labour-item-total').children().eq(1).html() * 1;
             var original_quantity = $('#labour-item-row' + rowId).children().eq(1).find('input').val() * 1;
             $('#labour-item-total').children().eq(1).html(Math.round((total_quantity - original_quantity) * 100) / 100);
