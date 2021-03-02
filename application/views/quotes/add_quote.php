@@ -2412,7 +2412,7 @@ if (is_sale()) {
             var original_price = $('#material-item-row' + rowId).children().eq(5).html() * 1;
             var total_quantity = $('#material-item-total').children().eq(1).html() * 1;
             var original_quantity = $('#material-item-row' + rowId).children().eq(4).find('input').val() * 1;
-            $('#material-item-total').children().eq(1).html(total_quantity - original_quantity);
+            $('#material-item-total').children().eq(1).html(Math.round((total_quantity - original_quantity) * 100) / 100);
             $('#material-item-total').children().eq(2).html(Math.round((total_price - original_price) * 100) / 100);
             $("#material-item-row" + rowId).remove();
             $('#final_quote_table').find('tr').eq(1).children().eq(1).find('a').html(is_sale ? Math.round((total_price - original_price) * 100) / 100 : Math.round((total_price - original_price) / 1.32 * 100) / 100);
@@ -2716,7 +2716,7 @@ if (is_sale()) {
         function delete_adsOn_item(rowId) {
             var total_price = $('#adsOn-item-total').children().eq(2).html() * 1;
             var original_price = $('#adsOn-item-row' + rowId).children().eq(3).html() * 1;
-            $('#adsOn-item-total').children().eq(2).html(total_price - original_price);
+            $('#adsOn-item-total').children().eq(2).html(Math.round((total_price - original_price) * 100) / 100);
             var total_quantity = $('#adsOn-item-total').children().eq(1).html() * 1;
             var original_quantity = $('#adsOn-item-row' + rowId).children().eq(2).find('input').val() * 1;
             $('#adsOn-item-total').children().eq(1).html(Math.round((total_quantity - original_quantity) * 100) / 100);
